@@ -8,7 +8,7 @@
 //  </auto-generated>
 // ------------------------------------------------------------------------------
 
-namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
+namespace CodedUITestFAT.UIMaps.UIMapResultsWindowClasses
 {
     using System;
     using System.CodeDom.Compiler;
@@ -276,6 +276,19 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
             Mouse.Click(uINewCustomScanButtonButton, new Point(77, 13));
         }
         
+        /// <summary>
+        /// ClickInAnalysisCounterListItem - Use 'ClickInAnalysisCounterListItemParams' to pass parameters into this method.
+        /// </summary>
+        public void ClickInAnalysisCounterListItem()
+        {
+            #region Variable Declarations
+            WpfList uIAggregatedPanelListBList = this.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIPleaseWaitProgressBar.UIAggregatedPanelListBList;
+            #endregion
+
+            // Select 'InAnalysisCounterListItem' in 'AggregatedPanelListBox' list box
+            uIAggregatedPanelListBList.SelectedItemsAsString = this.ClickInAnalysisCounterListItemParams.UIAggregatedPanelListBListSelectedItemsAsString;
+        }
+        
         #region Properties
         public virtual AssertResolvingComputersTextBlockExpectedValues AssertResolvingComputersTextBlockExpectedValues
         {
@@ -421,6 +434,18 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
             }
         }
         
+        public virtual ClickInAnalysisCounterListItemParams ClickInAnalysisCounterListItemParams
+        {
+            get
+            {
+                if ((this.mClickInAnalysisCounterListItemParams == null))
+                {
+                    this.mClickInAnalysisCounterListItemParams = new ClickInAnalysisCounterListItemParams();
+                }
+                return this.mClickInAnalysisCounterListItemParams;
+            }
+        }
+        
         public UIUnknownFileHunterWindow UIUnknownFileHunterWindow
         {
             get
@@ -482,6 +507,8 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         private ClickGroupByComputersToggleButtonParams mClickGroupByComputersToggleButtonParams;
         
         private ClickGroupByFilesToggleButtonParams mClickGroupByFilesToggleButtonParams;
+        
+        private ClickInAnalysisCounterListItemParams mClickInAnalysisCounterListItemParams;
         
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
         
@@ -668,6 +695,21 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         /// Set to 'Pressed' state 'GroupByFilesToggleButton' toggle button
         /// </summary>
         public bool UIGroupByFilesToggleBuToggleButtonPressed = true;
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'ClickInAnalysisCounterListItem'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class ClickInAnalysisCounterListItemParams
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Select 'InAnalysisCounterListItem' in 'AggregatedPanelListBox' list box
+        /// </summary>
+        public string UIAggregatedPanelListBListSelectedItemsAsString = "InAnalysisCounterListItem";
         #endregion
     }
     
@@ -2459,6 +2501,18 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
                 return this.mUIPleaseWaitProgressBar;
             }
         }
+        
+        public UIAggregatedPanelListBList UIAggregatedPanelListBList
+        {
+            get
+            {
+                if ((this.mUIAggregatedPanelListBList == null))
+                {
+                    this.mUIAggregatedPanelListBList = new UIAggregatedPanelListBList(this);
+                }
+                return this.mUIAggregatedPanelListBList;
+            }
+        }
         #endregion
         
         #region Fields
@@ -2467,6 +2521,8 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         private WpfToggleButton mUIGroupByComputersToggToggleButton;
         
         private UIPleaseWaitProgressBar mUIPleaseWaitProgressBar;
+        
+        private UIAggregatedPanelListBList mUIAggregatedPanelListBList;
         #endregion
     }
     
@@ -2499,10 +2555,64 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
                 return this.mUINewCustomScanButtonButton;
             }
         }
+        
+        public WpfList UIAggregatedPanelListBList
+        {
+            get
+            {
+                if ((this.mUIAggregatedPanelListBList == null))
+                {
+                    this.mUIAggregatedPanelListBList = new WpfList(this);
+                    #region Search Criteria
+                    this.mUIAggregatedPanelListBList.SearchProperties[WpfList.PropertyNames.AutomationId] = "AggregatedPanelListBox";
+                    this.mUIAggregatedPanelListBList.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIAggregatedPanelListBList;
+            }
+        }
         #endregion
         
         #region Fields
         private WpfButton mUINewCustomScanButtonButton;
+        
+        private WpfList mUIAggregatedPanelListBList;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIAggregatedPanelListBList : WpfList
+    {
+        
+        public UIAggregatedPanelListBList(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfList.PropertyNames.AutomationId] = "AggregatedPanelListBox";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfListItem UIInAnalysisCounterLisListItem
+        {
+            get
+            {
+                if ((this.mUIInAnalysisCounterLisListItem == null))
+                {
+                    this.mUIInAnalysisCounterLisListItem = new WpfListItem(this);
+                    #region Search Criteria
+                    this.mUIInAnalysisCounterLisListItem.SearchProperties[WpfListItem.PropertyNames.Name] = "InAnalysisCounterListItem";
+                    this.mUIInAnalysisCounterLisListItem.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIInAnalysisCounterLisListItem;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfListItem mUIInAnalysisCounterLisListItem;
         #endregion
     }
     

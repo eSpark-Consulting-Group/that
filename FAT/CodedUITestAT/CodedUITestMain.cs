@@ -7,6 +7,8 @@ using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
 using CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses;
 using CodedUITestFAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses;
 using CodedUITestAT.UIMaps.UIMapCamCredentialsWindowClasses;
+using CodedUITestFAT.UIMaps.UIMapAggregatedPanelClasses;
+using System.Text.RegularExpressions;
 
 namespace CodedUITestFAT
 {
@@ -63,10 +65,10 @@ namespace CodedUITestFAT
                 return this.mapCamCredentialsWindow;
             }
         }
-        private UIMapCamCredentialsWindow mapCamCredentialsWindow;
-        
+        private UIMapCamCredentialsWindow mapCamCredentialsWindow;        
+
         #endregion
-        
+
         #region Initialize and cleanup
 
         [TestInitialize]
@@ -80,7 +82,7 @@ namespace CodedUITestFAT
             UIHelper.WaitForControlIsEnabled(SkipDiscoveryButton());
             UIMapDiscovery.ClickSkipDiscoveryButton();
 
-            UIHelper.WaitForControl(CustomScanButton());
+            UIHelper.WaitForControlIsEnabled(CustomScanButton());
         }
         
         [TestCleanup]
@@ -244,7 +246,7 @@ namespace CodedUITestFAT
 
         private WpfButton CloseDetailsButton()
         {
-            return UIMapDetailsWindow.UIUnknownFileHunterWindow.UIThreatDetailsWindowCustom.UICloseButton;
+            return UIMapDetailsWindow.UIForensicAnalysisToolWindow.UIThreatDetailsWindowCustom.UICloseButton;
         }
 
         #endregion
@@ -280,6 +282,10 @@ namespace CodedUITestFAT
                     break;
                 default: throw new Exception(String.Format("Unexpected file type '{0}'!", fileType));
             }
+
+            string searchWord = "(";
+            string searchPattern = @"\d{1,}\s{1,}" + searchWord;
+            string match = Regex.Match(filesNumberStr, searchPattern).ToString().Replace(searchWord, String.Empty);
 
             if (Int32.TryParse(filesNumberStr, out filesNumber))
                 testContext.WriteLine(String.Format("'{0}' files number {1} successfully found at results panel.", fileType, filesNumber));
@@ -572,10 +578,13 @@ namespace CodedUITestFAT
         {
             Computer endpoint = DataHelper.GetEndpoint();
             string workgroupName = SysHelper.GetWorkgroupName();
+
             Malware malware = SysHelper.InfectForScan(endpoint);
-            SysHelper.AddUnknownFileForScan(endpoint);
-            
-            UIMapMain.ClickScanNowButton();
+            UnknownFile unknownFile = SysHelper.AddUnknownFileForScan(endpoint);
+
+            UIHelper.WaitForControlIsClickable(CustomScanButton());
+            UIMapDiscovery.ClickCustomScanButton();
+
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanWizard.ClickWorkgroupButton();
             UIHelper.WaitForControlIsEnabled(NextButton());
@@ -592,31 +601,21 @@ namespace CodedUITestFAT
             UIMapStartScanWizard.ClickQuickScanButton();
             TestContext.WriteLine(String.Format("Quick Scan started in Workgroup '{0}'...", workgroupName));
 
-            WaitForScanCompleted(ScanType.Quick);
-            WaitForNoInAnalysis();
-            int expectedFilesNumber = GetFoundFilesNumber(TestContext);
-            //UIMapScanCompletedWindow.ClickYesButton();
-            
-            UIHelper.WaitForControlIsEnabled(CamLoginTextBox());
-            TestContext.WriteLine("'Submit to Valkyrie' window appeared...");
-            //UIMapCamCredentialsWindow.InputCamKeyParams.UICamLicenseKeyWatermaEditSendKeys = DataHelper.GetCamKey();
-            UIMapCamCredentialsWindow.InputCamKey();
-            UIMapCamCredentialsWindow.ClickOkButton();
-            
-            // Gets the number of rows in 'Valkyrie analysis results' and compares it with the number of files found
-            WaitForValkyrieResults(TestContext);
-            UIHelper.GroupByFiles();
-            AssertValkyrieAnalysisResults(expectedFilesNumber, TestContext);
+            WaitForScanCompleted(ScanType.Quick);//Stopped here
 
-            // Verifies the scanning result at the Results screen
-            UIMapResultsWindow.GoToScanResultsTab();
-            UIHelper.GroupByComputers();
-            UIHelper.ClickRow(endpoint);
-            TestContext.WriteLine(String.Format("Computer '{0}' expanded at 'Scan results' screen.", endpoint.Name));
+            UIHelper.GroupByFiles();
+            UIHelper.ClickRow(malware);
+            TestContext.WriteLine(String.Format("Malware file {0} was found on result screen", malware));
+            UIHelper.ClickRow(unknownFile);
+            TestContext.WriteLine(String.Format("Unknown file {0} was found on result screen", unknownFile));
+
             UIHelper.ClickRow(malware, MouseClick.DoubleLeft);
-            TestContext.WriteLine(String.Format("Malware '{0}' details opened.", malware.Location));
-            UIHelper.WaitForControl(CloseDetailsButton());
             UIMapDetailsWindow.AssertThreatNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = malware.Name;
+            UIMapDetailsWindow.AssertThreatNameTextBlockText();
+            UIMapDetailsWindow.ClickCloseButton();
+
+            UIHelper.ClickRow(unknownFile, MouseClick.DoubleLeft);
+            UIMapDetailsWindow.AssertThreatNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = unknownFile.Name;
             UIMapDetailsWindow.AssertThreatNameTextBlockText();
             UIMapDetailsWindow.ClickCloseButton();
         }

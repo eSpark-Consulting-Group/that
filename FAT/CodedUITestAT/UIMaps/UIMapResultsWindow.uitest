@@ -342,6 +342,20 @@
       <WorkItemId>0</WorkItemId>
       <MarkerRegionType>Action</MarkerRegionType>
     </TestStepMarkerAction>
+    <SetValueAction UIObjectName="UIMapResultsWindow.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIPleaseWaitProgressBar.UIAggregatedPanelListBList">
+      <ParameterName />
+      <Value Encoded="false">InAnalysisCounterListItem</Value>
+      <Type>String</Type>
+    </SetValueAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="ClickInAnalysisCounterListItem">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Action</MarkerRegionType>
+    </TestStepMarkerAction>
   </ExecuteActions>
   <CleanupActions />
   <OnErrorActions />
@@ -1327,6 +1341,46 @@
                         <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
                         <PropertyCondition Name="ControlType">Button</PropertyCondition>
                         <PropertyCondition Name="AutomationId">NewCustomScanButton</PropertyCondition>
+                      </AndCondition>
+                      <SupportLevel>0</SupportLevel>
+                      <Descendants />
+                    </UIObject>
+                    <UIObject ControlType="List" Id="UIAggregatedPanelListBList" FriendlyName="AggregatedPanelListBox" SpecialControlType="None">
+                      <TechnologyName>UIA</TechnologyName>
+                      <WindowTitles>
+                        <WindowTitle>Forensic Analysis Tool</WindowTitle>
+                      </WindowTitles>
+                      <AndCondition>
+                        <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+                        <PropertyCondition Name="ControlType">List</PropertyCondition>
+                        <PropertyCondition Name="AutomationId">AggregatedPanelListBox</PropertyCondition>
+                      </AndCondition>
+                      <SupportLevel>0</SupportLevel>
+                      <Descendants />
+                    </UIObject>
+                  </Descendants>
+                </UIObject>
+                <UIObject ControlType="List" Id="UIAggregatedPanelListBList" FriendlyName="AggregatedPanelListBox" SpecialControlType="None">
+                  <TechnologyName>UIA</TechnologyName>
+                  <WindowTitles>
+                    <WindowTitle>Forensic Analysis Tool</WindowTitle>
+                  </WindowTitles>
+                  <AndCondition>
+                    <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+                    <PropertyCondition Name="ControlType">List</PropertyCondition>
+                    <PropertyCondition Name="AutomationId">AggregatedPanelListBox</PropertyCondition>
+                  </AndCondition>
+                  <SupportLevel>0</SupportLevel>
+                  <Descendants>
+                    <UIObject ControlType="ListItem" Id="UIInAnalysisCounterLisListItem" FriendlyName="InAnalysisCounterListItem" SpecialControlType="None">
+                      <TechnologyName>UIA</TechnologyName>
+                      <WindowTitles>
+                        <WindowTitle>Forensic Analysis Tool</WindowTitle>
+                      </WindowTitles>
+                      <AndCondition>
+                        <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+                        <PropertyCondition Name="ControlType">ListItem</PropertyCondition>
+                        <PropertyCondition Name="Name">InAnalysisCounterListItem</PropertyCondition>
                       </AndCondition>
                       <SupportLevel>0</SupportLevel>
                       <Descendants />

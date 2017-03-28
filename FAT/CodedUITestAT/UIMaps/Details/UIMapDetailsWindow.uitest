@@ -211,23 +211,6 @@
       <WorkItemId>0</WorkItemId>
       <MarkerRegionType>Assertion</MarkerRegionType>
     </TestStepMarkerAction>
-    <AssertAction UIObjectName="UIMapDetailsWindow.UIUnknownFileHunterWindow.UIThreatDetailsWindowCustom.UIItem91exestealthexeText">
-      <ParameterName />
-      <PropertyName>DisplayText</PropertyName>
-      <ExpectedValue>91exestealth.exe</ExpectedValue>
-      <MessageOnValidationFailure />
-      <Type>String</Type>
-      <PropertyCondition>AreEqual</PropertyCondition>
-    </AssertAction>
-    <TestStepMarkerAction Comment="" MarkerInformation="AssertThreatNameTextBlockText">
-      <ParameterName />
-      <StepId>-1</StepId>
-      <Direction>Start</Direction>
-      <Outcome />
-      <Disabled>false</Disabled>
-      <WorkItemId>0</WorkItemId>
-      <MarkerRegionType>Assertion</MarkerRegionType>
-    </TestStepMarkerAction>
     <AssertAction UIObjectName="UIMapDetailsWindow.UIUnknownFileHunterWindow.UIThreatDetailsWindowCustom.UIVerdictValueTextBoxEdit">
       <ParameterName />
       <PropertyName>Text</PropertyName>
@@ -262,11 +245,11 @@
       <WorkItemId>0</WorkItemId>
       <MarkerRegionType>Assertion</MarkerRegionType>
     </TestStepMarkerAction>
-    <MouseAction UIObjectName="UIMapDetailsWindow.UIUnknownFileHunterWindow.UIThreatDetailsWindowCustom.UICloseButton">
+    <MouseAction UIObjectName="UIMapDetailsWindow.UIForensicAnalysisToolWindow.UIThreatDetailsWindowCustom.UICloseButton">
       <ParameterName />
       <ModifierKeys>None</ModifierKeys>
       <IsGlobalHotkey>false</IsGlobalHotkey>
-      <Location X="42" Y="5" />
+      <Location X="53" Y="11" />
       <WheelDirection>0</WheelDirection>
       <ActionType>Click</ActionType>
       <MouseButton>Left</MouseButton>
@@ -279,6 +262,23 @@
       <Disabled>false</Disabled>
       <WorkItemId>0</WorkItemId>
       <MarkerRegionType>Action</MarkerRegionType>
+    </TestStepMarkerAction>
+    <AssertAction UIObjectName="UIMapDetailsWindow.UIForensicAnalysisToolWindow.UIThreatDetailsWindowCustom.UIItem91exestealthexeText">
+      <ParameterName />
+      <PropertyName>DisplayText</PropertyName>
+      <ExpectedValue>91exestealth.exe</ExpectedValue>
+      <MessageOnValidationFailure />
+      <Type>String</Type>
+      <PropertyCondition>AreEqual</PropertyCondition>
+    </AssertAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="AssertThreatNameTextBlockText">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Assertion</MarkerRegionType>
     </TestStepMarkerAction>
   </ExecuteActions>
   <CleanupActions />
@@ -618,6 +618,62 @@
                   <AndCondition>
                     <PropertyCondition Name="ControlType">Edit</PropertyCondition>
                     <PropertyCondition Name="AutomationId">ProductValueTextBox</PropertyCondition>
+                  </AndCondition>
+                  <SupportLevel>0</SupportLevel>
+                  <Descendants />
+                </UIObject>
+              </Descendants>
+            </UIObject>
+          </Descendants>
+        </TopLevelWindow>
+        <TopLevelWindow ControlType="Window" Id="UIForensicAnalysisToolWindow" FriendlyName="Forensic Analysis Tool" SpecialControlType="None" SessionId="5379932">
+          <TechnologyName>UIA</TechnologyName>
+          <WindowTitles>
+            <WindowTitle>Forensic Analysis Tool</WindowTitle>
+          </WindowTitles>
+          <AndCondition>
+            <PropertyCondition Name="ControlType">Window</PropertyCondition>
+            <PropertyCondition Name="Name">Forensic Analysis Tool</PropertyCondition>
+            <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+            <PropertyCondition Name="ClassName" Operator="Contains">HwndWrapper</PropertyCondition>
+          </AndCondition>
+          <SupportLevel>0</SupportLevel>
+          <Descendants>
+            <UIObject ControlType="Custom" Id="UIThreatDetailsWindowCustom" FriendlyName="ThreatDetailsWindow" SpecialControlType="None">
+              <TechnologyName>UIA</TechnologyName>
+              <WindowTitles>
+                <WindowTitle>Forensic Analysis Tool</WindowTitle>
+              </WindowTitles>
+              <AndCondition>
+                <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+                <PropertyCondition Name="ControlType">Custom</PropertyCondition>
+                <PropertyCondition Name="ClassName">Uia.ThreatDetailsView</PropertyCondition>
+                <PropertyCondition Name="AutomationId">ThreatDetailsWindow</PropertyCondition>
+              </AndCondition>
+              <SupportLevel>0</SupportLevel>
+              <Descendants>
+                <UIObject ControlType="Text" Id="UIItem91exestealthexeText" FriendlyName="91exestealth.exe" SpecialControlType="None">
+                  <TechnologyName>UIA</TechnologyName>
+                  <WindowTitles>
+                    <WindowTitle>Forensic Analysis Tool</WindowTitle>
+                  </WindowTitles>
+                  <AndCondition>
+                    <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+                    <PropertyCondition Name="ControlType">Text</PropertyCondition>
+                    <PropertyCondition Name="AutomationId">MalwareNameTextBlock</PropertyCondition>
+                  </AndCondition>
+                  <SupportLevel>0</SupportLevel>
+                  <Descendants />
+                </UIObject>
+                <UIObject ControlType="Button" Id="UICloseButton" FriendlyName="Close" SpecialControlType="None">
+                  <TechnologyName>UIA</TechnologyName>
+                  <WindowTitles>
+                    <WindowTitle>Forensic Analysis Tool</WindowTitle>
+                  </WindowTitles>
+                  <AndCondition>
+                    <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+                    <PropertyCondition Name="ControlType">Button</PropertyCondition>
+                    <PropertyCondition Name="AutomationId">CloseButton</PropertyCondition>
                   </AndCondition>
                   <SupportLevel>0</SupportLevel>
                   <Descendants />

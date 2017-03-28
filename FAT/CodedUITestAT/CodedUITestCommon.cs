@@ -6,10 +6,11 @@ using CodedUITestAT.UIMaps.UIMapMainClasses;
 using CodedUITestFAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses;
 using CodedUITestAT.UIMaps.UIMapStopScanWindowClasses;
 using CodedUITestAT.UIMaps.UIMapDiscoveryClasses;
-using CodedUITestAT.UIMaps.UIMapResultsWindowClasses;
-using CodedUITestAT.UIMaps.Details.UIMapDetailsWindowClasses;
+using CodedUITestFAT.UIMaps.UIMapResultsWindowClasses;
 using CodedUITestAT.UIMaps.Details.UIMapValkyrieDetailsWindowClasses;
 using CodedUITestFAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses;
+using CodedUITestFAT.UIMaps.UIMapAggregatedPanelClasses;
+using CodedUITestFAT.UIMaps.Details.UIMapDetailsWindowClasses;
 
 namespace CodedUITestFAT
 {
@@ -143,25 +144,45 @@ namespace CodedUITestFAT
         }
         private UIMapDetailsWindow mapDetailsWindow;
 
+        public UIMapAggregatedPanel UIMapAggregatedPanel
+        {
+            get
+            {
+                if ((this.mapAggregatedPanel == null))
+                {
+                    this.mapAggregatedPanel = new UIMapAggregatedPanel();
+                }
+
+                return this.mapAggregatedPanel;
+            }
+        }
+        private UIMapAggregatedPanel mapAggregatedPanel;
+
+
         #endregion
 
         #region Control methods
 
         #region Results panel
 
-        internal WpfText LookupInProgressCounterTextBlock()
-        {
-            return UIMapMain.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UIItem0Text2;
+        internal WpfText CleanFilesCounterTextBlock()
+        {            
+            return UIMapAggregatedPanel.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIAggregatedPanelListBList.UICleanCounterListItemListItem.UIItem120100Text;
+        }
+
+        internal WpfText InAnalysisFilesCounterTextBlock()
+        {            
+            return UIMapAggregatedPanel.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIAggregatedPanelListBList.UIInAnalysisCounterLisListItem.UIItem1021Text;
         }
 
         internal WpfText UnknownFilesCounterTextBlock()
         {
-            return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIItem0Text;
+            return UIMapAggregatedPanel.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIAggregatedPanelListBList.UIUnknownCounterListItListItem.UIItem1009Text;            
         }
 
         internal WpfText MaliciousFilesCounterTextBlock()
         {
-            return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIItem0Text1;
+            return UIMapAggregatedPanel.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIAggregatedPanelListBList.UIMalwareCounterListItListItem.UIItem3028Text;            
         }
 
         #endregion
@@ -256,9 +277,9 @@ namespace CodedUITestFAT
             for (;;)
             {
                 Playback.Wait(1000);
-                if (LookupInProgressCounterTextBlock().DisplayText == "0") break;
+                if (InAnalysisFilesCounterTextBlock().DisplayText == "0") break;
                 if ((int) timer.ElapsedMilliseconds > waitTime)
-                            throw new Exception(String.Format("Results panel shows 'Lookup in Progress' {0} after {1} seconds!", LookupInProgressCounterTextBlock().DisplayText, waitTime / 1000));
+                            throw new Exception(String.Format("Results panel shows 'Lookup in Progress' {0} after {1} seconds!", InAnalysisFilesCounterTextBlock().DisplayText, waitTime / 1000));
             }
             timer.Stop();
         }

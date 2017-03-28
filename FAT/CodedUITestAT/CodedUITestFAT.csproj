@@ -173,6 +173,12 @@
     <Compile Include="UIMaps\StartScanWizard\UIMapWorkgroup.Designer.cs">
       <DependentUpon>UIMapWorkgroup.uitest</DependentUpon>
     </Compile>
+    <Compile Include="UIMaps\UIMapAggregatedPanel.cs">
+      <DependentUpon>UIMapAggregatedPanel.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\UIMapAggregatedPanel.Designer.cs">
+      <DependentUpon>UIMapAggregatedPanel.uitest</DependentUpon>
+    </Compile>
     <Compile Include="UIMaps\UIMapDiscovery.cs">
       <DependentUpon>UIMapDiscovery.uitest</DependentUpon>
     </Compile>
@@ -282,6 +288,7 @@
     <None Include="UIMaps\StartScanWizard\UIMapActiveDirectory.uitest" />
     <None Include="UIMaps\StartScanWizard\UIMapNetworkAddresses.uitest" />
     <None Include="UIMaps\StartScanWizard\UIMapWorkgroup.uitest" />
+    <None Include="UIMaps\UIMapAggregatedPanel.uitest" />
     <None Include="UIMaps\UIMapDiscovery.uitest" />
     <None Include="UIMaps\UIMapHelp.uitest" />
     <None Include="UIMaps\UIMapCamCredentialsWindow.uitest" />
