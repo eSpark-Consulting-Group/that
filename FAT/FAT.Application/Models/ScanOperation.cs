@@ -141,7 +141,7 @@ namespace FAT.Application.Models
 
         public bool ValkyrieDetailsLinkAvailable
         {
-            get { return ValkyrieOperationInfo != null && !string.IsNullOrEmpty(ValkyrieOperationInfo.DetailedLink) && !(ComputersScanned == 0 && IsFailed); }
+            get { return ValkyrieOperationInfo != null && !string.IsNullOrEmpty(ValkyrieOperationInfo.DetailedLink) && ComputersScanned > 0; }
         }
 
         #endregion
