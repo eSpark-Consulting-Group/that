@@ -60,7 +60,7 @@ namespace APTAT.Valkyrie.Tests
                 .Returns(() => new RegisterWithResponse() { ApiKey = apiKey, ReturnCode = 0 });
 
             Mock.Arrange(() => apiProviderMock.StartScan(Arg.IsAny<StartScanRequest>()))
-                .Returns(() => new StartAndFinalizeScanResponse() { ReturnCode = ErrorCodesEnum.Success });
+                .Returns(() => new StartAndFinalizeScanResponse() { ReturnCode = ErrorCodesEnum.Success, AptScanId = Guid.NewGuid().ToString() });
 
             Mock.Arrange(() => apiProviderMock.GetBasicInfo(Arg.IsAny<InfoRequest>())).Returns(new BasicInfoResponse());
             Mock.Arrange(() => apiProviderMock.GetBasicInfoEmpty()).Returns(new BasicInfoResponse() { ReturnCode = ErrorCodesEnum.BadRequest });
@@ -79,10 +79,11 @@ namespace APTAT.Valkyrie.Tests
             client.AnalyzeCompleted+= (s, e) => { ev2.Set(); };
 
             ManualResetEventSlim ev = new ManualResetEventSlim();
-            client.AnalyzeStarted += (s, e) => { ev.Set(); };
+           
             client.StartAnalyze(camRegistration, "user", "test", 1, new System.Net.NetworkCredential(), "FAT");
             Mock.Raise(() => statusTimer.TimeoutCallback += null, args: new object[] { EventArgs.Empty });
-            ev.Wait(TimeSpan.FromMilliseconds(500));
+            //ev.Wait(TimeSpan.FromMilliseconds(500));
+
             ValkyrieFileInfo fileInfo1 = new ValkyrieFileInfo("cf23df2207d99a74fbe169e3eba035e633b65d14", ValkyrieVerdict.Undetected) { Path = @"C:\temp\file.exe" };
             ValkyrieFileInfo fileInfo2 = new ValkyrieFileInfo("cf23df2207d99a74fbe169e3eba035e633b65d14", ValkyrieVerdict.InQueue) { Path = @"C:\temp\file.exe" };
             ValkyrieFileInfo fileInfo3 = new ValkyrieFileInfo("cf23df2207d99a74fbe169e3eba035e633b65d14", ValkyrieVerdict.Undetected) { Path = @"C:\temp\file.exe" };
@@ -262,6 +263,73 @@ namespace APTAT.Valkyrie.Tests
             Mock.Assert(() => checkStatusTimer.Dispose(), Occurs.Once());
             Mock.Assert(() => progressNotifyTimer.Dispose(), Occurs.Once());
             Mock.Assert(() => progressNotifyTimer.SetInterval(TimeSpan.FromMilliseconds(1000)), Occurs.Once());
+        }
+
+        [Fact]
+        public void AddFilesToAnalyzeTest()
+        {
+            //Arange   
+            var apiProviderMock = Mock.Create<IValkyrieWebApiProvider>(Behavior.Strict);
+
+            var apiKey = Guid.NewGuid().ToString();
+            Mock.Arrange(() => apiProviderMock.RegisterWithCamLicense(Arg.IsAny<RegisterWithCamLicenseRequest>()))
+                .Returns(() => new RegisterWithResponse() { ApiKey = apiKey, ReturnCode = 0 });
+
+            Mock.Arrange(() => apiProviderMock.StartScan(Arg.IsAny<StartScanRequest>()))
+                .Returns(() => new StartAndFinalizeScanResponse() { ReturnCode = ErrorCodesEnum.Success, AptScanId = Guid.NewGuid().ToString() });
+
+            List<string> calledBasicInfoHashes = new List<string>();
+            Mock.Arrange(() => apiProviderMock.GetBasicInfo(Arg.IsAny<InfoRequest>())).DoInstead<InfoRequest>((x) => calledBasicInfoHashes.Add(x.SHA1)).Returns(new BasicInfoResponse());
+            Mock.Arrange(() => apiProviderMock.GetBasicInfoEmpty()).Returns(new BasicInfoResponse() { ReturnCode = ErrorCodesEnum.BadRequest });
+            var statusTimer = Mock.Create<IScheduler>(Behavior.Strict);
+            Mock.Arrange(() => statusTimer.IsEnabled).Returns(() => false);
+            Mock.Arrange(() => statusTimer.SetInterval(Arg.AnyTimeSpan));
+            Mock.Arrange(() => statusTimer.Start(Arg.AnyBool)).Returns(() => true);
+
+            ValkyrieClient client = new ValkyrieClient(Mock.Create<IMachineKeyProvider>(), apiProviderMock, Mock.Create<IScheduler>(), statusTimer);
+
+            var camRegistration = Mock.Create<ICamRegistration>();
+            Mock.Arrange(() => camRegistration.LicenseId).Returns(() => Guid.NewGuid().ToString());
+
+            //Act                       
+            ManualResetEventSlim ev = new ManualResetEventSlim();
+            client.AnalyzeCompleted += (s, e) => 
+            {
+                ev.Set();
+            };
+
+            var files = new[] {
+                new ValkyrieFileInfo("1", ValkyrieVerdict.Malware) { Path = @"C:\temp\file1.exe" },
+                new ValkyrieFileInfo("2", ValkyrieVerdict.InQueue) { Path = @"C:\temp\file2.exe" },
+                new ValkyrieFileInfo("3", ValkyrieVerdict.Undetected) { Path = @"C:\temp\file3.exe" },
+                new ValkyrieFileInfo("4", ValkyrieVerdict.Undetected) { Path = @"C:\temp\file4.exe" }
+            };
+
+
+            client.StartAnalyze(camRegistration, "user", "test", 1, new System.Net.NetworkCredential(), "FAT");
+            Mock.Raise(() => statusTimer.TimeoutCallback += null, args: new object[] { EventArgs.Empty });
+            ev.Wait(TimeSpan.FromMilliseconds(500));
+            
+            client.AddFilesToAnalyze(files.ToList(), true);
+            ev.Wait(TimeSpan.FromMilliseconds(1000));
+            Mock.Raise(() => statusTimer.TimeoutCallback += null, args: new object[] { EventArgs.Empty });
+            client.AnalyzeCompleted += (s, e) =>
+            {
+                ev.Set();
+            };
+            ev.Wait(TimeSpan.FromMilliseconds(1000));
+
+            
+                        
+            //Assert
+            var hashes = files.Select(f => f.Sha1).ToArray();
+            
+            Mock.Assert(() => apiProviderMock.StartScan(Arg.Matches<StartScanRequest>((s) => s.ApiKey == apiKey)), Occurs.AtLeastOnce());
+            Mock.Assert(() => apiProviderMock.GetBasicInfo(Arg.Matches<InfoRequest>((f) => hashes.Contains(f.SHA1))), Occurs.Exactly(8));
+            var calledDistinct = calledBasicInfoHashes.Distinct().OrderBy(b => b).ToList();
+            Assert.Equal(hashes.OrderBy(a=>a).ToList(), calledDistinct);
+            Assert.Equal(8, calledBasicInfoHashes.Count);
+            Mock.AssertAll(apiProviderMock);
         }
 
     }
