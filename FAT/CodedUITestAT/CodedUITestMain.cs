@@ -702,9 +702,7 @@ namespace CodedUITestFAT
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
 
             UIMapStartScanWizard.ClickActiveDirectoryButton();
-            UIHelper.WaitForControlIsEnabled(NextButton());
-
-            UIMapActiveDirectory.SelectUseCustomCredentialsRadioButton();
+            UIHelper.WaitForControlIsEnabled(NextButton());            
                                     
             InputDomainName(domainName);
             InputDomainAdministrator(DataHelper.Username);
