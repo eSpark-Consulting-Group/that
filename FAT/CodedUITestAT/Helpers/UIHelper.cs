@@ -332,9 +332,8 @@ namespace CodedUITestFAT
         /// <param name="rowName">Set a unique row name.</param>
         internal static UITestControl GetRow(this WpfTabPage tab, string rowName)
         {
-           var rows = tab.GetRows();
-
-           foreach (var row in rows) if (row.GetRowName().Contains(rowName)) return row;
+           var rows = tab.GetRows();            
+           foreach (var row in rows) if (String.Compare(row.GetRowName(), rowName, true) == 0) return row;
            
            return null;
         }
@@ -346,7 +345,7 @@ namespace CodedUITestFAT
         {
             var rows = table.GetRows();
 
-            foreach (var row in rows) if (row.GetRowName().Contains(rowName)) return row;
+            foreach (var row in rows) if (String.Compare(row.GetRowName(), rowName, true) == 0) return row;
 
             return null;
         }
@@ -455,8 +454,8 @@ namespace CodedUITestFAT
 
             foreach (var row in rows)
             {
-                string instanceName = row.GetRowStatus().ToLower();
-                if (instanceName.Contains(threat.Location))
+                string instanceName = row.GetRowStatus();
+                if (String.Compare(instanceName, threat.Location, true) == 0)
                 {
                     useMain.UIMapMain.ClickClearSearchTextButton();
                     GroupByComputers();
