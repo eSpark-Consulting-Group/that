@@ -1162,7 +1162,7 @@ namespace FAT.Application.Models
                     RaisePropertyChanged(nameof(ComputersHeader));
                 }
 
-                IsReportEnabled = !IsScanCancelled && !IsScanFailed;
+                IsReportEnabled = (!IsScanCancelled || Computers.Any(_ => _.ScanStage == ScanStage.OperationCompleted)) && !IsScanFailed;
 
                 ValkyrieDetailsLinkAvailable = _aptService.GetValkyrieDetailsLink() != null;
 
