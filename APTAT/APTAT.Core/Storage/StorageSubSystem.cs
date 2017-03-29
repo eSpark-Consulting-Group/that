@@ -60,7 +60,8 @@ namespace APTAT.Core.Storage
             using (var context = _entityStorage.Value.Context)
             {
                 var operation = context.AptScanOperationResultRepository.GetByOperationUid(scanOperationContext.OperationUid);
-                operation.Finished = scanOperationContext.CompletedTime;
+                if (operation != null)
+                    operation.Finished = scanOperationContext.CompletedTime;
                 context.SaveChanges();
             }
         }

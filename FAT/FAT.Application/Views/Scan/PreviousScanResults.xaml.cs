@@ -64,7 +64,6 @@ namespace FAT.Application
             var menu = new RadContextMenu();
             menu.IconColumnWidth = 0;
             menu.Width = 250;
-            //menu.Opened += menu_Opened;
             AutomationProperties.SetAutomationId(menu, "ScanResultsByComputersContextMenu");
 
             var item = new RadMenuItem();
@@ -75,27 +74,7 @@ namespace FAT.Application
             item.SetVisibilityBinding();
             menu.Items.Add(item);
 
-            /*item = new RadMenuItem();
-            item.CreateRestartScanHeader();
-            item.Command = ViewModel.RestartComputerScanCommand;
-            item.SetVisibilityBinding();
-            menu.Items.Add(item);
-
-            item = new RadMenuItem();
-            item.CreateRestartScanWithCredentialsHeader();
-            item.Command = ViewModel.RestartComputerScanWithCredentialsCommand;
-            item.SetVisibilityBinding();
-            menu.Items.Add(item);
-
-            item = new RadMenuItem();
-            item.CreateStopScanHeader();
-            item.Command = ViewModel.StopComputerScanCommand;
-            item.SetVisibilityBinding();
-            menu.Items.Add(item);*/
-
             RadContextMenu.SetContextMenu(treeList, menu);
-
-            //AppMessages.FilterMessage.Send(MessageTypes.FilterTarget, _ => _.Target = treeList);
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)

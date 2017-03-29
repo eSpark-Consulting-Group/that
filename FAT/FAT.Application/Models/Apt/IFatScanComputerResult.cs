@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace FAT.Application.Models.Apt
 {
@@ -18,6 +19,26 @@ namespace FAT.Application.Models.Apt
         string IpAddress { get; set; }
         bool IsLocal { get; set; }
         bool IsOnline { get; set; }
+    }
+
+    public class ScanComputerResultComparer : IComparer<IFatScanComputerResult>
+    {
+        public int Compare(IFatScanComputerResult x, IFatScanComputerResult y)
+        {
+            if ((x.IsLocal && !y.IsLocal) || (x.IsOnline && !y.IsOnline))
+                return -1;
+
+            if ((!x.IsLocal && y.IsLocal) || (!x.IsOnline && y.IsOnline))
+                return 1;
+
+            if (char.IsDigit(x.Name[0]) && !char.IsDigit(y.Name[0]))
+                return -1;
+
+            if (!char.IsDigit(x.Name[0]) && char.IsDigit(y.Name[0]))
+                return 1;
+
+            return x.Name.CompareTo(y.Name);
+        }
     }
 
     public interface IScanOperationResult
