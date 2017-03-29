@@ -8,7 +8,7 @@
 //  </auto-generated>
 // ------------------------------------------------------------------------------
 
-namespace CodedUITestAT.UIMaps.UIMapMainClasses
+namespace CodedUITestFAT.UIMaps.UIMapMainClasses
 {
     using System;
     using System.CodeDom.Compiler;
@@ -30,6 +30,84 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
     {
         
         /// <summary>
+        /// AssertComodoOneReferalTextPart1 - Use 'AssertComodoOneReferalTextPart1ExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertComodoOneReferalTextPart1()
+        {
+            #region Variable Declarations
+            WpfText uIComodoForensicAnalysText1 = this.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIPleaseWaitProgressBar.UIComodoForensicAnalysText1;
+            #endregion
+
+            // Verify that the 'DisplayText' property of 'Comodo Forensic Analysis Tool is part of the Comod...' label equals 'Comodo Forensic Analysis Tool is part of the Comodo ONE portfolio of security solutions. Visit '
+            Assert.AreEqual(this.AssertComodoOneReferalTextPart1ExpectedValues.UIComodoForensicAnalysText1DisplayText, uIComodoForensicAnalysText1.DisplayText);
+        }
+        
+        /// <summary>
+        /// AssertComodoOneReferalTextPart2 - Use 'AssertComodoOneReferalTextPart2ExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertComodoOneReferalTextPart2()
+        {
+            #region Variable Declarations
+            WpfText uIOnecomodocomText = this.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIPleaseWaitProgressBar.UIOnecomodocomText;
+            #endregion
+
+            // Verify that the 'DisplayText' property of 'one.comodo.com' label equals 'one.comodo.com'
+            Assert.AreEqual(this.AssertComodoOneReferalTextPart2ExpectedValues.UIOnecomodocomTextDisplayText, uIOnecomodocomText.DisplayText);
+        }
+        
+        /// <summary>
+        /// AssertComodoOneReferalTextPart3 - Use 'AssertComodoOneReferalTextPart3ExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertComodoOneReferalTextPart3()
+        {
+            #region Variable Declarations
+            WpfText uITolearnhowComodocanhText = this.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIPleaseWaitProgressBar.UITolearnhowComodocanhText;
+            #endregion
+
+            // Verify that the 'DisplayText' property of 'to learn how Comodo can help protect your environ...' label equals ' to learn how Comodo can help protect your environment.'
+            Assert.AreEqual(this.AssertComodoOneReferalTextPart3ExpectedValues.UITolearnhowComodocanhTextDisplayText, uITolearnhowComodocanhText.DisplayText);
+        }
+        
+        /// <summary>
+        /// AssertComodoOneReferralTextBlockText - Use 'AssertComodoOneReferralTextBlockTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertComodoOneReferralTextBlockText()
+        {
+            #region Variable Declarations
+            WpfText uIThisproductisjustoneText = this.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UISendingFilesforAnalyProgressBar.UIThisproductisjustoneText;
+            #endregion
+
+            // Verify that the 'DisplayText' property of 'This product is just one part of Comodo ONE produc...' label equals 'This product is just one part of Comodo ONE productivity and revenue generation engine. To get more AWESOME products for FREE, please visit one.comodo.com'
+            Assert.AreEqual(this.AssertComodoOneReferralTextBlockTextExpectedValues.UIThisproductisjustoneTextDisplayText, uIThisproductisjustoneText.DisplayText);
+        }
+        
+        /// <summary>
+        /// AssertInAnalysisCounterTextBlockText - Use 'AssertInAnalysisCounterTextBlockTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertInAnalysisCounterTextBlockText()
+        {
+            #region Variable Declarations
+            WpfText uIItem1Text = this.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UIItem1Text;
+            #endregion
+
+            // Verify that the 'DisplayText' property of '1' label equals '1'
+            Assert.AreEqual(this.AssertInAnalysisCounterTextBlockTextExpectedValues.UIItem1TextDisplayText, uIItem1Text.DisplayText);
+        }
+        
+        /// <summary>
+        /// AssertLookupInProgressCounterTextBlockText - Use 'AssertLookupInProgressCounterTextBlockTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertLookupInProgressCounterTextBlockText()
+        {
+            #region Variable Declarations
+            WpfText uIItem0Text2 = this.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UIItem0Text2;
+            #endregion
+
+            // Verify that the 'DisplayText' property of '0' label equals '0'
+            Assert.AreEqual(this.AssertLookupInProgressCounterTextBlockTextExpectedValues.UIItem0Text2DisplayText, uIItem0Text2.DisplayText);
+        }
+        
+        /// <summary>
         /// AssertMainWindow - Use 'AssertMainWindowExpectedValues' to pass parameters into this method.
         /// </summary>
         public void AssertMainWindow()
@@ -40,6 +118,19 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
 
             // Verify that the 'Exists' property of 'Unknown File Hunter' window equals 'True'
             Assert.AreEqual(this.AssertMainWindowExpectedValues.UIUnknownFileHunterWindowExists, uIUnknownFileHunterWindow.Exists);
+        }
+        
+        /// <summary>
+        /// AssertMainWindowTitleTextBlockText - Use 'AssertMainWindowTitleTextBlockTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertMainWindowTitleTextBlockText()
+        {
+            #region Variable Declarations
+            WpfText uIUnknownFileHunterText = this.UIUnknownFileHunterWindow1.UIUnknownFileHunterText;
+            #endregion
+
+            // Verify that the 'DisplayText' property of 'Unknown File Hunter' label equals 'Unknown File Hunter'
+            Assert.AreEqual(this.AssertMainWindowTitleTextBlockTextExpectedValues.UIUnknownFileHunterTextDisplayText, uIUnknownFileHunterText.DisplayText);
         }
         
         /// <summary>
@@ -66,6 +157,19 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
 
             // Verify that the 'DisplayText' property of 'There are no scans have been performed yet.' label equals 'There are no scans have been performed yet.'
             Assert.AreEqual(this.AssertNoScansTextBlockTextExpectedValues.UITherearenoscanshavebTextDisplayText, uITherearenoscanshavebText.DisplayText);
+        }
+        
+        /// <summary>
+        /// AssertReferalTextPart1 - Use 'AssertReferalTextPart1ExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertReferalTextPart1()
+        {
+            #region Variable Declarations
+            WpfText uIComodoForensicAnalysText = this.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIPleaseWaitProgressBar.UIComodoForensicAnalysText;
+            #endregion
+
+            // Verify that the 'DisplayText' property of 'Comodo Forensic Analysis Tool is part of the Comod...' label equals 'Comodo Forensic Analysis Tool is part of the Comodo ONE portfolio of security solutions. Visit '
+            Assert.AreEqual(this.AssertReferalTextPart1ExpectedValues.UIComodoForensicAnalysTextDisplayText, uIComodoForensicAnalysText.DisplayText);
         }
         
         /// <summary>
@@ -121,16 +225,68 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         }
         
         /// <summary>
+        /// ClickComodoOneReferralLink
+        /// </summary>
+        public void ClickComodoOneReferralLink()
+        {
+            #region Variable Declarations
+            WpfHyperlink uIOnecomodocomHyperlink = this.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIOnecomodocomText.UIOnecomodocomHyperlink;
+            #endregion
+
+            // Click 'one.comodo.com' link
+            Mouse.Click(uIOnecomodocomHyperlink, new Point(38, 8));
+        }
+        
+        /// <summary>
+        /// ClickCreateReportDropDownButton
+        /// </summary>
+        public void ClickCreateReportDropDownButton()
+        {
+            #region Variable Declarations
+            WpfButton uICreateReportButton = this.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIMainToolBarToolBar.UICreateReportButton;
+            #endregion
+
+            // Click 'Create Report' button
+            Mouse.Click(uICreateReportButton, new Point(67, 31));
+        }
+        
+        /// <summary>
         /// ClickMinimizeButton
         /// </summary>
         public void ClickMinimizeButton()
         {
             #region Variable Declarations
-            WpfButton uIMinimizeButtonButton = this.UIUnknownFileHunterWindow1.UIMinimizeButtonButton;
+            WpfButton uIMinimizeButtonButton = this.UIForensicAnalysisToolWindow.UIMinimizeButtonButton;
             #endregion
 
             // Click 'MinimizeButton' button
-            Mouse.Click(uIMinimizeButtonButton, new Point(15, 14));
+            Mouse.Click(uIMinimizeButtonButton, new Point(11, 14));
+        }
+        
+        /// <summary>
+        /// ClickOptionsButton
+        /// </summary>
+        public void ClickOptionsButton()
+        {
+            #region Variable Declarations
+            WpfButton uIOptionsButtonButton = this.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIMainToolBarToolBar.UIOptionsButtonButton;
+            #endregion
+
+            // Click 'OptionsButton' button
+            Mouse.Click(uIOptionsButtonButton, new Point(42, 38));
+        }
+        
+        /// <summary>
+        /// ClickPreviousScansButton
+        /// </summary>
+        public void ClickPreviousScansButton()
+        {
+            #region Variable Declarations
+            WpfButton uIPreviousScansButtonButton = this.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIMainToolBarToolBar.UIPreviousScansButtonButton;
+            #endregion
+
+            // Click 'PreviousScansButton' button
+            Mouse.Click(uIPreviousScansButtonButton, new Point(68, 30));
         }
         
         /// <summary>
@@ -152,24 +308,11 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         public void ClickResizeButton()
         {
             #region Variable Declarations
-            WpfButton uIResizeButtonButton = this.UIUnknownFileHunterWindow1.UIResizeButtonButton;
+            WpfButton uIResizeButtonButton = this.UIForensicAnalysisToolWindow.UIResizeButtonButton;
             #endregion
 
             // Click 'ResizeButton' button
-            Mouse.Click(uIResizeButtonButton, new Point(9, 7));
-        }
-        
-        /// <summary>
-        /// ClickScanNowButton
-        /// </summary>
-        public void ClickScanNowButton()
-        {
-            #region Variable Declarations
-            WpfButton uIStartScanningNowButton = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UISendingFilesforAnalyProgressBar.UIStartScanningNowButton;
-            #endregion
-
-            // Click 'Start Scanning Now!' button
-            Mouse.Click(uIStartScanningNowButton, new Point(76, 12));
+            Mouse.Click(uIResizeButtonButton, new Point(14, 4));
         }
         
         /// <summary>
@@ -224,72 +367,79 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
             Keyboard.SendKeys(uISearchWatermarkTextBEdit, this.InputTextToSearchBoxParams.UISearchWatermarkTextBEditSendKeys, ModifierKeys.None);
         }
         
-        /// <summary>
-        /// AssertComodoOneReferralTextBlockText - Use 'AssertComodoOneReferralTextBlockTextExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertComodoOneReferralTextBlockText()
-        {
-            #region Variable Declarations
-            WpfText uIThisproductisjustoneText = this.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UISendingFilesforAnalyProgressBar.UIThisproductisjustoneText;
-            #endregion
-
-            // Verify that the 'DisplayText' property of 'This product is just one part of Comodo ONE produc...' label equals 'This product is just one part of Comodo ONE productivity and revenue generation engine. To get more AWESOME products for FREE, please visit one.comodo.com'
-            Assert.AreEqual(this.AssertComodoOneReferralTextBlockTextExpectedValues.UIThisproductisjustoneTextDisplayText, uIThisproductisjustoneText.DisplayText);
-        }
-        
-        /// <summary>
-        /// ClickComodoOneReferralLink
-        /// </summary>
-        public void ClickComodoOneReferralLink()
-        {
-            #region Variable Declarations
-            WpfHyperlink uIOnecomodocomHyperlink = this.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UIThisproductisjustoneText.UIOnecomodocomHyperlink;
-            #endregion
-
-            // Click 'one.comodo.com' link
-            Mouse.Click(uIOnecomodocomHyperlink, new Point(31, 1));
-        }
-        
-        /// <summary>
-        /// AssertMainWindowTitleTextBlockText - Use 'AssertMainWindowTitleTextBlockTextExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertMainWindowTitleTextBlockText()
-        {
-            #region Variable Declarations
-            WpfText uIUnknownFileHunterText = this.UIUnknownFileHunterWindow1.UIUnknownFileHunterText;
-            #endregion
-
-            // Verify that the 'DisplayText' property of 'Unknown File Hunter' label equals 'Unknown File Hunter'
-            Assert.AreEqual(this.AssertMainWindowTitleTextBlockTextExpectedValues.UIUnknownFileHunterTextDisplayText, uIUnknownFileHunterText.DisplayText);
-        }
-        
-        /// <summary>
-        /// AssertInAnalysisCounterTextBlockText - Use 'AssertInAnalysisCounterTextBlockTextExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertInAnalysisCounterTextBlockText()
-        {
-            #region Variable Declarations
-            WpfText uIItem1Text = this.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UIItem1Text;
-            #endregion
-
-            // Verify that the 'DisplayText' property of '1' label equals '1'
-            Assert.AreEqual(this.AssertInAnalysisCounterTextBlockTextExpectedValues.UIItem1TextDisplayText, uIItem1Text.DisplayText);
-        }
-        
-        /// <summary>
-        /// AssertLookupInProgressCounterTextBlockText - Use 'AssertLookupInProgressCounterTextBlockTextExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertLookupInProgressCounterTextBlockText()
-        {
-            #region Variable Declarations
-            WpfText uIItem0Text2 = this.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UIItem0Text2;
-            #endregion
-
-            // Verify that the 'DisplayText' property of '0' label equals '0'
-            Assert.AreEqual(this.AssertLookupInProgressCounterTextBlockTextExpectedValues.UIItem0Text2DisplayText, uIItem0Text2.DisplayText);
-        }
-        
         #region Properties
+        public virtual AssertComodoOneReferalTextPart1ExpectedValues AssertComodoOneReferalTextPart1ExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertComodoOneReferalTextPart1ExpectedValues == null))
+                {
+                    this.mAssertComodoOneReferalTextPart1ExpectedValues = new AssertComodoOneReferalTextPart1ExpectedValues();
+                }
+                return this.mAssertComodoOneReferalTextPart1ExpectedValues;
+            }
+        }
+        
+        public virtual AssertComodoOneReferalTextPart2ExpectedValues AssertComodoOneReferalTextPart2ExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertComodoOneReferalTextPart2ExpectedValues == null))
+                {
+                    this.mAssertComodoOneReferalTextPart2ExpectedValues = new AssertComodoOneReferalTextPart2ExpectedValues();
+                }
+                return this.mAssertComodoOneReferalTextPart2ExpectedValues;
+            }
+        }
+        
+        public virtual AssertComodoOneReferalTextPart3ExpectedValues AssertComodoOneReferalTextPart3ExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertComodoOneReferalTextPart3ExpectedValues == null))
+                {
+                    this.mAssertComodoOneReferalTextPart3ExpectedValues = new AssertComodoOneReferalTextPart3ExpectedValues();
+                }
+                return this.mAssertComodoOneReferalTextPart3ExpectedValues;
+            }
+        }
+        
+        public virtual AssertComodoOneReferralTextBlockTextExpectedValues AssertComodoOneReferralTextBlockTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertComodoOneReferralTextBlockTextExpectedValues == null))
+                {
+                    this.mAssertComodoOneReferralTextBlockTextExpectedValues = new AssertComodoOneReferralTextBlockTextExpectedValues();
+                }
+                return this.mAssertComodoOneReferralTextBlockTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertInAnalysisCounterTextBlockTextExpectedValues AssertInAnalysisCounterTextBlockTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertInAnalysisCounterTextBlockTextExpectedValues == null))
+                {
+                    this.mAssertInAnalysisCounterTextBlockTextExpectedValues = new AssertInAnalysisCounterTextBlockTextExpectedValues();
+                }
+                return this.mAssertInAnalysisCounterTextBlockTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertLookupInProgressCounterTextBlockTextExpectedValues AssertLookupInProgressCounterTextBlockTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertLookupInProgressCounterTextBlockTextExpectedValues == null))
+                {
+                    this.mAssertLookupInProgressCounterTextBlockTextExpectedValues = new AssertLookupInProgressCounterTextBlockTextExpectedValues();
+                }
+                return this.mAssertLookupInProgressCounterTextBlockTextExpectedValues;
+            }
+        }
+        
         public virtual AssertMainWindowExpectedValues AssertMainWindowExpectedValues
         {
             get
@@ -299,6 +449,18 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
                     this.mAssertMainWindowExpectedValues = new AssertMainWindowExpectedValues();
                 }
                 return this.mAssertMainWindowExpectedValues;
+            }
+        }
+        
+        public virtual AssertMainWindowTitleTextBlockTextExpectedValues AssertMainWindowTitleTextBlockTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertMainWindowTitleTextBlockTextExpectedValues == null))
+                {
+                    this.mAssertMainWindowTitleTextBlockTextExpectedValues = new AssertMainWindowTitleTextBlockTextExpectedValues();
+                }
+                return this.mAssertMainWindowTitleTextBlockTextExpectedValues;
             }
         }
         
@@ -326,6 +488,18 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
             }
         }
         
+        public virtual AssertReferalTextPart1ExpectedValues AssertReferalTextPart1ExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertReferalTextPart1ExpectedValues == null))
+                {
+                    this.mAssertReferalTextPart1ExpectedValues = new AssertReferalTextPart1ExpectedValues();
+                }
+                return this.mAssertReferalTextPart1ExpectedValues;
+            }
+        }
+        
         public virtual AssertUnknownFilesCounterTextBlockTextExpectedValues AssertUnknownFilesCounterTextBlockTextExpectedValues
         {
             get
@@ -347,54 +521,6 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
                     this.mInputTextToSearchBoxParams = new InputTextToSearchBoxParams();
                 }
                 return this.mInputTextToSearchBoxParams;
-            }
-        }
-        
-        public virtual AssertComodoOneReferralTextBlockTextExpectedValues AssertComodoOneReferralTextBlockTextExpectedValues
-        {
-            get
-            {
-                if ((this.mAssertComodoOneReferralTextBlockTextExpectedValues == null))
-                {
-                    this.mAssertComodoOneReferralTextBlockTextExpectedValues = new AssertComodoOneReferralTextBlockTextExpectedValues();
-                }
-                return this.mAssertComodoOneReferralTextBlockTextExpectedValues;
-            }
-        }
-        
-        public virtual AssertMainWindowTitleTextBlockTextExpectedValues AssertMainWindowTitleTextBlockTextExpectedValues
-        {
-            get
-            {
-                if ((this.mAssertMainWindowTitleTextBlockTextExpectedValues == null))
-                {
-                    this.mAssertMainWindowTitleTextBlockTextExpectedValues = new AssertMainWindowTitleTextBlockTextExpectedValues();
-                }
-                return this.mAssertMainWindowTitleTextBlockTextExpectedValues;
-            }
-        }
-        
-        public virtual AssertInAnalysisCounterTextBlockTextExpectedValues AssertInAnalysisCounterTextBlockTextExpectedValues
-        {
-            get
-            {
-                if ((this.mAssertInAnalysisCounterTextBlockTextExpectedValues == null))
-                {
-                    this.mAssertInAnalysisCounterTextBlockTextExpectedValues = new AssertInAnalysisCounterTextBlockTextExpectedValues();
-                }
-                return this.mAssertInAnalysisCounterTextBlockTextExpectedValues;
-            }
-        }
-        
-        public virtual AssertLookupInProgressCounterTextBlockTextExpectedValues AssertLookupInProgressCounterTextBlockTextExpectedValues
-        {
-            get
-            {
-                if ((this.mAssertLookupInProgressCounterTextBlockTextExpectedValues == null))
-                {
-                    this.mAssertLookupInProgressCounterTextBlockTextExpectedValues = new AssertLookupInProgressCounterTextBlockTextExpectedValues();
-                }
-                return this.mAssertLookupInProgressCounterTextBlockTextExpectedValues;
             }
         }
         
@@ -448,23 +574,31 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         #endregion
         
         #region Fields
+        private AssertComodoOneReferalTextPart1ExpectedValues mAssertComodoOneReferalTextPart1ExpectedValues;
+        
+        private AssertComodoOneReferalTextPart2ExpectedValues mAssertComodoOneReferalTextPart2ExpectedValues;
+        
+        private AssertComodoOneReferalTextPart3ExpectedValues mAssertComodoOneReferalTextPart3ExpectedValues;
+        
+        private AssertComodoOneReferralTextBlockTextExpectedValues mAssertComodoOneReferralTextBlockTextExpectedValues;
+        
+        private AssertInAnalysisCounterTextBlockTextExpectedValues mAssertInAnalysisCounterTextBlockTextExpectedValues;
+        
+        private AssertLookupInProgressCounterTextBlockTextExpectedValues mAssertLookupInProgressCounterTextBlockTextExpectedValues;
+        
         private AssertMainWindowExpectedValues mAssertMainWindowExpectedValues;
+        
+        private AssertMainWindowTitleTextBlockTextExpectedValues mAssertMainWindowTitleTextBlockTextExpectedValues;
         
         private AssertMalwaresCounterTextBlockTextExpectedValues mAssertMalwaresCounterTextBlockTextExpectedValues;
         
         private AssertNoScansTextBlockTextExpectedValues mAssertNoScansTextBlockTextExpectedValues;
         
+        private AssertReferalTextPart1ExpectedValues mAssertReferalTextPart1ExpectedValues;
+        
         private AssertUnknownFilesCounterTextBlockTextExpectedValues mAssertUnknownFilesCounterTextBlockTextExpectedValues;
         
         private InputTextToSearchBoxParams mInputTextToSearchBoxParams;
-        
-        private AssertComodoOneReferralTextBlockTextExpectedValues mAssertComodoOneReferralTextBlockTextExpectedValues;
-        
-        private AssertMainWindowTitleTextBlockTextExpectedValues mAssertMainWindowTitleTextBlockTextExpectedValues;
-        
-        private AssertInAnalysisCounterTextBlockTextExpectedValues mAssertInAnalysisCounterTextBlockTextExpectedValues;
-        
-        private AssertLookupInProgressCounterTextBlockTextExpectedValues mAssertLookupInProgressCounterTextBlockTextExpectedValues;
         
         private UICOMODOUnknownFileHunWindow mUICOMODOUnknownFileHunWindow;
         
@@ -473,6 +607,98 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         private UIUnknownFileHunterWindow1 mUIUnknownFileHunterWindow1;
         
         private UIForensicAnalysisToolWindow mUIForensicAnalysisToolWindow;
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertComodoOneReferalTextPart1'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AssertComodoOneReferalTextPart1ExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'DisplayText' property of 'Comodo Forensic Analysis Tool is part of the Comod...' label equals 'Comodo Forensic Analysis Tool is part of the Comodo ONE portfolio of security solutions. Visit '
+        /// </summary>
+        public string UIComodoForensicAnalysText1DisplayText = "Comodo Forensic Analysis Tool is part of the Comodo ONE portfolio of security sol" +
+            "utions. Visit ";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertComodoOneReferalTextPart2'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AssertComodoOneReferalTextPart2ExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'DisplayText' property of 'one.comodo.com' label equals 'one.comodo.com'
+        /// </summary>
+        public string UIOnecomodocomTextDisplayText = "one.comodo.com";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertComodoOneReferalTextPart3'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AssertComodoOneReferalTextPart3ExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'DisplayText' property of 'to learn how Comodo can help protect your environ...' label equals ' to learn how Comodo can help protect your environment.'
+        /// </summary>
+        public string UITolearnhowComodocanhTextDisplayText = " to learn how Comodo can help protect your environment.";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertComodoOneReferralTextBlockText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AssertComodoOneReferralTextBlockTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'DisplayText' property of 'This product is just one part of Comodo ONE produc...' label equals 'This product is just one part of Comodo ONE productivity and revenue generation engine. To get more AWESOME products for FREE, please visit one.comodo.com'
+        /// </summary>
+        public string UIThisproductisjustoneTextDisplayText = "This product is just one part of Comodo ONE productivity and revenue generation e" +
+            "ngine. To get more AWESOME products for FREE, please visit one.comodo.com";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertInAnalysisCounterTextBlockText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AssertInAnalysisCounterTextBlockTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'DisplayText' property of '1' label equals '1'
+        /// </summary>
+        public string UIItem1TextDisplayText = "1";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertLookupInProgressCounterTextBlockText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AssertLookupInProgressCounterTextBlockTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'DisplayText' property of '0' label equals '0'
+        /// </summary>
+        public string UIItem0Text2DisplayText = "0";
         #endregion
     }
     
@@ -488,6 +714,21 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         /// Verify that the 'Exists' property of 'Unknown File Hunter' window equals 'True'
         /// </summary>
         public bool UIUnknownFileHunterWindowExists = true;
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertMainWindowTitleTextBlockText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AssertMainWindowTitleTextBlockTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'DisplayText' property of 'Unknown File Hunter' label equals 'Unknown File Hunter'
+        /// </summary>
+        public string UIUnknownFileHunterTextDisplayText = "Unknown File Hunter";
         #endregion
     }
     
@@ -522,6 +763,22 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
     }
     
     /// <summary>
+    /// Parameters to be passed into 'AssertReferalTextPart1'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AssertReferalTextPart1ExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'DisplayText' property of 'Comodo Forensic Analysis Tool is part of the Comod...' label equals 'Comodo Forensic Analysis Tool is part of the Comodo ONE portfolio of security solutions. Visit '
+        /// </summary>
+        public string UIComodoForensicAnalysTextDisplayText = "Comodo Forensic Analysis Tool is part of the Comodo ONE portfolio of security sol" +
+            "utions. Visit ";
+        #endregion
+    }
+    
+    /// <summary>
     /// Parameters to be passed into 'AssertUnknownFilesCounterTextBlockText'
     /// </summary>
     [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
@@ -548,67 +805,6 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         /// Type 'text' in 'SearchWatermarkTextBox' text box
         /// </summary>
         public string UISearchWatermarkTextBEditSendKeys = "text";
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'AssertComodoOneReferralTextBlockText'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class AssertComodoOneReferralTextBlockTextExpectedValues
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Verify that the 'DisplayText' property of 'This product is just one part of Comodo ONE produc...' label equals 'This product is just one part of Comodo ONE productivity and revenue generation engine. To get more AWESOME products for FREE, please visit one.comodo.com'
-        /// </summary>
-        public string UIThisproductisjustoneTextDisplayText = "This product is just one part of Comodo ONE productivity and revenue generation e" +
-            "ngine. To get more AWESOME products for FREE, please visit one.comodo.com";
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'AssertMainWindowTitleTextBlockText'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class AssertMainWindowTitleTextBlockTextExpectedValues
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Verify that the 'DisplayText' property of 'Unknown File Hunter' label equals 'Unknown File Hunter'
-        /// </summary>
-        public string UIUnknownFileHunterTextDisplayText = "Unknown File Hunter";
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'AssertInAnalysisCounterTextBlockText'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class AssertInAnalysisCounterTextBlockTextExpectedValues
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Verify that the 'DisplayText' property of '1' label equals '1'
-        /// </summary>
-        public string UIItem1TextDisplayText = "1";
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'AssertLookupInProgressCounterTextBlockText'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class AssertLookupInProgressCounterTextBlockTextExpectedValues
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Verify that the 'DisplayText' property of '0' label equals '0'
-        /// </summary>
-        public string UIItem0Text2DisplayText = "0";
         #endregion
     }
     
@@ -1533,6 +1729,38 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
                 return this.mUISearchControlCustom;
             }
         }
+        
+        public WpfButton UIResizeButtonButton
+        {
+            get
+            {
+                if ((this.mUIResizeButtonButton == null))
+                {
+                    this.mUIResizeButtonButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIResizeButtonButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "ResizeButton";
+                    this.mUIResizeButtonButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIResizeButtonButton;
+            }
+        }
+        
+        public WpfButton UIMinimizeButtonButton
+        {
+            get
+            {
+                if ((this.mUIMinimizeButtonButton == null))
+                {
+                    this.mUIMinimizeButtonButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIMinimizeButtonButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "MinimizeButton";
+                    this.mUIMinimizeButtonButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIMinimizeButtonButton;
+            }
+        }
         #endregion
         
         #region Fields
@@ -1541,6 +1769,10 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         private UIViewsMainViewxamlPane1 mUIViewsMainViewxamlPane;
         
         private UISearchControlCustom3 mUISearchControlCustom;
+        
+        private WpfButton mUIResizeButtonButton;
+        
+        private WpfButton mUIMinimizeButtonButton;
         #endregion
     }
     
@@ -1582,12 +1814,40 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
                 return this.mUISearchControlCustom;
             }
         }
+        
+        public UIPleaseWaitProgressBar UIPleaseWaitProgressBar
+        {
+            get
+            {
+                if ((this.mUIPleaseWaitProgressBar == null))
+                {
+                    this.mUIPleaseWaitProgressBar = new UIPleaseWaitProgressBar(this);
+                }
+                return this.mUIPleaseWaitProgressBar;
+            }
+        }
+        
+        public UIOnecomodocomText UIOnecomodocomText
+        {
+            get
+            {
+                if ((this.mUIOnecomodocomText == null))
+                {
+                    this.mUIOnecomodocomText = new UIOnecomodocomText(this);
+                }
+                return this.mUIOnecomodocomText;
+            }
+        }
         #endregion
         
         #region Fields
         private UIMainToolBarToolBar mUIMainToolBarToolBar;
         
         private UISearchControlCustom2 mUISearchControlCustom;
+        
+        private UIPleaseWaitProgressBar mUIPleaseWaitProgressBar;
+        
+        private UIOnecomodocomText mUIOnecomodocomText;
         #endregion
     }
     
@@ -1620,10 +1880,64 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
                 return this.mUIReportsButton;
             }
         }
+        
+        public WpfButton UIPreviousScansButtonButton
+        {
+            get
+            {
+                if ((this.mUIPreviousScansButtonButton == null))
+                {
+                    this.mUIPreviousScansButtonButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIPreviousScansButtonButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "PreviousScansButton";
+                    this.mUIPreviousScansButtonButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIPreviousScansButtonButton;
+            }
+        }
+        
+        public WpfButton UICreateReportButton
+        {
+            get
+            {
+                if ((this.mUICreateReportButton == null))
+                {
+                    this.mUICreateReportButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUICreateReportButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "CreateReportDropDownButton";
+                    this.mUICreateReportButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUICreateReportButton;
+            }
+        }
+        
+        public WpfButton UIOptionsButtonButton
+        {
+            get
+            {
+                if ((this.mUIOptionsButtonButton == null))
+                {
+                    this.mUIOptionsButtonButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIOptionsButtonButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "OptionsButton";
+                    this.mUIOptionsButtonButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIOptionsButtonButton;
+            }
+        }
         #endregion
         
         #region Fields
         private WpfButton mUIReportsButton;
+        
+        private WpfButton mUIPreviousScansButtonButton;
+        
+        private WpfButton mUICreateReportButton;
+        
+        private WpfButton mUIOptionsButtonButton;
         #endregion
     }
     
@@ -1661,6 +1975,168 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         
         #region Fields
         private WpfButton mUIClearSearchBoxButtonButton;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIPleaseWaitProgressBar : WpfProgressBar
+    {
+        
+        public UIPleaseWaitProgressBar(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfProgressBar.PropertyNames.Name] = "Please Wait...";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfText UIComodoForensicAnalysText
+        {
+            get
+            {
+                if ((this.mUIComodoForensicAnalysText == null))
+                {
+                    this.mUIComodoForensicAnalysText = new WpfText(this);
+                    #region Search Criteria
+                    this.mUIComodoForensicAnalysText.SearchProperties[WpfText.PropertyNames.AutomationId] = "ReferalTextPart1";
+                    this.mUIComodoForensicAnalysText.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIComodoForensicAnalysText;
+            }
+        }
+        
+        public WpfText UIComodoForensicAnalysText1
+        {
+            get
+            {
+                if ((this.mUIComodoForensicAnalysText1 == null))
+                {
+                    this.mUIComodoForensicAnalysText1 = new WpfText(this);
+                    #region Search Criteria
+                    this.mUIComodoForensicAnalysText1.SearchProperties[WpfText.PropertyNames.AutomationId] = "ComodoOneReferalTextPart1";
+                    this.mUIComodoForensicAnalysText1.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIComodoForensicAnalysText1;
+            }
+        }
+        
+        public WpfText UIOnecomodocomText
+        {
+            get
+            {
+                if ((this.mUIOnecomodocomText == null))
+                {
+                    this.mUIOnecomodocomText = new WpfText(this);
+                    #region Search Criteria
+                    this.mUIOnecomodocomText.SearchProperties[WpfText.PropertyNames.AutomationId] = "ComodoOneReferalTextPart2";
+                    this.mUIOnecomodocomText.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIOnecomodocomText;
+            }
+        }
+        
+        public WpfText UITolearnhowComodocanhText
+        {
+            get
+            {
+                if ((this.mUITolearnhowComodocanhText == null))
+                {
+                    this.mUITolearnhowComodocanhText = new WpfText(this);
+                    #region Search Criteria
+                    this.mUITolearnhowComodocanhText.SearchProperties[WpfText.PropertyNames.AutomationId] = "ComodoOneReferalTextPart3";
+                    this.mUITolearnhowComodocanhText.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUITolearnhowComodocanhText;
+            }
+        }
+        
+        public WpfButton UIScanNowButtonButton
+        {
+            get
+            {
+                if ((this.mUIScanNowButtonButton == null))
+                {
+                    this.mUIScanNowButtonButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIScanNowButtonButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "ScanNowButton";
+                    this.mUIScanNowButtonButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIScanNowButtonButton;
+            }
+        }
+        
+        public WpfButton UIStartAutoDiscoveryBuButton
+        {
+            get
+            {
+                if ((this.mUIStartAutoDiscoveryBuButton == null))
+                {
+                    this.mUIStartAutoDiscoveryBuButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIStartAutoDiscoveryBuButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "StartAutoDiscoveryButton";
+                    this.mUIStartAutoDiscoveryBuButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIStartAutoDiscoveryBuButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfText mUIComodoForensicAnalysText;
+        
+        private WpfText mUIComodoForensicAnalysText1;
+        
+        private WpfText mUIOnecomodocomText;
+        
+        private WpfText mUITolearnhowComodocanhText;
+        
+        private WpfButton mUIScanNowButtonButton;
+        
+        private WpfButton mUIStartAutoDiscoveryBuButton;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIOnecomodocomText : WpfText
+    {
+        
+        public UIOnecomodocomText(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfText.PropertyNames.AutomationId] = "ComodoOneReferalTextPart2";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfHyperlink UIOnecomodocomHyperlink
+        {
+            get
+            {
+                if ((this.mUIOnecomodocomHyperlink == null))
+                {
+                    this.mUIOnecomodocomHyperlink = new WpfHyperlink(this);
+                    #region Search Criteria
+                    this.mUIOnecomodocomHyperlink.SearchProperties[WpfHyperlink.PropertyNames.AutomationId] = "ComodoOneReferralLink";
+                    this.mUIOnecomodocomHyperlink.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIOnecomodocomHyperlink;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfHyperlink mUIOnecomodocomHyperlink;
         #endregion
     }
     

@@ -8,7 +8,7 @@
 //  </auto-generated>
 // ------------------------------------------------------------------------------
 
-namespace CodedUITestAT.UIMaps.UIMapDiscoveryClasses
+namespace CodedUITestFAT.UIMaps.UIMapDiscoveryClasses
 {
     using System;
     using System.CodeDom.Compiler;
@@ -53,6 +53,32 @@ namespace CodedUITestAT.UIMaps.UIMapDiscoveryClasses
 
             // Click 'SkipDiscoveryButton' button
             Mouse.Click(uISkipDiscoveryButtonButton, new Point(53, 8));
+        }
+        
+        /// <summary>
+        /// ClickScanNowButton
+        /// </summary>
+        public void ClickScanNowButton()
+        {
+            #region Variable Declarations
+            WpfButton uIScanNowButtonButton = this.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIPleaseWaitProgressBar.UIScanNowButtonButton;
+            #endregion
+
+            // Click 'ScanNowButton' button
+            Mouse.Click(uIScanNowButtonButton, new Point(46, 6));
+        }
+        
+        /// <summary>
+        /// ClickStartAutoDiscoveryButton
+        /// </summary>
+        public void ClickStartAutoDiscoveryButton()
+        {
+            #region Variable Declarations
+            WpfButton uIStartAutoDiscoveryBuButton = this.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIPleaseWaitProgressBar.UIStartAutoDiscoveryBuButton;
+            #endregion
+
+            // Click 'StartAutoDiscoveryButton' button
+            Mouse.Click(uIStartAutoDiscoveryBuButton, new Point(92, 16));
         }
         
         #region Properties
@@ -152,12 +178,80 @@ namespace CodedUITestAT.UIMaps.UIMapDiscoveryClasses
                 return this.mUICustomScanButtonButton;
             }
         }
+        
+        public UIPleaseWaitProgressBar UIPleaseWaitProgressBar
+        {
+            get
+            {
+                if ((this.mUIPleaseWaitProgressBar == null))
+                {
+                    this.mUIPleaseWaitProgressBar = new UIPleaseWaitProgressBar(this);
+                }
+                return this.mUIPleaseWaitProgressBar;
+            }
+        }
         #endregion
         
         #region Fields
         private WpfButton mUISkipDiscoveryButtonButton;
         
         private WpfButton mUICustomScanButtonButton;
+        
+        private UIPleaseWaitProgressBar mUIPleaseWaitProgressBar;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIPleaseWaitProgressBar : WpfProgressBar
+    {
+        
+        public UIPleaseWaitProgressBar(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfProgressBar.PropertyNames.Name] = "Please Wait...";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfButton UIScanNowButtonButton
+        {
+            get
+            {
+                if ((this.mUIScanNowButtonButton == null))
+                {
+                    this.mUIScanNowButtonButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIScanNowButtonButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "ScanNowButton";
+                    this.mUIScanNowButtonButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIScanNowButtonButton;
+            }
+        }
+        
+        public WpfButton UIStartAutoDiscoveryBuButton
+        {
+            get
+            {
+                if ((this.mUIStartAutoDiscoveryBuButton == null))
+                {
+                    this.mUIStartAutoDiscoveryBuButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIStartAutoDiscoveryBuButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "StartAutoDiscoveryButton";
+                    this.mUIStartAutoDiscoveryBuButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIStartAutoDiscoveryBuButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfButton mUIScanNowButtonButton;
+        
+        private WpfButton mUIStartAutoDiscoveryBuButton;
         #endregion
     }
 }

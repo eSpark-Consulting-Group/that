@@ -184,7 +184,7 @@ namespace CodedUITestFAT
 
             BasicReportTest(ReportType.ExecutiveValkyrie, TestContext);
 
-            UIHelper.WaitForControlIsClickable(useMain.StartScanButton());
+            //UIHelper.WaitForControlIsClickable(useMain.StartScanButton());
         }
 
         [TestMethod, Timeout(DataHelper.LongTestTimeout)]
@@ -213,7 +213,7 @@ namespace CodedUITestFAT
             
             BasicReportTest(ReportType.PerDeviceValkyrie, TestContext);
             
-            UIHelper.WaitForControlIsClickable(useMain.StartScanButton());
+            //UIHelper.WaitForControlIsClickable(useMain.StartScanButton());
         }
 
         [TestMethod, Timeout(DataHelper.LongTestTimeout)]
@@ -242,7 +242,7 @@ namespace CodedUITestFAT
 
             BasicReportTest(ReportType.PerProgramValkyrie, TestContext);
 
-            UIHelper.WaitForControlIsClickable(useMain.StartScanButton());
+            //UIHelper.WaitForControlIsClickable(useMain.StartScanButton());
         }
 
         #endregion

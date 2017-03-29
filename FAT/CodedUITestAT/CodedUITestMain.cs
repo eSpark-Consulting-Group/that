@@ -5,8 +5,10 @@ using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
-using CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses;
 using CodedUITestFAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses;
+using CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses;
+
+
 
 namespace CodedUITestFAT
 {
@@ -60,12 +62,7 @@ namespace CodedUITestFAT
             SysHelper.StartProduct(DataHelper.GetEndpoint());
             
             CodedUITestEula useEula = new CodedUITestEula();            
-            useEula.UIMapEula.ClickIAcceptButton();
-
-            UIHelper.WaitForControlIsEnabled(SkipDiscoveryButton());
-            UIMapDiscovery.ClickSkipDiscoveryButton();
-
-            UIHelper.WaitForControlIsEnabled(CustomScanButton());
+            useEula.UIMapEula.ClickIAcceptButton();            
         }
         
         [TestCleanup]
@@ -84,9 +81,19 @@ namespace CodedUITestFAT
 
         #region Discovery
 
+        private WpfButton ScanNowButton()
+        {
+            return UIMapDiscovery.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIPleaseWaitProgressBar.UIScanNowButtonButton;
+        }
+
         private WpfButton CustomScanButton()
         {
             return UIMapDiscovery.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UICustomScanButtonButton;
+        }
+
+        private WpfButton StartAutoDiscoveryButton()
+        {
+            return UIMapDiscovery.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIPleaseWaitProgressBar.UIStartAutoDiscoveryBuButton;
         }
 
         #endregion
@@ -95,22 +102,23 @@ namespace CodedUITestFAT
 
         internal WpfWindow MainWindow()
         {
-            return UIMapMain.UIUnknownFileHunterWindow;
+            return UIMapMain.UIForensicAnalysisToolWindow;
         }
         
-        internal WpfButton StartScanButton()
+        internal WpfButton PreviousScansButton()
         {
-            return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIStartScanningButtonButton;
+            return UIMapMain.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIMainToolBarToolBar.UIPreviousScansButtonButton;
+        }
+       
+        
+        private WpfButton CreateReportDropDownButton()
+        {
+            return UIMapMain.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIMainToolBarToolBar.UICreateReportButton;
         }
 
-        private WpfButton ScanNowButton()
+        private WpfButton OptionsButton()
         {
-            return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UISendingFilesforAnalyProgressBar.UIStartScanningNowButton;
-        }
-        
-        private WpfButton StopScanButton()
-        {
-            return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIStopScanningButtonButton;
+            return UIMapMain.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIMainToolBarToolBar.UICreateReportButton;
         }
 
         private WpfButton AnalyzeWithValkyrieButton()
@@ -133,8 +141,21 @@ namespace CodedUITestFAT
           return UIMapMain.UIUnknownFileHunterWindow1.UISearchControlCustom.UISearchWatermarkTextBEdit;
         }
 
+        private WpfText ComodoOneReferalTextPart1()
+        {
+            return UIMapMain.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIPleaseWaitProgressBar.UIComodoForensicAnalysText1;
+        }
+        private WpfText ComodoOneReferalTextPart2()
+        {
+            return UIMapMain.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIPleaseWaitProgressBar.UIOnecomodocomText;
+        }
+        private WpfText ComodoOneReferalTextPart3()
+        {
+            return UIMapMain.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIPleaseWaitProgressBar.UITolearnhowComodocanhText;
+        }
+
         #endregion
-              
+
         #region Start Scan Wizard                
 
         #region Active Directory
@@ -341,6 +362,17 @@ namespace CodedUITestFAT
             else Assert.Fail(String.Format("The total number of files found {0} and the number of files at 'Valkyrie analysis results' screen {1} do not coincide!", expectedFilesNumber, valkyrieResultsRowsNumber));
         }
 
+        /// <summary> Asserts the referal text are equal to expected string </summary>
+        /// <param name="expectedReferralText">Set an expected referral text.</param>
+        /// <param name="testContext">Set a current test context.</param>
+        private void AssertReferralTextAreEqual(string expectedReferralText, TestContext testContext)
+        {
+            string actualReferaraltext = ComodoOneReferalTextPart1().DisplayText + ComodoOneReferalTextPart2().DisplayText + ComodoOneReferalTextPart3().DisplayText;            
+            if (actualReferaraltext.Equals(expectedReferralText))
+                testContext.WriteLine(String.Format("Actual referral text: \"{0}\" are equal to expected: \"{1}\"", actualReferaraltext, expectedReferralText));
+            else Assert.Fail(String.Format("Actual referral text: \"{0}\" are not equal to expected: \"{1}\"", actualReferaraltext, expectedReferralText));
+        }
+
         /// <summary> Waits until the Valkyrie results are received. </summary>
         /// <param name="testContext">Set a current TestContext.</param>
         internal void WaitForValkyrieResults(TestContext testContext)
@@ -545,6 +577,12 @@ namespace CodedUITestFAT
         [TestMethod, Timeout(DataHelper.LongTestTimeout)]
         public void WorkgroupQuickScanAndThreatDetailsCheckTest()
         {
+
+            UIHelper.WaitForControlIsEnabled(SkipDiscoveryButton());
+            UIMapDiscovery.ClickSkipDiscoveryButton();
+
+            UIHelper.WaitForControlIsEnabled(CustomScanButton());
+
             Computer endpoint = DataHelper.GetEndpoint();
             string workgroupName = SysHelper.GetWorkgroupName();
 
@@ -593,7 +631,7 @@ namespace CodedUITestFAT
         public void VerifyMainScreenDefaultsTest()
         {
             CodedUITestHelp useHelp = new CodedUITestHelp();
-            
+
             UIMapMain.ClickResizeButton();
             if (MainWindow().Maximized) TestContext.WriteLine("Main window was successfully maximized using Resize button.");
             else Assert.Fail("Main window was not maximized after clicking Resize button!");
@@ -607,34 +645,37 @@ namespace CodedUITestFAT
             else Assert.Fail("Main window is not minimized after clicking Minimize button!");
             MainWindow().Minimized = false;
 
-            if (StartScanButton().Enabled) TestContext.WriteLine("Start Scan button is enabled by default.");
-            else Assert.Fail("Start Scan button is disabled by default!");
+            if (SkipDiscoveryButton().Enabled) TestContext.WriteLine("Skip Discovery button is enabled by default.");
+            else Assert.Fail("Skip Discovery button is enabled by default!");
 
-            if (!StopScanButton().Enabled) TestContext.WriteLine("Stop Scan button is disabled by default.");
+            if (!PreviousScansButton().Enabled) TestContext.WriteLine("Previous Scans button is disabled by default.");
+            else Assert.Fail("Previous Scans button is enabled by default!");           
+
+            if (!CreateReportDropDownButton().Enabled) TestContext.WriteLine("Create Report drop down button is disabled by default.");
             else Assert.Fail("Stop Scan button is enabled by default!");
 
-            if (!AnalyzeWithValkyrieButton().Enabled) TestContext.WriteLine("'Analyze with Valkyrie' button is disabled by default.");
-            else Assert.Fail("'Analyse with Valkyrie' button is enabled by default!");
-            
-            if (!ReportsDropDownButton().Enabled) TestContext.WriteLine("Reports button is disabled by default.\n");
-            else Assert.Fail("Reports button is enabled by default!");
+            if (!OptionsButton().Enabled) TestContext.WriteLine("Options button is disabled by default.");
+            else Assert.Fail("Options button is enabled by default!");
 
             if (useHelp.HelpButton().Enabled) TestContext.WriteLine("Help button is enabled by default.");
             else Assert.Fail("Help button is disabled by default!");
 
-            if (!ScanResultsTab().Exists) TestContext.WriteLine("'Scan results' list is not shown by default.");
-            else Assert.Fail("'Scan results' list is shown by default!");
+            UIHelper.WaitForControlIsEnabled(SkipDiscoveryButton());
+            UIMapDiscovery.ClickSkipDiscoveryButton();            
 
-            UIMapMain.AssertNoScansTextBlockTextExpectedValues.UITherearenoscanshavebTextDisplayText = Settings.General.Default.NoScansTextBlockText;
-            UIMapMain.AssertNoScansTextBlockText();
-            TestContext.WriteLine(String.Format("'{0}' text is shown.", Settings.General.Default.NoScansTextBlockText));
+            UIHelper.WaitForControlIsEnabled(CustomScanButton());
+            UIHelper.WaitForControlIsClickable(CustomScanButton());
 
             if (ScanNowButton().Enabled) TestContext.WriteLine("'Scan Now' button is enabled by default.");
             else Assert.Fail("'Scan Now' button is disabled by default!");
 
-            UIMapMain.AssertComodoOneReferralTextBlockTextExpectedValues.UIThisproductisjustoneTextDisplayText = Settings.General.Default.ComodoOneReferralText;
-            UIMapMain.AssertComodoOneReferralTextBlockText();
-            TestContext.WriteLine(String.Format("'{0}' text is shown.", Settings.General.Default.ComodoOneReferralText));
+            if (CustomScanButton().Enabled) TestContext.WriteLine("'Custom Scan' button is enabled by default.");
+            else Assert.Fail("'Custom Scan' button is disabled by default!");
+
+            if (StartAutoDiscoveryButton().Enabled) TestContext.WriteLine("'Start Auto Discovery' button is enabled by default.");
+            else Assert.Fail("'Start Auto Discovery' button is disabled by default!");
+
+            AssertReferralTextAreEqual(Settings.General.Default.ComodoOneReferralText, TestContext);
 
             UIMapMain.ClickComodoOneReferralLink();
             UIHelper.AssertBrowserUri(Settings.General.Default.ComodoOneReferralUri, TestContext);
@@ -652,7 +693,7 @@ namespace CodedUITestFAT
             Malware malware = SysHelper.InfectForScan(endpoint);
             SysHelper.AddUnknownFileForScan(endpoint);
 
-            UIMapMain.ClickScanNowButton();
+            //UIMapMain.ClickScanNowButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanWizard.ClickActiveDirectoryButton();
             UIHelper.WaitForControlIsEnabled(NextButton());
@@ -686,7 +727,7 @@ namespace CodedUITestFAT
             UIMapValkyrieDetailsWindow.AssertThreatNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = malware.Name;
             UIMapValkyrieDetailsWindow.AssertThreatNameTextBlockText();
             UIMapValkyrieDetailsWindow.ClickCloseButton();
-            UIHelper.WaitForControlIsClickable(StartScanButton());
+            //UIHelper.WaitForControlIsClickable(StartScanButton());
         }
 
         [TestMethod, Timeout(DataHelper.LongTestTimeout)]
@@ -928,7 +969,7 @@ namespace CodedUITestFAT
             WaitForScanCompleted(ScanType.Quick);
             //UIMapScanCompletedWindow.ClickCloseCrossButton();
             TestContext.WriteLine("Scan completed...");
-            UIHelper.WaitForControlIsClickable(StartScanButton());
+            //UIHelper.WaitForControlIsClickable(StartScanButton());
             UIMapMain.ClickStartScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanWizard.ClickActiveDirectoryButton();
@@ -975,7 +1016,7 @@ namespace CodedUITestFAT
         {
             Computer endpoint = DataHelper.GetEndpoint();
 
-            UIMapMain.ClickScanNowButton();            
+            //UIMapMain.ClickScanNowButton();            
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanWizard.ClickNetworkAddressButton();
             UIHelper.WaitForControlIsClickable(NextButton());
@@ -1006,7 +1047,7 @@ namespace CodedUITestFAT
         {
             string workgroup = SysHelper.GetWorkgroupName();
 
-            UIMapMain.ClickScanNowButton();
+            //UIMapMain.ClickScanNowButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanWizard.ClickWorkgroupButton();
             UIHelper.WaitForControlIsClickable(NextButton());
@@ -1052,7 +1093,7 @@ namespace CodedUITestFAT
             string domainName = SysHelper.GetDomainName();
             Computer endpoint = DataHelper.GetEndpoint();
 
-            UIMapMain.ClickScanNowButton();
+            //UIMapMain.ClickScanNowButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanWizard.ClickActiveDirectoryButton();
             UIHelper.WaitForControlIsClickable(NextButton());

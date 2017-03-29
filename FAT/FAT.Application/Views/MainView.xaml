@@ -431,7 +431,7 @@
 
                     <Grid Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,74,32,20" Visibility="{Binding Loaded, Converter={converters:BoolToVisibilityConverter2}}">
                         <Grid Visibility="{Binding IsAutoDiscoveryInProgress, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}">
-                            <Button  MinWidth="180" MaxWidth="180" Visibility="{Binding IsScanInProgress, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"
+                            <Button AutomationProperties.AutomationId="StartAutoDiscoveryButton" MinWidth="180" MaxWidth="180" Visibility="{Binding IsScanInProgress, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"
                                      Command="{Binding StartAutoDiscoveryCommand}" Height="32" HorizontalContentAlignment="Left" >
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -667,7 +667,7 @@
                             </telerik:RadButton.Content>
                         </telerik:RadButton>
 
-                        <telerik:RadDropDownButton AutomationProperties.AutomationId="ReportsDropDownButton"
+                        <telerik:RadDropDownButton AutomationProperties.AutomationId="CreateReportDropDownButton"
                                            AutoOpenDelay="0:0:0.0"
                                            Content="Create Report"
                                            IsEnabled="{Binding IsReportEnabled}"
@@ -795,13 +795,13 @@
 
                 <Border Grid.Row="4" Height="46"  Background="White" >
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <TextBlock  Text="Comodo Forensic Analysis Tool is part of the Comodo ONE portfolio of security solutions. Visit " Foreground="#FF547D98" FontSize="13"/>
+                        <TextBlock AutomationProperties.AutomationId="ComodoOneReferalTextPart1" Text="Comodo Forensic Analysis Tool is part of the Comodo ONE portfolio of security solutions. Visit " Foreground="#FF547D98" FontSize="13"/>
 
-                        <TextBlock Cursor="Hand">
-                    <Hyperlink NavigateUri="http://one.comodo.com" RequestNavigate="Hyperlink_RequestNavigate"  Foreground="#FF547D98" FontSize="13">one.comodo.com </Hyperlink>
+                        <TextBlock AutomationProperties.AutomationId="ComodoOneReferalTextPart2" Cursor="Hand">
+                    <Hyperlink AutomationProperties.AutomationId="ComodoOneReferralLink" NavigateUri="http://one.comodo.com" RequestNavigate="Hyperlink_RequestNavigate"  Foreground="#FF547D98" FontSize="13">one.comodo.com </Hyperlink>
                         </TextBlock>
 
-                        <TextBlock  Text=" to learn how Comodo can help protect your environment." Foreground="#FF547D98" FontSize="13"/>
+                        <TextBlock AutomationProperties.AutomationId="ComodoOneReferalTextPart3" Text=" to learn how Comodo can help protect your environment." Foreground="#FF547D98" FontSize="13"/>
                     </StackPanel>
                 </Border>
             </Grid>

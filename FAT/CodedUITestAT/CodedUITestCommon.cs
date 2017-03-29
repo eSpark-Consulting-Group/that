@@ -2,10 +2,10 @@
 using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
-using CodedUITestAT.UIMaps.UIMapMainClasses;
+using CodedUITestFAT.UIMaps.UIMapMainClasses;
 using CodedUITestFAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses;
 using CodedUITestAT.UIMaps.UIMapStopScanWindowClasses;
-using CodedUITestAT.UIMaps.UIMapDiscoveryClasses;
+using CodedUITestFAT.UIMaps.UIMapDiscoveryClasses;
 using CodedUITestFAT.UIMaps.UIMapResultsWindowClasses;
 using CodedUITestAT.UIMaps.Details.UIMapValkyrieDetailsWindowClasses;
 using CodedUITestFAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses;
