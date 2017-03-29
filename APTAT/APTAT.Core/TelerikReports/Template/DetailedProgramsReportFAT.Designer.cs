@@ -306,7 +306,6 @@ namespace APTAT.Core.TelerikReports
             this.graphAxis1.MinorGridLineStyle.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(1D);
             this.graphAxis1.MinorGridLineStyle.Visible = false;
             this.graphAxis1.Name = "graphAxis1";
-            numericalScale1.DataPointTicks = true;
             numericalScale1.LabelStep = 1D;
             this.graphAxis1.Scale = numericalScale1;
             // 

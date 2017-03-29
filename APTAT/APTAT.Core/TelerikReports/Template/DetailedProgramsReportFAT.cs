@@ -25,11 +25,18 @@ namespace APTAT.Core.TelerikReports
             //
         }
 
+        internal void ChangeScaleForOne()
+        {
+            ((NumericalScale)graphAxis1.Scale).LabelStep = 1;
+            ((NumericalScale)graphAxis1.Scale).MajorStep = 1;
+        }
+
         private void graph1_ItemDataBinding(object sender, EventArgs e)
         {
             var graph = (Telerik.Reporting.Processing.DataItem)sender;
             var obj =(Reports.AptReportData)graph.DataObject.RawData;
             var len = obj.Top10PopularBadFiles.Length;
+            if (len < 5) ChangeScaleForOne();
             ((CategoryScale)graphAxis2.Scale).SpacingSlotCount = ChartHelper.CalculateSpacingSlotCount(len, 8);
         }
     }
