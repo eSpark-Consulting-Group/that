@@ -37,18 +37,14 @@ namespace FAT.Application
         private void treeList_MouseDown(object sender, MouseButtonEventArgs e)
         {
             var element = e.OriginalSource as FrameworkElement;
-            var cell = element.GetVisualParent<GridViewCell>();
-            if (cell != null && !cell.IsSelected)
-            {
-                cell.IsSelected = true;
-                cell.IsCurrent = true;
 
+            var item = element.DataContext as IThreatInfoItem;
+            if (item != null)
+            {
                 treeList.SelectedItem = null;
                 ViewModel.SelectedItems.Clear();
-                treeList.SelectedItem = cell.DataContext;
+                treeList.SelectedItem = item;
             }
-            else
-                ViewModel.SelectedItems = ViewModel.SelectedItems;
         }
 
         private void menu_Opened(object sender, RoutedEventArgs e)
@@ -61,12 +57,9 @@ namespace FAT.Application
         private void treeList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var element = e.OriginalSource as FrameworkElement;
-            var cell = element.GetVisualParent<GridViewCell>();
-            if (cell != null)
-            {
-                if (ViewModel.SelectedItems.Count == 1 && !ViewModel.SelectedItem.IsComputer)
-                    item_Click(sender, e);
-            }
+            var item = element.DataContext as IThreatInfoItem;
+            if (item != null && !item.IsComputer)
+                item_Click(sender, e);
         }
 
         private void item_Click(object sender, RoutedEventArgs e)

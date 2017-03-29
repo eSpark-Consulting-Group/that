@@ -5,7 +5,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using FAT.Application.Models;
 using Telerik.Windows.Controls;
-using Telerik.Windows.Controls.GridView;
 using FAT.Application.Extensions;
 using System.Diagnostics;
 using System.Windows.Navigation;
@@ -29,25 +28,18 @@ namespace FAT.Application
         private void treeList_MouseDown(object sender, MouseButtonEventArgs e)
         {
             var element = e.OriginalSource as FrameworkElement;
-            var cell = element.GetVisualParent<GridViewCell>();
-            if (cell != null && !cell.IsSelected)
-            {
-                cell.IsSelected = true;
-                cell.IsCurrent = true;
 
-                treeList.SelectedItem = cell.DataContext;
-            }
+            var operation = element.DataContext as IScanOperation;
+            if (operation != null)
+                treeList.SelectedItem = operation;
         }
 
         private void treeList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var element = e.OriginalSource as FrameworkElement;
-            var cell = element.GetVisualParent<GridViewCell>();
-            if (cell != null)
-            {
-                var operation = cell.DataContext as IScanOperation;
+            var operation = element.DataContext as IScanOperation;
+            if (operation != null)
                 ViewModel.OpenPreviousScanDetailsCommand.Execute(operation);
-            }
         }
 
         private void item_Click(object sender, RoutedEventArgs e)

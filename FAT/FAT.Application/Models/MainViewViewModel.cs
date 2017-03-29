@@ -511,7 +511,7 @@ namespace FAT.Application.Models
                 if (value)
                 {
                     Set(() => Uri, "/Views/Scan/ScanResultsWithFiles.xaml");
-
+                    SelectedItem = null;
                     _groupByComputers = !value;
                 }
                 _groupByFiles = value;
@@ -530,7 +530,7 @@ namespace FAT.Application.Models
                 {
                     GroupEnabled = true;
                     Set(() => Uri, "/Views/Scan/ScanResultsWithComputers.xaml");
-
+                    SelectedItem = null;
                     _groupByFiles = !value;
                 }
                 _groupByComputers = value;
