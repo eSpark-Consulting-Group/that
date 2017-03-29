@@ -225,12 +225,7 @@ namespace CodedUITestFAT
             string subnet = String.Format("{0}/{1}", internalAddress.ChangeLastByte(0), 24);
             UnknownFile unknownFile = SysHelper.AddUnknownFileForScan(endpoint);
             Malware malware = SysHelper.InfectForScan(endpoint);
-
-            UIMapMain.ClickStartScanButton();
-            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            UIMapStartScanWizard.ClickNetworkAddressButton();
-
-            UIHelper.WaitForControlIsEnabled(NextButton());
+                        
             CleanNetworkAddressesList();
             UIMapNetworkAddresses.InputNetworkAddressParams.UINetworkAddressTextBoEditText = subnet;
             UIMapNetworkAddresses.InputNetworkAddress();
@@ -244,19 +239,20 @@ namespace CodedUITestFAT
             InputPassword(DataHelper.Password);
             UIMapStartScanWizard.ClickQuickScanButton();
 
-            //UIHelper.WaitForControl(ScanCompletedTextBlock(), Settings.WaitingTime.Default.QuickScanRangeWaitTime);
-            WaitForNoInAnalysis();
-            //UIMapScanCompletedWindow.ClickNoButton();
+            UIHelper.WaitForControl(CloseSummaryWindowButton(), Settings.WaitingTime.Default.QuickScanRangeWaitTime);
+            UIHelper.WaitForControlIsClickable(CloseSummaryWindowButton());
+            UIMapResultsWindow.ClickCloseSummaryWindowButton();
 
             // Verifies the scanning results
             UIHelper.ClickRow(server);
-            TestContext.WriteLine(String.Format("Computer '{0}' found at 'Scan results' screen.", server.Name));
+            TestContext.WriteLine(String.Format("Computer '{0}' found at the scan results screen.", server.Name));
             UIHelper.ClickRow(endpoint);
-            TestContext.WriteLine(String.Format("Computer '{0}' found at 'Scan results' screen.", endpoint.Name));
+            TestContext.WriteLine(String.Format("Computer '{0}' found at the scan results screen.", endpoint.Name));
+            UIHelper.GroupByFiles();
             UIHelper.ClickRow(malware);
-            TestContext.WriteLine(String.Format("Malware '{0}' found at 'Scan results' screen.", malware.Location));
+            TestContext.WriteLine(String.Format("Malware '{0}' found at the scan results screen.", malware.Location));
             UIHelper.ClickRow(unknownFile);
-            TestContext.WriteLine(String.Format("Unknown file '{0}' found at 'Scan results' screen.", unknownFile.Location));
+            TestContext.WriteLine(String.Format("Unknown file '{0}' found at the scan results screen.", unknownFile.Location));
         }
 
         [TestMethod]

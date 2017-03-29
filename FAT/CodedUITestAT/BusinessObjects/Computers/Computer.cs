@@ -18,14 +18,15 @@ namespace CodedUITestFAT
         /// <param name="computerName">Set a computer isolated network name.</param>
         internal Computer(string computerName)
         {
-            _name = computerName.ToLower();
-            _rowName = _name;
+            _name = computerName;            
 
             try
             {
                 _ipAddress = Dns.GetHostAddresses(computerName)[0];
             }
             catch (SocketException) { _ipAddress = null; }
+
+            _rowName = String.Format(@"{0} ({1})", _name, _ipAddress);
         }
 
         /// <summary> Represents a local network computer. </summary>
@@ -37,22 +38,22 @@ namespace CodedUITestFAT
             try
             {
                 var hostEntry = Dns.GetHostEntry(ipAddress);
-                _name = hostEntry.HostName.ToLower();
-                _rowName = _name;
+                _name = hostEntry.HostName;
+                _rowName = String.Format(@"{0} ({1})", _name, _ipAddress);
             }
             catch (SocketException)
             {
                 _name = ipAddress.ToString();
-                _rowName = _name;
+                _rowName = String.Format(@"{0} ({1})", _name, _ipAddress);
             }
         }
 
         /// <summary> Represents a current computer. </summary>
         internal Computer()
         {
-            _name = Environment.MachineName.ToLower();
-            _rowName = _name;
+            _name = Environment.MachineName;            
             _ipAddress = SysHelper.GetLocalIpAddress();
+            _rowName = String.Format(@"{0} ({1})", _name, _ipAddress);
         }
 
         private string _name;
