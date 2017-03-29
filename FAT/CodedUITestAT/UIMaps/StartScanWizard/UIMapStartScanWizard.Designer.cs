@@ -87,11 +87,11 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
         public void ClickActiveDirectoryButton()
         {
             #region Variable Declarations
-            WpfButton uIScancomputersbyselecButton = this.UIUnknownFileHunterWindow1.UIScanningWizardWindowCustom.UILoadingProgressBar.UIScancomputersbyselecButton;
+            WpfButton uIScancomputersselecteButton1 = this.UIForensicAnalysisToolWindow.UIScanningWizardWindowCustom.UIPleaseWaitProgressBar.UIScancomputersselecteButton1;
             #endregion
 
-            // Click 'Scan computers by selecting them from Active Direc...' button
-            Mouse.Click(uIScancomputersbyselecButton, new Point(189, 137));
+            // Click 'Scan computers selected from Active Directory' button
+            Mouse.Click(uIScancomputersselecteButton1, new Point(78, 64));
         }
         
         /// <summary>
@@ -845,6 +845,22 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
                 return this.mUIFullScanButton;
             }
         }
+        
+        public WpfButton UIScancomputersselecteButton1
+        {
+            get
+            {
+                if ((this.mUIScancomputersselecteButton1 == null))
+                {
+                    this.mUIScancomputersselecteButton1 = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIScancomputersselecteButton1.SearchProperties[WpfButton.PropertyNames.AutomationId] = "ActiveDirectoryButton";
+                    this.mUIScancomputersselecteButton1.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIScancomputersselecteButton1;
+            }
+        }
         #endregion
         
         #region Fields
@@ -855,6 +871,8 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
         private WpfButton mUIQuickScanButton;
         
         private WpfButton mUIFullScanButton;
+        
+        private WpfButton mUIScancomputersselecteButton1;
         #endregion
     }
 }

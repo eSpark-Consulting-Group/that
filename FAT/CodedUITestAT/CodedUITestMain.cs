@@ -6,8 +6,7 @@ using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
 using CodedUITestFAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses;
-using CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses;
-
+using CodedUITestFAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses;
 
 
 namespace CodedUITestFAT
@@ -162,7 +161,7 @@ namespace CodedUITestFAT
 
         private WpfTree AdTree()
         {
-           return UIMapActiveDirectory.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIActiveDirectoryViewCustom.UIAdTreeTree;
+           return UIMapActiveDirectory.UIForensicAnalysisToolWindow.UIActiveDirectoryViewCustom.UIAdTreeTree;
         }
 
         private WpfEdit DomainNameTextBox()
@@ -434,21 +433,22 @@ namespace CodedUITestFAT
         /// <param name="rowName">Set a unique row name.</param>
         private void ExpandAdRow(string rowName)
         {
-            UIMapActiveDirectory.UIUnknownFileHunterWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDCdevTreeItem.
-                                                                                            SearchProperties[WpfTreeItem.PropertyNames.Name] = SysHelper.GetDomainName(true);
-            UIMapActiveDirectory.UIUnknownFileHunterWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDCdevTreeItem.UIComputersTreeItem.
-                                                                                            SearchProperties[WpfTreeItem.PropertyNames.Name] = rowName;
-            UIMapActiveDirectory.ExpandAdRow();
+            //UIMapActiveDirectory.UIUnknownFileHunterWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDCdevTreeItem.SearchProperties[WpfTreeItem.PropertyNames.Name] = SysHelper.GetDomainName(true);
+            //UIMapActiveDirectory.UIUnknownFileHunterWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDCdevTreeItem.UIComputersTreeItem.SearchProperties[WpfTreeItem.PropertyNames.Name] = rowName;
+            UIMapActiveDirectory.UIForensicAnalysisToolWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDevTreeItem.SearchProperties[WpfTreeItem.PropertyNames.Name] = SysHelper.GetDomainName(true);
+            UIMapActiveDirectory.UIForensicAnalysisToolWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDevTreeItem.UIComputersTreeItem.SearchProperties[WpfTreeItem.PropertyNames.Name] = rowName;
+
+            UIMapActiveDirectory.ExpandAdRow();            
         }
 
         /// <summary> Checks a given row in Active Directory tree. In accordance with DeploymentItem.cs. </summary>
         /// <param name="rowName">Set a unique row name.</param>
         private void CheckAdRow(string rowName)
         {
-            UIMapActiveDirectory.UIUnknownFileHunterWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDCdevTreeItem.
+            UIMapActiveDirectory.UIForensicAnalysisToolWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDevTreeItem.
                                                                                             SearchProperties[WpfTreeItem.PropertyNames.Name] = SysHelper.GetDomainName(true);
-            UIMapActiveDirectory.UIUnknownFileHunterWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDCdevTreeItem.UIComputersTreeItem.
-                                                                                            SearchProperties[WpfTreeItem.PropertyNames.Name] = rowName;
+            UIMapActiveDirectory.UIForensicAnalysisToolWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDevTreeItem.UIComputersTreeItem.UIALEXCHEWIN7PROTreeItem.
+                                                                                            SearchProperties[WpfTreeItem.PropertyNames.Name] = rowName;           
             UIMapActiveDirectory.CheckAdRow();
         }
 
@@ -550,7 +550,7 @@ namespace CodedUITestFAT
         /// <param name="domainName">Set a domain name to input.</param>
         private void InputDomainName(string domainName)
         {
-            WpfEdit domainNameEdit = UIMapActiveDirectory.UIUnknownFileHunterWindow1.UIThisCustom.UIDomainNameWatermarkTEdit;
+            WpfEdit domainNameEdit = UIMapActiveDirectory.UIForensicAnalysisToolWindow.UIThisCustom.UIDomainNameWatermarkTEdit;
             if (domainNameEdit.Text == Settings.General.Default.EmptyWatermarkTextBoxText || domainNameEdit.Text != domainName) domainNameEdit.Text = domainName;
         }
 
@@ -558,7 +558,7 @@ namespace CodedUITestFAT
         /// <param name="domainAdministrator">Set a domain administrator to input.</param>
         private void InputDomainAdministrator(string domainAdministrator)
         {
-            WpfEdit domainAdministratorEdit = UIMapActiveDirectory.UIUnknownFileHunterWindow1.UIThisCustom.UIDomainAdministratorWEdit;
+            WpfEdit domainAdministratorEdit = UIMapActiveDirectory.UIForensicAnalysisToolWindow.UIThisCustom.UIDomainAdministratorWEdit;
             if (domainAdministratorEdit.Text == Settings.General.Default.EmptyWatermarkTextBoxText || domainAdministratorEdit.Text != domainAdministrator) domainAdministratorEdit.Text = domainAdministrator;
         }
 
@@ -688,46 +688,60 @@ namespace CodedUITestFAT
         [TestMethod, Timeout(DataHelper.LongTestTimeout)]
         public void AdQuickScanTest()
         {
+            UIHelper.WaitForControlIsClickable(SkipDiscoveryButton());
+            UIMapDiscovery.ClickSkipDiscoveryButton();
+
             Computer endpoint = DataHelper.GetEndpoint();
             string domainName = SysHelper.GetDomainName();
             Malware malware = SysHelper.InfectForScan(endpoint);
-            SysHelper.AddUnknownFileForScan(endpoint);
+            UnknownFile unknownFile = SysHelper.AddUnknownFileForScan(endpoint);                     
 
-            //UIMapMain.ClickScanNowButton();
+            UIHelper.WaitForControlIsClickable(CustomScanButton());
+            UIMapDiscovery.ClickCustomScanButton();
+
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
+
             UIMapStartScanWizard.ClickActiveDirectoryButton();
             UIHelper.WaitForControlIsEnabled(NextButton());
-                        
+
+            UIMapActiveDirectory.SelectUseCustomCredentialsRadioButton();
+                                    
             InputDomainName(domainName);
             InputDomainAdministrator(DataHelper.Username);
             InputPassword(DataHelper.Password);
+
             UIMapStartScanWizard.ClickNextButton();
+
             UIHelper.WaitForControl(AdTree());
+
             ExpandAdRow(Settings.General.Default.AdTreeComputersElement);
             CheckAdRow(endpoint.Name);
             UIMapStartScanWizard.ClickNextButton();
+
             UIHelper.WaitForControl(QuickScanButton());
             UIMapStartScanWizard.ClickQuickScanButton();
+
             TestContext.WriteLine(String.Format("Quick Scan started at endpoint '{0}' from domain '{1}'...", endpoint.Name, domainName));
 
             WaitForScanCompleted(ScanType.Quick);
-            WaitForNoInAnalysis();
-            int expectedFilesNumber = GetFoundFilesNumber(TestContext);
-            //UIMapScanCompletedWindow.ClickYesButton();
-            //InputCamCredentials(TestContext);
-            WaitForValkyrieResults(TestContext);
+
             UIHelper.GroupByFiles();
-            AssertValkyrieAnalysisResults(expectedFilesNumber, TestContext);
-            UIHelper.GroupByComputers();
-            UIHelper.ClickRow(endpoint);
-            TestContext.WriteLine(String.Format("Computer '{0}' expanded at 'Valkyrie analysis results' screen.", endpoint.Name));
+            UIHelper.ClickRow(malware);
+            TestContext.WriteLine(String.Format("Malicious file {0} found at the results screen.", malware));
+            UIHelper.ClickRow(unknownFile);
+            TestContext.WriteLine(String.Format("Unknown file {0} found at the results screen.", unknownFile));
+
             UIHelper.ClickRow(malware, MouseClick.DoubleLeft);
-            TestContext.WriteLine(String.Format("Malware '{0}' details opened.", malware.Name));
-            
-            UIMapValkyrieDetailsWindow.AssertThreatNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = malware.Name;
-            UIMapValkyrieDetailsWindow.AssertThreatNameTextBlockText();
-            UIMapValkyrieDetailsWindow.ClickCloseButton();
-            //UIHelper.WaitForControlIsClickable(StartScanButton());
+            UIMapDetailsWindow.AssertThreatNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = malware.Name;
+            UIMapDetailsWindow.AssertThreatNameTextBlockText();
+            TestContext.WriteLine(String.Format("Malicious file name {0} found at threat Details screen.", malware.Name));
+            UIMapDetailsWindow.ClickCloseButton();
+
+            UIHelper.ClickRow(unknownFile, MouseClick.DoubleLeft);
+            UIMapDetailsWindow.AssertThreatNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = unknownFile.Name;
+            UIMapDetailsWindow.AssertThreatNameTextBlockText();
+            TestContext.WriteLine(String.Format("Unknown file name {0} found at threat Details screen.", unknownFile.Name));
+            UIMapDetailsWindow.ClickCloseButton();
         }
 
         [TestMethod, Timeout(DataHelper.LongTestTimeout)]

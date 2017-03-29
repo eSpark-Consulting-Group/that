@@ -8,7 +8,7 @@
 //  </auto-generated>
 // ------------------------------------------------------------------------------
 
-namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
+namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
 {
     using System;
     using System.CodeDom.Compiler;
@@ -74,7 +74,7 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
         public void CheckAdRow()
         {
             #region Variable Declarations
-            WpfCheckBox uICheckBoxElementCheckBox = this.UIUnknownFileHunterWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDCdevTreeItem.UIComputersTreeItem.UICheckBoxElementCheckBox;
+            WpfCheckBox uICheckBoxElementCheckBox = this.UIForensicAnalysisToolWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDevTreeItem.UIComputersTreeItem.UIALEXCHEWIN7PROTreeItem.UICheckBoxElementCheckBox;
             #endregion
 
             // Select 'CheckBoxElement' check box
@@ -87,11 +87,11 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
         public void ExpandAdRow()
         {
             #region Variable Declarations
-            WpfButton uIExpanderButton = this.UIUnknownFileHunterWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDCdevTreeItem.UIComputersTreeItem.UIExpanderButton;
+            WpfButton uIExpanderButton = this.UIForensicAnalysisToolWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDevTreeItem.UIComputersTreeItem.UIExpanderButton;
             #endregion
 
             // Click 'Expander' button
-            Mouse.Click(uIExpanderButton, new Point(9, 12));
+            Mouse.Click(uIExpanderButton, new Point(9, 16));
         }
         
         /// <summary>
@@ -100,10 +100,10 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
         public void InputDomainAdministrator()
         {
             #region Variable Declarations
-            WpfEdit uIDomainAdministratorWEdit = this.UIUnknownFileHunterWindow1.UIThisCustom.UIDomainAdministratorWEdit;
+            WpfEdit uIDomainAdministratorWEdit = this.UIForensicAnalysisToolWindow.UIThisCustom.UIDomainAdministratorWEdit;
             #endregion
 
-            // Type 'admin' in 'DomainAdministratorWatermarkTextBox' text box
+            // Type 'administrator' in 'DomainAdministratorWatermarkTextBox' text box
             Keyboard.SendKeys(uIDomainAdministratorWEdit, this.InputDomainAdministratorParams.UIDomainAdministratorWEditSendKeys, ModifierKeys.None);
         }
         
@@ -113,7 +113,7 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
         public void InputDomainName()
         {
             #region Variable Declarations
-            WpfEdit uIDomainNameWatermarkTEdit = this.UIUnknownFileHunterWindow1.UIThisCustom.UIDomainNameWatermarkTEdit;
+            WpfEdit uIDomainNameWatermarkTEdit = this.UIForensicAnalysisToolWindow.UIThisCustom.UIDomainNameWatermarkTEdit;
             #endregion
 
             // Type 'domain' in 'DomainNameWatermarkTextBox' text box
@@ -126,24 +126,11 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
         public void SelectUseCustomCredentialsRadioButton()
         {
             #region Variable Declarations
-            WpfRadioButton uIUseCustomCredentialsRadioButton = this.UIUnknownFileHunterWindow1.UIActiveDirectoryViewCustom.UIThisCustom.UIUseCustomCredentialsRadioButton;
+            WpfRadioButton uIUseCustomCredentialsRadioButton = this.UIForensicAnalysisToolWindow.UIActiveDirectoryViewCustom.UIThisCustom.UIUseCustomCredentialsRadioButton;
             #endregion
 
             // Select 'Use Custom Credentials' radio button
             uIUseCustomCredentialsRadioButton.Selected = this.SelectUseCustomCredentialsRadioButtonParams.UIUseCustomCredentialsRadioButtonSelected;
-        }
-        
-        /// <summary>
-        /// AssertAdTreeItem - Use 'AssertAdTreeItemExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertAdTreeItem()
-        {
-            #region Variable Declarations
-            WpfTreeItem uIDevTreeItem = this.UIUnknownFileHunterWindow1.UIScanningWizardWindowCustom.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDevTreeItem;
-            #endregion
-
-            // Verify that the 'Name' property of 'dev' tree item equals 'dev'
-            Assert.AreEqual(this.AssertAdTreeItemExpectedValues.UIDevTreeItemName, uIDevTreeItem.Name);
         }
         
         /// <summary>
@@ -157,6 +144,19 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
 
             // Verify that the 'Text' property of 'LoginWatermarkTextBox' text box equals 'dev\a.smyrnov'
             Assert.AreEqual(this.AssertLoginTextBoxTextExpectedValues.UILoginWatermarkTextBoEditText, uILoginWatermarkTextBoEdit.Text);
+        }
+        
+        /// <summary>
+        /// AssertAdTreeItem - Use 'AssertAdTreeItemExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertAdTreeItem()
+        {
+            #region Variable Declarations
+            WpfTreeItem uIDevTreeItem = this.UIForensicAnalysisToolWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDevTreeItem;
+            #endregion
+
+            // Verify that the 'Name' property of 'dev' tree item equals 'dev'
+            Assert.AreEqual(this.AssertAdTreeItemExpectedValues.UIDevTreeItemName, uIDevTreeItem.Name);
         }
         
         #region Properties
@@ -244,18 +244,6 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
             }
         }
         
-        public virtual AssertAdTreeItemExpectedValues AssertAdTreeItemExpectedValues
-        {
-            get
-            {
-                if ((this.mAssertAdTreeItemExpectedValues == null))
-                {
-                    this.mAssertAdTreeItemExpectedValues = new AssertAdTreeItemExpectedValues();
-                }
-                return this.mAssertAdTreeItemExpectedValues;
-            }
-        }
-        
         public virtual AssertLoginTextBoxTextExpectedValues AssertLoginTextBoxTextExpectedValues
         {
             get
@@ -265,6 +253,18 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
                     this.mAssertLoginTextBoxTextExpectedValues = new AssertLoginTextBoxTextExpectedValues();
                 }
                 return this.mAssertLoginTextBoxTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertAdTreeItemExpectedValues AssertAdTreeItemExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertAdTreeItemExpectedValues == null))
+                {
+                    this.mAssertAdTreeItemExpectedValues = new AssertAdTreeItemExpectedValues();
+                }
+                return this.mAssertAdTreeItemExpectedValues;
             }
         }
         
@@ -291,6 +291,18 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
                 return this.mUIUnknownFileHunterWindow1;
             }
         }
+        
+        public UIForensicAnalysisToolWindow UIForensicAnalysisToolWindow
+        {
+            get
+            {
+                if ((this.mUIForensicAnalysisToolWindow == null))
+                {
+                    this.mUIForensicAnalysisToolWindow = new UIForensicAnalysisToolWindow();
+                }
+                return this.mUIForensicAnalysisToolWindow;
+            }
+        }
         #endregion
         
         #region Fields
@@ -308,13 +320,15 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
         
         private SelectUseCustomCredentialsRadioButtonParams mSelectUseCustomCredentialsRadioButtonParams;
         
-        private AssertAdTreeItemExpectedValues mAssertAdTreeItemExpectedValues;
-        
         private AssertLoginTextBoxTextExpectedValues mAssertLoginTextBoxTextExpectedValues;
+        
+        private AssertAdTreeItemExpectedValues mAssertAdTreeItemExpectedValues;
         
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
         
         private UIUnknownFileHunterWindow1 mUIUnknownFileHunterWindow1;
+        
+        private UIForensicAnalysisToolWindow mUIForensicAnalysisToolWindow;
         #endregion
     }
     
@@ -387,9 +401,9 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
         
         #region Fields
         /// <summary>
-        /// Type 'admin' in 'DomainAdministratorWatermarkTextBox' text box
+        /// Type 'administrator' in 'DomainAdministratorWatermarkTextBox' text box
         /// </summary>
-        public string UIDomainAdministratorWEditSendKeys = "admin";
+        public string UIDomainAdministratorWEditSendKeys = "administrator";
         #endregion
     }
     
@@ -424,21 +438,6 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
     }
     
     /// <summary>
-    /// Parameters to be passed into 'AssertAdTreeItem'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class AssertAdTreeItemExpectedValues
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Verify that the 'Name' property of 'dev' tree item equals 'dev'
-        /// </summary>
-        public string UIDevTreeItemName = "dev";
-        #endregion
-    }
-    
-    /// <summary>
     /// Parameters to be passed into 'AssertLoginTextBoxText'
     /// </summary>
     [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
@@ -450,6 +449,21 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
         /// Verify that the 'Text' property of 'LoginWatermarkTextBox' text box equals 'dev\a.smyrnov'
         /// </summary>
         public string UILoginWatermarkTextBoEditText = "dev\\a.smyrnov";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertAdTreeItem'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AssertAdTreeItemExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Name' property of 'dev' tree item equals 'dev'
+        /// </summary>
+        public string UIDevTreeItemName = "dev";
         #endregion
     }
     
@@ -1169,6 +1183,397 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
         
         #region Fields
         private WpfTreeItem mUIDevTreeItem;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIForensicAnalysisToolWindow : WpfWindow
+    {
+        
+        public UIForensicAnalysisToolWindow()
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfWindow.PropertyNames.Name] = "Forensic Analysis Tool";
+            this.SearchProperties.Add(new PropertyExpression(WpfWindow.PropertyNames.ClassName, "HwndWrapper", PropertyExpressionOperator.Contains));
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public UIActiveDirectoryViewCustom4 UIActiveDirectoryViewCustom
+        {
+            get
+            {
+                if ((this.mUIActiveDirectoryViewCustom == null))
+                {
+                    this.mUIActiveDirectoryViewCustom = new UIActiveDirectoryViewCustom4(this);
+                }
+                return this.mUIActiveDirectoryViewCustom;
+            }
+        }
+        
+        public UIThisCustom3 UIThisCustom
+        {
+            get
+            {
+                if ((this.mUIThisCustom == null))
+                {
+                    this.mUIThisCustom = new UIThisCustom3(this);
+                }
+                return this.mUIThisCustom;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIActiveDirectoryViewCustom4 mUIActiveDirectoryViewCustom;
+        
+        private UIThisCustom3 mUIThisCustom;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIActiveDirectoryViewCustom4 : WpfCustom
+    {
+        
+        public UIActiveDirectoryViewCustom4(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfControl.PropertyNames.ClassName] = "Uia.StartScanByDomainView";
+            this.SearchProperties[WpfControl.PropertyNames.AutomationId] = "ActiveDirectoryView";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public UIThisCustom2 UIThisCustom
+        {
+            get
+            {
+                if ((this.mUIThisCustom == null))
+                {
+                    this.mUIThisCustom = new UIThisCustom2(this);
+                }
+                return this.mUIThisCustom;
+            }
+        }
+        
+        public UIAdTreeTree2 UIAdTreeTree
+        {
+            get
+            {
+                if ((this.mUIAdTreeTree == null))
+                {
+                    this.mUIAdTreeTree = new UIAdTreeTree2(this);
+                }
+                return this.mUIAdTreeTree;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIThisCustom2 mUIThisCustom;
+        
+        private UIAdTreeTree2 mUIAdTreeTree;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIThisCustom2 : WpfCustom
+    {
+        
+        public UIThisCustom2(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfControl.PropertyNames.ClassName] = "Uia.LoginPasswordUserControl";
+            this.SearchProperties[WpfControl.PropertyNames.AutomationId] = "this";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfRadioButton UIUseCustomCredentialsRadioButton
+        {
+            get
+            {
+                if ((this.mUIUseCustomCredentialsRadioButton == null))
+                {
+                    this.mUIUseCustomCredentialsRadioButton = new WpfRadioButton(this);
+                    #region Search Criteria
+                    this.mUIUseCustomCredentialsRadioButton.SearchProperties[WpfRadioButton.PropertyNames.AutomationId] = "UseCustomCredentialsRadioButton";
+                    this.mUIUseCustomCredentialsRadioButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIUseCustomCredentialsRadioButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfRadioButton mUIUseCustomCredentialsRadioButton;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIAdTreeTree2 : WpfTree
+    {
+        
+        public UIAdTreeTree2(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfTree.PropertyNames.AutomationId] = "AdTree";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public UIDevTreeItem UIDevTreeItem
+        {
+            get
+            {
+                if ((this.mUIDevTreeItem == null))
+                {
+                    this.mUIDevTreeItem = new UIDevTreeItem(this);
+                }
+                return this.mUIDevTreeItem;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIDevTreeItem mUIDevTreeItem;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIDevTreeItem : WpfTreeItem
+    {
+        
+        public UIDevTreeItem(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfTreeItem.PropertyNames.Name] = "dev";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public UIComputersTreeItem1 UIComputersTreeItem
+        {
+            get
+            {
+                if ((this.mUIComputersTreeItem == null))
+                {
+                    this.mUIComputersTreeItem = new UIComputersTreeItem1(this);
+                }
+                return this.mUIComputersTreeItem;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIComputersTreeItem1 mUIComputersTreeItem;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIComputersTreeItem1 : WpfTreeItem
+    {
+        
+        public UIComputersTreeItem1(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfTreeItem.PropertyNames.Name] = "Computers";
+            this.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfButton UIExpanderButton
+        {
+            get
+            {
+                if ((this.mUIExpanderButton == null))
+                {
+                    this.mUIExpanderButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIExpanderButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "Expander";
+                    this.mUIExpanderButton.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+                    this.mUIExpanderButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIExpanderButton;
+            }
+        }
+        
+        public UIItem10631macserveTreeItem UIItem10631macserveTreeItem
+        {
+            get
+            {
+                if ((this.mUIItem10631macserveTreeItem == null))
+                {
+                    this.mUIItem10631macserveTreeItem = new UIItem10631macserveTreeItem(this);
+                }
+                return this.mUIItem10631macserveTreeItem;
+            }
+        }
+        
+        public UIALEXCHEWIN7PROTreeItem UIALEXCHEWIN7PROTreeItem
+        {
+            get
+            {
+                if ((this.mUIALEXCHEWIN7PROTreeItem == null))
+                {
+                    this.mUIALEXCHEWIN7PROTreeItem = new UIALEXCHEWIN7PROTreeItem(this);
+                }
+                return this.mUIALEXCHEWIN7PROTreeItem;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfButton mUIExpanderButton;
+        
+        private UIItem10631macserveTreeItem mUIItem10631macserveTreeItem;
+        
+        private UIALEXCHEWIN7PROTreeItem mUIALEXCHEWIN7PROTreeItem;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIItem10631macserveTreeItem : WpfTreeItem
+    {
+        
+        public UIItem10631macserveTreeItem(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfTreeItem.PropertyNames.Name] = "1063-1-macserve";
+            this.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfCheckBox UICheckBoxElementCheckBox
+        {
+            get
+            {
+                if ((this.mUICheckBoxElementCheckBox == null))
+                {
+                    this.mUICheckBoxElementCheckBox = new WpfCheckBox(this);
+                    #region Search Criteria
+                    this.mUICheckBoxElementCheckBox.SearchProperties[WpfCheckBox.PropertyNames.AutomationId] = "CheckBoxElement";
+                    this.mUICheckBoxElementCheckBox.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+                    this.mUICheckBoxElementCheckBox.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUICheckBoxElementCheckBox;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfCheckBox mUICheckBoxElementCheckBox;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIALEXCHEWIN7PROTreeItem : WpfTreeItem
+    {
+        
+        public UIALEXCHEWIN7PROTreeItem(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfTreeItem.PropertyNames.Name] = "ALEXCHE-WIN7PRO";
+            this.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfCheckBox UICheckBoxElementCheckBox
+        {
+            get
+            {
+                if ((this.mUICheckBoxElementCheckBox == null))
+                {
+                    this.mUICheckBoxElementCheckBox = new WpfCheckBox(this);
+                    #region Search Criteria
+                    this.mUICheckBoxElementCheckBox.SearchProperties[WpfCheckBox.PropertyNames.AutomationId] = "CheckBoxElement";
+                    this.mUICheckBoxElementCheckBox.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+                    this.mUICheckBoxElementCheckBox.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUICheckBoxElementCheckBox;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfCheckBox mUICheckBoxElementCheckBox;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIThisCustom3 : WpfCustom
+    {
+        
+        public UIThisCustom3(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfControl.PropertyNames.ClassName] = "Uia.LoginPasswordUserControl";
+            this.SearchProperties[WpfControl.PropertyNames.AutomationId] = "this";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfEdit UIDomainNameWatermarkTEdit
+        {
+            get
+            {
+                if ((this.mUIDomainNameWatermarkTEdit == null))
+                {
+                    this.mUIDomainNameWatermarkTEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUIDomainNameWatermarkTEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "DomainNameWatermarkTextBox";
+                    this.mUIDomainNameWatermarkTEdit.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIDomainNameWatermarkTEdit;
+            }
+        }
+        
+        public WpfEdit UIDomainAdministratorWEdit
+        {
+            get
+            {
+                if ((this.mUIDomainAdministratorWEdit == null))
+                {
+                    this.mUIDomainAdministratorWEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUIDomainAdministratorWEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "DomainAdministratorWatermarkTextBox";
+                    this.mUIDomainAdministratorWEdit.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIDomainAdministratorWEdit;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfEdit mUIDomainNameWatermarkTEdit;
+        
+        private WpfEdit mUIDomainAdministratorWEdit;
         #endregion
     }
 }

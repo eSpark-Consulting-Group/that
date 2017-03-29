@@ -242,7 +242,7 @@ namespace CodedUITestFAT
 
         internal WpfButton QuickScanButton()
         {
-            return UIMapStartScanWizard.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIQuickScanButton;
+            return UIMapStartScanWizard.UIForensicAnalysisToolWindow.UIScanningWizardWindowCustom.UIPleaseWaitProgressBar.UIQuickScanButton;
         }
 
         internal WpfButton NextButton()
