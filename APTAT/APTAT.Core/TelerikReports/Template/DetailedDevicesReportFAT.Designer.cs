@@ -820,6 +820,7 @@ namespace APTAT.Core.TelerikReports
             // 
             this.graphAxis2.MajorGridLineStyle.LineColor = System.Drawing.Color.LightGray;
             this.graphAxis2.MajorGridLineStyle.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(1D);
+            this.graphAxis2.MajorGridLineStyle.Visible = false;
             this.graphAxis2.MinorGridLineStyle.LineColor = System.Drawing.Color.LightGray;
             this.graphAxis2.MinorGridLineStyle.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(1D);
             this.graphAxis2.MinorGridLineStyle.Visible = false;

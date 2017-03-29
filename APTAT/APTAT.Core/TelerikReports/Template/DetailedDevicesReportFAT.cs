@@ -57,7 +57,7 @@ namespace APTAT.Core.TelerikReports
         private void DetailedDeviceReportFAT_ItemDataBinding(object sender, EventArgs e)
         {
             var obj = (Telerik.Reporting.Processing.Report)sender;
-            var dataSource = (Reports.AptReportDataFAT)obj.DataSource;
+            var dataSource = (Reports.AptReportData)obj.DataSource;
             var bgColor = Color.FromArgb(251, 251, 251);
 
             var isActiveDirectory = dataSource.DevicesSourceDescription.Type == DeploymentCore.Directory.ETargetsDiscovererType.ActiveDirectory;
