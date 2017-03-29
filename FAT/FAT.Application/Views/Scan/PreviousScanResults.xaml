@@ -151,7 +151,7 @@
                     CellTemplate="{StaticResource TypeColumn}"   
                     IsFilterable="False"
                     Header="Scan Target"  
-                    SortMemberPath="DevicesSourceDescription.Type"
+                    SortMemberPath="ScanTypeStr"
                     TextAlignment="Left"
                     Width="143"
                     MinWidth="100"/>
@@ -159,7 +159,7 @@
                     HeaderCellStyle="{StaticResource HeaderCellStyle}"
                     CellTemplate="{StaticResource MethodColumn}"   
                     IsFilterable="False"
-                    SortMemberPath="ScanMethod"
+                    SortMemberPath="ScanMethodStr"
                     Header="Scan Type"  
                     TextAlignment="Left"
                     MinWidth="203"
