@@ -163,11 +163,8 @@ namespace CodedUITestFAT
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
 
-            UIHelper.GroupByFiles();
-            UIHelper.ClickRow(malware);
-            TestContext.WriteLine(String.Format("Malicious file '{0}' found at the results screen.", malware.Name));
-            UIHelper.ClickRow(unknownFile);
-            TestContext.WriteLine(String.Format("Unknown file '{0}' found at the results screen.", unknownFile.Name));
+            UIHelper.FindThreat(malware, TestContext);
+            UIHelper.FindThreat(unknownFile, TestContext);
 
             // Clicks Valkyrie link and checks the respective browser window URI
             string expectedValkyrieUri = Settings.General.Default.ValkyrieUri;
@@ -209,11 +206,8 @@ namespace CodedUITestFAT
             TestContext.WriteLine(String.Format("Computer '{0}' found at the scan results screen.", server.Name));
             UIHelper.ClickRow(endpoint);
             TestContext.WriteLine(String.Format("Computer '{0}' found at the scan results screen.", endpoint.Name));
-            UIHelper.GroupByFiles();
-            UIHelper.ClickRow(malware);
-            TestContext.WriteLine(String.Format("Malware '{0}' found at the scan results screen.", malware.Location));
-            UIHelper.ClickRow(unknownFile);
-            TestContext.WriteLine(String.Format("Unknown file '{0}' found at the scan results screen.", unknownFile.Location));
+            UIHelper.FindThreat(malware, TestContext);
+            UIHelper.FindThreat(unknownFile, TestContext);
         }
 
         [TestMethod, Timeout(DataHelper.LongTestTimeout)]
@@ -248,11 +242,8 @@ namespace CodedUITestFAT
             TestContext.WriteLine(String.Format("Computer '{0}' found at the scan results screen.", server.Name));
             UIHelper.ClickRow(endpoint);
             TestContext.WriteLine(String.Format("Computer '{0}' found at the scan results screen.", endpoint.Name));
-            UIHelper.GroupByFiles();
-            UIHelper.ClickRow(malware);
-            TestContext.WriteLine(String.Format("Malware '{0}' found at the scan results screen.", malware.Location));
-            UIHelper.ClickRow(unknownFile);
-            TestContext.WriteLine(String.Format("Unknown file '{0}' found at the scan results screen.", unknownFile.Location));
+            UIHelper.FindThreat(malware, TestContext);
+            UIHelper.FindThreat(unknownFile, TestContext);
         }
 
         [TestMethod]
