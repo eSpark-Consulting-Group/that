@@ -26,7 +26,7 @@ namespace CodedUITestFAT
             }
             catch (SocketException) { _ipAddress = null; }
 
-            _rowName = String.Format(@"{0} ({1})", _name, _ipAddress);
+            _rowName = _name;
         }
 
         /// <summary> Represents a local network computer. </summary>
@@ -39,12 +39,12 @@ namespace CodedUITestFAT
             {
                 var hostEntry = Dns.GetHostEntry(ipAddress);
                 _name = hostEntry.HostName;
-                _rowName = String.Format(@"{0} ({1})", _name, _ipAddress);
+                _rowName = _name;
             }
             catch (SocketException)
             {
                 _name = ipAddress.ToString();
-                _rowName = String.Format(@"{0} ({1})", _name, _ipAddress);
+                _rowName = _name;
             }
         }
 
@@ -53,7 +53,7 @@ namespace CodedUITestFAT
         {
             _name = Environment.MachineName;            
             _ipAddress = SysHelper.GetLocalIpAddress();
-            _rowName = String.Format(@"{0} ({1})", _name, _ipAddress);
+            _rowName = _name;
         }
 
         private string _name;
