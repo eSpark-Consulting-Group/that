@@ -281,19 +281,18 @@ namespace APTAT.Valkyrie.Tests
             //Act                       
             ManualResetEventSlim ev = new ManualResetEventSlim();
             int eventCalled = 0;
-            bool IsAnalyzedCompletedRized = false;
+            bool IsAnalyzedCompletedRised = false;
             client.AnalyzeCompleted += (s, e) =>
               {
-                  IsAnalyzedCompletedRized = true;
+                  IsAnalyzedCompletedRised = true;
                   Interlocked.Increment(ref eventCalled);
                   ev.Set();
               };
 
+            bool ananlyzeProgressChangedCalled = false;
             client.AnalyzeProgressChanged += (s, e) =>
             {
-                var p = e.ProgressInfo;
-                Interlocked.Increment(ref eventCalled);
-                ev.Set();
+                ananlyzeProgressChangedCalled = true;
             };
 
 
@@ -304,6 +303,7 @@ namespace APTAT.Valkyrie.Tests
                 new ValkyrieFileInfo("4", ValkyrieVerdict.Undetected) { Path = @"C:\temp\file4.exe" }
             };
 
+            
 
             client.StartAnalyze(camRegistration, "user", "test", 1, new System.Net.NetworkCredential(), "FAT");
             ev.Wait(TimeSpan.FromMilliseconds(1000));
@@ -313,19 +313,27 @@ namespace APTAT.Valkyrie.Tests
             client.AddFilesToAnalyze(files.ToList(), true);
             ev.Wait(TimeSpan.FromMilliseconds(1000));
 
-            ev.Reset();
-            client.AllowSubmit(files.ToDictionary((f) => f.Sha1, (f) => f));
-            ev.Wait(TimeSpan.FromMilliseconds(1000));
+            int eventCounts = 5;
+            for (int i = 0; i < eventCounts; i++)
+            {
+                ev.Reset();
+                Mock.Raise(() => statusTimer.TimeoutCallback += null, args: new object[] { EventArgs.Empty });
+                ev.Wait(TimeSpan.FromMilliseconds(1000));
+                Mock.Raise(() => progressNotify.TimeoutCallback += null, args: new object[] { EventArgs.Empty });
+            }
+
 
             //Assert
+            Assert.True(ananlyzeProgressChangedCalled);
+            int numbersOfCallsShouldBe = (eventCounts + 1) * files.Count();
             var hashes = files.Select(f => f.Sha1).ToArray();
-            Mock.Assert(() => apiProviderMock.StartScan(Arg.Matches<StartScanRequest>((s) => s.ApiKey == apiKey)), Occurs.AtLeastOnce());
-            Mock.Assert(() => apiProviderMock.GetBasicInfo(Arg.Matches<InfoRequest>((f) => hashes.Contains(f.SHA1))), Occurs.Exactly(8));
+            Mock.Assert(() => apiProviderMock.StartScan(Arg.Matches<StartScanRequest>((s) => s.ApiKey == apiKey)), Occurs.Once());
+            Mock.Assert(() => apiProviderMock.GetBasicInfo(Arg.Matches<InfoRequest>((f) => hashes.Contains(f.SHA1))), Occurs.Exactly(numbersOfCallsShouldBe));
             var calledDistinct = calledBasicInfoHashes.Distinct().OrderBy(b => b).ToList();
             Assert.Equal(hashes.OrderBy(a => a).ToList(), calledDistinct);
-            Assert.Equal(8, calledBasicInfoHashes.Count);
+            Assert.Equal(numbersOfCallsShouldBe, calledBasicInfoHashes.Count);
             Assert.Equal(1, eventCalled);
-            Assert.True(IsAnalyzedCompletedRized);
+            Assert.True(IsAnalyzedCompletedRised);
             Mock.AssertAll(apiProviderMock);
         }
 
