@@ -166,7 +166,7 @@ namespace CodedUITestFAT
 
         private WpfEdit DomainNameTextBox()
         {
-            return UIMapActiveDirectory.UIUnknownFileHunterWindow1.UIThisCustom.UIDomainNameWatermarkTEdit;
+            return UIMapActiveDirectory.UIForensicAnalysisToolWindow.UIThisCustom.UIDomainNameWatermarkTEdit;
         }
 
         #endregion
@@ -438,8 +438,8 @@ namespace CodedUITestFAT
         }
 
         private bool IsDomainComputerChecked(Computer endpoint)
-        {
-            WpfTreeItem domainTreeItem = UIMapActiveDirectory.UIUnknownFileHunterWindow1.UIScanningWizardWindowCustom.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDevTreeItem;
+        {            
+            WpfTreeItem domainTreeItem = UIMapActiveDirectory.UIForensicAnalysisToolWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDevTreeItem;            
             domainTreeItem.SearchProperties[WpfTreeItem.PropertyNames.Name] = SysHelper.GetDomainName(true);
 
             WpfTreeItem computersTreeItem = domainTreeItem.GetChildren().FirstOrDefault(i => i is WpfTreeItem && i.Name == Settings.General.Default.AdTreeComputersElement) as WpfTreeItem;
@@ -826,17 +826,25 @@ namespace CodedUITestFAT
         {
             string domainName = SysHelper.GetDomainName();
             Computer endpoint = DataHelper.GetEndpoint();
+
+            UIHelper.WaitForControlIsClickable(SkipDiscoveryButton());
+            UIMapDiscovery.ClickSkipDiscoveryButton();
+
             SysHelper.DisinfectForQuickScan(endpoint, TestContext);
 
-            UIMapMain.ClickStartScanButton();
+            UIHelper.WaitForControlIsClickable(CustomScanButton());
+            UIMapDiscovery.ClickCustomScanButton();
+
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanWizard.ClickActiveDirectoryButton();
             UIHelper.WaitForControlIsEnabled(NextButton());
+           
 
             // Active Directory Credentials step
             InputDomainName(domainName);
             InputDomainAdministrator(DataHelper.Username);
             InputPassword(DataHelper.Password);
+
             UIMapStartScanWizard.ClickBackButton();
             TestContext.WriteLine("Back to Start Scan Wizard...");
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
@@ -886,11 +894,10 @@ namespace CodedUITestFAT
             UIMapStartScanWizard.ClickQuickScanButton();
             TestContext.WriteLine("Quick Scan button clicked...");
 
-            WaitForScanCompleted(ScanType.Quick);
-            //UIMapScanCompletedWindow.ClickCloseCrossButton();
-            TestContext.WriteLine("Scan completed...");
-            //UIHelper.WaitForControlIsClickable(StartScanButton());
-            UIMapMain.ClickStartScanButton();
+            WaitForScanCompleted(ScanType.Quick);            
+            TestContext.WriteLine("Scan completed...");            
+
+            UIMapResultsWindow.ClickNewCustomScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanWizard.ClickActiveDirectoryButton();
             UIHelper.WaitForControlIsClickable(NextButton());
@@ -926,8 +933,7 @@ namespace CodedUITestFAT
             TestContext.WriteLine(String.Format("Login '{0}' is shown correctly.", DataHelper.Username));
             UIMapStartScanWizard.ClickQuickScanButton();
             TestContext.WriteLine("Quick Scan button clicked...");
-            WaitForScanCompleted(ScanType.Quick);
-            //UIMapScanCompletedWindow.ClickCloseCrossButton();
+            WaitForScanCompleted(ScanType.Quick);            
             TestContext.WriteLine("Scan completed...");
         }
         
