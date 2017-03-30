@@ -2,11 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using Telerik.JustMock;
-using Telerik.JustMock.Helpers;
 using Valkyrie.WebApiProvider;
 using Valkyrie.WebApiProvider.Contracts;
 using Valkyrie.WebApiProvider.Enums;
@@ -49,8 +46,7 @@ namespace APTAT.Valkyrie.Tests
         }
 
 
-        [Fact]
-        public void StartAnalyzeTest()
+        private ValkyrieClient CreateAptClientForEventTests()
         {
             //Arange   
             var apiProviderMock = Mock.Create<IValkyrieWebApiProvider>(Behavior.Strict);
@@ -60,45 +56,81 @@ namespace APTAT.Valkyrie.Tests
                 .Returns(() => new RegisterWithResponse() { ApiKey = apiKey, ReturnCode = 0 });
 
             Mock.Arrange(() => apiProviderMock.StartScan(Arg.IsAny<StartScanRequest>()))
-                .Returns(() => new StartAndFinalizeScanResponse() { ReturnCode = ErrorCodesEnum.Success, AptScanId = Guid.NewGuid().ToString() });
+                .Returns(() => new StartAndFinalizeScanResponse() { ReturnCode = ErrorCodesEnum.Success });
 
-            Mock.Arrange(() => apiProviderMock.GetBasicInfo(Arg.IsAny<InfoRequest>())).Returns(new BasicInfoResponse());
             Mock.Arrange(() => apiProviderMock.GetBasicInfoEmpty()).Returns(new BasicInfoResponse() { ReturnCode = ErrorCodesEnum.BadRequest });
-            var statusTimer = Mock.Create<IScheduler>(Behavior.Strict);
-            Mock.Arrange(() => statusTimer.IsEnabled).Returns(() => false);
-            Mock.Arrange(() => statusTimer.SetInterval(Arg.AnyTimeSpan));
-            Mock.Arrange(() => statusTimer.Start(Arg.AnyBool)).Returns(() => true);
-            
-            ValkyrieClient client = new ValkyrieClient(Mock.Create<IMachineKeyProvider>(), apiProviderMock, Mock.Create<IScheduler>(), statusTimer);
-            
-            var camRegistration = Mock.Create<ICamRegistration>();
-            Mock.Arrange(() => camRegistration.LicenseId).Returns(() => Guid.NewGuid().ToString());
 
-            //Act                       
-            ManualResetEventSlim ev2 = new ManualResetEventSlim();
-            client.AnalyzeCompleted+= (s, e) => { ev2.Set(); };
+            var client = new ValkyrieClient(Mock.Create<IMachineKeyProvider>(), apiProviderMock, Mock.Create<IScheduler>(), Mock.Create<IScheduler>());
 
-            ManualResetEventSlim ev = new ManualResetEventSlim();
-           
-            client.StartAnalyze(camRegistration, "user", "test", 1, new System.Net.NetworkCredential(), "FAT");
-            Mock.Raise(() => statusTimer.TimeoutCallback += null, args: new object[] { EventArgs.Empty });
-            //ev.Wait(TimeSpan.FromMilliseconds(500));
+            return client;
 
-            ValkyrieFileInfo fileInfo1 = new ValkyrieFileInfo("cf23df2207d99a74fbe169e3eba035e633b65d14", ValkyrieVerdict.Undetected) { Path = @"C:\temp\file.exe" };
-            ValkyrieFileInfo fileInfo2 = new ValkyrieFileInfo("cf23df2207d99a74fbe169e3eba035e633b65d14", ValkyrieVerdict.InQueue) { Path = @"C:\temp\file.exe" };
-            ValkyrieFileInfo fileInfo3 = new ValkyrieFileInfo("cf23df2207d99a74fbe169e3eba035e633b65d14", ValkyrieVerdict.Undetected) { Path = @"C:\temp\file.exe" };
-            ValkyrieFileInfo fileInfo4 = new ValkyrieFileInfo("cf23df2207d99a74fbe169e3eba035e633b65d14", ValkyrieVerdict.Malware) { Path = @"C:\temp\file.exe" };
-            client.AddFilesToAnalyze(new List<ValkyrieFileInfo>() { fileInfo1, fileInfo2, fileInfo3, fileInfo4 }, true);
-            ev2.Wait(TimeSpan.FromMilliseconds(1000));
-
-            
-
-            //Assert
-            Mock.Assert(() => apiProviderMock.StartScan(Arg.Matches<StartScanRequest>((s) => s.ApiKey == apiKey)), Occurs.Once());
-            Mock.Assert(() => apiProviderMock.GetBasicInfo(Arg.IsAny<InfoRequest>()), Occurs.Once());
-            Mock.AssertAll(apiProviderMock);
         }
 
+
+        [Fact]
+        public void StartAnalyzeRisesAnalyzeStarted()
+        {
+            //Arange   
+            var client = CreateAptClientForEventTests();
+            bool isEventRised = false;
+
+            //Act                       
+            var ev = new ManualResetEventSlim();
+
+            client.AnalyzeStarted += (s, e) =>
+            {
+                isEventRised = true;
+                ev.Set();
+            };
+
+            ICamRegistration camRegistration = CreateCamRegistrationMock();
+
+            client.StartAnalyze(camRegistration, "user", "test", 1, new System.Net.NetworkCredential(), "FAT");
+            ev.Wait(TimeSpan.FromMilliseconds(2500));
+
+            //Assert            
+            Assert.True(isEventRised);
+        }
+
+        [Fact]
+        public void StartAnalyzeRisesAnalyzeCompleted()
+        {
+            //Arange   
+            var client = CreateAptClientForEventTests();
+            bool isEventRised = false;
+
+            //Act                       
+            var ev = new ManualResetEventSlim();
+
+            client.AnalyzeCompleted += (s, e) =>
+            {
+                isEventRised = true;
+                ev.Set();
+            };
+
+            ICamRegistration camRegistration = CreateCamRegistrationMock();
+
+            client.StartAnalyze(camRegistration, "user", "test", 1, new System.Net.NetworkCredential(), "FAT");
+            ev.Wait(TimeSpan.FromMilliseconds(2500));
+
+            //Assert            
+            Assert.True(isEventRised);
+        }
+        private static ICamRegistration CreateCamRegistrationMock()
+        {
+            var camRegistration = Mock.Create<ICamRegistration>();
+            Mock.Arrange(() => camRegistration.LicenseId).Returns(() => Guid.NewGuid().ToString());
+            return camRegistration;
+        }
+
+
+        [Fact]
+        public void StartAnalyzeCallsGetBasicInfoEmptyTest()
+        {
+            var apiProviderMock = CreateClientAndCallStartAnalyze();
+            //Assert            
+            Mock.Assert(() => apiProviderMock.GetBasicInfoEmpty(), Occurs.Once());
+        }
 
 
         [Fact]
@@ -113,87 +145,39 @@ namespace APTAT.Valkyrie.Tests
 
             Mock.Arrange(() => apiProviderMock.StartScan(Arg.IsAny<StartScanRequest>()))
                 .Returns(() => new StartAndFinalizeScanResponse() { ReturnCode = ErrorCodesEnum.Success });
-            
-            ValkyrieClient client = new ValkyrieClient(Mock.Create<IMachineKeyProvider>(), apiProviderMock, Mock.Create<IScheduler>(), Mock.Create<IScheduler>());
-            var camRegistration = Mock.Create<ICamRegistration>();
-            Mock.Arrange(() => camRegistration.LicenseId).Returns(() => Guid.NewGuid().ToString());
 
+            ValkyrieClient client = new ValkyrieClient(Mock.Create<IMachineKeyProvider>(), apiProviderMock, Mock.Create<IScheduler>(), Mock.Create<IScheduler>());
+            var camRegistration = CreateCamRegistrationMock();
+            Mock.Arrange(() => apiProviderMock.GetBasicInfoEmpty()).Returns(new BasicInfoResponse() { ReturnCode = ErrorCodesEnum.BadRequest });
             //Act                       
             ManualResetEventSlim ev = new ManualResetEventSlim();
-            client.AnalyzeCompleted += (s, e) => { ev.Set(); };
+            client.AnalyzeStarted += (s, e) => { ev.Set(); };
             client.StartAnalyze(camRegistration, "user", "test", 1, new System.Net.NetworkCredential(), "FAT");
             ev.Wait(TimeSpan.FromMilliseconds(300));
 
             //Assert
             Mock.Assert(() => apiProviderMock.StartScan(Arg.Matches<StartScanRequest>((s) => s.ApiKey == apiKey)), Occurs.Once());
-           // Mock.AssertAll(apiProviderMock);
+
+            Mock.AssertAll(apiProviderMock);
         }
+
 
         [Fact]
         public void StartAnalyzeCallsRegisterWithCamLicenseTest()
         {
-            //Arange   
-            
-            var apiProviderMock = Mock.Create<IValkyrieWebApiProvider>(Behavior.Strict);
-
-            Mock.Arrange(() => apiProviderMock.RegisterWithCamLicense(Arg.IsAny<RegisterWithCamLicenseRequest>()))
-                .Returns(() => new RegisterWithResponse() { ApiKey = Guid.NewGuid().ToString(), ReturnCode = 0 });
-
-            Mock.Arrange(() => apiProviderMock.StartScan(Arg.IsAny<StartScanRequest>()))
-                .Returns(() => new StartAndFinalizeScanResponse() { ReturnCode = ErrorCodesEnum.Success });
-
-
-            ValkyrieClient client = new ValkyrieClient(Mock.Create<IMachineKeyProvider>(), apiProviderMock, Mock.Create<IScheduler>(), Mock.Create<IScheduler>());
-            var camRegistration = Mock.Create<ICamRegistration>();
-            Mock.Arrange(() => camRegistration.LicenseId).Returns(() => Guid.NewGuid().ToString());
-            
-            //Act                       
-            ManualResetEventSlim ev = new ManualResetEventSlim();
-            client.AnalyzeCompleted += (s, e) => { ev.Set(); };
-            client.StartAnalyze(camRegistration, "user", "test", 1, new System.Net.NetworkCredential(), "FAT");
-            ev.Wait(TimeSpan.FromMilliseconds(300));
-            
+            IValkyrieWebApiProvider apiProviderMock = CreateClientAndCallStartAnalyze(CreateCamRegistrationLicense());
             //Assert
             Mock.Assert(() => apiProviderMock.RegisterWithCamLicense(Arg.IsAny<RegisterWithCamLicenseRequest>()), Occurs.Once());
-            Mock.Assert(() => apiProviderMock.RegisterWithCamCredentials(Arg.IsAny<RegisterWithCamCredentials>()), Occurs.Never());            
+            Mock.Assert(() => apiProviderMock.RegisterWithCamCredentials(Arg.IsAny<RegisterWithCamCredentials>()), Occurs.Never());
         }
-
 
         [Fact]
         public void StartAnalyzeCallsRegisterWithCamCredenitalsTest()
         {
-            //Arange   
-
-            var apiProviderMock = Mock.Create<IValkyrieWebApiProvider>(Behavior.Strict);
-
-            Mock.Arrange(() => apiProviderMock.RegisterWithCamLicense(Arg.IsAny<RegisterWithCamLicenseRequest>()))
-                .Returns(() => new RegisterWithResponse() { ApiKey = Guid.NewGuid().ToString(), ReturnCode = 0 });
-
-            Mock.Arrange(() => apiProviderMock.StartScan(Arg.IsAny<StartScanRequest>()))
-                .Returns(() => new StartAndFinalizeScanResponse() { ReturnCode = ErrorCodesEnum.Success });
-
-
-            ValkyrieClient client = new ValkyrieClient(Mock.Create<IMachineKeyProvider>(), apiProviderMock, Mock.Create<IScheduler>(), Mock.Create<IScheduler>());
-
-            var camRegistration = Mock.Create<ICamRegistration>();            
-            Mock.Arrange(() => camRegistration.UserName).Returns(() => "UserName");
-            Mock.Arrange(() => camRegistration.Password).Returns(() => "Password");
-
-            //Act                       
-            ManualResetEventSlim ev = new ManualResetEventSlim();
-            client.AnalyzeCompleted += (s, e) => { ev.Set(); };
-            client.StartAnalyze(camRegistration, "user", "test", 1, new System.Net.NetworkCredential(), "FAT");
-            ev.Wait(TimeSpan.FromMilliseconds(300));
-
+            IValkyrieWebApiProvider apiProviderMock = CreateClientAndCallStartAnalyze(CreateCamRegistrationLoginPwd());
             //Assert
             Mock.Assert(() => apiProviderMock.RegisterWithCamLicense(Arg.IsAny<RegisterWithCamLicenseRequest>()), Occurs.Never());
             Mock.Assert(() => apiProviderMock.RegisterWithCamCredentials(Arg.IsAny<RegisterWithCamCredentials>()), Occurs.Once());
-
-        }
-
-        private void Client_AnalyzeStarted(object sender, ValkyrieAnalyzeStartedEventArgs e)
-        {
-            throw new NotImplementedException();
         }
 
         [Fact(DisplayName = "SubmitEmail of ValkyrieWebApiProvider method should be called")]
@@ -206,14 +190,14 @@ namespace APTAT.Valkyrie.Tests
 
             Mock.Arrange(() => apiProviderMock.SubmitEmail(Arg.IsAny<SubscribeEmailRequest>()))
                 .Returns(() => new ValkyrieResponse() { ReturnCode = ErrorCodesEnum.Success });
-                        
+
             ValkyrieClient client = new ValkyrieClient(keyProviderMock, apiProviderMock, Mock.Create<IScheduler>(), Mock.Create<IScheduler>());
 
             var emails = new[] { "some@mail.com", "other_mail@yahoo.com" };
-            
+
             //Act
             var t = client.SubmitEmail(emails);
-            
+
 
             //Assert
             Assert.Equal(ErrorCodesEnum.Success, t.ReturnCode);
@@ -221,7 +205,7 @@ namespace APTAT.Valkyrie.Tests
                 Occurs.Once());
         }
 
-       
+
 
         [Fact]
         public void SetBaseUrlTest()
@@ -238,10 +222,10 @@ namespace APTAT.Valkyrie.Tests
             //Act
             var uri = new Uri(@"http://valkyrie.comodo.com");
             client.SetBaseUri(uri);
-            
+
             //Assert
-            Mock.Assert(() => apiProviderMock.SetBaseUri(uri),Occurs.Once());
-        }        
+            Mock.Assert(() => apiProviderMock.SetBaseUri(uri), Occurs.Once());
+        }
 
         [Fact]
         public void DisposeTest()
@@ -250,15 +234,15 @@ namespace APTAT.Valkyrie.Tests
             var keyProviderMock = Mock.Create<IMachineKeyProvider>();
             var apiProviderMock = Mock.Create<IValkyrieWebApiProvider>();
             var progressNotifyTimer = Mock.Create<IScheduler>(Behavior.Strict);
-            var checkStatusTimer = Mock.Create<IScheduler>(Behavior.Strict);            
+            var checkStatusTimer = Mock.Create<IScheduler>(Behavior.Strict);
             Mock.Arrange(() => progressNotifyTimer.Dispose());
             Mock.Arrange(() => checkStatusTimer.Dispose());
             Mock.Arrange(() => progressNotifyTimer.SetInterval(Arg.AnyTimeSpan));
             ValkyrieClient client = new ValkyrieClient(keyProviderMock, apiProviderMock, progressNotifyTimer, checkStatusTimer);
-            
+
             //Act
             client.Dispose();
-            
+
             //Assert
             Mock.Assert(() => checkStatusTimer.Dispose(), Occurs.Once());
             Mock.Assert(() => progressNotifyTimer.Dispose(), Occurs.Once());
@@ -286,17 +270,32 @@ namespace APTAT.Valkyrie.Tests
             Mock.Arrange(() => statusTimer.SetInterval(Arg.AnyTimeSpan));
             Mock.Arrange(() => statusTimer.Start(Arg.AnyBool)).Returns(() => true);
 
-            ValkyrieClient client = new ValkyrieClient(Mock.Create<IMachineKeyProvider>(), apiProviderMock, Mock.Create<IScheduler>(), statusTimer);
+            var progressNotify = Mock.Create<IScheduler>();
+            Mock.Arrange(() => progressNotify.IsEnabled).Returns(() => true);
+
+            ValkyrieClient client = new ValkyrieClient(Mock.Create<IMachineKeyProvider>(), apiProviderMock, progressNotify, statusTimer);
 
             var camRegistration = Mock.Create<ICamRegistration>();
             Mock.Arrange(() => camRegistration.LicenseId).Returns(() => Guid.NewGuid().ToString());
 
             //Act                       
             ManualResetEventSlim ev = new ManualResetEventSlim();
-            client.AnalyzeCompleted += (s, e) => 
+            int eventCalled = 0;
+            bool IsAnalyzedCompletedRized = false;
+            client.AnalyzeCompleted += (s, e) =>
+              {
+                  IsAnalyzedCompletedRized = true;
+                  Interlocked.Increment(ref eventCalled);
+                  ev.Set();
+              };
+
+            client.AnalyzeProgressChanged += (s, e) =>
             {
+                var p = e.ProgressInfo;
+                Interlocked.Increment(ref eventCalled);
                 ev.Set();
             };
+
 
             var files = new[] {
                 new ValkyrieFileInfo("1", ValkyrieVerdict.Malware) { Path = @"C:\temp\file1.exe" },
@@ -307,30 +306,73 @@ namespace APTAT.Valkyrie.Tests
 
 
             client.StartAnalyze(camRegistration, "user", "test", 1, new System.Net.NetworkCredential(), "FAT");
-            Mock.Raise(() => statusTimer.TimeoutCallback += null, args: new object[] { EventArgs.Empty });
-            ev.Wait(TimeSpan.FromMilliseconds(500));
-            
-            client.AddFilesToAnalyze(files.ToList(), true);
-            ev.Wait(TimeSpan.FromMilliseconds(1000));
-            Mock.Raise(() => statusTimer.TimeoutCallback += null, args: new object[] { EventArgs.Empty });
-            client.AnalyzeCompleted += (s, e) =>
-            {
-                ev.Set();
-            };
             ev.Wait(TimeSpan.FromMilliseconds(1000));
 
-            
-                        
+
+            ev.Reset();
+            client.AddFilesToAnalyze(files.ToList(), true);
+            ev.Wait(TimeSpan.FromMilliseconds(1000));
+
+            ev.Reset();
+            client.AllowSubmit(files.ToDictionary((f) => f.Sha1, (f) => f));
+            ev.Wait(TimeSpan.FromMilliseconds(1000));
+
             //Assert
             var hashes = files.Select(f => f.Sha1).ToArray();
-            
             Mock.Assert(() => apiProviderMock.StartScan(Arg.Matches<StartScanRequest>((s) => s.ApiKey == apiKey)), Occurs.AtLeastOnce());
             Mock.Assert(() => apiProviderMock.GetBasicInfo(Arg.Matches<InfoRequest>((f) => hashes.Contains(f.SHA1))), Occurs.Exactly(8));
             var calledDistinct = calledBasicInfoHashes.Distinct().OrderBy(b => b).ToList();
-            Assert.Equal(hashes.OrderBy(a=>a).ToList(), calledDistinct);
+            Assert.Equal(hashes.OrderBy(a => a).ToList(), calledDistinct);
             Assert.Equal(8, calledBasicInfoHashes.Count);
+            Assert.Equal(1, eventCalled);
+            Assert.True(IsAnalyzedCompletedRized);
             Mock.AssertAll(apiProviderMock);
         }
+
+        #region Mock Helpers
+        private ICamRegistration CreateCamRegistrationLicense()
+        {
+            var camRegistration = Mock.Create<ICamRegistration>();
+            Mock.Arrange(() => camRegistration.LicenseId).Returns(() => Guid.NewGuid().ToString());
+            return camRegistration;
+        }
+        private static ICamRegistration CreateCamRegistrationLoginPwd()
+        {
+            var camRegistration = Mock.Create<ICamRegistration>();
+            Mock.Arrange(() => camRegistration.UserName).Returns(() => "UserName");
+            Mock.Arrange(() => camRegistration.Password).Returns(() => "Password");
+            return camRegistration;
+        }
+
+        private IValkyrieWebApiProvider CreateClientAndCallStartAnalyze(ICamRegistration camRegistration = null)
+        {
+            //Arange   
+
+            var apiProviderMock = Mock.Create<IValkyrieWebApiProvider>(Behavior.Strict);
+
+            Mock.Arrange(() => apiProviderMock.RegisterWithCamLicense(Arg.IsAny<RegisterWithCamLicenseRequest>()))
+                .Returns(() => new RegisterWithResponse() { ApiKey = Guid.NewGuid().ToString(), ReturnCode = 0 });
+
+            Mock.Arrange(() => apiProviderMock.RegisterWithCamCredentials(Arg.IsAny<RegisterWithCamCredentials>()))
+                            .Returns(() => new RegisterWithResponse() { ApiKey = Guid.NewGuid().ToString(), ReturnCode = 0 });
+
+            Mock.Arrange(() => apiProviderMock.StartScan(Arg.IsAny<StartScanRequest>()))
+                .Returns(() => new StartAndFinalizeScanResponse() { ReturnCode = ErrorCodesEnum.Success });
+
+            Mock.Arrange(() => apiProviderMock.GetBasicInfoEmpty()).Returns(new BasicInfoResponse() { ReturnCode = ErrorCodesEnum.BadRequest });
+            ValkyrieClient client = new ValkyrieClient(Mock.Create<IMachineKeyProvider>(), apiProviderMock, Mock.Create<IScheduler>(), Mock.Create<IScheduler>());
+            if (camRegistration == null)
+                camRegistration = CreateCamRegistrationLoginPwd();
+
+            //Act                       
+            ManualResetEventSlim ev = new ManualResetEventSlim();
+            client.AnalyzeCompleted += (s, e) => { ev.Set(); };
+            client.StartAnalyze(camRegistration, "user", "test", 1, new System.Net.NetworkCredential(), "FAT");
+            ev.Wait(TimeSpan.FromMilliseconds(300));
+            return apiProviderMock;
+        }
+
+        #endregion
 
     }
 }
