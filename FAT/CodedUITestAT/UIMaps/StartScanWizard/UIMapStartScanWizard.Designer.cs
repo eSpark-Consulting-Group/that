@@ -113,11 +113,11 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
         public void ClickBackButton()
         {
             #region Variable Declarations
-            WpfButton uIBackButton = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIBackButton;
+            WpfButton uIBackButton = this.UIForensicAnalysisToolWindow.UIScanningWizardWindowCustom.UIPleaseWaitProgressBar.UIBackButton;
             #endregion
 
             // Click 'Back' button
-            Mouse.Click(uIBackButton, new Point(90, 13));
+            Mouse.Click(uIBackButton, new Point(57, 14));
         }
         
         /// <summary>
@@ -134,19 +134,6 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
         }
         
         /// <summary>
-        /// AssertErrorTextBlockText - Use 'AssertErrorTextBlockTextExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertErrorTextBlockText()
-        {
-            #region Variable Declarations
-            WpfText uIPleaseSpecifyPassworText = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIPleaseSpecifyPassworText;
-            #endregion
-
-            // Verify that the 'DisplayText' property of 'Please Specify Password' label equals 'Please Specify Password'
-            Assert.AreEqual(this.AssertErrorTextBlockTextExpectedValues.UIPleaseSpecifyPassworTextDisplayText, uIPleaseSpecifyPassworText.DisplayText);
-        }
-        
-        /// <summary>
         /// ClickThisComputerButton
         /// </summary>
         public void ClickThisComputerButton()
@@ -157,6 +144,32 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
 
             // Click 'Scan This Computer' button
             Mouse.Click(uIScanThisComputerButton, new Point(180, 49));
+        }
+        
+        /// <summary>
+        /// AssertErrorTextBlockText - Use 'AssertErrorTextBlockTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertErrorTextBlockText()
+        {
+            #region Variable Declarations
+            WpfText uIPleasespecifyPassworText = this.UIForensicAnalysisToolWindow.UIScanningWizardWindowCustom.UIPleaseWaitProgressBar.UIPleasespecifyPassworText;
+            #endregion
+
+            // Verify that the 'DisplayText' property of 'Please specify Password' label equals 'Please specify Password'
+            Assert.AreEqual(this.AssertErrorTextBlockTextExpectedValues.UIPleasespecifyPassworTextDisplayText, uIPleasespecifyPassworText.DisplayText);
+        }
+        
+        /// <summary>
+        /// ClickCloseScanWizardButton
+        /// </summary>
+        public void ClickCloseScanWizardButton()
+        {
+            #region Variable Declarations
+            WpfButton uICloseScanWizardButtoButton = this.UIForensicAnalysisToolWindow.UICloseScanWizardButtoButton;
+            #endregion
+
+            // Click 'CloseScanWizardButton' button
+            Mouse.Click(uICloseScanWizardButtoButton, new Point(6, 6));
         }
         
         #region Properties
@@ -229,9 +242,9 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
         
         #region Fields
         /// <summary>
-        /// Verify that the 'DisplayText' property of 'Please Specify Password' label equals 'Please Specify Password'
+        /// Verify that the 'DisplayText' property of 'Please specify Password' label equals 'Please specify Password'
         /// </summary>
-        public string UIPleaseSpecifyPassworTextDisplayText = "Please Specify Password";
+        public string UIPleasespecifyPassworTextDisplayText = "Please specify Password";
         #endregion
     }
     
@@ -660,10 +673,28 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
                 return this.mUIScanningWizardWindowCustom;
             }
         }
+        
+        public WpfButton UICloseScanWizardButtoButton
+        {
+            get
+            {
+                if ((this.mUICloseScanWizardButtoButton == null))
+                {
+                    this.mUICloseScanWizardButtoButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUICloseScanWizardButtoButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "CloseScanWizardButton";
+                    this.mUICloseScanWizardButtoButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUICloseScanWizardButtoButton;
+            }
+        }
         #endregion
         
         #region Fields
         private UIScanningWizardWindowCustom2 mUIScanningWizardWindowCustom;
+        
+        private WpfButton mUICloseScanWizardButtoButton;
         #endregion
     }
     
@@ -861,6 +892,38 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
                 return this.mUIScancomputersselecteButton1;
             }
         }
+        
+        public WpfButton UIBackButton
+        {
+            get
+            {
+                if ((this.mUIBackButton == null))
+                {
+                    this.mUIBackButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIBackButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "BackButton";
+                    this.mUIBackButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIBackButton;
+            }
+        }
+        
+        public WpfText UIPleasespecifyPassworText
+        {
+            get
+            {
+                if ((this.mUIPleasespecifyPassworText == null))
+                {
+                    this.mUIPleasespecifyPassworText = new WpfText(this);
+                    #region Search Criteria
+                    this.mUIPleasespecifyPassworText.SearchProperties[WpfText.PropertyNames.AutomationId] = "ErrorTextBlock";
+                    this.mUIPleasespecifyPassworText.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIPleasespecifyPassworText;
+            }
+        }
         #endregion
         
         #region Fields
@@ -873,6 +936,10 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
         private WpfButton mUIFullScanButton;
         
         private WpfButton mUIScancomputersselecteButton1;
+        
+        private WpfButton mUIBackButton;
+        
+        private WpfText mUIPleasespecifyPassworText;
         #endregion
     }
 }

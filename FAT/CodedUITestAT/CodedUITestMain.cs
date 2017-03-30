@@ -175,7 +175,7 @@ namespace CodedUITestFAT
         
         private WpfText ErrorTextBlock()
         {
-            return UIMapStartScanWizard.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIPleaseSpecifyPassworText;
+            return UIMapStartScanWizard.UIForensicAnalysisToolWindow.UIScanningWizardWindowCustom.UIPleaseWaitProgressBar.UIPleasespecifyPassworText;
         }
 
         #endregion
@@ -496,7 +496,7 @@ namespace CodedUITestFAT
         private void AssertErrorText(string expectedErrorText, TestContext testContext)
         {
             UIHelper.WaitForControlIsClickable(ErrorTextBlock());
-            UIMapStartScanWizard.AssertErrorTextBlockTextExpectedValues.UIPleaseSpecifyPassworTextDisplayText = expectedErrorText;
+            UIMapStartScanWizard.AssertErrorTextBlockTextExpectedValues.UIPleasespecifyPassworTextDisplayText = expectedErrorText;
             UIMapStartScanWizard.AssertErrorTextBlockText();
             testContext.WriteLine(String.Format("Expected regular error message '{0}' appeared.", expectedErrorText));
         }
@@ -731,10 +731,15 @@ namespace CodedUITestFAT
         public void ScanningWizardNavigationWorkgroupTest()
         {
             string workgroupName = SysHelper.GetWorkgroupName();
-            
+
+            UIHelper.WaitForControlIsClickable(SkipDiscoveryButton());
+            UIMapDiscovery.ClickSkipDiscoveryButton();
+
             SysHelper.DisinfectForQuickScan(DataHelper.GetEndpoint(), TestContext);
 
-            UIMapMain.ClickStartScanButton();
+            UIHelper.WaitForControlIsClickable(CustomScanButton());
+            UIMapDiscovery.ClickCustomScanButton();
+
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanWizard.ClickWorkgroupButton();
             UIHelper.WaitForControlIsEnabled(NextButton());
@@ -783,8 +788,10 @@ namespace CodedUITestFAT
             TestContext.WriteLine("Quick Scan button clicked...");
 
             WaitForScanCompleted(ScanType.Quick);
-            //UIMapScanCompletedWindow.ClickCloseCrossButton();
-            UIMapMain.ClickStartScanButton();
+
+
+            UIMapResultsWindow.ClickNewCustomScanButton();
+            
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanWizard.ClickWorkgroupButton();
             UIHelper.WaitForControl(NextButton());
@@ -805,8 +812,7 @@ namespace CodedUITestFAT
             CheckWorkgroup(workgroupName);
             UIMapStartScanWizard.ClickNextButton();
 
-            // Scan Credentials step after scan
-            UIHelper.WaitForControlIsEnabled(QuickScanButton());
+            // Scan Credentials step after scan            
             TestContext.WriteLine("Returned to Scan Credentials step after scan...");
             UIMapWorkgroup.AssertLoginTextBoxTextExpectedValues.UILoginWatermarkTextBoEditText = DataHelper.Username;
             UIMapWorkgroup.AssertLoginTextBoxText();
@@ -814,6 +820,7 @@ namespace CodedUITestFAT
             UIMapStartScanWizard.ClickQuickScanButton();
             TestContext.WriteLine("Quick Scan button clicked...");
             AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
+            UIMapStartScanWizard.ClickCloseScanWizardButton();
         }
 
         [TestMethod, Timeout(DataHelper.LongTestTimeout)]

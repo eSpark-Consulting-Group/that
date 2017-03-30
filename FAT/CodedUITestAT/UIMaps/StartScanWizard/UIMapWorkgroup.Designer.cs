@@ -30,19 +30,6 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
     {
         
         /// <summary>
-        /// AssertWorkgroupTextBoxText - Use 'AssertWorkgroupTextBoxTextExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertWorkgroupTextBoxText()
-        {
-            #region Variable Declarations
-            WpfEdit uIWorkgroupWatermarkTeEdit = this.UIUnknownFileHunterWindow1.UIWorkgroupViewCustom.UIWorkgroupWatermarkTeEdit;
-            #endregion
-
-            // Verify that the 'Text' property of 'WorkgroupWatermarkTextBox' text box equals 'workgroup'
-            Assert.AreEqual(this.AssertWorkgroupTextBoxTextExpectedValues.UIWorkgroupWatermarkTeEditText, uIWorkgroupWatermarkTeEdit.Text);
-        }
-        
-        /// <summary>
         /// AssertWorkgroupTree - Use 'AssertWorkgroupTreeExpectedValues' to pass parameters into this method.
         /// </summary>
         public void AssertWorkgroupTree()
@@ -121,31 +108,32 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
         }
         
         /// <summary>
+        /// AssertWorkgroupTextBoxText - Use 'AssertWorkgroupTextBoxTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertWorkgroupTextBoxText()
+        {
+            #region Variable Declarations
+            WpfEdit uIWorkgroupWatermarkTeEdit = this.UIForensicAnalysisToolWindow.UIScanningWizardWindowCustom.UIWorkgroupViewCustom.UIWorkgroupWatermarkTeEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'WorkgroupWatermarkTextBox' text box equals 'test'
+            Assert.AreEqual(this.AssertWorkgroupTextBoxTextExpectedValues.UIWorkgroupWatermarkTeEditText, uIWorkgroupWatermarkTeEdit.Text);
+        }
+        
+        /// <summary>
         /// AssertLoginTextBoxText - Use 'AssertLoginTextBoxTextExpectedValues' to pass parameters into this method.
         /// </summary>
         public void AssertLoginTextBoxText()
         {
             #region Variable Declarations
-            WpfEdit uILoginWatermarkTextBoEdit = this.UIUnknownFileHunterWindow1.UIWorkgroupViewCustom.UIThisCustom.UILoginWatermarkTextBoEdit;
+            WpfEdit uILoginWatermarkTextBoEdit = this.UIForensicAnalysisToolWindow.UIThisCustom.UILoginWatermarkTextBoEdit;
             #endregion
 
-            // Verify that the 'Text' property of 'LoginWatermarkTextBox' text box equals 'admin'
+            // Verify that the 'Text' property of 'LoginWatermarkTextBox' text box equals 'Administrator'
             Assert.AreEqual(this.AssertLoginTextBoxTextExpectedValues.UILoginWatermarkTextBoEditText, uILoginWatermarkTextBoEdit.Text);
         }
         
         #region Properties
-        public virtual AssertWorkgroupTextBoxTextExpectedValues AssertWorkgroupTextBoxTextExpectedValues
-        {
-            get
-            {
-                if ((this.mAssertWorkgroupTextBoxTextExpectedValues == null))
-                {
-                    this.mAssertWorkgroupTextBoxTextExpectedValues = new AssertWorkgroupTextBoxTextExpectedValues();
-                }
-                return this.mAssertWorkgroupTextBoxTextExpectedValues;
-            }
-        }
-        
         public virtual AssertWorkgroupTreeExpectedValues AssertWorkgroupTreeExpectedValues
         {
             get
@@ -218,6 +206,18 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
             }
         }
         
+        public virtual AssertWorkgroupTextBoxTextExpectedValues AssertWorkgroupTextBoxTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertWorkgroupTextBoxTextExpectedValues == null))
+                {
+                    this.mAssertWorkgroupTextBoxTextExpectedValues = new AssertWorkgroupTextBoxTextExpectedValues();
+                }
+                return this.mAssertWorkgroupTextBoxTextExpectedValues;
+            }
+        }
+        
         public virtual AssertLoginTextBoxTextExpectedValues AssertLoginTextBoxTextExpectedValues
         {
             get
@@ -268,8 +268,6 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
         #endregion
         
         #region Fields
-        private AssertWorkgroupTextBoxTextExpectedValues mAssertWorkgroupTextBoxTextExpectedValues;
-        
         private AssertWorkgroupTreeExpectedValues mAssertWorkgroupTreeExpectedValues;
         
         private CheckWorkgroupParams mCheckWorkgroupParams;
@@ -282,6 +280,8 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
         
         private SelectUseKnownWorkgroupRadioButtonParams mSelectUseKnownWorkgroupRadioButtonParams;
         
+        private AssertWorkgroupTextBoxTextExpectedValues mAssertWorkgroupTextBoxTextExpectedValues;
+        
         private AssertLoginTextBoxTextExpectedValues mAssertLoginTextBoxTextExpectedValues;
         
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
@@ -289,21 +289,6 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
         private UIUnknownFileHunterWindow1 mUIUnknownFileHunterWindow1;
         
         private UIForensicAnalysisToolWindow mUIForensicAnalysisToolWindow;
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'AssertWorkgroupTextBoxText'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class AssertWorkgroupTextBoxTextExpectedValues
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Verify that the 'Text' property of 'WorkgroupWatermarkTextBox' text box equals 'workgroup'
-        /// </summary>
-        public string UIWorkgroupWatermarkTeEditText = "workgroup";
         #endregion
     }
     
@@ -398,6 +383,21 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
     }
     
     /// <summary>
+    /// Parameters to be passed into 'AssertWorkgroupTextBoxText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AssertWorkgroupTextBoxTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'WorkgroupWatermarkTextBox' text box equals 'test'
+        /// </summary>
+        public string UIWorkgroupWatermarkTeEditText = "test";
+        #endregion
+    }
+    
+    /// <summary>
     /// Parameters to be passed into 'AssertLoginTextBoxText'
     /// </summary>
     [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
@@ -406,9 +406,9 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
         
         #region Fields
         /// <summary>
-        /// Verify that the 'Text' property of 'LoginWatermarkTextBox' text box equals 'admin'
+        /// Verify that the 'Text' property of 'LoginWatermarkTextBox' text box equals 'Administrator'
         /// </summary>
-        public string UILoginWatermarkTextBoEditText = "admin";
+        public string UILoginWatermarkTextBoEditText = "Administrator";
         #endregion
     }
     
@@ -1015,12 +1015,26 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
                 return this.mUIWorkgroupViewCustom;
             }
         }
+        
+        public UIThisCustom1 UIThisCustom
+        {
+            get
+            {
+                if ((this.mUIThisCustom == null))
+                {
+                    this.mUIThisCustom = new UIThisCustom1(this);
+                }
+                return this.mUIThisCustom;
+            }
+        }
         #endregion
         
         #region Fields
         private UIScanningWizardWindowCustom2 mUIScanningWizardWindowCustom;
         
         private UIWorkgroupViewCustom5 mUIWorkgroupViewCustom;
+        
+        private UIThisCustom1 mUIThisCustom;
         #endregion
     }
     
@@ -1087,10 +1101,28 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
                 return this.mUIUseKnownWorkgroupNamRadioButton;
             }
         }
+        
+        public WpfEdit UIWorkgroupWatermarkTeEdit
+        {
+            get
+            {
+                if ((this.mUIWorkgroupWatermarkTeEdit == null))
+                {
+                    this.mUIWorkgroupWatermarkTeEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUIWorkgroupWatermarkTeEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "WorkgroupWatermarkTextBox";
+                    this.mUIWorkgroupWatermarkTeEdit.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIWorkgroupWatermarkTeEdit;
+            }
+        }
         #endregion
         
         #region Fields
         private WpfRadioButton mUIUseKnownWorkgroupNamRadioButton;
+        
+        private WpfEdit mUIWorkgroupWatermarkTeEdit;
         #endregion
     }
     
@@ -1211,6 +1243,43 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
         
         #region Fields
         private WpfCheckBox mUICheckBoxElementCheckBox;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIThisCustom1 : WpfCustom
+    {
+        
+        public UIThisCustom1(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfControl.PropertyNames.ClassName] = "Uia.LoginPasswordUserControl";
+            this.SearchProperties[WpfControl.PropertyNames.AutomationId] = "this";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfEdit UILoginWatermarkTextBoEdit
+        {
+            get
+            {
+                if ((this.mUILoginWatermarkTextBoEdit == null))
+                {
+                    this.mUILoginWatermarkTextBoEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUILoginWatermarkTextBoEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "LoginWatermarkTextBox";
+                    this.mUILoginWatermarkTextBoEdit.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUILoginWatermarkTextBoEdit;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfEdit mUILoginWatermarkTextBoEdit;
         #endregion
     }
 }
