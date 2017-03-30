@@ -39,7 +39,7 @@ namespace FAT.Application
         {
             var element = e.OriginalSource as FrameworkElement;
 
-            var item = element.DataContext as IThreatInfoItem;
+            var item = element?.DataContext as IThreatInfoItem;
             if (item != null)
             {
                 treeList.SelectedItem = null;

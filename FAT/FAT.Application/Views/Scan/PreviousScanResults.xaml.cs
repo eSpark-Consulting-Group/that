@@ -29,7 +29,7 @@ namespace FAT.Application
         {
             var element = e.OriginalSource as FrameworkElement;
 
-            var operation = element.DataContext as IScanOperation;
+            var operation = element?.DataContext as IScanOperation;
             if (operation != null)
                 treeList.SelectedItem = operation;
         }
