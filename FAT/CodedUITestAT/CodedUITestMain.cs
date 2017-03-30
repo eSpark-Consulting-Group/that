@@ -172,12 +172,7 @@ namespace CodedUITestFAT
         #endregion
 
         #region Network Addresses
-
-        private WpfList NetworkAddressesList()
-        {
-            return UIMapNetworkAddresses.UIUnknownFileHunterWindow.UINetworkAddressesViewCustom.UITextEntryListViewCustom.UINetworkAddressItemsLList;
-        }
-
+        
         private WpfText ErrorTextBlock()
         {
             return UIMapStartScanWizard.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIPleaseSpecifyPassworText;
@@ -418,17 +413,7 @@ namespace CodedUITestFAT
             }
             timer.Stop();
         }
-        
-        /// <summary> Cleans Network Addresses list. </summary>
-        private void CleanNetworkAddressesList()
-        {
-            while (NetworkAddressesList().Items.Count > 0)
-            {
-              Mouse.Click(NetworkAddressesList().Items[0]);
-              UIMapNetworkAddresses.ClickRemoveButton();
-            }
-        }
-        
+               
         /// <summary> Expands a given row in Active Directory tree. In accordance with DeploymentItem.cs. </summary>
         /// <param name="rowName">Set a unique row name.</param>
         private void ExpandAdRow(string rowName)
@@ -741,89 +726,7 @@ namespace CodedUITestFAT
             TestContext.WriteLine(String.Format("Unknown file name {0} found at threat Details screen.", unknownFile.Name));
             UIMapDetailsWindow.ClickCloseButton();
         }
-
-        [TestMethod, Timeout(DataHelper.LongTestTimeout)]
-        public void ScanningWizardNavigationNetworkAddressesTest()
-        {
-            Computer endpoint = DataHelper.GetEndpoint();
-            SysHelper.DisinfectForQuickScan(endpoint, TestContext);
-            
-            UIMapMain.ClickStartScanButton();
-            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            UIMapStartScanWizard.ClickNetworkAddressButton();
-            UIHelper.WaitForControlIsEnabled(NextButton());
-            
-            // Network Addresses step
-            UIMapNetworkAddresses.InputNetworkAddressParams.UINetworkAddressTextBoEditText = endpoint.Name;
-            UIMapNetworkAddresses.InputNetworkAddress();
-            UIMapNetworkAddresses.ClickAddButton();
-            UIMapStartScanWizard.ClickBackButton();
-            TestContext.WriteLine("Back to Start Scan Wizard...");
-            UIMapStartScanWizard.ClickNetworkAddressButton();
-            TestContext.WriteLine("Returned to Network Addresses step...");
-            var networkAddresses = NetworkAddressesList().Items;
-            bool thereIsNoEndpointName = true;
-            foreach (var networkAddress in networkAddresses)
-            {
-                if (networkAddress.Name == endpoint.Name)
-                {
-                    TestContext.WriteLine(String.Format("Endpoint name '{0}' is still present in Network Addresses list.", endpoint.Name));
-                    thereIsNoEndpointName = false;
-                    break;
-                }
-            }
-            if (thereIsNoEndpointName) Assert.Fail(String.Format("Endpoint name '{0}' is no longer present in Network Addresses list!", endpoint.Name));
-            UIMapStartScanWizard.ClickNextButton();
-            
-            // Scan Credentials step
-            UIHelper.WaitForControl(QuickScanButton());
-            InputScanLogin(DataHelper.Username);
-            InputPassword(DataHelper.Password);            
-            UIMapStartScanWizard.ClickBackButton();
-            TestContext.WriteLine("Back to Network Addresses step...");
-            UIHelper.WaitForControl(NextButton());
-            UIMapStartScanWizard.ClickNextButton();
-            TestContext.WriteLine("Returned to Scan Credentials step...");
-            UIHelper.WaitForControl(QuickScanButton());
-            UIMapNetworkAddresses.AssertLoginTextBoxTextExpectedValues.UILoginWatermarkTextBoEditText = DataHelper.Username;
-            UIMapNetworkAddresses.AssertLoginTextBoxText();
-            TestContext.WriteLine(String.Format("Login '{0}' is stored in the respective text box.", DataHelper.Username));
-            UIMapStartScanWizard.ClickQuickScanButton();
-            TestContext.WriteLine("Quick Scan button clicked...");
-            WaitForScanCompleted(ScanType.Quick);
-            //UIMapScanCompletedWindow.ClickCloseCrossButton();
-
-            UIMapMain.ClickStartScanButton();
-            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            UIMapStartScanWizard.ClickNetworkAddressButton();
-
-            // Network Addresses step after scan
-            TestContext.WriteLine("Returned to Network Addresses step after scan...");
-            networkAddresses = NetworkAddressesList().Items;
-            thereIsNoEndpointName = true;
-            foreach (var networkAddress in networkAddresses)
-            {
-                if (networkAddress.Name == endpoint.Name)
-                {
-                    TestContext.WriteLine(String.Format("Endpoint name '{0}' is still present in Network Addresses list.", endpoint.Name));
-                    thereIsNoEndpointName = false;
-                    break;
-                }
-            }
-            if (thereIsNoEndpointName) Assert.Fail(String.Format("Endpoint name '{0}' is no longer present in Network Addresses list!", endpoint.Name));
-            UIMapStartScanWizard.ClickNextButton();
-
-            // Scan Credentials step after scan
-            TestContext.WriteLine("Returned to Scan Credentials step after scan...");
-            UIHelper.WaitForControl(QuickScanButton());
-            UIMapNetworkAddresses.AssertLoginTextBoxTextExpectedValues.UILoginWatermarkTextBoEditText = DataHelper.Username;
-            UIMapNetworkAddresses.AssertLoginTextBoxText();
-            TestContext.WriteLine(String.Format("Login '{0}' is stored in the respective text box.", DataHelper.Username));
-            UIMapStartScanWizard.ClickQuickScanButton();
-            TestContext.WriteLine("Quick Scan button clicked...");
-            AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
-        }
-
+        
         [TestMethod, Timeout(DataHelper.LongTestTimeout)]
         public void ScanningWizardNavigationWorkgroupTest()
         {
@@ -1023,37 +926,6 @@ namespace CodedUITestFAT
             TestContext.WriteLine("Scan completed...");
         }
         
-        [TestMethod]
-        public void InvalidInputHandlingInNetworkAddressesTest()
-        {
-            Computer endpoint = DataHelper.GetEndpoint();
-
-            //UIMapMain.ClickScanNowButton();            
-            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            UIMapStartScanWizard.ClickNetworkAddressButton();
-            UIHelper.WaitForControlIsClickable(NextButton());
-
-            // Network address
-            UIMapStartScanWizard.ClickNextButton();
-            AssertErrorText(Settings.Errors.Default.SpecifyNetworkAddress, TestContext);
-            UIMapNetworkAddresses.InputNetworkAddressParams.UINetworkAddressTextBoEditText = endpoint.Name;
-            UIMapNetworkAddresses.InputNetworkAddress();
-            UIMapStartScanWizard.ClickNextButton();
-            AssertErrorText(Settings.Errors.Default.SpecifyNetworkAddress, TestContext);
-            UIMapNetworkAddresses.ClickAddButton();
-            UIMapStartScanWizard.ClickNextButton();
-
-            // Login
-            UIMapStartScanWizard.ClickQuickScanButton();
-            AssertErrorText(Settings.Errors.Default.SpecifyLogin, TestContext);
-            UIMapNetworkAddresses.InputLoginParams.UILoginWatermarkTextBoEditSendKeys = DataHelper.Username;
-            UIMapNetworkAddresses.InputLogin();
-
-            // Password
-            UIMapStartScanWizard.ClickQuickScanButton();
-            AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
-        }
-
         [TestMethod]
         public void InvalidInputHandlingInWorkgroupTest()
         {
