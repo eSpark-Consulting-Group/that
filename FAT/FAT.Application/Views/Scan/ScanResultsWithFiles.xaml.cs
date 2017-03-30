@@ -57,7 +57,8 @@ namespace FAT.Application
         private void treeList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var element = e.OriginalSource as FrameworkElement;
-            var item = element.DataContext as IThreatInfoItem;
+
+            var item = element?.DataContext as IThreatInfoItem;
             if (item != null && !item.IsComputer)
                 item_Click(sender, e);
         }

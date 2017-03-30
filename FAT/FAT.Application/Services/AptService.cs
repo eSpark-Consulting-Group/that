@@ -302,6 +302,10 @@ namespace FAT.Application.Services
             {
                 scanner.ScanStarted -= OnScanStarted;
             }
+
+            if (e.Error != null)
+                return;
+
             StartValkyrieAnalysis();
             
             Action action = () =>
@@ -309,8 +313,8 @@ namespace FAT.Application.Services
                 ScanStartedEventArgs args = new ScanStartedEventArgs
                 {
                     OperationUid = e.OperationUid,
-                    RescanAttempt = e.RescanAttempt,
-                    Error = e.Error
+                    //RescanAttempt = e.RescanAttempt,
+                    //Error = e.Error
                 };
                 FatScanStarted?.Invoke(this, args);
             };

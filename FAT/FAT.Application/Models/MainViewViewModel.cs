@@ -47,6 +47,7 @@ namespace FAT.Application.Models
         private bool _groupByFiles;
         private bool _groupByComputers;
         private bool _isFailed;
+        private bool _isSearchInitiated;
 
         private TimeSpan? _lastModifiesComputerDate = null;
         private DateTime? _lastModifiesFlsVerdictDate = null;
@@ -61,7 +62,9 @@ namespace FAT.Application.Models
         private Boolean _cancelInProgress;
         private IThreatInfoItem[] _onlineItems;
         private readonly DispatcherTimer _scanIteratorTimer;
+
         private string _email = string.Empty;
+        private string _scanKeyword;
 
         #region Props
 
@@ -566,7 +569,24 @@ namespace FAT.Application.Models
 
         public bool HideSubmitEmail { get; set; }
 
-        public string ScanKeyword { get; set; }
+        public string ScanKeyword
+        {
+            get { return _scanKeyword; }
+            set
+            {
+                _scanKeyword = value;
+                RaisePropertyChanged(nameof(ScanKeyword));
+                RaisePropertyChanged(nameof(HasScanKeyword));
+            }
+        }
+
+        public bool HasScanKeyword
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(ScanKeyword);
+            }
+        }
 
         #endregion
 
@@ -587,6 +607,7 @@ namespace FAT.Application.Models
         public DelegateCommand OpenCurrentScanCommand { get; private set; }
         public DelegateCommand OpenPreviousScanDetailsCommand { get; private set; }
         public DelegateCommand SearchPreviousScansCommand { get; private set; }
+        public DelegateCommand ClearScanKeywordCommand { get; private set; }
         #endregion
 
         public MainViewViewModel(
@@ -648,6 +669,7 @@ namespace FAT.Application.Models
             OpenCurrentScanCommand = new DelegateCommand(InvokeOpenCurrentScan);
             OpenPreviousScanDetailsCommand = new DelegateCommand(InvokeOpenPreviousScanDetails);
             SearchPreviousScansCommand = new DelegateCommand(InvokeSearchPreviousScans);
+            ClearScanKeywordCommand = new DelegateCommand(InvokeCleanScanKeyword);
         }
 
         protected override void InvokeViewLoaded(Object arg)
@@ -862,7 +884,15 @@ namespace FAT.Application.Models
 
         private void InvokeSearchPreviousScans(Object arg)
         {
+            PreviousScansViewModel._isSearchInitiated = PreviousScansViewModel.HasScanKeyword;
             InvokeOpenPreviousScans(PreviousScansViewModel.ScanKeyword ?? string.Empty);
+        }
+
+        private void InvokeCleanScanKeyword(Object arg)
+        {
+            PreviousScansViewModel.ScanKeyword = null;
+            if (PreviousScansViewModel._isSearchInitiated)
+                InvokeSearchPreviousScans(arg);
         }
 
         private void DispatcherOperationCompleted(object sender, EventArgs e)

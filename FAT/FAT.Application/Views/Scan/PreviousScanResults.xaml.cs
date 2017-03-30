@@ -37,7 +37,8 @@ namespace FAT.Application
         private void treeList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var element = e.OriginalSource as FrameworkElement;
-            var operation = element.DataContext as IScanOperation;
+
+            var operation = element?.DataContext as IScanOperation;
             if (operation != null)
                 ViewModel.OpenPreviousScanDetailsCommand.Execute(operation);
         }

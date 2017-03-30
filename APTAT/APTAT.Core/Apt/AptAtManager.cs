@@ -45,7 +45,7 @@ namespace APTAT.Core.Apt
         private int _filesShouldSendToValkyrieCount = 0;
         private int _filesWithFlsErrorCount = 0;
         //private IReportBuilder _reportBuilder;
-        private bool _isLastScanCancelled = false;
+        //private bool _isLastScanCancelled = false;
         private readonly IAptReportBuilder _reportBuilder;
 
         public event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<FileResult>> ValkyrieAnalyzeProgressChanged;
@@ -446,7 +446,7 @@ namespace APTAT.Core.Apt
         private void OnScanStarted(object sender, ScanStartedEventArgs e)
         {
             IAptScanner scanner = sender as IAptScanner;
-            if (scanner == null) return;
+            if (scanner == null || scanner.ScanOperationContext == null) return;
             /*if (e.RescanAttempt && AggregatedScanResults != null)
                 AggregatedScanResults.MergeOperationContext(scanner.ScanOperationContext);
             else*/
@@ -470,7 +470,7 @@ namespace APTAT.Core.Apt
                     _queueToValkyrie.Clear();
                 ShouldSendToValkyrie.Clear();
                 ValkyrieAnalysisResult.Clear();
-                _isLastScanCancelled = false;
+                //_isLastScanCancelled = false;
                 _entityStorage.SaveOperationContext(scanner.ScanOperationContext);
             }
         }
@@ -502,7 +502,7 @@ namespace APTAT.Core.Apt
 
         public void StopScan(Guid[] targetsUids)
         {
-            _isLastScanCancelled = true;
+            //_isLastScanCancelled = true;
             if (targetsUids.Any())
                 _descentSubSystem.StopOperationForTargetUid(targetsUids);
             else
