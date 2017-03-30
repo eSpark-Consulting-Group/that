@@ -332,8 +332,8 @@ namespace CodedUITestFAT
         /// <param name="rowName">Set a unique row name.</param>
         internal static UITestControl GetRow(this WpfTabPage tab, string rowName)
         {
-           var rows = tab.GetRows();            
-           foreach (var row in rows) if (String.Compare(row.GetRowName(), rowName, true) == 0) return row;
+           var rows = tab.GetRows();
+           foreach (var row in rows) if (row.GetRowName().ContainsIgnoringCase(rowName)) return row;
            
            return null;
         }
@@ -345,7 +345,7 @@ namespace CodedUITestFAT
         {
             var rows = table.GetRows();
 
-            foreach (var row in rows) if (String.Compare(row.GetRowName(), rowName, true) == 0) return row;
+            foreach (var row in rows) if (row.GetRowName().ContainsIgnoringCase(rowName)) return row;
 
             return null;
         }
@@ -364,8 +364,8 @@ namespace CodedUITestFAT
             else rows = useMain.ScanResultsByComputersTable().GetRows();
 
             foreach (var row in rows)
-            {
-                if (String.Compare(row.GetRowName(), rowName, true) == 0)
+            {                
+                if (row.GetRowName().ContainsIgnoringCase(rowName))
                 {
                     var text = row.GetChildren()[1].GetChildren()[0].GetChildren()[0];
                     //var text = row.GetChildren().FirstOrDefault(c => c is WpfText); // First WPF text in the row
@@ -455,7 +455,7 @@ namespace CodedUITestFAT
             foreach (var row in rows)
             {
                 string instanceName = row.GetRowStatus();
-                if (String.Compare(instanceName, threat.Location, true) == 0)
+                if (instanceName.ContainsIgnoringCase(threat.Location))
                 {
                     useMain.UIMapMain.ClickClearSearchTextButton();
                     GroupByComputers();

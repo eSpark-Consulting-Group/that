@@ -78,5 +78,16 @@ namespace CodedUITestFAT
             int dotPosition = str.LastIndexOf(".");
             return str.Remove(dotPosition);
         }
+
+        /// <summary> Determines whether the first string contains the second one. Ignores case. </summary>
+        /// <param name="firstString"></param>
+        /// <param name="secondString"></param>
+        internal static bool ContainsIgnoringCase(this string firstString, string secondString)
+        {
+            string str1 = firstString.ToLower();
+            string str2 = secondString.ToLower();
+
+            return str1.Contains(str2);
+        }
     }
 }
