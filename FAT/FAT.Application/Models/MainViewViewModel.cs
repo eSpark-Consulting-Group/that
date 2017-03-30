@@ -983,14 +983,13 @@ namespace FAT.Application.Models
 
         private void MergeScanComputerResults(IFatScanComputerResult[] results)
         {
-            var computers = new SortedList<IFatScanComputerResult, IFatScanComputerResult>(results.Length, new ScanComputerResultComparer());
-            foreach (var result in results)
-                computers.Add(result, result);
+            var computers = results.ToList();
+            computers.Sort(new ScanComputerResultComparer());
 
             PreviousScansViewModel.Computers = new ObservableCollection<IThreatInfoItem>();
             PreviousScansViewModel.Files = new ObservableCollection<IThreatInfoItem>();
 
-            foreach (var res in computers.Values)
+            foreach (var res in computers)
             {
                 var item = new ThreatInfoItem();
                 item.IsComputer = true;
