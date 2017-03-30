@@ -745,9 +745,7 @@ namespace CodedUITestFAT
             UIHelper.WaitForControlIsEnabled(NextButton());
 
             // Specify Workgroup step
-            UIMapWorkgroup.SelectUseKnownWorkgroupRadioButton();
-            UIMapWorkgroup.InputWorkgroupParams.UIWorkgroupWatermarkTeEditSendKeys = workgroupName;
-            UIMapWorkgroup.InputWorkgroup();
+            UIMapWorkgroup.SelectUseKnownWorkgroupRadioButton();            
             UIMapStartScanWizard.ClickBackButton();
             TestContext.WriteLine("Back to Start Scan Wizard...");
             UIHelper.WaitForControl(NetworkAddressButton());
