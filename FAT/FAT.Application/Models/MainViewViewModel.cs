@@ -1105,6 +1105,10 @@ namespace FAT.Application.Models
             }
 
             InvokeStopScan(items.Select(_ => _.DeploymentTarget.Uid).ToArray());
+        }
+        
+        private void RestartComputerScan(bool isQuickScan)
+        {
         }*/
 
         private void InvokeStartScan(Object arg)
@@ -1388,6 +1392,10 @@ namespace FAT.Application.Models
                     && infoItem.ScanStage != ScanStage.OperationCanceled)
                 {
                     infoItem.TrySetCancelledStatus();
+                    counterDiff.InProgressDiff = (-1) * infoItem.PendingFilesCount;
+                    counterDiff.UnknownDiff = (-1) * infoItem.UnknownFilesCount;
+                    counterDiff.MalwareDiff = (-1) * infoItem.MalwareFilesCount;
+                    counterDiff.NotAnalyzedDiff = (-1) * infoItem.NotAnalyzedFilesCount;
                 }
                 if (_isFailed && localPercentage < 100)
                 {

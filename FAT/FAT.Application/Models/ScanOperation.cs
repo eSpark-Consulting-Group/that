@@ -64,7 +64,12 @@ namespace FAT.Application.Models
             get
             {
                 if (IsCancelled)
-                    return "Scan Canceled.";
+                {
+                    if (ComputersScanned == 0)
+                        return "Scan Canceled.";
+
+                    return $"Scan Canceled. Computers scanned: {ComputersScanned}.";
+                }
                 if (IsFailed)
                     return "Scan Failed.";
 
