@@ -2,7 +2,7 @@
 
 namespace APTAT.DeploymentCore.Descent.Helpers
 {
-    public interface IRemoteHostInfo
+    public interface IRemoteHostInfo:IRemoteObject
     {
         string HostName { get; set; }
         bool IsCancelled { get;  }

@@ -11,38 +11,45 @@ using APTAT.DeploymentCore.Messages;
 
 namespace APTAT.Core.Descent.Apt
 {
-
     public partial class AptDescentScanner : Scanner
-    {        
-        private AptDescentMod _descentMod;
+    {
+        private IAptDescentMod _descentMod;
         private readonly IScanOptions _scanOptions;
-        private IContextFactory _contextFactory;
+        private IAptFactory _aptFactory;
+        private IRemoteFactory _remoteFactory;
 
         public AptDescentScanner(IEnumerable<IComputer> targets, string login, string password,
             IDevicesSourceDescription devicesSourceDescription, IScanOptions scanOptions,
-            IContextFactory contextFactory) 
+            IAptFactory aptFactory,IRemoteFactory remoteFactory) 
             : base(targets, login, password, devicesSourceDescription)
         {
             _scanOptions = scanOptions;
-            _contextFactory = contextFactory;
+            _aptFactory = aptFactory;
+            _remoteFactory = remoteFactory;
         }
 
         public override IDescentQueryResult ValidateAndGetResult()
         {
-            var result = _contextFactory.CreateContext(Targets,  DevicesSourceDescription);
-            ((AptScanOperationContext)result).ScanMethod = _scanOptions.ScanKind;
-            return result;
+            var result = _aptFactory.CreateContext(Targets,  DevicesSourceDescription);
+            var aptScanResult = (IAptScanOperationContextInternal)result;
+                aptScanResult.SetScanKind(_scanOptions.ScanKind);
+            return aptScanResult;
         }
         public override DescentEventArgs GetDescentCompletedEventArgs(IDescentQueryResult result)
         {
-            var aptResult = (AptScanOperationContext)result;
+            var aptResult = (IAptScanOperationContextInternal)result;
+
             int failed, notPerformed, succeeded, total, canceled;
+
             CalculateOperationStatistics(aptResult.ScanResults, out failed, out notPerformed, out succeeded, out total, out canceled);
-            aptResult.SucceededTargetsCount = succeeded;
-            aptResult.FailedTargetsCount = failed;
-            aptResult.NotPerformedTargetsCount = aptResult.TotalTargetsCount - total;
-            aptResult.CanceledTargetsCount = canceled;
-            return new AptScanCompletedEventArgs() { OperationUid = result.OperationUid, Context = aptResult };
+
+            aptResult.SetCounters(succeeded, failed, aptResult.TotalTargetsCount - total, canceled);
+
+            return new AptScanCompletedEventArgs()
+            {
+                OperationUid = result.OperationUid,
+                Context = aptResult
+            };
         }
 
         public override void StopScan(Guid targetUid)
@@ -52,33 +59,39 @@ namespace APTAT.Core.Descent.Apt
 
         public override void StartScan(IChangeTrackingSubSystem changeTrackingSubSystem, IDescentQueryResult result)
         {
-            TaskFactory.StartNew(StartScanThread, 
-                new Tuple<IDescentQueryResult, IChangeTrackingSubSystem>(result, changeTrackingSubSystem), TaskCreationOptions.LongRunning);
-            
+           TaskFactory.StartNew(StartScanThread, 
+           new Tuple<IDescentQueryResult, IChangeTrackingSubSystem>(result, changeTrackingSubSystem), TaskCreationOptions.LongRunning);
         }
 
         private void StartScanThread(object parameters)
         {
             var tuple = (Tuple<IDescentQueryResult, IChangeTrackingSubSystem>) parameters;
             var changeTrackingSubSystem = tuple.Item2;
-            var scanResults = (AptScanOperationContext)tuple.Item1;
+            var scanResults = (IAptScanOperationContext)tuple.Item1;
             _descentMod?.Release();
-            _descentMod = new AptDescentMod(TaskFactory, changeTrackingSubSystem);
+            _descentMod = _aptFactory.CreateDescentMode(TaskFactory, changeTrackingSubSystem);
+
             FormattedText offlineText = new FormattedText(new ResourceText("null", "This computer is not accessible."));
             foreach (var computer in Targets)
             {
-                var scanResult = (AptScanResult)scanResults.GetComputerDescentResultByTargetUid(computer.Uid);
+                var scanResult = (IAptScanResult)scanResults.GetComputerDescentResultByTargetUid(computer.Uid);
                 if (!computer.IsOnline)
                 {
                     scanResult.ResultType = ScanResultType.NotPerformed;
-                    scanResults.OnDescendOperationEvent(false, computer.Uid, offlineText, offlineText, String.Empty, 0,
-                        String.Empty);
+                    scanResults.OnDescendOperationEvent(
+                        false, computer.Uid, offlineText, offlineText, String.Empty, 0,String.Empty);
                     continue;
                 }
-                var ri = new RemoteHostInfo(computer.Uid, computer.IPAddress ?? computer.DnsName,
-                    Login, Password, computer.IsLocalComputer);
-                var job = new RemoteInstallerJob(scanResults, changeTrackingSubSystem, this, computer);
-                _descentMod.StartAptScan(ri, job, computer.Uid, scanResult, scanResults.OperationUid, _scanOptions);
+
+                var ri =_remoteFactory.CreateRemoteHostInfo(
+                    computer.Uid, computer.IPAddress ?? computer.DnsName,Login,Password,
+                    computer.IsLocalComputer);
+
+                var job = _remoteFactory.CreateRemoteInstallerJob(
+                    scanResults,changeTrackingSubSystem,this,computer);
+
+                _descentMod.StartAptScan(ri, job, computer.Uid, scanResult, 
+                    scanResults.OperationUid, _scanOptions);
             }
         }
 

@@ -80,6 +80,7 @@
   <ItemGroup>
     <Compile Include="AptAtManagerTests.cs" />
     <Compile Include="ArrayExt.cs" />
+    <Compile Include="DescentAPT\AptDescentScannerTest.cs" />
     <Compile Include="FlsResultExtTest.cs" />
     <Compile Include="FLS\FlsManagerTest.cs" />
     <Compile Include="ModuleCollectionFactory.cs" />

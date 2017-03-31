@@ -9,7 +9,7 @@ namespace APTAT.Core
 {
     public class ScanResultsProcessor
     {
-        public bool TryParse(ref AptScanResult result)
+        public bool TryParse(ref IAptScanResult result)
         {
             if (result == null)
                 return false;

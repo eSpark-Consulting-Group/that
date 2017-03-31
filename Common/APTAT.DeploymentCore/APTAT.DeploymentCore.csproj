@@ -73,6 +73,7 @@
     <Compile Include="Descent\Helpers\DescentHelperEventArgs.cs" />
     <Compile Include="Descent\Helpers\DescentMod.cs" />
     <Compile Include="Descent\Helpers\IDescentCallback.cs" />
+    <Compile Include="Descent\Helpers\IDescentMod.cs" />
     <Compile Include="Descent\Helpers\INetworkHelper.cs" />
     <Compile Include="Descent\Helpers\IRemoteHostInfo.cs" />
     <Compile Include="Descent\Helpers\NetworkHelper.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="Descent\IDescentSubSystem.cs" />
     <Compile Include="Descent\IDescentWatcher.cs" />
     <Compile Include="Descent\IOperationDescentResult.cs" />
+    <Compile Include="Descent\IRemoteFactory.cs" />
     <Compile Include="Descent\IScanner.cs" />
     <Compile Include="Descent\ITimeStampProvider.cs" />
     <Compile Include="Descent\LimitedConcurrencyLevelTaskScheduler.cs" />

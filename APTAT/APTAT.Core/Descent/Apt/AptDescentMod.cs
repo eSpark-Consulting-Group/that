@@ -11,7 +11,9 @@ using APTAT.DeploymentCore.Properties;
 
 namespace APTAT.Core.Descent.Apt
 {
-    public class AptDescentMod : DescentMod
+
+    
+    public class AptDescentMod : DescentMod, IAptDescentMod
     {
         private readonly ConcurrentDictionary<Guid, AptInstallAgentThreadParams> _paramsPerTargetUid 
             = new ConcurrentDictionary<Guid,AptInstallAgentThreadParams>(); 
@@ -22,21 +24,21 @@ namespace APTAT.Core.Descent.Apt
 
         protected class AptInstallAgentThreadParams : InstallAgentThreadParams
         {
-            public AptScanResult Result { get; set; }
+            public IAptScanResult Result { get; set; }
          
             public IScanOptions Options { get; set; }
         }
-        public void StartAptScan(RemoteHostInfo remoteHostInfo, IDescentCallback cb, Guid agentIdentity,
-            AptScanResult result, Guid operationUid,  IScanOptions scanOptions)
+        public void StartAptScan(IRemoteHostInfo remoteHostInfo, IDescentCallback cb, Guid agentIdentity, 
+            IAptScanResult result, Guid operationUid, IScanOptions scanOptions)
         {
             AptInstallAgentThreadParams tp = new AptInstallAgentThreadParams
             {
-                RemoteHostInfo = remoteHostInfo,
+                RemoteHostInfo = (RemoteHostInfo)remoteHostInfo,
                 DescentCallback = cb,
                 AgentIdentity = agentIdentity,
                 OperationUid = operationUid,
                 Result = result,
-         
+
                 Options = scanOptions
             };
             _paramsPerTargetUid[agentIdentity] = tp;
@@ -104,7 +106,7 @@ namespace APTAT.Core.Descent.Apt
         protected virtual void OnScanResultsFileReceived(object sender, AptDescentHelper.ScanResultsFileReceivedEventArgs args)
         {
             var tp = _paramsPerTargetUid[args.TargetUid];
-            AptScanResult result = tp.Result;
+            IAptScanResult result = tp.Result;
 
             if (result != null)
             {
@@ -163,7 +165,7 @@ namespace APTAT.Core.Descent.Apt
             base.ProcessResults(agentTp, dh);
             var tp = (AptInstallAgentThreadParams)agentTp;
             var resultsProcessor = new ScanResultsProcessor();
-            AptScanResult result = tp.Result;
+            IAptScanResult result = tp.Result;
             if (result != null)
             {
                 var text = new ResourceText("null",
@@ -270,7 +272,7 @@ namespace APTAT.Core.Descent.Apt
             InstallAgentThreadParams atp)
         {
             var tp = (AptInstallAgentThreadParams)atp;
-            AptScanResult result = tp.Result;
+            IAptScanResult result = tp.Result;
             if (result != null)
             {
                 string errorText = errorMessage;
@@ -283,5 +285,7 @@ namespace APTAT.Core.Descent.Apt
             }
             base.ProcessErrorOrCancel(descentStatus, win32ErrorCode, errorMessage, tp);
         }
+
+
     }
 }

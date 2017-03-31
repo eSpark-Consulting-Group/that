@@ -21,6 +21,11 @@ namespace APTAT.Core.Descent
         event EventHandler<AptOperationProgressChangedEventArgs> OperationProgressChanged;
     }
 
+    internal interface IAptScanOperationContextInternal : IAptScanOperationContext
+    {
+        void SetScanKind(ScanKind scanKind);
+        void SetCounters(int SucceededTargetsCount, int FailedTargetsCount, int NotPerformedTargetsCount, int CanceledTargetsCount);
+    }
     public class AptOperationProgressChangedEventArgs : OperationProgressChangedEventArgs
     {
         public IDescentProgressItem[] ProgressItems { get; set; }

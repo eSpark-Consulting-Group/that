@@ -2,7 +2,7 @@
 
 namespace APTAT.DeploymentCore.Descent.Helpers
 {
-    public interface IDescentCallback
+    public interface IDescentCallback:IRemoteObject
     {
         void OnDescentCallback(DescentStatus status, int win32Error, string response);
         void SetDescentThread();

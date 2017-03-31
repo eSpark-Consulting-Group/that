@@ -8,7 +8,7 @@ using APTAT.Common;
 
 namespace APTAT.Core.Descent.Apt
 {
-    public class AptScanOperationContext : DescentResult, IAptScanOperationContext
+    public class AptScanOperationContext : DescentResult, IAptScanOperationContextInternal
     {
 
         public AptScanOperationContext(IEnumerable<IComputer> computers,
@@ -87,6 +87,28 @@ namespace APTAT.Core.Descent.Apt
         private void OnOperationProgressChanged(AptOperationProgressChangedEventArgs args)
         {
             OperationProgressChanged?.Invoke(this,args);
-        }    
+        }
+
+        public void SetScanKind(ScanKind scanKind)
+        {
+            ScanMethod = scanKind;
+        }
+
+        public void SetCounters(int succeededTargetsCount, int failedTargetsCount, int notPerformedTargetsCount, int canceledTargetsCount)
+        {
+            SucceededTargetsCount = succeededTargetsCount;
+            FailedTargetsCount = failedTargetsCount;
+            NotPerformedTargetsCount = notPerformedTargetsCount;
+            CanceledTargetsCount = canceledTargetsCount;
+        }
+
+
+        public sealed class AptComputerDescentResultFactory : IComputerDescentResultFactory
+        {
+            public IComputerDescentResultInternal CreateComputerDescentResult(IComputer computer, Guid operationUid, ITimeStampProvider timeStampProvider)
+            {
+                return new AptScanResult(computer, operationUid, timeStampProvider);
+            }
+        }
     }
 }

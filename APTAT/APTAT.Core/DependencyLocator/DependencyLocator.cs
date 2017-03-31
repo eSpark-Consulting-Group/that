@@ -18,14 +18,14 @@ namespace APTAT.Core.DependencyLocator
             d.RegisterDependencies(resolver);
             resolver.RegisterSingleton<ICamLicenseProvider, CamLicenseProvider>();
             resolver.RegisterSingleton<IAptScannerFactory, AptScannerFactory>();
-
             resolver.RegisterSingleton<IDescentScannerFactory, AptDescentScannerFactory>();
-            resolver.RegisterSingleton<IContextFactory, ContextFactory>();
+            resolver.RegisterSingleton<IAptFactory, AptFactory>();
+
+            resolver.RegisterSingleton<IAptAtManager , AptAtManager>();
+            resolver.Register<IRemoteFactory, RemoteFactory>();
 
 
-            resolver.RegisterSingleton<IAptAtManager, AptAtManager>();
             resolver.RegisterSingleton<IFlsManager, FlsManager>();
-
             resolver.RegisterSingleton<IFlsApiProvider, FlsApiProvider>();
             resolver.RegisterSingleton<IValkyrieClientEx, ValkyrieClientWithStorage>();
             

@@ -78,8 +78,10 @@
     <Compile Include="Apt\IAggregatedAptScanResult.cs" />
     <Compile Include="Apt\IDescentScannerFactory.cs" />
     <Compile Include="Descent\Apt\AptComputerDescentResultFactory.cs" />
+    <Compile Include="Descent\Apt\AptFactory.cs" />
     <Compile Include="Descent\Apt\ContextFactory.cs" />
-    <Compile Include="Descent\Apt\IContextFactory.cs" />
+    <Compile Include="Descent\Apt\IAptDescentMod.cs" />
+    <Compile Include="Descent\Apt\IAptFactory.cs" />
     <Compile Include="FinalVerdictCalculator.cs" />
     <Compile Include="FLS\IFlsResponse.cs" />
     <Compile Include="IFinalVerdictCalculator.cs" />

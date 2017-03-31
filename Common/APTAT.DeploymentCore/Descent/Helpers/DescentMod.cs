@@ -13,7 +13,7 @@ using APTAT.DeploymentCore.Properties;
 
 namespace APTAT.DeploymentCore.Descent.Helpers
 {
-    public abstract class DescentMod
+    public abstract class DescentMod : IDescentMod
     {
         protected readonly TaskFactory TaskFactory;
         protected readonly IChangeTrackingSubSystem Tracker;

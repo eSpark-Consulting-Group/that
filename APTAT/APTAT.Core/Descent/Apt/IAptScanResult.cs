@@ -36,6 +36,8 @@ namespace APTAT.Core.Descent.Apt
         IModule[] MalwareFiles { get; }
         IModule[] UnknownFiles { get; }
         IModule[] LookupInProgressFiles { get; }
+        void SetAptReportInstance(AptReport report);
+
 
     }
 }

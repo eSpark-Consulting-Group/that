@@ -9,14 +9,18 @@ namespace APTAT.Core.Apt
 {
     class AptDescentScannerFactory : IDescentScannerFactory
     {
-        IContextFactory _contextFactory;
-        public AptDescentScannerFactory(IContextFactory factory)
+        IAptFactory _aptFactory;
+        IRemoteFactory _remoteFactory;
+        public AptDescentScannerFactory(IAptFactory factory, IRemoteFactory remoteFactory)
         {
-            _contextFactory = factory;
+            _aptFactory = factory;
+            _remoteFactory = remoteFactory;
         }
-        public IScanner GetScanner(IEnumerable<IComputer> targets, string login, string password, IDevicesSourceDescription devicesSourceDescription, IScanOptions scanOptions)
+        public IScanner GetScanner(IEnumerable<IComputer> targets, string login, string password, 
+            IDevicesSourceDescription devicesSourceDescription, IScanOptions scanOptions)
         {
-            return new AptDescentScanner(targets, login, password, devicesSourceDescription, scanOptions, _contextFactory);
+            return new AptDescentScanner(targets, login, password, devicesSourceDescription, 
+                scanOptions, _aptFactory, _remoteFactory);
         }
     }
 }
