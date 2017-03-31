@@ -727,6 +727,8 @@ namespace APTAT.Valkyrie
    
         public void Dispose()
         {
+            _progressNotifyTimer.TimeoutCallback -= ProgressNotifyTimerCallback;
+            _checkStatusesTimer.TimeoutCallback -= CheckStatusesTimerCallback;
             _progressNotifyTimer?.Dispose();
 
             _checkStatusesTimer?.Dispose();
