@@ -21,7 +21,7 @@ namespace CodedUITestFAT
         {
             control.WaitForControlExist(waitForMilliseconds);
         }
-        
+
         /// <summary> Waits until a specific UI control is enabled. </summary>
         /// <param name="control">Set a UI control.</param>
         /// <param name="waitForMilliseconds">Set the waiting time in milliseconds or keep default.</param>
@@ -37,11 +37,11 @@ namespace CodedUITestFAT
         internal static void WaitForControlIsClickable(UITestControl control, int waitForMilliseconds = DataHelper.DefaultWaitTime, bool isClickable = true)
         {
             var timer = Stopwatch.StartNew();
-            for (; ; )
+            for (;;)
             {
                 Playback.Wait(1000);
                 if (IsClickable(control) == isClickable) break;
-                if ((int) timer.ElapsedMilliseconds > waitForMilliseconds)
+                if ((int)timer.ElapsedMilliseconds > waitForMilliseconds)
                     throw new Exception(String.Format("The given control '{0}' 'IsClickable' property is not '{1}' after {2} seconds!", control.FriendlyName, isClickable, waitForMilliseconds / 1000));
             }
             timer.Stop();
@@ -56,19 +56,19 @@ namespace CodedUITestFAT
             UITestControl row = null;
             CodedUITestMain useMain = new CodedUITestMain();
             var timer = Stopwatch.StartNew();
-            for ( ; ; )
+            for (;;)
             {
                 Playback.Wait(1000);
 
                 if (IsGroupedByFiles()) row = useMain.ScanResultsByFilesTable().GetRow(rowName);
                 else row = useMain.ScanResultsByComputersTable().GetRow(rowName);
-                
+
                 if (row != null)
                 {
                     testContext.WriteLine(String.Format("The given row '{0}' is found at the results screen.", rowName));
                     break;
                 }
-                if ((int) timer.ElapsedMilliseconds > waitForMilliseconds)
+                if ((int)timer.ElapsedMilliseconds > waitForMilliseconds)
                     throw new UITestControlNotFoundException(String.Format("The given row '{0}' is not found at the results screen after {1} seconds!", rowName, waitForMilliseconds / 1000));
             }
             timer.Stop();
@@ -80,7 +80,7 @@ namespace CodedUITestFAT
         /// <param name="waitForMilliseconds">Set wait time in milliseconds.</param>
         internal static void WaitForResultsRow(IRow row, TestContext testContext, int waitForMilliseconds = DataHelper.DefaultWaitTime)
         {
-            WaitForResultsRow(row.RowName, testContext, waitForMilliseconds);            
+            WaitForResultsRow(row.RowName, testContext, waitForMilliseconds);
         }
 
         /// <summary>Waits for a specified row to be absent at a given results screen.</summary>
@@ -94,7 +94,7 @@ namespace CodedUITestFAT
             CodedUITestMain useMain = new CodedUITestMain();
 
             var timer = Stopwatch.StartNew();
-            for (; ; )
+            for (;;)
             {
                 Playback.Wait(1000);
                 switch (resultsScreen)
@@ -115,7 +115,7 @@ namespace CodedUITestFAT
                     testContext.WriteLine(String.Format("The given row '{0}' is not found at '{1}'.", row.RowName, resultsScreen));
                     break;
                 }
-                if ((int) timer.ElapsedMilliseconds > waitForMilliseconds)
+                if ((int)timer.ElapsedMilliseconds > waitForMilliseconds)
                     throw new Exception(String.Format("The given row '{0}' is still present at '{1}' after {2} seconds!", row.RowName, resultsScreen, waitForMilliseconds / 1000));
             }
             timer.Stop();
@@ -139,7 +139,7 @@ namespace CodedUITestFAT
 
             int treeShift = 2;
             if (IsGroupedByFiles()) treeShift++;
-            
+
             var table = tab.GetChildren()[treeShift].GetChildren()[0] as WpfTable;
             if (table == null) throw new Exception("The resulting WPF table is null!");
 
@@ -158,7 +158,7 @@ namespace CodedUITestFAT
 
             return rowsCollection.ToArray();
         }
-        
+
         /// <summary> Gets a given row name. In accordance with Application.Models.Apt.ThreatInfoItem or Core.FileResults. </summary>
         /// <param name="row">Set a row control.</param>
         internal static string GetRowName(this UITestControl row)
@@ -195,9 +195,9 @@ namespace CodedUITestFAT
             int iterations = 4;
             for (int i = 1; i < iterations; i++)
             {
-               if (cellElement is WpfText) break;
-               cellElement = cellElement.GetChildren()[0];
-               if (i == iterations) throw new Exception(String.Format("No WPF text found in a given cell #{0} after {1} iterations!", cellNumber, iterations));
+                if (cellElement is WpfText) break;
+                cellElement = cellElement.GetChildren()[0];
+                if (i == iterations) throw new Exception(String.Format("No WPF text found in a given cell #{0} after {1} iterations!", cellNumber, iterations));
             }
 
             WpfText text = cellElement as WpfText;
@@ -244,7 +244,7 @@ namespace CodedUITestFAT
 
             for (;;)
             {
-                Playback.Wait(2000);                
+                Playback.Wait(2000);
                 try // The row may be in the state of refreshing and therefore may have no child controls, if a screen is automatically refreshed
                 {
                     actualStatus = GetCellContent(resultsScreen, row, cellNumber);
@@ -257,7 +257,7 @@ namespace CodedUITestFAT
                     break;
                 }
 
-                if ((int) timer.ElapsedMilliseconds > waitTime)
+                if ((int)timer.ElapsedMilliseconds > waitTime)
                 {
                     Assert.Fail(failureMessage);
                     break;
@@ -313,7 +313,7 @@ namespace CodedUITestFAT
         internal static void WaitForScanStatus(Computer endpoint, ScanStatus expectedScanStatus, TestContext testContext, int waitTime = DataHelper.DefaultWaitTime)
         {
             var timer = Stopwatch.StartNew();
-            for (; ; )
+            for (;;)
             {
                 Playback.Wait(2000);
                 if (endpoint.GetScanStatus() == expectedScanStatus)
@@ -321,7 +321,7 @@ namespace CodedUITestFAT
                     testContext.WriteLine(String.Format("The expected status '{0}' appeared for computer '{1}'.", expectedScanStatus, endpoint.Name));
                     break;
                 }
-                if ((int) timer.ElapsedMilliseconds > waitTime)
+                if ((int)timer.ElapsedMilliseconds > waitTime)
                     throw new Exception(String.Format("The expected status '{0}' did not appear for computer '{1}' after {2} seconds!", expectedScanStatus, endpoint.Name, waitTime / 1000));
             }
             timer.Stop();
@@ -332,10 +332,10 @@ namespace CodedUITestFAT
         /// <param name="rowName">Set a unique row name.</param>
         internal static UITestControl GetRow(this WpfTabPage tab, string rowName)
         {
-           var rows = tab.GetRows();
-           foreach (var row in rows) if (row.GetRowName().ContainsIgnoringCase(rowName)) return row;
-           
-           return null;
+            var rows = tab.GetRows();
+            foreach (var row in rows) if (row.GetRowName().ContainsIgnoringCase(rowName)) return row;
+
+            return null;
         }
 
         /// <summary> Gets a row with a given name from the indicated table. Returns null, if a row with the given name was not found in the tree. </summary>
@@ -364,7 +364,7 @@ namespace CodedUITestFAT
             else rows = useMain.ScanResultsByComputersTable().GetRows();
 
             foreach (var row in rows)
-            {                
+            {
                 if (row.GetRowName().ContainsIgnoringCase(rowName))
                 {
                     var text = row.GetChildren()[1].GetChildren()[0].GetChildren()[0];
@@ -404,7 +404,8 @@ namespace CodedUITestFAT
                 WaitForResultsRow(threat, testContext);
                 useMain.UIMapMain.ClickClearSearchTextButton();
                 GroupByComputers();
-            } catch(UITestControlNotFoundException)
+            }
+            catch (UITestControlNotFoundException)
             {
                 useMain.UIMapMain.ClickClearSearchTextButton();
                 GroupByComputers();
@@ -454,18 +455,21 @@ namespace CodedUITestFAT
 
             foreach (var row in rows)
             {
-                string instanceName = row.GetRowStatus();
-                if (instanceName.ContainsIgnoringCase(threat.Location))
+                if (!row.FriendlyName.Equals("GridViewRow"))
                 {
-                    useMain.UIMapMain.ClickClearSearchTextButton();
-                    GroupByComputers();
-                    return true;
+                    string instanceName = row.GetRowStatus();
+                    if (instanceName.ContainsIgnoringCase(threat.Location))
+                    {
+                        useMain.UIMapMain.ClickClearSearchTextButton();
+                        GroupByComputers();
+                        return true;
+                    }
                 }
             }
 
             useMain.UIMapMain.ClickClearSearchTextButton();
             GroupByComputers();
-            return false;            
+            return false;
         }
 
         /// <summary> Switches the results screens to 'Group by Files' view. Starts at Main screen. </summary>
@@ -500,7 +504,7 @@ namespace CodedUITestFAT
             WaitForControl(webPage);
             string actualUri = webPage.Uri.ToString();
             if (actualUri.Contains(expectedUri)) testContext.WriteLine(String.Format("Browser window opened with a correct address: '{0}'.", actualUri));
-            else error = String.Format("Browser window opened with an incorrect address: '{0}'!", actualUri);                        
+            else error = String.Format("Browser window opened with an incorrect address: '{0}'!", actualUri);
             webPage.Close();
 
             if (!String.IsNullOrEmpty(error)) Assert.Fail(error);
