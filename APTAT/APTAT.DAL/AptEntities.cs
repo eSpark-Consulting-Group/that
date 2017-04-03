@@ -23,7 +23,8 @@ namespace APTAT.DAL
                 ? "data\\AptDatabase.sdf" : "AptDatabase.sdf";
             builder.PersistSecurityInfo = true;
             _connectionString = builder.ToString();
-            _connectionString = _connectionString + ";File Access Retry Timeout=15;Max Database Size=4091;Default Lock Timeout=5000;Max Buffer Size=6400";
+            _connectionString = _connectionString + ";Max Database Size=4091;" +
+                "Default Lock Timeout=5000;Max Buffer Size=6400";
             //var sqliteConnectionInitializer = new DropCreateDatabaseIfModelChanges<AptEntities>();
             //Database.SetInitializer(sqliteConnectionInitializer);
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<AptEntities, Migrations.Configuration>());
