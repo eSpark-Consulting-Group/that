@@ -72,7 +72,7 @@ namespace APTAT.Core.Storage.Repositories
                              ScanMethod = i.ScanMethod,
                              Type = i.Source,
                              DiscovererDescription = i.SourceDescription,
-                             FilesScanned = i.AptScanResults.Sum(sr => sr.TotalCount),
+                             FilesScanned = i.AptScanResults.Sum(sr => sr.Succeeded ? sr.TotalCount : 0),
                              Canceled = i.AptScanResults.Any(sr => sr.Canceled),
                              UnknownsCount = m.Count(f1 => (f1.Valkyrie != null
                                     && f1.Valkyrie.Verdict == ValkyrieVerdict.Undetected)

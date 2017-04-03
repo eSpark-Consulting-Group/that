@@ -896,11 +896,9 @@ namespace FAT.Application.Models
 
         public void TrySetCancelledStatus()
         {
-            if (ScanStage != ScanStage.OperationCompleted) return;
-            if (ValkyrieProgressPercentage != 100)
-            {
+            if (ScanStage == ScanStage.ScanInProgress)
                 ScanStage = ScanStage.OperationCancelling;
-            }
+            
         }
 
         public void TrySetFailedStatus()

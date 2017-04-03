@@ -1392,10 +1392,17 @@ namespace FAT.Application.Models
                     && infoItem.ScanStage != ScanStage.OperationCanceled)
                 {
                     infoItem.TrySetCancelledStatus();
-                    counterDiff.InProgressDiff = (-1) * infoItem.PendingFilesCount;
-                    counterDiff.UnknownDiff = (-1) * infoItem.UnknownFilesCount;
-                    counterDiff.MalwareDiff = (-1) * infoItem.MalwareFilesCount;
-                    counterDiff.NotAnalyzedDiff = (-1) * infoItem.NotAnalyzedFilesCount;
+
+                    counterDiff.MalwareDiff += (-1) * infoItem.MalwareFilesCount;
+                    counterDiff.CleanDiff += (-1) * infoItem.CleanFilesCount;
+                    counterDiff.InProgressDiff += (-1) * infoItem.PendingFilesCount;
+                    counterDiff.UnknownDiff += (-1) * infoItem.UnknownFilesCount;
+                    counterDiff.NotAnalyzedDiff += (-1) * infoItem.NotAnalyzedFilesCount;
+
+                    _scanCounterManager.UpdateCounters(counterDiff);
+                    RaisedHasMalwares = _scanCounterManager.HasMalwares;
+
+                    counterDiff = new ScanCounterDiff();       
                 }
                 if (_isFailed && localPercentage < 100)
                 {
@@ -1422,6 +1429,7 @@ namespace FAT.Application.Models
             _scanCounterManager.UpdateCounters(counterDiff);
 
             ScannedItemsCount = scanned;
+
             if (!RaisedHasMalwares)
             {
                 RaisedHasMalwares = _scanCounterManager.HasMalwares;
