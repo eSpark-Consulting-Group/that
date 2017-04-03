@@ -775,7 +775,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Foreground="White" HorizontalAlignment="Center" FontSize="13" VerticalAlignment="Center"  Visibility="{Binding HideSubmitEmail, Converter={converters:BoolToVisibilityConverter2}}">
+                            <TextBlock Foreground="White" Margin="20 0 0 0" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" FontSize="13" VerticalAlignment="Center"  Visibility="{Binding HideSubmitEmail, Converter={converters:BoolToVisibilityConverter2}}">
                                 <Run Text="When all the files are analyzed, you will receive a detailed report at "/><Run Text="{Binding Email}" FontWeight="Bold"/>
                             </TextBlock>
 

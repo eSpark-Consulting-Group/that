@@ -60,6 +60,7 @@ namespace FAT.Application.Models
         private Boolean _isAutoDiscoveryInProgress;
         private Boolean _isAutoDiscoveryCompleted;
         private Boolean _cancelInProgress;
+        private Boolean _submitingEmail;
         private IThreatInfoItem[] _onlineItems;
         private readonly DispatcherTimer _scanIteratorTimer;
 
@@ -648,7 +649,7 @@ namespace FAT.Application.Models
                 o => IsDetailsEnabled);
 
             SubmitEmailCommand = new DelegateCommand(InvokeSubmitEmail,
-                o => IsValidEmail(Email));
+                o => IsValidEmail(Email) && !_submitingEmail);
             EditEmailCommand = new DelegateCommand(o =>
                 Set(() => HideSubmitEmail, false));
 
@@ -1525,12 +1526,18 @@ namespace FAT.Application.Models
 
         private void InvokeSubmitEmail(Object arg)
         {
+            _submitingEmail = true;
+            SubmitEmailCommand.InvalidateCanExecute();
+
             var result = _aptService.SubmitEmail(Email.Split(new[] { ',', ';' }));
 
             if (result.IsSucceeded)
                 Set(() => HideSubmitEmail, true);
             else
                 ErrorOccurred?.Invoke(this, new DomainEventArgs(null, new InvalidOperationException(result.ErrorMessage)));
+
+            _submitingEmail = false;
+            SubmitEmailCommand.InvalidateCanExecute();
         }
 
         public void SetReportKind(ReportKind kind)
