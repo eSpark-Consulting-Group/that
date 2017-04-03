@@ -84,7 +84,50 @@ namespace FAT.Application.Models
                 if (ComputersScanned == 0 || FilesScanned == 0)
                     return string.Empty;
 
+                var value = $"Total files scanned: {FilesScanned}. Unknown: {UnknownsCount}. ";
+
+                return value;
+            }
+        }
+
+        public string ScanHeader2Full
+        {
+            get
+            {
+                if (ComputersScanned == 0 || FilesScanned == 0)
+                    return string.Empty;
+
                 var value = $"Total files scanned: {FilesScanned}. Unknown: {UnknownsCount}. Malicious: {MaliciousCount}. ";
+                if (InAnalysisCount > 0)
+                    value += $"In Analysis: {InAnalysisCount}. ";
+                if (NotAnalyzedCount > 0)
+                    value += $"Not Analyzed: {NotAnalyzedCount}. ";
+
+                return value;
+            }
+        }
+
+        public string ScanHeader3
+        {
+            get
+            {
+                if (ComputersScanned == 0 || FilesScanned == 0)
+                    return string.Empty;
+
+                var value = $"Malicious: {MaliciousCount}. ";
+
+                return value;
+            }
+        }
+
+        public string ScanHeader4
+        {
+            get
+            {
+                if (ComputersScanned == 0 || FilesScanned == 0)
+                    return string.Empty;
+
+                var value = string.Empty;
 
                 if (InAnalysisCount > 0)
                     value += $"In Analysis: {InAnalysisCount}. ";

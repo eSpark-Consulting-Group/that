@@ -104,9 +104,15 @@
                             <Path SnapsToDevicePixels="True" Data="F1M210.9355,237.189C211.2945,237.549,211.2945,238.132,210.9355,238.494L209.4645,239.962L210.8785,241.376C211.2715,241.767,211.2695,242.4,210.8785,242.791C210.4885,243.181,209.8555,243.182,209.4645,242.791L208.0505,241.376L206.5815,242.846C206.2205,243.207,205.6385,243.207,205.2775,242.846L205.1675,242.736C204.8085,242.376,204.8065,241.793,205.1675,241.431L206.6365,239.962L205.2225,238.548C204.8315,238.158,204.8315,237.525,205.2225,237.134C205.6135,236.744,206.2465,236.744,206.6365,237.134L208.0505,238.548L209.5195,237.079C209.8805,236.718,210.4645,236.719,210.8245,237.079z M203.7575,235.757C201.4145,238.1,201.4145,241.9,203.7575,244.242C206.1015,246.585,209.9005,246.585,212.2425,244.242C214.5855,241.9,214.5855,238.101,212.2425,235.757C209.9005,233.414,206.0995,233.415,203.7575,235.757" Fill="#FFFAAE17" Height="12" Canvas.Left="12.5" Stretch="Fill" Width="12"/>
                         </Canvas>
 
-                        <TextBlock Margin="8,5,0,0" Text="{Binding ScanHeader}" Grid.Column="1" FontSize="14" Foreground="{Binding ElementName=txt, Path=Foreground, Converter={converters:ColorToWhiteConverter}}"/>
+                        <TextBlock Margin="8,5,0,0" Text="{Binding ScanHeader, Mode=OneWay}" Grid.Column="1" FontSize="14" Foreground="{Binding ElementName=txt, Path=Foreground, Converter={converters:ColorToWhiteConverter}}"/>
 
-                        <TextBlock Margin="8,6,0,8" x:Name="txt" ToolTip="{Binding ScanHeader2}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" Grid.Column="2" Text="{Binding ScanHeader2}" FontSize="13" />
+                        <TextBlock Visibility="{Binding HasMalwares, Converter={converters:BoolToVisibilityConverter2}}" Margin="8,6,0,8" x:Name="txt" ToolTip="{Binding ScanHeader2Full, Mode=OneWay}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" Grid.Column="2"  FontSize="13" >
+                            <Run Text="{Binding ScanHeader2, Mode=OneWay}"/><Run Text="{Binding ScanHeader3, Mode=OneWay}" Foreground="#FFD64332"/><Run Text="{Binding ScanHeader4, Mode=OneWay}"/>
+                        </TextBlock>
+
+                        <TextBlock Visibility="{Binding HasMalwares, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}" Margin="8,6,0,8" ToolTip="{Binding ScanHeader2Full, Mode=OneWay}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" Grid.Column="2"  FontSize="13" >
+                            <Run Text="{Binding ScanHeader2, Mode=OneWay}"/><Run Text="{Binding ScanHeader3, Mode=OneWay}"/><Run Text="{Binding ScanHeader4, Mode=OneWay}"/>
+                        </TextBlock>
                     </Grid>
                 </DataTemplate>
 
