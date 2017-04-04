@@ -68,26 +68,7 @@ namespace APTAT.Core.UnitTests
             
             Mock.Assert(valkyrie);
         }
-
-        [Fact]
-        public void ConstructorShouldCallInitForReportBuilder()
-        {
-
-            var descent = Mock.Create<IDescentSubSystem>(Behavior.Strict);
-            var fls = Mock.Create<IFlsManager>(Behavior.Strict);
-            var valkyrie = Mock.Create<IValkyrieClientEx>();
-            var aptScannerFactory = Mock.Create<IAptScannerFactory>(Behavior.Strict);
-            var distinctFileHelper = Mock.Create<IDistinctFileHelper>(Behavior.Strict);
-            var storage = Mock.Create<IStorageSubSystem>(Behavior.Strict);
-            var reports = Mock.Create<IReportBuilder>(Behavior.Strict);
-            IAptAtManager aptInternal = null;            
-            var target = new AptAtManager(descent, valkyrie, fls, aptScannerFactory, distinctFileHelper, storage, reports);
-            
-            Mock.Assert(valkyrie);
-            Assert.NotNull(aptInternal);
-            Assert.True(Object.ReferenceEquals(target, aptInternal));
-        }
-
+                
 
         [Theory]
         [InlineData(CloudVerdict.NoVerdict)]
