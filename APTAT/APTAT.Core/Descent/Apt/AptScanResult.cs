@@ -295,7 +295,12 @@ namespace APTAT.Core.Descent.Apt
                 return (from file in Files where file.Cloud == CloudVerdict.FailedToAnalyze || file.Cloud == CloudVerdict.NoVerdict select file).ToArray();
             }
         }
-  
+        
+        public int BadFilesCount
+        {
+            get { return UnknownFilesCount + MalwareFilesCount + PendingAnalysisFilesCount + LookupInProgressFilesCount; }
+        }
+
     }
 
 

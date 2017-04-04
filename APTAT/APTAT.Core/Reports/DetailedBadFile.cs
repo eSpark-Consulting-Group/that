@@ -9,7 +9,7 @@ using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 
 namespace APTAT.Core.Reports
 {
-    public class DetailedBadFile
+    public class DetailedBadFile : ScanModule
     {
         private readonly List<ScannedTarget> _targets = new List<ScannedTarget>();
         private readonly IFinalVerdictCalculator _calculator;
@@ -38,21 +38,8 @@ namespace APTAT.Core.Reports
             target.BadFileInstances.Add(new BadFileInstanceInfo(module));
             _targets.Add(target);
         }
-        public string Path { get; set; }
-        public DateTime Created { get; set; }
-        public DateTime Modified { get; set; }
-        public DateTime Accessed { get; set; }
 
-        public string Sha1 { get; set; }
         public string Name { get; set; }
-
-        public long Size { get; set; }
-        public string Signer { get; set; }
-        public string Version { get; set; }
-        public string Copyright { get; set; }
-        public string Product { get; set; }
-        public Descent.Apt.CloudVerdict Cloud { get; set; }
-        public string FileSizeFormatted { get; set; }
 
         public BadFileType FileType
         {
@@ -249,6 +236,6 @@ namespace APTAT.Core.Reports
 
         public string OperationStatus { get; set; }
 
-        public string FileAge { get; set; }
+
     }
 }

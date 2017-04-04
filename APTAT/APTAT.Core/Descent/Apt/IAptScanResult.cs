@@ -39,5 +39,6 @@ namespace APTAT.Core.Descent.Apt
         void SetAptReportInstance(AptReport report);
 
 
+        int BadFilesCount { get;  }
     }
 }

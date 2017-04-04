@@ -58,6 +58,17 @@ namespace APTAT.Core.TelerikReports
         {
             var obj = (Telerik.Reporting.Processing.Report)sender;
             var dataSource = (Reports.AptReportData)obj.DataSource;
+            AlteringColors(dataSource);
+            var topVulnerableDevicesValk = dataSource.Top10VulnerableDevices.Select(d => d.BadFilesCount).DefaultIfEmpty().Max();
+            if (topVulnerableDevicesValk <= 5)
+            {
+                ChangeScaleForOne();
+            }
+
+        }
+
+        private void AlteringColors(Reports.AptReportData dataSource)
+        {
             var bgColor = Color.FromArgb(251, 251, 251);
 
             var isActiveDirectory = dataSource.DevicesSourceDescription.Type == DeploymentCore.Directory.ETargetsDiscovererType.ActiveDirectory;
@@ -85,14 +96,13 @@ namespace APTAT.Core.TelerikReports
                     panelToColor[i].Style.BackgroundColor = Color.White;
                 }
             }
-
         }
 
         private void graph1_ItemDataBinding(object sender, EventArgs e)
         {
             var graph = (Telerik.Reporting.Processing.DataItem)sender;
             var obj = (Reports.AptReportData)graph.DataObject.RawData;
-            var len = obj.Top10VulnerableDevicesValkyrie.Select(t=>t.Uid).Distinct().Count();            
+            var len = obj.Top10VulnerableDevices.Select(t=>t.Uid).Distinct().Count();            
             ((CategoryScale)graphAxis2.Scale).SpacingSlotCount = ChartHelper.CalculateSpacingSlotCount(len, 8);
         }
     }

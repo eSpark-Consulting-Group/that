@@ -647,8 +647,8 @@ namespace APTAT.Core.TelerikReports
             // 
             // graph1
             // 
-            this.graph1.Bindings.Add(new Telerik.Reporting.Binding("DataSource", "= Fields.FileRatingValkyrie"));
-            this.graph1.Bindings.Add(new Telerik.Reporting.Binding("Visible", "= Fields.FileRatingValkyrie.Length > 0"));
+            this.graph1.Bindings.Add(new Telerik.Reporting.Binding("DataSource", "= Fields.FileRating"));
+            this.graph1.Bindings.Add(new Telerik.Reporting.Binding("Visible", "= Fields.FileRating.Length > 0"));
             graphGroup1.Name = "categoryGroup";
             this.graph1.CategoryGroups.Add(graphGroup1);
             this.graph1.CoordinateSystems.Add(this.polarCoordinateSystem1);
@@ -737,7 +737,7 @@ namespace APTAT.Core.TelerikReports
             // 
             // graph2
             // 
-            this.graph2.Bindings.Add(new Telerik.Reporting.Binding("DataSource", "= Fields.DevicesRatingValkyrie"));
+            this.graph2.Bindings.Add(new Telerik.Reporting.Binding("DataSource", "= Fields.DevicesRating"));
             graphGroup5.Name = "categoryGroup2";
             this.graph2.CategoryGroups.Add(graphGroup5);
             this.graph2.CoordinateSystems.Add(this.polarCoordinateSystem3);

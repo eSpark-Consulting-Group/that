@@ -67,21 +67,19 @@ namespace FAT.Application.Services
         }
     }
     
-
-    public class BuildReportCompletedEventArgs : DomainEventArgs
+    public class BuildReportResult
     {
         public String FileName { get; private set; }
         public byte[] DocumentBytes { get; private set; }
-
-        public BuildReportCompletedEventArgs(string fileName, byte[] documentBytes, Exception e, Object userState)
+        public Exception Exception { get; private set; }
+        public BuildReportResult(string fileName, byte[] documentBytes, Exception e)
         {
             DocumentBytes = documentBytes;
-            Exception = e;           
-            UserState = userState;
+            Exception = e;
             FileName = fileName;
         }
     }
-    
+
     public enum ReportKind
     {
         Executive,
@@ -93,12 +91,12 @@ namespace FAT.Application.Services
     }
 
     public interface IAptService : IDisposable
-    { 
-        event EventHandler<BuildReportCompletedEventArgs> BuildReportCompleted;
+    {
+
         void UpdateFlsPorts(int udpPort, int tcpPort);
         void StopScan(Guid[] items);
-        void BuildReport(Guid operationGuid, ReportKind reportKind, Object userState);
-        
+        Task<BuildReportResult> BuildReportAsync(Guid operationGuid, ReportKind reportKind);
+
         string GetValkyrieDetailsLink();
         string GetValkyrieDetailsLink(string apiKey, string scanId);
         OperationResult SubmitEmail(string[] addresses);

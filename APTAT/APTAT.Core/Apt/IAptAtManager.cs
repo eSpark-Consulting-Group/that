@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net;
-using APTAT.Core.Descent;
 using APTAT.Core.Descent.Apt;
 using APTAT.Core.Reports;
 using APTAT.DeploymentCore.Directory;
 using APTAT.Valkyrie;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using APTAT.Core.Apt;
 using APTAT.Core.FLS;
 using APTAT.DeploymentCore;
-using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
-using Valkyrie.WebApiProvider.Contracts;
 
 namespace APTAT.Core
 {
@@ -26,8 +21,7 @@ namespace APTAT.Core
         IAggregatedAptScanResult AggregatedScanResults { get; }
 
         IAptScanner GetAptScanner(IComputer[] targets, IDevicesSourceDescription devicesSourceDescription, IScanOptions options);
-
-        IAptReportBuilder GetAptReportBuilder();
+                
         int GetDistinctFilesCount();
         IAptVerdictContext[] GetModifiedFileVerdicts(DateTime? modifiedDate);
         FileResult[] GetModifiedValkyrieVerdicts(DateTime? modifiedDate, Dictionary<string, IModule> modules
@@ -44,12 +38,6 @@ namespace APTAT.Core
         string GetValkyrieDetailsLink(string apiKey, string scanId);
 
         OperationResult SubmitEmail(string[] addresses);
-    }
-
-    internal interface IAptAtManagerInternal : IAptAtManager
-    {
-        Guid ValkyrieOperationUid { get; }
-        Guid FlsLookupOperationUid { get; }
-        Dictionary<string, ValkyrieAnalysisResult> ValkyrieAnalysisResult { get; }
-    }
+        Task<ReportFile> BuildReportAsync(ReportType reportType, bool saveFile);        
+    }    
 }

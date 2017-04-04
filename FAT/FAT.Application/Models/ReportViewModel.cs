@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Windows;
 using FAT.Application.Services;
+using System.Threading.Tasks;
 
 namespace FAT.Application.Models
 {
@@ -33,7 +34,7 @@ namespace FAT.Application.Models
             _storage = storage;
         }
 
-        protected override void InvokeViewLoaded(Object arg)
+        protected override  void  InvokeViewLoaded(Object arg)
         {
             base.InvokeViewLoaded(arg);
 
@@ -52,25 +53,29 @@ namespace FAT.Application.Models
             {
                 Header = "Executive Report";
             }
-
-            _aptService.BuildReportCompleted += OnBuildReportCompleted;
+                     
             IsBusy = true;
-            _aptService.BuildReport(operationGuid, kind, this);
+
+            var task = Task.Run(async () =>
+            {
+                var res = await _aptService.BuildReportAsync(operationGuid, kind);
+                OnBuildReportCompleted(res);
+            });
+            
         }
 
         protected override void InvokeViewUnloaded(Object arg)
         {
             base.InvokeViewUnloaded(arg);
 
-            _aptService.BuildReportCompleted -= OnBuildReportCompleted;
-
+         
             //if(ReportStream != null)
             //{
             //    ReportStream.Close();
             //}
         }
 
-        private void OnBuildReportCompleted(Object sender, BuildReportCompletedEventArgs e)
+        private void OnBuildReportCompleted(BuildReportResult e)
         {
 
             IsBusy = false;

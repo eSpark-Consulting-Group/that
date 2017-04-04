@@ -46,28 +46,12 @@ namespace FAT.Application.Services
             #endregion
         }
         #region reporting
-        public event EventHandler<BuildReportCompletedEventArgs> BuildReportCompleted;
-        public void BuildReport(Guid operationGuid, ReportKind reportKind, Object userState)
+        public async Task<BuildReportResult> BuildReportAsync(Guid operationGuid, ReportKind reportKind)
         {
-            IAptReportBuilder reportBuilder = _manager.GetAptReportBuilder();
-            reportBuilder.ReportCompleted += OnReportCompleted;
-            reportBuilder.BeginLastBuildReport(ToReportType(reportKind), false, userState);
+            var result = await _manager.BuildReportAsync(ToReportType(reportKind), false);
+            return new BuildReportResult(result.FileName, result.DocumentBytes, result.Error);                        
         }
 
-        private void OnReportCompleted(Object sender, ReportCompletedEventArgs e)
-        {
-            BuildReportCompletedEventArgs args = new BuildReportCompletedEventArgs(e.FileName, e.DocumentBytes, e.Error, e.State);
-            if (sender is IAptReportBuilder)
-            {
-                var builder = (IAptReportBuilder)sender;
-                builder.ReportCompleted -= OnReportCompleted;
-            }
-            Action action = () =>
-            {
-                BuildReportCompleted?.Invoke(this, args);
-            };
-            App.Current.Dispatcher.BeginInvoke(action);
-        }
         private ReportType ToReportType(ReportKind kind)
         {
             if (kind == ReportKind.Executive)

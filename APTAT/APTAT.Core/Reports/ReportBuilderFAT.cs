@@ -1,33 +1,35 @@
 ﻿using APTAT.Core.TelerikReports;
 using System;
-using System.Linq;
-using APTAT.Core.Apt;
-using System.Collections.Generic;
-using APTAT.Valkyrie;
+using System.Globalization;
 
 namespace APTAT.Core.Reports
 {
     public class ReportBuilderFAT : ReportBuilder
     {
-
-        public override AptReportData CreateReportData(IResultMergeHelper mergeHelper, IAggregatedAptScanResult operationContext, Dictionary<string, ValkyrieAnalysisResult> valkyrieAnalysisResult, Guid ValkyrieOperationUid, Guid FlsLookupOperationUid)
+        public ReportBuilderFAT(IReportNamesCache cache, IResultMergeHelper mergeHelper) : base(cache, mergeHelper)
         {
-            var data = new AptReportDataFAT(mergeHelper)
+        }
+
+        protected override AptReportData CreateReportData(ReportData reportData)
+        {
+            return new AptReportDataFAT(_mergeHelper, reportData);
+        }
+
+        protected override string GetFileName(ReportType reportType)
+        {
+            var timeStamp = DateTime.Now.ToString("s", CultureInfo.CurrentCulture).Replace(":", "").Replace("-", "");
+            const string fileFormatString = "{0}-{1}.pdf";
+            switch (reportType)
             {
-                OperationUid = operationContext.OperationUid,
-                ScanStarted = operationContext.StartedTime.ToLocalTime(),
-                ScanFinished = (DateTime)operationContext.CompletedTime?.ToLocalTime(),
-                TargetsFailed = operationContext.FailedTargetsCount,
-                TargetsNotPerformed = operationContext.NotPerformedTargetsCount,
-                TotalTargetsCount = operationContext.TotalTargetsCount,
-                TargetsSucceeded = operationContext.SucceededTargetsCount,
-                ValkyrieAnalysisResult = valkyrieAnalysisResult
-                       .ToDictionary(k => k.Key, k => k.Value, StringComparer.OrdinalIgnoreCase),
-                ValkyrieOperationUid = ValkyrieOperationUid,
-                FlsLookupOperationUid = FlsLookupOperationUid,
-                DevicesSourceDescription = operationContext.DeviceSourceDescription
-            };
-            return data;
+                case ReportType.DetailedPerDeviceWithValkyrie:
+                    return string.Format(fileFormatString, "PerDeviceReport", timeStamp);
+                case ReportType.ExecutiveWithValkyrie:
+                    return string.Format(fileFormatString, "ExecutiveReport", timeStamp);
+                case ReportType.DetailedPerProgramWithValkyrie:
+                    return string.Format(fileFormatString, "PerProgramReport", timeStamp);
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(reportType));
+            }
         }
 
         protected override byte[] Render(AptReportData data, ReportType reportType)
@@ -38,27 +40,17 @@ namespace APTAT.Core.Reports
             switch (reportType)
             {
                 case ReportType.ExecutiveWithValkyrie:
-                    data.GetAllBadFilesSorted(false);
                     return renderer.Render(new ExecutiveReportFAT(), data);
 
                 case ReportType.DetailedPerDeviceWithValkyrie:
-                    var valkyrieDetailedDevicesReport = new DetailedDeviceReportFAT();
-                    var topVulnerableDevicesValk = data.Top10VulnerableDevicesValkyrie.Select(d => d.BadFilesCount).DefaultIfEmpty().Max();
-                    if (topVulnerableDevicesValk <= 5)
-                    {
-                        valkyrieDetailedDevicesReport.ChangeScaleForOne();
-                    }
-                    return renderer.Render(valkyrieDetailedDevicesReport, data);
+                    return renderer.Render(new DetailedDeviceReportFAT(), data);
 
                 case ReportType.DetailedPerProgramWithValkyrie:
-                    data.SucceededTargetsWithValkyrie.ToArray();
                     return renderer.Render(new DetailedProgramsReportFAT(), data);
 
                 default:
                     throw new ArgumentOutOfRangeException(nameof(reportType));
             }
-
         }
-
     }
 }

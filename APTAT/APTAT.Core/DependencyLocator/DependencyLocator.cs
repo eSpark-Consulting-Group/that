@@ -35,7 +35,8 @@ namespace APTAT.Core.DependencyLocator
             resolver.RegisterSingleton<IReportBuilder, ReportBuilder>();
             resolver.RegisterSingleton<IFinalVerdictCalculator, FinalVerdictCalculator>();
             resolver.RegisterSingleton<IResultMergeHelper, ResultMergeHelper>(); 
-            resolver.RegisterSingleton<IAptReportBuilder, AptReportBuilder>();
+            //resolver.RegisterSingleton<IAptReportBuilder, AptReportBuilder>();
+            resolver.RegisterSingleton<IReportNamesCache, ReportNamesCache>();
         }
     }
 }

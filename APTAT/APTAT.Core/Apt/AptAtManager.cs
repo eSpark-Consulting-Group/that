@@ -19,10 +19,12 @@ using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 using ValkyrieFileInfo = APTAT.Valkyrie.ValkyrieFileInfo;
 using APTAT.DAL.Enums;
 using APTAT.Core.Valkyrie;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace APTAT.Core.Apt
 {
-    public class AptAtManager : IAptAtManagerInternal
+    public class AptAtManager : IAptAtManager
     {
         private readonly IDescentSubSystem _descentSubSystem;
         private readonly IAptScannerFactory _aptScannerFactory;
@@ -45,7 +47,7 @@ namespace APTAT.Core.Apt
         private int _filesShouldSendToValkyrieCount = 0;
         private int _filesWithFlsErrorCount = 0;
         //private IReportBuilder _reportBuilder;
-        private readonly IAptReportBuilder _reportBuilder;
+        private readonly IReportBuilder _reportBuilder;
 
         public event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<FileResult>> ValkyrieAnalyzeProgressChanged;
         public event EventHandler<FlsRequestEventArgs<IAptVerdictContext>> FlsAnalyzeProgressChanged;
@@ -98,14 +100,13 @@ namespace APTAT.Core.Apt
 
         public AptAtManager(IDescentSubSystem descentSubSystem, IValkyrieClientEx valkyrieClient, IFlsManager manager,
             IAptScannerFactory aptScannerFactory, IDistinctFileHelper distinctHelper, IStorageSubSystem storage, 
-            IAptReportBuilder reportBuilder)
+            IReportBuilder reportBuilder)
         {
             _descentSubSystem = descentSubSystem;
             _entityStorage = storage;
             _aptScannerFactory = aptScannerFactory;
             _distinctHelper = distinctHelper;
-            _reportBuilder = reportBuilder;
-            ((IAptReportBuilderInternal) _reportBuilder).Init(this);
+            _reportBuilder = reportBuilder;           
 
             _valkyrieClient = valkyrieClient;
             _valkyrieClient.SetBaseUri(new Uri(Settings.Default.valkyrieBaseUrl));
@@ -497,10 +498,7 @@ namespace APTAT.Core.Apt
             }
         }
 
-        public IAptReportBuilder GetAptReportBuilder()
-        {
-            return _reportBuilder;
-        }
+        
 
         public void StopScan(Guid[] targetsUids)
         {
@@ -594,6 +592,43 @@ namespace APTAT.Core.Apt
                 FlsAnalyzeProgressChanged?.Invoke(this, e);
             };
             Task.Factory.StartNew(action, TaskCreationOptions.None);
+        }
+
+        public async Task<ReportFile> BuildReportAsync(ReportType reportType, bool saveFile = true)
+        {
+            return await _reportBuilder.BuildReportAsync(GetReportData(), reportType, saveFile);
+        }
+
+        private ReportData GetReportData()
+        {
+            var operationContext = AggregatedScanResults;
+
+            if (!operationContext.CompletedTime.HasValue || operationContext.CompletedTime.Value == DateTime.MinValue)
+                throw new DataNotReadyException();
+
+            ReportData reportData = new ReportData()
+            {
+                OperationUid = CurrentOperationUid,
+                ValkyrieAnalysisResult = ValkyrieAnalysisResult,
+                OperationContext = operationContext
+            };
+
+            return reportData;
+        }
+
+        public String CurrentOperationUid
+        {
+            get
+            {
+                var uid = this.AggregatedScanResults.OperationUid.ToString() + FlsLookupOperationUid.ToString() + ValkyrieOperationUid.ToString();
+                return Hash(uid);
+            }
+        }
+
+        private static string Hash(string input)
+        {
+            var hash = (new SHA1Managed()).ComputeHash(Encoding.UTF8.GetBytes(input));
+            return string.Join("", hash.Select(b => b.ToString("x2")).ToArray());
         }
     }
 

@@ -85,12 +85,32 @@
     <Compile Include="FinalVerdictCalculator.cs" />
     <Compile Include="FLS\IFlsResponse.cs" />
     <Compile Include="IFinalVerdictCalculator.cs" />
+    <Compile Include="Reports\Data\AptReportDataFAT.cs" />
+    <Compile Include="Reports\Data\AptReportDataValkyrie.cs" />
+    <Compile Include="Reports\Data\AptRiskAssessmentLevel.cs" />
+    <Compile Include="Reports\Data\BadFileType.cs" />
+    <Compile Include="Reports\Data\FileRatingInfo.cs" />
+    <Compile Include="Reports\Data\FileRatingInfoFAT.cs" />
+    <Compile Include="Reports\Data\FileRatingValkyrieInfo.cs" />
+    <Compile Include="Reports\Data\IAptReportData.cs" />
+    <Compile Include="Reports\IReportNamesCache.cs" />
     <Compile Include="Reports\IResultMergeManager.cs" />
     <Compile Include="Reports\ITargetVerdict.cs" />
+    <Compile Include="Reports\Data\ItemRatingInfo.cs" />
+    <Compile Include="Reports\Data\MostWantedBadFileInfo.cs" />
     <Compile Include="Reports\ReportBuilderFAT.cs" />
     <Compile Include="Reports\IReportBuilder.cs" />
-    <Compile Include="Reports\ReportFile.cs" />
+    <Compile Include="Reports\ReportBuilderValkyrie.cs" />
+    <Compile Include="Reports\ReportData.cs" />
+    <Compile Include="Reports\ReportNamesCache.cs" />
     <Compile Include="Reports\ResultMergeManager.cs" />
+    <Compile Include="Reports\Data\ScanResultMapper.cs" />
+    <Compile Include="Reports\Data\ScanResultType.cs" />
+    <Compile Include="Reports\Data\TargetRatingInfo.cs" />
+    <Compile Include="Reports\Data\TargetVerdict.cs" />
+    <Compile Include="Reports\Data\VulnerableDeviceInfo.cs" />
+    <Compile Include="Reports\Data\VulnerableDeviceInfoEx.cs" />
+    <Compile Include="Reports\Data\ScanModuleMapper.cs" />
     <Compile Include="Storage\Mappers\CloudVerdictMapper.cs" />
     <Compile Include="Storage\Mappers\ScanKindMapper.cs" />
     <Compile Include="Storage\Mappers\Mapper.cs" />
@@ -148,10 +168,8 @@
     <Compile Include="IFlsResult.cs" />
     <Compile Include="OperationResult.cs" />
     <Compile Include="OsInfoHelper.cs" />
-    <Compile Include="Reports\AptReportBuilder.cs" />
     <Compile Include="Reports\ScanResult.cs" />
     <Compile Include="Reports\DetailedBadFile.cs" />
-    <Compile Include="Reports\IAptReportBuilder.cs" />
     <Compile Include="Reports\ReportCompletedEventArgs.cs" />
     <Compile Include="Reports\ScanModule.cs" />
     <Compile Include="Reports\ScannedTarget.cs" />
@@ -163,7 +181,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="Reports\AptReportData.cs" />
+    <Compile Include="Reports\Data\AptReportData.cs" />
     <Compile Include="Reports\ReportBuilder.cs" />
     <Compile Include="Reports\ReportType.cs" />
     <Compile Include="Descent\Apt\AptScanResult.cs" />
@@ -179,10 +197,8 @@
     <Compile Include="TelerikReports\Helpers\IFileHelper.cs" />
     <Compile Include="TelerikReports\Helpers\IRenderStrategy.cs" />
     <Compile Include="TelerikReports\Helpers\IReportFileGenerator.cs" />
-    <Compile Include="TelerikReports\Helpers\IReportNamesCache.cs" />
     <Compile Include="TelerikReports\Helpers\RenderPdfStrategy.cs" />
     <Compile Include="TelerikReports\Helpers\RenderStrategyFactory.cs" />
-    <Compile Include="TelerikReports\Helpers\ReportNamesCache.cs" />
     <Compile Include="TelerikReports\Helpers\ReportType.cs" />
     <Compile Include="TelerikReports\Template\DetailedDevicesReport.cs">
       <SubType>Component</SubType>

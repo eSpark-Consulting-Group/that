@@ -736,7 +736,7 @@ namespace APTAT.Core.TelerikReports
             // 
             // panelCharts
             // 
-            this.panelCharts.Bindings.Add(new Telerik.Reporting.Binding("Visible", "= Fields.Top10VulnerableDevicesValkyrie.Length > 0"));
+            this.panelCharts.Bindings.Add(new Telerik.Reporting.Binding("Visible", "= Fields.Top10VulnerableDevices.Length > 0"));
             this.panelCharts.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
             this.textBox19,
             this.textBox17,
@@ -769,7 +769,7 @@ namespace APTAT.Core.TelerikReports
             // 
             // graph1
             // 
-            this.graph1.Bindings.Add(new Telerik.Reporting.Binding("DataSource", "= Fields.Top10VulnerableDevicesValkyrie"));
+            this.graph1.Bindings.Add(new Telerik.Reporting.Binding("DataSource", "= Fields.Top10VulnerableDevices"));
             graphGroup1.Groupings.Add(new Telerik.Reporting.Grouping("= Fields.Uid"));
             graphGroup1.Label = "=Fields.Name";
             graphGroup1.Name = "uidGroup";
@@ -860,7 +860,7 @@ namespace APTAT.Core.TelerikReports
             // 
             // list1
             // 
-            this.list1.Bindings.Add(new Telerik.Reporting.Binding("DataSource", "=ReportItem.DataObject.SucceededTargetsWithValkyrie"));
+            this.list1.Bindings.Add(new Telerik.Reporting.Binding("DataSource", "=ReportItem.DataObject.SucceededTargets"));
             this.list1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(15.90000057220459D)));
             this.list1.Body.Rows.Add(new Telerik.Reporting.TableBodyRow(Telerik.Reporting.Drawing.Unit.Cm(14.433327674865723D)));
             this.list1.Body.SetCellContent(0, 0, this.panel6);
@@ -1346,7 +1346,7 @@ namespace APTAT.Core.TelerikReports
             // 
             // panelSpaceBeforeReportSummary
             // 
-            this.panelSpaceBeforeReportSummary.Bindings.Add(new Telerik.Reporting.Binding("Visible", "= Fields.Top10VulnerableDevicesValkyrie.Length > 0"));
+            this.panelSpaceBeforeReportSummary.Bindings.Add(new Telerik.Reporting.Binding("Visible", "= Fields.Top10VulnerableDevices.Length > 0"));
             this.panelSpaceBeforeReportSummary.CanShrink = true;
             this.panelSpaceBeforeReportSummary.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(9.9988508736714721E-05D), Telerik.Reporting.Drawing.Unit.Cm(11.298441886901856D));
             this.panelSpaceBeforeReportSummary.Name = "panelSpaceBeforeReportSummary";
