@@ -1,5 +1,4 @@
-﻿
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Automation;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -28,8 +27,9 @@ namespace FAT.Application
         private void treeList_MouseDown(object sender, MouseButtonEventArgs e)
         {
             var element = e.OriginalSource as FrameworkElement;
+            var contentElement = e.OriginalSource as FrameworkContentElement;
 
-            var operation = element?.DataContext as IScanOperation;
+            var operation = (element?.DataContext as IScanOperation) ?? (contentElement?.DataContext as IScanOperation);
             if (operation != null)
                 treeList.SelectedItem = operation;
         }
@@ -37,8 +37,9 @@ namespace FAT.Application
         private void treeList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var element = e.OriginalSource as FrameworkElement;
+            var contentElement = e.OriginalSource as FrameworkContentElement;
 
-            var operation = element?.DataContext as IScanOperation;
+            var operation = (element?.DataContext as IScanOperation) ?? (contentElement?.DataContext as IScanOperation);
             if (operation != null)
                 ViewModel.OpenPreviousScanDetailsCommand.Execute(operation);
         }
