@@ -22,7 +22,7 @@ namespace APTAT.DAL.Entities
         [Key]
         public int Id { get; set; }
 
-        [MaxLength(128)]
+        [MaxLength(254)]
         public string Address { get; set; }
     }
 }
