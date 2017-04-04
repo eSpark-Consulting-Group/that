@@ -119,6 +119,7 @@ namespace FAT.Application
         {
             var saveDialog = new SaveFileDialog();
             saveDialog.Filter = "PDF File|*.pdf";
+            saveDialog.FileName = Path.GetFileName(_viewModel.FileName);
 
             bool? dialogResult = saveDialog.ShowDialog();
             if (dialogResult == true)
