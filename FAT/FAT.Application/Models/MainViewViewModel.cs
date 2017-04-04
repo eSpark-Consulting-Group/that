@@ -442,7 +442,7 @@ namespace FAT.Application.Models
             get { return _valkyrieDetailsLinkAvailable; }
             set
             {
-                if (value && Computers.All(_ => _.ScanStage == ScanStage.OperationFailed || _.ScanStage == ScanStage.OperationCanceled))
+                if (value && Computers.All(_ => _.ScanStage == ScanStage.OperationFailed || _.ScanStage == ScanStage.OperationCanceled || !_.IsOnline))
                     value = false;
 
                 _valkyrieDetailsLinkAvailable = value;
