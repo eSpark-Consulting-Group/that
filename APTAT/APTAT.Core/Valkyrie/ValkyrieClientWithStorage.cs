@@ -29,7 +29,7 @@ namespace APTAT.Core.Valkyrie
         #region IValkyrieClient
 
         public event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieAnalysisResult>> AnalyzeProgressChanged;
-        public event EventHandler<AnalyzeCompletedEventArgs<ValkyrieAnalysisResult>> AnalyzeCompleted;
+        public event EventHandler<AnalyzeCompletedEventArgs> AnalyzeCompleted;
         public event EventHandler<ValkyrieAnalyzeStartedEventArgs> AnalyzeStarted;
 
         public void AddFilesToAnalyze(List<ValkyrieFileInfo> filesToAnalyze, bool shouldStartImmediately)
@@ -114,7 +114,7 @@ namespace APTAT.Core.Valkyrie
 
 
         #endregion
-        private void OnAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<ValkyrieAnalysisResult> e)
+        private void OnAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs e)
         {
             AnalyzeCompleted?.Invoke(sender, e);
         }

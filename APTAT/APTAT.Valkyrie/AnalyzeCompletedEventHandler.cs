@@ -1,4 +1,4 @@
 namespace APTAT.Valkyrie
 {
-    public delegate void AnalyzeCompletedEventHandler<T>(object sender, AnalyzeCompletedEventArgs<T> e);
+    public delegate void AnalyzeCompletedEventHandler(object sender, AnalyzeCompletedEventArgs e);
 }

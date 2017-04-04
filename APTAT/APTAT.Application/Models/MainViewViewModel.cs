@@ -32,7 +32,7 @@ namespace APTAT.Application.Models
         public event EventHandler<Services.GetFileStatisticsEventArgs> ScanProcessCompleted;
         public event EventHandler<DomainEventArgs> DomainTargetsResolveFailure;
         public event EventHandler ValkyrieAnalyzeStarted;
-        public event EventHandler<AnalyzeCompletedEventArgs<ValkyrieFile>> ValkyrieAnalyzeCompleted;
+        public event EventHandler<AnalyzeCompletedEventArgs> ValkyrieAnalyzeCompleted;
 
         public IMainViewModel ParentViewModel
         {
@@ -1005,7 +1005,7 @@ namespace APTAT.Application.Models
             return valkyrieFile;
         }
 
-        void OnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<ValkyrieFile> e)
+        void OnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs e)
         {
             if (_isScanInProgress != false) return;
             if (e.Error != null)
@@ -1039,7 +1039,6 @@ namespace APTAT.Application.Models
                 if (_isScanInProgress == false)
                 {
                     IsValkyrieReportEnabled = true;
-                    MergeResults(e.Result);
                     CopyMalwaresFromScanResults();
                 }
             }

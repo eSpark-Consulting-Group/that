@@ -26,10 +26,6 @@ namespace APTAT.Valkyrie
         private int _filesCount;
         private CancellationTokenSource _cancellationTokenSource;
         private readonly string _endpointId;
-        private ConcurrentBag<ValkyrieAnalysisResult> _analysisResults;
-        private ConcurrentDictionary<string, ValkyrieAnalysisResult> _analysedItems
-            = new ConcurrentDictionary<string, ValkyrieAnalysisResult>(StringComparer.OrdinalIgnoreCase);
-
         private string[] _emails = null;
 
         private readonly ConcurrentDictionary<string, ValkyrieAnalysisResult> _pendingItemsResolved
@@ -55,7 +51,7 @@ namespace APTAT.Valkyrie
         bool _submitAllowed;
 
         public event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieAnalysisResult>> AnalyzeProgressChanged;
-        public event EventHandler<AnalyzeCompletedEventArgs<ValkyrieAnalysisResult>> AnalyzeCompleted;
+        public event EventHandler<AnalyzeCompletedEventArgs> AnalyzeCompleted;
         public event EventHandler<ValkyrieAnalyzeStartedEventArgs> AnalyzeStarted;
 
         private readonly IValkyrieWebApiProvider _provider;
@@ -65,7 +61,6 @@ namespace APTAT.Valkyrie
         {
             _provider = provider;
             _endpointId = machineKeyProvider.GlobalMachineKey;
-            _analysisResults = new ConcurrentBag<ValkyrieAnalysisResult>();
             _progressNotifyTimer = progressNotifyTimer;
             _checkStatusesTimer = checkStatusTimer;
             _progressNotifyTimer.SetInterval(TimeSpan.FromSeconds(1));
@@ -145,13 +140,9 @@ namespace APTAT.Valkyrie
         {
             if (!_progressNotifyTimer.IsEnabled) return;
             _progressNotifyTimer.Stop();
-            if (_isMainScanFinished && _analysedItems.Count == 0)
+            if (_isMainScanFinished)
             {
                 OnAnalyzeProgressChanged(_pendingItemsResolved, true);
-            }
-            else
-            {
-                OnAnalyzeProgressChanged(_analysedItems);
             }
             _progressNotifyTimer.Start();
         }
@@ -219,7 +210,7 @@ namespace APTAT.Valkyrie
                 filesToAnalyze = _lookupContexts.ToList();
                 _lookupContexts.Clear();
             }
-            SubmitToAutomaticAnalysis(filesToAnalyze, cancellationToken, MergeResult, true);
+            SubmitToAutomaticAnalysis(filesToAnalyze, cancellationToken);
 
             List<ValkyrieAnalyseOperationContext> filesToCheckAnalysisResult;
             lock (_automaticAnalyseSync)
@@ -301,34 +292,26 @@ namespace APTAT.Valkyrie
         }
 
 
-        private void SubmitToAutomaticAnalysis(List<ValkyrieFileInfo> badFiles,
-            CancellationToken cancellationToken, Action<ValkyrieAnalysisResult, ValkyrieFileInfo, CancellationToken> addAction, bool parallels = true)
+        private void SubmitToAutomaticAnalysis(List<ValkyrieFileInfo> badFiles, CancellationToken cancellationToken)
         {
             var endpointId = _endpointId;
             ParallelOptions opt = new ParallelOptions
             {
                 MaxDegreeOfParallelism = Environment.ProcessorCount
             };
-            if (parallels)
-                Parallel.ForEach(badFiles, opt, f =>
-                {
-                    GetValkyrieVerdictForOneFile(f, endpointId, addAction, cancellationToken);
-                });
-            else
-                foreach (var f in badFiles)
-                {
-                    GetValkyrieVerdictForOneFile(f, endpointId, addAction, cancellationToken);
-                }
+            Parallel.ForEach(badFiles, opt, f =>
+            {
+                GetValkyrieVerdictForOneFile(f, endpointId, cancellationToken);
+            });
         }
 
-        private void GetValkyrieVerdictForOneFile(ValkyrieFileInfo f, string endpointId, Action<ValkyrieAnalysisResult, ValkyrieFileInfo, CancellationToken> addAction
-            , CancellationToken cancellationToken)
+        private void GetValkyrieVerdictForOneFile(ValkyrieFileInfo f, string endpointId, CancellationToken cancellationToken)
         {
             try
             {
                 var result = UploadFile(f, endpointId, cancellationToken);
                 if (result == null) throw new ArgumentException("ValkyrieAnalysisResult can not be null");
-                addAction(result, f, cancellationToken);
+                MergeResult(result, f, cancellationToken);
             }
             catch (Exception e)
             {
@@ -351,7 +334,7 @@ namespace APTAT.Valkyrie
                         s = SkippReasonEnum.WebException;
                     result = ValkyrieAnalysisResult.CreateSkipInfo(f.Sha1, m, s);
                 }
-                addAction(result, f, cancellationToken);
+                MergeResult(result, f, cancellationToken);
 
                 Trace.WriteLine(
                     $"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : Submit Failed SHA1 = {f.Sha1} Reason : {e.Message}" +
@@ -391,9 +374,7 @@ namespace APTAT.Valkyrie
 
             Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : Scan Completed for API_KEY = {_apiKey}");
             _isMainScanFinished = true;
-            AnalyzeCompleted?.Invoke(this,
-                new AnalyzeCompletedEventArgs<ValkyrieAnalysisResult>(_analysisResults.ToArray(), exception,
-                    task.IsCanceled, task.AsyncState));
+            AnalyzeCompleted?.Invoke(this, new AnalyzeCompletedEventArgs(exception, task.IsCanceled, task.AsyncState));
             lock (_checkStatusesTimer)
             {
                 _checkStatusesTimer.Start();
@@ -594,21 +575,6 @@ namespace APTAT.Valkyrie
             return result;
         }
 
-        private void AddResult(ValkyrieAnalysisResult result, ValkyrieFileInfo info, CancellationToken cancellationToken)
-        {
-            _analysisResults.Add(result);
-            Interlocked.Increment(ref _fileScanned);
-            _analysedItems.TryAdd(result.SHA1, result);
-
-            if ((result.Verdict == ValkyrieVerdict.Undetected
-                || result.Verdict == ValkyrieVerdict.Pending
-                || result.Verdict == ValkyrieVerdict.FirstSeen)
-                && !result.IsSubmitted)
-            {
-                AddLookupContext(info, result.Verdict, cancellationToken);
-            }
-        }
-
         public string GetValkyrieDetailsLink()
         {
             return GetValkyrieDetailsLink(_apiKey, _aptScanId);
@@ -644,7 +610,6 @@ namespace APTAT.Valkyrie
         public void StartAnalyze(ICamRegistration camRegistration, string login, string password, int machineCount,
             NetworkCredential proxyCredential, string productName)
         {
-            _analysedItems = new ConcurrentDictionary<string, ValkyrieAnalysisResult>();
             _machineCount = machineCount;
             _fileScanned = 0;
             var cancellationTokenSource = new CancellationTokenSource();
@@ -680,7 +645,6 @@ namespace APTAT.Valkyrie
                     throw ex;
                 }
                 apiKeyInternal = regInfo.Key;
-                _analysisResults = new ConcurrentBag<ValkyrieAnalysisResult>();
                 _pendingItemsResolved.Clear();
                 _login = login;
                 _password = password;

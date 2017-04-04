@@ -616,7 +616,7 @@ namespace APTAT.Core.Reports
             public IEnumerable<DetailedBadFile> MergeNonUniqueResults { get; set; }
         }
         protected void MergeResults(IEnumerable<IAptScanResult> flsResults,
-            Dictionary<string, FileResult> valkyrieResults, out IEnumerable<ScannedTarget> mergedTargets,
+            Dictionary<string, ValkyrieAnalysisResult> valkyrieResults, out IEnumerable<ScannedTarget> mergedTargets,
             out IEnumerable<DetailedBadFile> uniqueBadFiles, out IEnumerable<DetailedBadFile> nonUniqueBadFiles)
         {
             if (_mergedScanResultsCache != null)
@@ -661,7 +661,7 @@ namespace APTAT.Core.Reports
                 .OrderByDescending(file => file.InstancesTotalCount).ThenBy(file => file.Name).ToArray();
         }
 
-        public Dictionary<string, FileResult> ValkyrieAnalysisResult { get; set; }
+        public Dictionary<string, ValkyrieAnalysisResult> ValkyrieAnalysisResult { get; set; }
         public Guid FlsLookupOperationUid { get; set; }
     }
 

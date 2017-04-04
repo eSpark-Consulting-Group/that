@@ -9,7 +9,7 @@ namespace APTAT.Valkyrie
     public interface IValkyrieClient : IDisposable
     {
         event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieAnalysisResult>> AnalyzeProgressChanged;
-        event EventHandler<AnalyzeCompletedEventArgs<ValkyrieAnalysisResult>> AnalyzeCompleted;
+        event EventHandler<AnalyzeCompletedEventArgs> AnalyzeCompleted;
         event EventHandler<ValkyrieAnalyzeStartedEventArgs> AnalyzeStarted;
         void AddFilesToAnalyze(List<ValkyrieFileInfo> filesToAnalyze, bool shouldStartImmediately);
         void AnalyzeAsyncCancel(bool cancelledByUser = true);

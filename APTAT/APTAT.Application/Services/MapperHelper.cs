@@ -15,12 +15,7 @@ namespace APTAT.Application.Services
         {
             return new ValkyrieFile(result);
         }
-
-        public static AnalyzeCompletedEventArgs<ValkyrieFile> ToClient(this AnalyzeCompletedEventArgs<FileResult> result)
-        {
-            return new AnalyzeCompletedEventArgs<ValkyrieFile>(result.Result.Select(c => new ValkyrieFile(c)).ToArray(),
-                result.Error, result.Cancelled, result.UserState);
-        }
+        
 
         public static ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieFile> ToClient
             (this ValkyrieAnalyzeProgressChangedEventArgs<FileResult> result)

@@ -270,7 +270,7 @@ namespace FAT.Application.Services
         }
         
 
-        void OnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<FileResult> e)
+        void OnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs e)
         {
             Action action;
             if (e.Error != null)

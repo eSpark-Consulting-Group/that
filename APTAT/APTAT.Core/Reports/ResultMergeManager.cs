@@ -46,9 +46,9 @@ namespace APTAT.Core.Reports
             }
         }
 
-        protected override void CalculateStatistics(IModule module, FileResult fileResult, Statistics computerStatistics)
+        protected override void CalculateStatistics(IModule module, ValkyrieAnalysisResult valkyrieAnalysisResult, Statistics computerStatistics)
         {
-            var final = _calculator.GetFinalVerdict(module.Cloud, fileResult.ValkyrieAnalysisResult.Verdict);
+            var final = _calculator.GetFinalVerdict(module.Cloud, valkyrieAnalysisResult.Verdict);
             UpdateStatisticsByFinalVerdict(computerStatistics, final);
         }
     }
@@ -61,7 +61,7 @@ namespace APTAT.Core.Reports
             _calculator = calculator;
         }
 
-        public FilesStatistics MergeResults(IEnumerable<IAptScanResult> flsResults, Dictionary<string, FileResult> valkyrieResults, out IEnumerable<ScannedTarget> mergedTargets,
+        public FilesStatistics MergeResults(IEnumerable<IAptScanResult> flsResults, Dictionary<string, ValkyrieAnalysisResult> valkyrieResults, out IEnumerable<ScannedTarget> mergedTargets,
           out IEnumerable<DetailedBadFile> uniqueBadFiles, out IEnumerable<DetailedBadFile> nonUniqueBadFiles)
         {
             int totalFilesCount = 0;
@@ -88,30 +88,27 @@ namespace APTAT.Core.Reports
 
                 foreach (var module in flsResult.Files)
                 {
-                    FileResult fileResult = null;
+                    ValkyrieAnalysisResult valkyrieAnalysisResult = null;
                     if (module.IsBad)
                     {
-                        valkyrieResults.TryGetValue(module.Sha1, out fileResult);
+                        valkyrieResults.TryGetValue(module.Sha1, out valkyrieAnalysisResult);
                     }
-                    if (fileResult != null)
+                    if (valkyrieAnalysisResult != null)
                     {
                         DetailedBadFile badFile = new DetailedBadFile(module, new ScannedTarget(flsResult),_calculator);
 
-                        badFile.SetValkyrieAnalysis(fileResult.ValkyrieAnalysisResult);
+                        badFile.SetValkyrieAnalysis(valkyrieAnalysisResult);
                         
 
                         if (badFile.Verdict != ValkyrieVerdict.Clean)
                         {
                             AddBadFile(uniqueFiles, badFile, module);
                             var copiedBadFile = new DetailedBadFile(module, new ScannedTarget(flsResult), _calculator);
-                            copiedBadFile.SetValkyrieAnalysis(fileResult.ValkyrieAnalysisResult);
+                            copiedBadFile.SetValkyrieAnalysis(valkyrieAnalysisResult);
                             nonUniqueBadFilesInternal.Add(copiedBadFile);
                         }
                         #region Calculate Statistics
-
-                        CalculateStatistics(module, fileResult, computerStatistics);
-
-
+                        CalculateStatistics(module, valkyrieAnalysisResult, computerStatistics);
                         #endregion
                     }
                     else
@@ -132,8 +129,6 @@ namespace APTAT.Core.Reports
                 #endregion
 
                 #region Filling in targets info
-
-
                 ScannedTarget target = new ScannedTarget(flsResult)
                 {
                     MalwareFilesCount = computerStatistics.MergedMalwareCount,
@@ -228,7 +223,7 @@ namespace APTAT.Core.Reports
             }
         }
 
-        protected virtual void CalculateStatistics(IModule module, FileResult fileResult, Statistics computerStatistics)
+        protected virtual void CalculateStatistics(IModule module, ValkyrieAnalysisResult valkyrieResult, Statistics computerStatistics)
         {
             do
             {
@@ -237,7 +232,7 @@ namespace APTAT.Core.Reports
                     computerStatistics.MergedMalwareCount++;
                     break;
                 }
-                switch (fileResult.ValkyrieAnalysisResult.Verdict)
+                switch (valkyrieResult.Verdict)
                 {
                     case ValkyrieVerdict.Clean:
                         computerStatistics.MergedSafeCount++;

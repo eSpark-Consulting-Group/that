@@ -6,7 +6,7 @@ using System.Linq;
 using APTAT.Core.TelerikReports;
 using APTAT.Core.Properties;
 using APTAT.Core.Apt;
-
+using APTAT.Valkyrie;
 
 namespace APTAT.Core.Reports
 {
@@ -156,7 +156,7 @@ namespace APTAT.Core.Reports
         }
 
         public virtual AptReportData CreateReportData(IResultMergeHelper mergeHelper, IAggregatedAptScanResult operationContext,
-            Dictionary<string, FileResult> valkyrieAnalysisResult, Guid ValkyrieOperationUid, Guid FlsLookupOperationUid)
+            Dictionary<string, ValkyrieAnalysisResult> valkyrieAnalysisResult, Guid ValkyrieOperationUid, Guid FlsLookupOperationUid)
         {
             var data = new AptReportData(mergeHelper)
             {

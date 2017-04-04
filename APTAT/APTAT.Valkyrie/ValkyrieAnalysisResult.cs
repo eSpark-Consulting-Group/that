@@ -5,15 +5,6 @@ using Valkyrie.WebApiProvider.Enums;
 
 namespace APTAT.Valkyrie
 {
-    public interface IValkyrieAnalysisResult
-    {
-        string OperationStatus { get; }
-        string SkipReason { get; }
-        ValkyrieVerdict Verdict { get; }
-        bool IsWhiteListed { get; }
-        float? MalwareProbability { get; }
-    }
-
     public class ValkyrieAnalysisResult : IValkyrieAnalysisResult
     {
         public static ValkyrieAnalysisResult Create(BasicInfoResponse basicInfo)
@@ -86,29 +77,7 @@ namespace APTAT.Valkyrie
         public string OperationStatus { get; private set; }
         public bool IsSkipped { get; private set; }
         public string SkipReason { get; private set; }
-
-        public string VerdictString
-        {
-            get
-            {
-                switch (Verdict)
-                {
-                    case ValkyrieVerdict.NotAnalyzed:
-                        return $"Not Analyzed ({OperationStatus.Replace(Environment.NewLine, "")})";
-                    case ValkyrieVerdict.PotentiallyUnwantedApplication:
-                        return "Potentially Unwanted";
-                    case ValkyrieVerdict.Pending:
-                    case ValkyrieVerdict.FirstSeen:
-                        return "In Analysis";
-                    case ValkyrieVerdict.Undetected:
-                        return "No Threat Found";
-                    case ValkyrieVerdict.PendingFls:
-                        return "Lookup in Progress";
-                }
-                return Verdict.ToString();
-            }
-        }
-
+        
         public SkippReasonEnum SkipReasonEnum { get; internal set; }
 
         public static ValkyrieAnalysisResult CreateSkipInfo(string sha1, string reason, SkippReasonEnum skippReasonEnum)

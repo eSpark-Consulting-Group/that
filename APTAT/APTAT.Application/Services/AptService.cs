@@ -25,7 +25,7 @@ namespace APTAT.Application.Services
         public event EventHandler<ScanCompletedEventArgs> ScanCompleted;
         public event EventHandler<BuildReportCompletedEventArgs> BuildReportCompleted;
         public event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieFile>> ValkyrieAnalyzeProgressChanged;
-        public event AnalyzeCompletedEventHandler<ValkyrieFile> ValkyrieAnalyzeCompleted;
+        public event AnalyzeCompletedEventHandler ValkyrieAnalyzeCompleted;
         public event EventHandler ValkyrieAnalyzeStarted;
         public event EventHandler<FlsRequestEventArgs<IAptVerdictContext>> FlsAnalyzeProgressChanged;
         private IAptAtManager _manager;
@@ -72,11 +72,11 @@ namespace APTAT.Application.Services
             App.Current.Dispatcher.Invoke(action);
         }
 
-        void OnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<FileResult> e)
+        void OnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs e)
         {
             Action action = () =>
             {
-                ValkyrieAnalyzeCompleted?.Invoke(this,e.ToClient());
+                ValkyrieAnalyzeCompleted?.Invoke(this,e);
             };
             App.Current.Dispatcher.BeginInvoke(action);
         }

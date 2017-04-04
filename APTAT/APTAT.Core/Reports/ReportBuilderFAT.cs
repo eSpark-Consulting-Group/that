@@ -3,13 +3,14 @@ using System;
 using System.Linq;
 using APTAT.Core.Apt;
 using System.Collections.Generic;
+using APTAT.Valkyrie;
 
 namespace APTAT.Core.Reports
 {
     public class ReportBuilderFAT : ReportBuilder
     {
 
-        public override AptReportData CreateReportData(IResultMergeHelper mergeHelper, IAggregatedAptScanResult operationContext, Dictionary<string, FileResult> valkyrieAnalysisResult, Guid ValkyrieOperationUid, Guid FlsLookupOperationUid)
+        public override AptReportData CreateReportData(IResultMergeHelper mergeHelper, IAggregatedAptScanResult operationContext, Dictionary<string, ValkyrieAnalysisResult> valkyrieAnalysisResult, Guid ValkyrieOperationUid, Guid FlsLookupOperationUid)
         {
             var data = new AptReportDataFAT(mergeHelper)
             {

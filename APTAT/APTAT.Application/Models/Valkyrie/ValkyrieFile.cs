@@ -193,21 +193,21 @@ namespace APTAT.Application.Models.Valkyrie
         public ValkyrieFile(FileResult result)
         {
             Computers = new ObservableCollection<ValkyrieComputer>();
-            Id = result.Id;
-            Path = result.Path;
-            FlsVerdict = result.Cloud;
-            Size = result.Size;
-            SizeSorting = SizeToSorting(result.Size);
-            Attributes = result.Attributes;
-            Created = result.Created;
-            Modified = result.Modified;
-            Accessed = result.Accessed;
+            Id = result.Module.Id;
+            Path = result.Module.Path;
+            FlsVerdict = result.Module.Cloud;
+            Size = result.Module.Size;
+            SizeSorting = SizeToSorting(result.Module.Size);
+            Attributes = result.Module.Attributes;
+            Created = result.Module.Created;
+            Modified = result.Module.Modified;
+            Accessed = result.Module.Accessed;
             Sha1 = result.Sha1.Trim().ToLower();
-            Signer = result.Signer;
-            Description = result.Description;
-            Version = result.Version;
-            Copyright = result.Copyright;
-            Product = result.Product;
+            Signer = result.Module.Signer;
+            Description = result.Module.Description;
+            Version = result.Module.Version;
+            Copyright = result.Module.Copyright;
+            Product = result.Module.Product;
             ValkyrieVerdict = result.ValkyrieAnalysisResult.Verdict;
             OperationStatus = result.ValkyrieAnalysisResult.OperationStatus;
             SkipReason = result.ValkyrieAnalysisResult.SkipReason;

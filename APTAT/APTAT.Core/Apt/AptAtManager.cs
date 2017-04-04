@@ -45,18 +45,20 @@ namespace APTAT.Core.Apt
         private int _filesShouldSendToValkyrieCount = 0;
         private int _filesWithFlsErrorCount = 0;
         //private IReportBuilder _reportBuilder;
-        //private bool _isLastScanCancelled = false;
         private readonly IAptReportBuilder _reportBuilder;
 
         public event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<FileResult>> ValkyrieAnalyzeProgressChanged;
         public event EventHandler<FlsRequestEventArgs<IAptVerdictContext>> FlsAnalyzeProgressChanged;
-        public event AnalyzeCompletedEventHandler<FileResult> ValkyrieAnalyzeCompleted;
+        public event EventHandler<AnalyzeCompletedEventArgs> ValkyrieAnalyzeCompleted;
         public event EventHandler ValkyrieAnalyzeStarted;
         public IAggregatedAptScanResult AggregatedScanResults { get; private set; }
         public Guid ValkyrieOperationUid { get; private set; }
         public Guid FlsLookupOperationUid { get; private set; }
 
-        public Dictionary<string, FileResult> ValkyrieAnalysisResult { get; } =
+        public Dictionary<string, ValkyrieAnalysisResult> ValkyrieAnalysisResult { get; } =
+            new Dictionary<string, ValkyrieAnalysisResult>(StringComparer.OrdinalIgnoreCase);
+
+        public Dictionary<string, FileResult> _valkyrieAnalysisResult { get; } =
             new Dictionary<string, FileResult>(StringComparer.OrdinalIgnoreCase);
 
         public HashSet<string> ShouldSendToValkyrie { get; } =
@@ -132,11 +134,9 @@ namespace APTAT.Core.Apt
             }
         }
 
-        private void OnValkyrieManagerAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<ValkyrieAnalysisResult> e)
+        private void OnValkyrieManagerAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs e)
         {
-            var valkyrieAnalysisResult = GetFullResult(e.Result, GetResultsEnumerator().ToArray()).Values;
-            var arg = new AnalyzeCompletedEventArgs<FileResult>(valkyrieAnalysisResult.ToArray(), e.Error, e.Cancelled
-                , e.UserState);
+            var arg = new AnalyzeCompletedEventArgs(e.Error, e.Cancelled, e.UserState);
             ValkyrieAnalyzeCompleted?.Invoke(this, arg);
         }
 
@@ -146,7 +146,7 @@ namespace APTAT.Core.Apt
 
             var valkyrieAnalysisResultDict = GetFullResult(info.Results, GetResultsEnumerator().ToArray());
             var valkyrieAnalysisResult = valkyrieAnalysisResultDict.Values;
-            var valkyrieAnalysisResultInternal = ValkyrieAnalysisResult;
+            var valkyrieAnalysisResultInternal = _valkyrieAnalysisResult;
             lock (ValkyrieAnalysisResult)
             {
                 foreach (var fileResult in valkyrieAnalysisResult)
@@ -155,6 +155,7 @@ namespace APTAT.Core.Apt
                     if (valkyrieAnalysisResultInternal.TryGetValue(fileResult.Sha1, out file))
                     {
                         valkyrieAnalysisResultInternal.Remove(file.Sha1);
+                        ValkyrieAnalysisResult.Remove(fileResult.Sha1);
                         if (!e.IsUpdate)
                             Debug.Assert(true, "uploaded twice the same file to valkyrie");
                         if (file.ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.InQueue)
@@ -167,6 +168,7 @@ namespace APTAT.Core.Apt
                     if (file != null || !e.IsUpdate)
                     {
                         valkyrieAnalysisResultInternal.Add(fileResult.Sha1, fileResult);
+                        ValkyrieAnalysisResult.Add(fileResult.Sha1, fileResult.ValkyrieAnalysisResult);
 
                         if (_latestValkyrieVerdictUpdate == null || fileResult.VerdictModified > _latestValkyrieVerdictUpdate.Value)
                             _latestValkyrieVerdictUpdate = fileResult.VerdictModified;
@@ -218,19 +220,19 @@ namespace APTAT.Core.Apt
                     FileResult found;
                     if (!fileResults.TryGetValue(badFile.Sha1, out found))
                     {
-                        found = new FileResult(badFile);
                         var vResult =
-                            valkyrieAnalysisResults.FirstOrDefault(v => v.SHA1 != null
-                            && String.Equals(v.SHA1, badFile.Sha1, StringComparison.OrdinalIgnoreCase));
+                            valkyrieAnalysisResults.FirstOrDefault(v => 
+                            String.Equals(v.SHA1, badFile.Sha1, StringComparison.OrdinalIgnoreCase));
 
                         if (vResult != null)
                         {
-                            found.SetValkyrieResult(vResult);
+                            found = new FileResult(badFile, vResult);
                             fileResults.Add(found.Sha1, found);
                         }
                     }
 
-                    if (scanResult.AptReport != null && scanResult.AptReport.Computer != null)
+                    if (found != null && scanResult.AptReport != null 
+                        && scanResult.AptReport.Computer != null)
                     {
                         var computer = scanResult.AptReport.Computer;
                         var comp = new ComputerInformation(computer, scanResult.TargetUid);
@@ -375,7 +377,8 @@ namespace APTAT.Core.Apt
                     _filesShouldSendToValkyrieCount += filesToAnalyze.Count;
                     foreach (var fileInfo in valkyrieAnalysisResults)
                     {
-                        ValkyrieAnalysisResult.Add(fileInfo.Sha1, fileInfo);
+                        _valkyrieAnalysisResult.Add(fileInfo.Sha1, fileInfo);
+                        ValkyrieAnalysisResult.Add(fileInfo.Sha1, fileInfo.ValkyrieAnalysisResult);
                         if (fromRemoteScanner)
                             ShouldSendToValkyrie.Add(fileInfo.Sha1);
                     }
@@ -421,7 +424,7 @@ namespace APTAT.Core.Apt
             FileResult[] fileResults;
             lock (ValkyrieAnalysisResult)
             {
-                fileResults = ValkyrieAnalysisResult.Values.ToArray();
+                fileResults = _valkyrieAnalysisResult.Values.ToArray();
             }
             List<FileResult> result = new List<FileResult>();
             foreach (var fileResult in fileResults)
@@ -431,7 +434,7 @@ namespace APTAT.Core.Apt
                 if (modules.ContainsKey(fileResult.Sha1))
                     valkyrieAnalysisResults.Add(fileResult.Sha1, fileResult.ValkyrieAnalysisResult);
             }
-            return modifiedDate == null ? fileResults : result.ToArray();
+            return modifiedDate == null ? fileResults.ToArray() : result.ToArray();
         }
 
         private void FlsManagerOnAnalyzed(object sender, FlsRequestEventArgs<IFlsResult> e)
@@ -470,7 +473,6 @@ namespace APTAT.Core.Apt
                     _queueToValkyrie.Clear();
                 ShouldSendToValkyrie.Clear();
                 ValkyrieAnalysisResult.Clear();
-                //_isLastScanCancelled = false;
                 _entityStorage.SaveOperationContext(scanner.ScanOperationContext);
             }
         }
@@ -502,7 +504,6 @@ namespace APTAT.Core.Apt
 
         public void StopScan(Guid[] targetsUids)
         {
-            //_isLastScanCancelled = true;
             if (targetsUids.Any())
                 _descentSubSystem.StopOperationForTargetUid(targetsUids);
             else

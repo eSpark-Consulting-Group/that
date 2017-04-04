@@ -166,7 +166,7 @@ namespace APTAT.Application
             });
         }
 
-        private void ViewModelOnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<ValkyrieFile> e)
+        private void ViewModelOnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs e)
         {
             if (_onCompletedAction != null)
             {

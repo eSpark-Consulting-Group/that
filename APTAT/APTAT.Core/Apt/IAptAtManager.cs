@@ -20,7 +20,7 @@ namespace APTAT.Core
     public interface IAptAtManager : IDisposable
     {
         event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<FileResult>> ValkyrieAnalyzeProgressChanged;
-        event AnalyzeCompletedEventHandler<FileResult> ValkyrieAnalyzeCompleted;
+        event EventHandler<AnalyzeCompletedEventArgs> ValkyrieAnalyzeCompleted;
         event EventHandler<FlsRequestEventArgs<IAptVerdictContext>> FlsAnalyzeProgressChanged;
         event EventHandler ValkyrieAnalyzeStarted;
         IAggregatedAptScanResult AggregatedScanResults { get; }
@@ -50,6 +50,6 @@ namespace APTAT.Core
     {
         Guid ValkyrieOperationUid { get; }
         Guid FlsLookupOperationUid { get; }
-        Dictionary<string, FileResult> ValkyrieAnalysisResult { get; }
+        Dictionary<string, ValkyrieAnalysisResult> ValkyrieAnalysisResult { get; }
     }
 }

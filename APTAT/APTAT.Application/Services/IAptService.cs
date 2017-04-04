@@ -140,7 +140,7 @@ namespace APTAT.Application.Services
         event EventHandler<GetScanResultCompletedEventArgs> ComputerScanCompleted;
         event EventHandler<BuildReportCompletedEventArgs> BuildReportCompleted; 
         event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieFile>> ValkyrieAnalyzeProgressChanged;
-        event AnalyzeCompletedEventHandler<ValkyrieFile> ValkyrieAnalyzeCompleted;
+        event AnalyzeCompletedEventHandler ValkyrieAnalyzeCompleted;
         event EventHandler ValkyrieAnalyzeStarted;
         event EventHandler<FlsRequestEventArgs<IAptVerdictContext>> FlsAnalyzeProgressChanged;
         void BeginScan(DeploymentTarget[] items, Object userState,
