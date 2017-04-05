@@ -27,7 +27,7 @@ namespace APTAT.Core.TelerikReports
             Telerik.Reporting.Drawing.FormattingRule formattingRule9 = new Telerik.Reporting.Drawing.FormattingRule();
             Telerik.Reporting.TableGroup tableGroup1 = new Telerik.Reporting.TableGroup();
             Telerik.Reporting.TableGroup tableGroup2 = new Telerik.Reporting.TableGroup();
-            Telerik.Reporting.InstanceReportSource instanceReportSource1 = new Telerik.Reporting.InstanceReportSource();
+            Telerik.Reporting.TypeReportSource typeReportSource1 = new Telerik.Reporting.TypeReportSource();
             Telerik.Reporting.Drawing.FormattingRule formattingRule10 = new Telerik.Reporting.Drawing.FormattingRule();
             Telerik.Reporting.Drawing.FormattingRule formattingRule11 = new Telerik.Reporting.Drawing.FormattingRule();
             Telerik.Reporting.Drawing.FormattingRule formattingRule12 = new Telerik.Reporting.Drawing.FormattingRule();
@@ -35,7 +35,6 @@ namespace APTAT.Core.TelerikReports
             Telerik.Reporting.Drawing.FormattingRule formattingRule14 = new Telerik.Reporting.Drawing.FormattingRule();
             Telerik.Reporting.Drawing.FormattingRule formattingRule15 = new Telerik.Reporting.Drawing.FormattingRule();
             Telerik.Reporting.Drawing.StyleRule styleRule1 = new Telerik.Reporting.Drawing.StyleRule();
-            this.devices1 = new APTAT.Core.TelerikReports.Template.Devices();
             this.pageHeaderSection1 = new Telerik.Reporting.PageHeaderSection();
             this.textBox34 = new Telerik.Reporting.TextBox();
             this.shape2 = new Telerik.Reporting.Shape();
@@ -112,12 +111,7 @@ namespace APTAT.Core.TelerikReports
             this.pageFooterSection1 = new Telerik.Reporting.PageFooterSection();
             this.textBox18 = new Telerik.Reporting.TextBox();
             this.shape4 = new Telerik.Reporting.Shape();
-            ((System.ComponentModel.ISupportInitialize)(this.devices1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
-            // 
-            // devices1
-            // 
-            this.devices1.Name = "Devices";
             // 
             // pageHeaderSection1
             // 
@@ -257,6 +251,7 @@ namespace APTAT.Core.TelerikReports
             graphTitle2.Text = "Number of Unknown/Malicious/Lookup in Progress";
             this.graph1.Titles.Add(graphTitle1);
             this.graph1.Titles.Add(graphTitle2);
+            this.graph1.ItemDataBinding += new System.EventHandler(this.graph1_ItemDataBinding);
             // 
             // cartesianCoordinateSystem1
             // 
@@ -716,12 +711,13 @@ namespace APTAT.Core.TelerikReports
             // subReportDevices
             // 
             this.subReportDevices.Bindings.Add(new Telerik.Reporting.Binding("Visible", "=ReportItem.DataObject.TargetsCount>0"));
-            this.subReportDevices.Bindings.Add(new Telerik.Reporting.Binding("ReportSource.ReportDocument.DataSource", "=ReportItem.DataObject.Targets"));
             this.subReportDevices.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(1.2999981641769409D));
             this.subReportDevices.Name = "subReportDevices";
-            instanceReportSource1.Parameters.Add(new Telerik.Reporting.Parameter("IsActiveDirectory", "True"));
-            instanceReportSource1.ReportDocument = this.devices1;
-            this.subReportDevices.ReportSource = instanceReportSource1;
+            typeReportSource1.Parameters.Add(new Telerik.Reporting.Parameter("IsActiveDirectory", "True"));
+            typeReportSource1.Parameters.Add(new Telerik.Reporting.Parameter("DataSourceBinding", "Targets"));
+            typeReportSource1.TypeName = "APTAT.Core.TelerikReports.Template.Devices, APTAT.Core, Version=2.1.0.0, Culture=" +
+    "neutral, PublicKeyToken=null";
+            this.subReportDevices.ReportSource = typeReportSource1;
             this.subReportDevices.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.667495727539063D), Telerik.Reporting.Drawing.Unit.Cm(1.0322916507720947D));
             // 
             // textBox44
@@ -989,7 +985,6 @@ namespace APTAT.Core.TelerikReports
             this.StyleSheet.AddRange(new Telerik.Reporting.Drawing.StyleRule[] {
             styleRule1});
             this.Width = Telerik.Reporting.Drawing.Unit.Cm(15.9197998046875D);
-            ((System.ComponentModel.ISupportInitialize)(this.devices1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
 
         }
@@ -1071,6 +1066,5 @@ namespace APTAT.Core.TelerikReports
         private Telerik.Reporting.TextBox textBox41;
         private Telerik.Reporting.TextBox textBox40;
         private Telerik.Reporting.TextBox textBox36;
-        private Template.Devices devices1;
     }
 }

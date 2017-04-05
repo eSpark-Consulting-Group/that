@@ -13,47 +13,48 @@ namespace APTAT.Core.Reports
     public class ReportBuilder : IReportBuilder
     {
         private readonly IReportNamesCache _cache;
-        protected readonly IResultMergeHelper _mergeHelper;
+        protected IResultMergeHelper MergeHelper { get; }
+
         public ReportBuilder(IReportNamesCache cache, IResultMergeHelper mergeHelper)
         {
             _cache = cache;
-            _mergeHelper = mergeHelper;
+            MergeHelper = mergeHelper;
         }             
                
         public async Task<ReportFile> BuildReportAsync(ReportData reportData, ReportType reportType, bool saveFile = true)
         {
             ReportFile reportFile = new ReportFile();
+            ReportFile BuildReport()
+            {
+                var reportKey = reportData.OperationUid + "-" + reportType;
+                var reportFromCache = _cache.TryGetReportFromCache(reportKey);
+                if (reportFromCache != null) return reportFromCache;
+
+                var data = CreateReportData(reportData);
+                var reportBytes = Render(data, reportType);
+
+                string fileName = GetFileName(reportType);
+                var path = Path.Combine(Settings.Default.ReportFolder, fileName);
+
+                if (saveFile)
+                {
+                    var directoryInfo = (new FileInfo(path)).Directory;
+                    directoryInfo?.Create();
+
+
+                    using (FileStream fs = new FileStream(path, FileMode.Create))
+                    {
+                        fs.Write(reportBytes, 0, reportBytes.Length);
+                    }
+                    _cache.Add(reportKey, fileName);
+                }
+
+                return new ReportFile { FileName = path, DocumentBytes = reportBytes };
+            }
+
             try
             {
-                Func<ReportFile> action = () =>
-                {
-                    
-                    var reportKey = reportData.OperationUid + "-" + reportType;
-                    var reportFromCache = _cache.TryGetReportFromCache(reportKey);
-                    if (reportFromCache != null) return reportFromCache;
-
-                    var data = CreateReportData(reportData);
-                    var reportBytes = Render(data, reportType);
-
-                    string fileName = GetFileName(reportType);
-                    var path = Path.Combine(Settings.Default.ReportFolder, fileName);
-
-                    if (saveFile)
-                    {
-                        (new FileInfo(path)).Directory.Create();
-
-
-                        using (FileStream fs = new FileStream(path, FileMode.Create))
-                        {
-                            fs.Write(reportBytes, 0, reportBytes.Length);
-                        }
-                        _cache.Add(reportKey, fileName);
-                    }
-
-                    return new ReportFile() { FileName = path, DocumentBytes = reportBytes };
-                };
-
-                return await Task.Factory.StartNew(action);
+                return await Task.Factory.StartNew(BuildReport);
             }
             catch (Exception ex)
             {
@@ -105,7 +106,7 @@ namespace APTAT.Core.Reports
                     return renderer.Render(valkyrieDetailedDevicesReport, data);
 
                 case ReportType.DetailedPerProgramWithValkyrie:
-                    data.SucceededTargets.ToArray();
+                    //data.SucceededTargets.ToArray();
                     return renderer.Render(new DetailedProgramsValkyrieReport(), data);
 
                 default:
@@ -139,7 +140,7 @@ namespace APTAT.Core.Reports
 
         protected virtual AptReportData CreateReportData(ReportData operationData)
         {
-            return new AptReportData(_mergeHelper, operationData);
+            return new AptReportData(MergeHelper, operationData);
         }
 
     }

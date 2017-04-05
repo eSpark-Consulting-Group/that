@@ -1,3 +1,6 @@
+using System.Linq;
+using APTAT.Core.TelerikReports.Helpers;
+
 namespace APTAT.Core.TelerikReports
 {
     using System;
@@ -33,6 +36,13 @@ namespace APTAT.Core.TelerikReports
         {
            ((NumericalScale) graphAxisX.Scale ).LabelStep= 1;
         }
-       
+
+        private void graphTop10VulnerableDevices_ItemDataBinding(object sender, EventArgs e)
+        {
+            var graph = (Telerik.Reporting.Processing.DataItem)sender;
+            var obj = (Reports.AptReportData)graph.DataObject.RawData;
+            var len = obj.Top10VulnerableDevices.Select(t => t.Uid).Distinct().Count();
+            ((CategoryScale)graphAxis2.Scale).SpacingSlotCount = ChartHelper.CalculateSpacingSlotCount(len, 8);
+        }
     }
 }

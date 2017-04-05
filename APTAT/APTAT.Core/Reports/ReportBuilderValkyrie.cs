@@ -8,7 +8,7 @@
 
         protected override AptReportData CreateReportData(ReportData reportData)
         {
-            return new AptReportDataValkyrie(_mergeHelper, reportData);
+            return new AptReportDataValkyrie(MergeHelper, reportData);
         }
     }
 }

@@ -46,8 +46,9 @@ namespace APTAT.Core.Apt
 
         private int _filesShouldSendToValkyrieCount = 0;
         private int _filesWithFlsErrorCount = 0;
-        //private IReportBuilder _reportBuilder;
-        private readonly IReportBuilder _reportBuilder;
+        
+        
+        private IReportBuilderFactory _reportBuilderFactory;
 
         public event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<FileResult>> ValkyrieAnalyzeProgressChanged;
         public event EventHandler<FlsRequestEventArgs<IAptVerdictContext>> FlsAnalyzeProgressChanged;
@@ -100,13 +101,13 @@ namespace APTAT.Core.Apt
 
         public AptAtManager(IDescentSubSystem descentSubSystem, IValkyrieClientEx valkyrieClient, IFlsManager manager,
             IAptScannerFactory aptScannerFactory, IDistinctFileHelper distinctHelper, IStorageSubSystem storage, 
-            IReportBuilder reportBuilder)
+            IReportBuilderFactory reportBuilderFactory)
         {
             _descentSubSystem = descentSubSystem;
             _entityStorage = storage;
             _aptScannerFactory = aptScannerFactory;
             _distinctHelper = distinctHelper;
-            _reportBuilder = reportBuilder;           
+            _reportBuilderFactory = reportBuilderFactory;           
 
             _valkyrieClient = valkyrieClient;
             _valkyrieClient.SetBaseUri(new Uri(Settings.Default.valkyrieBaseUrl));
@@ -594,7 +595,8 @@ namespace APTAT.Core.Apt
 
         public async Task<ReportFile> BuildReportAsync(ReportType reportType, bool saveFile = true)
         {
-            return await _reportBuilder.BuildReportAsync(GetReportData(), reportType, saveFile);
+            var reportBuilder = _reportBuilderFactory.GetReportBuilder(reportType.ScanStage());
+            return await reportBuilder.BuildReportAsync(GetReportData(), reportType, saveFile);
         }
 
         private ReportData GetReportData()

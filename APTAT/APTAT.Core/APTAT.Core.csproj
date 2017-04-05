@@ -93,11 +93,14 @@
     <Compile Include="Reports\Data\FileRatingInfoFAT.cs" />
     <Compile Include="Reports\Data\FileRatingValkyrieInfo.cs" />
     <Compile Include="Reports\Data\IAptReportData.cs" />
+    <Compile Include="Reports\IReportBuilderFactory.cs" />
     <Compile Include="Reports\IReportNamesCache.cs" />
     <Compile Include="Reports\IResultMergeManager.cs" />
     <Compile Include="Reports\ITargetVerdict.cs" />
     <Compile Include="Reports\Data\ItemRatingInfo.cs" />
     <Compile Include="Reports\Data\MostWantedBadFileInfo.cs" />
+    <Compile Include="Reports\ReportBuilderFactory.cs" />
+    <Compile Include="Reports\ReportBuilderFactoryFat.cs" />
     <Compile Include="Reports\ReportBuilderFAT.cs" />
     <Compile Include="Reports\IReportBuilder.cs" />
     <Compile Include="Reports\ReportBuilderValkyrie.cs" />

@@ -256,6 +256,7 @@ namespace APTAT.Core.TelerikReports
             graphTitle1.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Cm(0D);
             graphTitle1.Text = "Top 10 Vulnerable Devices";
             this.graphTop10VulnerableDevices.Titles.Add(graphTitle1);
+            this.graphTop10VulnerableDevices.ItemDataBinding += new System.EventHandler(this.graphTop10VulnerableDevices_ItemDataBinding);
             // 
             // cartesianCoordinateSystem1
             // 

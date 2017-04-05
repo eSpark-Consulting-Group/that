@@ -12,7 +12,7 @@ namespace APTAT.Core.Reports
 
         protected override AptReportData CreateReportData(ReportData reportData)
         {
-            return new AptReportDataFAT(_mergeHelper, reportData);
+            return new AptReportDataFAT(MergeHelper, reportData);
         }
 
         protected override string GetFileName(ReportType reportType)

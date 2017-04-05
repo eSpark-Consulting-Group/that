@@ -276,6 +276,7 @@ namespace APTAT.Core.TelerikReports
             graphTitle2.Text = "Number of Unknown Files/Malicious Files/Lookup in Progress /In Analysis Files ";
             this.graph1.Titles.Add(graphTitle1);
             this.graph1.Titles.Add(graphTitle2);
+            this.graph1.ItemDataBinding += new System.EventHandler(this.graph1_ItemDataBinding);
             // 
             // cartesianCoordinateSystem1
             // 
