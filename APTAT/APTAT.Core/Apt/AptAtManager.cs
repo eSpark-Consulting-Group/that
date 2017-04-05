@@ -48,7 +48,7 @@ namespace APTAT.Core.Apt
         private int _filesWithFlsErrorCount = 0;
         
         
-        private IReportBuilderFactory _reportBuilderFactory;
+        private readonly IReportBuilderFactory _reportBuilderFactory;
 
         public event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<FileResult>> ValkyrieAnalyzeProgressChanged;
         public event EventHandler<FlsRequestEventArgs<IAptVerdictContext>> FlsAnalyzeProgressChanged;

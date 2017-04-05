@@ -47,6 +47,7 @@ namespace APTAT.Core.TelerikReports
             this.polarCoordinateSystem1 = new Telerik.Reporting.PolarCoordinateSystem();
             this.graphAxis1 = new Telerik.Reporting.GraphAxis();
             this.graphAxis2 = new Telerik.Reporting.GraphAxis();
+            this.dsTargetRatingInfo = new Telerik.Reporting.ObjectDataSource();
             this.barSeries1 = new Telerik.Reporting.BarSeries();
             this.graph2 = new Telerik.Reporting.Graph();
             this.polarCoordinateSystem3 = new Telerik.Reporting.PolarCoordinateSystem();
@@ -90,7 +91,6 @@ namespace APTAT.Core.TelerikReports
             this.textBox18 = new Telerik.Reporting.TextBox();
             this.shape4 = new Telerik.Reporting.Shape();
             this.dsAptReportData = new Telerik.Reporting.ObjectDataSource();
-            this.dsTargetRatingInfo = new Telerik.Reporting.ObjectDataSource();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             // 
             // pageHeaderSection1
@@ -237,7 +237,7 @@ namespace APTAT.Core.TelerikReports
             // 
             // graph1
             // 
-            this.graph1.Bindings.Add(new Telerik.Reporting.Binding("DataSource", "= Fields.FileRatingValkyrie"));
+            this.graph1.Bindings.Add(new Telerik.Reporting.Binding("DataSource", "= Fields.FileRating"));
             graphGroup1.Name = "categoryGroup";
             this.graph1.CategoryGroups.Add(graphGroup1);
             this.graph1.CoordinateSystems.Add(this.polarCoordinateSystem1);
@@ -301,6 +301,11 @@ namespace APTAT.Core.TelerikReports
             this.graphAxis2.Scale = categoryScale1;
             this.graphAxis2.Style.Visible = false;
             // 
+            // dsTargetRatingInfo
+            // 
+            this.dsTargetRatingInfo.DataSource = typeof(APTAT.Core.Reports.TargetRatingInfo);
+            this.dsTargetRatingInfo.Name = "dsTargetRatingInfo";
+            // 
             // barSeries1
             // 
             this.barSeries1.ArrangeMode = Telerik.Reporting.GraphSeriesArrangeMode.Stacked100;
@@ -330,7 +335,7 @@ namespace APTAT.Core.TelerikReports
             // 
             // graph2
             // 
-            this.graph2.Bindings.Add(new Telerik.Reporting.Binding("DataSource", "= Fields.DevicesRatingValkyrie"));
+            this.graph2.Bindings.Add(new Telerik.Reporting.Binding("DataSource", "= Fields.DevicesRating"));
             graphGroup5.Name = "categoryGroup2";
             this.graph2.CategoryGroups.Add(graphGroup5);
             this.graph2.CoordinateSystems.Add(this.polarCoordinateSystem3);
@@ -769,11 +774,6 @@ namespace APTAT.Core.TelerikReports
             // 
             this.dsAptReportData.DataSource = typeof(APTAT.Core.Reports.AptReportData);
             this.dsAptReportData.Name = "dsAptReportData";
-            // 
-            // dsTargetRatingInfo
-            // 
-            this.dsTargetRatingInfo.DataSource = typeof(APTAT.Core.Reports.TargetRatingInfo);
-            this.dsTargetRatingInfo.Name = "dsTargetRatingInfo";
             // 
             // ExecutiveValkyrieReport
             // 

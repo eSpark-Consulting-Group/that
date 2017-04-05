@@ -97,11 +97,6 @@ namespace APTAT.Core.Reports
 
                 case ReportType.DetailedPerDeviceWithValkyrie:
                     var valkyrieDetailedDevicesReport = new DetailedDevicesValkyrieReport();
-                    var topVulnerableDevicesValk = data.Top10VulnerableDevices.Select(d => d.BadFilesCount).DefaultIfEmpty().Max();
-                    if (topVulnerableDevicesValk <= 5)
-                    {
-                        valkyrieDetailedDevicesReport.ChangeScaleForOne();
-                    }
                     return renderer.Render(valkyrieDetailedDevicesReport, data);
 
                 case ReportType.DetailedPerProgramWithValkyrie:

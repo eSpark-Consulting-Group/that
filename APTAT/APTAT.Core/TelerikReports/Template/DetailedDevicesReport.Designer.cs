@@ -1069,6 +1069,7 @@ namespace APTAT.Core.TelerikReports
             this.StyleSheet.AddRange(new Telerik.Reporting.Drawing.StyleRule[] {
             styleRule1});
             this.Width = Telerik.Reporting.Drawing.Unit.Cm(15.9197998046875D);
+            this.ItemDataBinding += new System.EventHandler(this.DetailedDevicesReport_ItemDataBinding);
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
 
         }

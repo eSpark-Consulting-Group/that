@@ -214,7 +214,7 @@ namespace APTAT.Core.TelerikReports
             // 
             // panelCharts
             // 
-            this.panelCharts.Bindings.Add(new Telerik.Reporting.Binding("Visible", "= Fields.Top10VulnerableDevicesValkyrie.Length > 0"));
+            this.panelCharts.Bindings.Add(new Telerik.Reporting.Binding("Visible", "= Fields.Top10VulnerableDevices.Length > 0"));
             this.panelCharts.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
             this.textBox17,
             this.graph1});
@@ -236,7 +236,7 @@ namespace APTAT.Core.TelerikReports
             // 
             // graph1
             // 
-            this.graph1.Bindings.Add(new Telerik.Reporting.Binding("DataSource", "= Fields.Top10VulnerableDevicesValkyrie"));
+            this.graph1.Bindings.Add(new Telerik.Reporting.Binding("DataSource", "= Fields.Top10VulnerableDevices"));
             graphGroup1.Groupings.Add(new Telerik.Reporting.Grouping("= Fields.Uid"));
             graphGroup1.Label = "=Fields.Name";
             graphGroup1.Name = "uidGroup";
@@ -328,7 +328,7 @@ namespace APTAT.Core.TelerikReports
             // 
             // list1
             // 
-            this.list1.Bindings.Add(new Telerik.Reporting.Binding("DataSource", "=ReportItem.DataObject.SucceededTargetsWithValkyrie"));
+            this.list1.Bindings.Add(new Telerik.Reporting.Binding("DataSource", "=ReportItem.DataObject.SucceededTargets"));
             this.list1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(15.667496681213379D)));
             this.list1.Body.Rows.Add(new Telerik.Reporting.TableBodyRow(Telerik.Reporting.Drawing.Unit.Cm(14.983612060546875D)));
             this.list1.Body.SetCellContent(0, 0, this.panel1);
@@ -352,7 +352,7 @@ namespace APTAT.Core.TelerikReports
             this.subReportPendingAnalysis,
             this.subReportFailedToAnalyze});
             this.panel1.Name = "panel1";
-            this.panel1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.667496681213379D), Telerik.Reporting.Drawing.Unit.Cm(14.983612060546875D));
+            this.panel1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.773329734802246D), Telerik.Reporting.Drawing.Unit.Cm(14.983612060546875D));
             // 
             // panel6
             // 
@@ -1100,6 +1100,7 @@ namespace APTAT.Core.TelerikReports
             this.StyleSheet.AddRange(new Telerik.Reporting.Drawing.StyleRule[] {
             styleRule1});
             this.Width = Telerik.Reporting.Drawing.Unit.Cm(15.9197998046875D);
+            this.ItemDataBinding += new System.EventHandler(this.DetailedDevicesValkyrieReport_ItemDataBinding);
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
 
         }

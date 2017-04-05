@@ -30,15 +30,14 @@ namespace APTAT.Core.TelerikReports.Template
             var ds = this.ReportParameters["DataSourceBinding"].Value.ToString();
             if (Bindings.Count > 0)
             {
-                var bind = Bindings.Where(b => b.Path == "DataSource").FirstOrDefault();
+                var bind = Bindings.FirstOrDefault(b => b.Path == "DataSource");
                 if (bind != null)
                 {
                     Bindings.Remove(bind);
                 }
-
             }
 
-            this.Bindings.Add(new Telerik.Reporting.Binding("DataSource", "=ReportItem.Parent.DataObject." + ds));
+            Bindings.Add(new Telerik.Reporting.Binding("DataSource", "=ReportItem.Parent.DataObject." + ds));
         }
     }
 }

@@ -39,5 +39,16 @@ namespace APTAT.Core.TelerikReports
             var len = obj.Top10VulnerableDevices.Select(t => t.Uid).Distinct().Count();
             ((CategoryScale)graphAxis2.Scale).SpacingSlotCount = ChartHelper.CalculateSpacingSlotCount(len, 8);
         }
+
+        private void DetailedDevicesValkyrieReport_ItemDataBinding(object sender, EventArgs e)
+        {
+            var obj = (Telerik.Reporting.Processing.Report)sender;
+            var dataSource = (Reports.AptReportData)obj.DataSource;
+            var topVulnerableDevicesValk = dataSource.Top10VulnerableDevices.Select(d => d.BadFilesCount).DefaultIfEmpty().Max();
+            if (topVulnerableDevicesValk <= 5)
+            {
+                ChangeScaleForOne();
+            }
+        }
     }
 }
