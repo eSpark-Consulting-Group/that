@@ -494,12 +494,10 @@ namespace APTAT.Core.Apt
             if (_valkyrieScanStarted)
             {
                 IAptScanResult[] aptScanResults = GetResultsEnumerator().ToArray();
-                this._valkyrieClient.AllowSubmit(_distinctHelper.GetDistinctFileInfoDict(aptScanResults));
+                _valkyrieClient.AllowSubmit(_distinctHelper.GetDistinctFileInfoDict(aptScanResults));
             }
         }
-
         
-
         public void StopScan(Guid[] targetsUids)
         {
             if (targetsUids.Any())
@@ -616,11 +614,11 @@ namespace APTAT.Core.Apt
             return reportData;
         }
 
-        public String CurrentOperationUid
+        public string CurrentOperationUid
         {
             get
             {
-                var uid = this.AggregatedScanResults.OperationUid.ToString() + FlsLookupOperationUid.ToString() + ValkyrieOperationUid.ToString();
+                var uid = AggregatedScanResults.OperationUid + FlsLookupOperationUid.ToString() + ValkyrieOperationUid;
                 return Hash(uid);
             }
         }

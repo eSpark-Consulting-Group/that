@@ -25,16 +25,13 @@ namespace FAT.Application.Services
         private readonly ICamLicenseProvider _camLicenseProvider;
         private readonly IProxySettingsViewModel _proxyCredentialsProvider;
         private string _camLicense = null;
-        private readonly Guid _sessionGuid = new Guid("C78DA9FA-4DC3-4F26-B7C3-304D24220B15");
         private NetworkCredential _proxyCredentials;
 
         private string _systemLogin;
         private string _systemPassword;
         private bool _isValkyrieStarted = false;
-        public Guid SessionId
-        {
-            get { return _sessionGuid; }
-        }
+        public Guid SessionId { get; } = new Guid("C78DA9FA-4DC3-4F26-B7C3-304D24220B15");
+
         public AptService(IAptAtManager aptAtManager, ICamLicenseProvider camLicenseProvider, IProxySettingsViewModel settingsViewModel)
         {
             _camLicenseProvider = camLicenseProvider;
@@ -46,7 +43,7 @@ namespace FAT.Application.Services
             #endregion
         }
         #region reporting
-        public async Task<BuildReportResult> BuildReportAsync(Guid operationGuid, ReportKind reportKind)
+        public async Task<BuildReportResult> BuildReportAsync(ReportKind reportKind)
         {
             var result = await _manager.BuildReportAsync(ToReportType(reportKind), false);
             return new BuildReportResult(result.FileName, result.DocumentBytes, result.Error);                        

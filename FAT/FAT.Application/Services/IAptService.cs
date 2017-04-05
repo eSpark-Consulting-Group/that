@@ -95,7 +95,7 @@ namespace FAT.Application.Services
 
         void UpdateFlsPorts(int udpPort, int tcpPort);
         void StopScan(Guid[] items);
-        Task<BuildReportResult> BuildReportAsync(Guid operationGuid, ReportKind reportKind);
+        Task<BuildReportResult> BuildReportAsync(ReportKind reportKind);
 
         string GetValkyrieDetailsLink();
         string GetValkyrieDetailsLink(string apiKey, string scanId);

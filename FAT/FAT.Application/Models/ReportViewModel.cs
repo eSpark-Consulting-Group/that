@@ -1,7 +1,5 @@
 ﻿
 using System;
-using System.IO;
-using System.Windows;
 using FAT.Application.Services;
 using System.Threading.Tasks;
 
@@ -38,7 +36,6 @@ namespace FAT.Application.Models
         {
             base.InvokeViewLoaded(arg);
 
-            Guid operationGuid = _storage.GetValue<Guid>(KnownKeys.OperationGuid, false);
             ReportKind kind = _storage.GetValue<ReportKind>(KnownKeys.ReportKind, false);
 
             if (kind == ReportKind.DetailedPerProgram || kind == ReportKind.DetailedPerProgramWithValkyrie)
@@ -56,23 +53,12 @@ namespace FAT.Application.Models
                      
             IsBusy = true;
 
-            var task = Task.Run(async () =>
+            Task.Run(async () =>
             {
-                var res = await _aptService.BuildReportAsync(operationGuid, kind);
+                var res = await _aptService.BuildReportAsync(kind);
                 OnBuildReportCompleted(res);
             });
             
-        }
-
-        protected override void InvokeViewUnloaded(Object arg)
-        {
-            base.InvokeViewUnloaded(arg);
-
-         
-            //if(ReportStream != null)
-            //{
-            //    ReportStream.Close();
-            //}
         }
 
         private void OnBuildReportCompleted(BuildReportResult e)
