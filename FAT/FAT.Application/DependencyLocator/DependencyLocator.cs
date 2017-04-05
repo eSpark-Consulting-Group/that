@@ -24,7 +24,7 @@ namespace FAT.Application
 
             resolver.AllowOverridingRegistrations(true);
             resolver.RegisterSingleton<IDistinctFileHelper,FATFileFilter>();
-            resolver.RegisterSingleton<IReportBuilder, ReportBuilderFAT>();
+            resolver.RegisterSingleton<IReportBuilderFactory, ReportBuilderFactoryFat>();
             resolver.RegisterSingleton<IResultMergeHelper, FatResultMergeHelper>();
         }
     }
