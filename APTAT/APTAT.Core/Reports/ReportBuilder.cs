@@ -24,37 +24,36 @@ namespace APTAT.Core.Reports
         public async Task<ReportFile> BuildReportAsync(ReportData reportData, ReportType reportType, bool saveFile = true)
         {
             ReportFile reportFile = new ReportFile();
-            ReportFile BuildReport()
-            {
-                var reportKey = reportData.OperationUid + "-" + reportType;
-                var reportFromCache = _cache.TryGetReportFromCache(reportKey);
-                if (reportFromCache != null) return reportFromCache;
-
-                var data = CreateReportData(reportData);
-                var reportBytes = Render(data, reportType);
-
-                string fileName = GetFileName(reportType);
-                var path = Path.Combine(Settings.Default.ReportFolder, fileName);
-
-                if (saveFile)
-                {
-                    var directoryInfo = (new FileInfo(path)).Directory;
-                    directoryInfo?.Create();
-
-
-                    using (FileStream fs = new FileStream(path, FileMode.Create))
-                    {
-                        fs.Write(reportBytes, 0, reportBytes.Length);
-                    }
-                    _cache.Add(reportKey, fileName);
-                }
-
-                return new ReportFile { FileName = path, DocumentBytes = reportBytes };
-            }
 
             try
             {
-                return await Task.Factory.StartNew(BuildReport);
+                return await Task.Factory.StartNew(() =>
+                {
+                    var reportKey = reportData.OperationUid + "-" + reportType;
+                    var reportFromCache = _cache.TryGetReportFromCache(reportKey);
+                    if (reportFromCache != null) return reportFromCache;
+
+                    var data = CreateReportData(reportData);
+                    var reportBytes = Render(data, reportType);
+
+                    string fileName = GetFileName(reportType);
+                    var path = Path.Combine(Settings.Default.ReportFolder, fileName);
+
+                    if (saveFile)
+                    {
+                        var directoryInfo = (new FileInfo(path)).Directory;
+                        directoryInfo?.Create();
+
+
+                        using (FileStream fs = new FileStream(path, FileMode.Create))
+                        {
+                            fs.Write(reportBytes, 0, reportBytes.Length);
+                        }
+                        _cache.Add(reportKey, fileName);
+                    }
+
+                    return new ReportFile { FileName = path, DocumentBytes = reportBytes };
+                });
             }
             catch (Exception ex)
             {
