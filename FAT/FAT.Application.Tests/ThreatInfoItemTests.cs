@@ -232,7 +232,10 @@ namespace FAT.Application.Tests
 
         [Theory]
         [InlineData(UiFinalVerdict.Clean, "cf23df2207d99a74fbe169e3eba035e633b65d94")]
-        public void UpdateVerdictForCleanFiles(UiFinalVerdict verdict, string sha1)
+        [InlineData(UiFinalVerdict.Malware, "cf23df2207d99a74fbe169e3eba035e633b65d94")]
+        [InlineData(UiFinalVerdict.Unknown, "cf23df2207d99a74fbe169e3eba035e633b65d94")]
+        [InlineData(UiFinalVerdict.NotAnalyzed, "cf23df2207d99a74fbe169e3eba035e633b65d94")]
+        public void UpdateVerdictForFiles(UiFinalVerdict verdict, string sha1)
         {
             var computer = Mock.Create<IComputer>(Behavior.Strict);
             var file = Mock.Create<IThreatInfoItem>(Behavior.Strict);
@@ -241,7 +244,13 @@ namespace FAT.Application.Tests
             var scanCounterDiff = Mock.Create<IScanCounterDiff>(Behavior.Strict);
 
             Mock.Arrange(() => scanCounterDiff.CleanDiff).Returns(Arg.AnyInt);
-            Mock.ArrangeSet(() => scanCounterDiff.CleanDiff = Arg.Matches<int>(_ => _ == 1)).MustBeCalled();
+            Mock.ArrangeSet(() => scanCounterDiff.CleanDiff = Arg.Matches<int>(_ => _ == 1));
+            Mock.Arrange(() => scanCounterDiff.MalwareDiff).Returns(Arg.AnyInt);
+            Mock.ArrangeSet(() => scanCounterDiff.MalwareDiff = Arg.Matches<int>(_ => _ == 1));
+            Mock.Arrange(() => scanCounterDiff.UnknownDiff).Returns(Arg.AnyInt);
+            Mock.ArrangeSet(() => scanCounterDiff.UnknownDiff = Arg.Matches<int>(_ => _ == 1));
+            Mock.Arrange(() => scanCounterDiff.NotAnalyzedDiff).Returns(Arg.AnyInt);
+            Mock.ArrangeSet(() => scanCounterDiff.NotAnalyzedDiff = Arg.Matches<int>(_ => _ == 1));
             Mock.Arrange(() => scanCounterDiff.InProgressDiff).Returns(Arg.AnyInt);
             Mock.ArrangeSet(() => scanCounterDiff.InProgressDiff = Arg.Matches<int>(_ => _ == -1)).MustBeCalled();
 
@@ -264,16 +273,18 @@ namespace FAT.Application.Tests
             Mock.Arrange(() => file.IsComputer).Returns(false);
             Mock.Arrange(() => file.FinalVerdict).Returns(() => !verdictUpdated ? UiFinalVerdict.InProgress : verdict);
             Mock.Arrange(() => file.UpdateFileVerdict(Arg.Matches<IFileVerdictContext>(_ => ReferenceEquals(_, context)))).DoInstead(() => verdictUpdated = true).Returns(true).MustBeCalled();
-            Mock.Arrange(() => badFile.Sha1).Returns(sha1);
-            Mock.Arrange(() => badFile.Cloud).Returns(Arg.IsAny<CloudVerdict>);
+            Mock.Arrange(() => badFile.Sha1).Returns(sha1);       
 
             target.AddFile(file);
             //act
             target.UpdateVerdictForFiles(new[] { context }, scanCounterDiff);
 
-            //Mock.Assert(() => scanCounterDiff);
-            //Mock.Assert(() => file);
-            Assert.Equal(1, target.CleanFilesCount);
+            Mock.Assert(scanCounterDiff);
+            Mock.Assert(file);
+            Assert.Equal(Convert.ToInt32(verdict == UiFinalVerdict.Clean), target.CleanFilesCount);
+            Assert.Equal(Convert.ToInt32(verdict == UiFinalVerdict.Malware), target.MalwareFilesCount);
+            Assert.Equal(Convert.ToInt32(verdict == UiFinalVerdict.Unknown), target.UnknownFilesCount);
+            Assert.Equal(Convert.ToInt32(verdict == UiFinalVerdict.NotAnalyzed), target.NotAnalyzedFilesCount);
             Assert.Equal(0, target.PendingFilesCount);
         }
     }
