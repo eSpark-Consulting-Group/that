@@ -838,16 +838,31 @@ namespace FAT.Application.Models
             }
             if (anyUpdated)
             {
-                CleanFilesCount += cleanDiff;
-                scanCounterDiff.CleanDiff += cleanDiff;
-                UnknownFilesCount += unknownDiff;
-                scanCounterDiff.UnknownDiff += unknownDiff;
-                MalwareFilesCount += malwareDiff;
-                scanCounterDiff.MalwareDiff += malwareDiff;
-                NotAnalyzedFilesCount += notAnalyzedDiff;
-                scanCounterDiff.NotAnalyzedDiff += notAnalyzedDiff;
-                PendingFilesCount += inAnalysizDiff;
-                scanCounterDiff.InProgressDiff += inAnalysizDiff;
+                if (cleanDiff != 0)
+                {
+                    CleanFilesCount += cleanDiff;
+                    scanCounterDiff.CleanDiff += cleanDiff;
+                }
+                if (unknownDiff != 0)
+                {
+                    UnknownFilesCount += unknownDiff;
+                    scanCounterDiff.UnknownDiff += unknownDiff;
+                }
+                if (malwareDiff != 0)
+                {
+                    MalwareFilesCount += malwareDiff;
+                    scanCounterDiff.MalwareDiff += malwareDiff;
+                }
+                if (notAnalyzedDiff != 0)
+                {
+                    NotAnalyzedFilesCount += notAnalyzedDiff;
+                    scanCounterDiff.NotAnalyzedDiff += notAnalyzedDiff;
+                }
+                if (inAnalysizDiff != 0)
+                {
+                    PendingFilesCount += inAnalysizDiff;
+                    scanCounterDiff.InProgressDiff += inAnalysizDiff;
+                }
             }
             if (shouldUpdateStatus)
             {

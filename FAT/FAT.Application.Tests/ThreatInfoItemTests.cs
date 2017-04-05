@@ -229,5 +229,52 @@ namespace FAT.Application.Tests
             Assert.Equal(probability, target.MalwareProbabilityValue);
             Assert.Equal(verdict, target.ValkyrieVerdict);
         }
+
+        [Theory]
+        [InlineData(UiFinalVerdict.Clean, "cf23df2207d99a74fbe169e3eba035e633b65d94")]
+        public void UpdateVerdictForCleanFiles(UiFinalVerdict verdict, string sha1)
+        {
+            var computer = Mock.Create<IComputer>(Behavior.Strict);
+            var file = Mock.Create<IThreatInfoItem>(Behavior.Strict);
+            var badFile = Mock.Create<IBadFileItem>(Behavior.Strict);
+            var context = Mock.Create<IFileVerdictContext>(Behavior.Strict);
+            var scanCounterDiff = Mock.Create<IScanCounterDiff>(Behavior.Strict);
+
+            Mock.Arrange(() => scanCounterDiff.CleanDiff).Returns(Arg.AnyInt);
+            Mock.ArrangeSet(() => scanCounterDiff.CleanDiff = Arg.Matches<int>(_ => _ == 1)).MustBeCalled();
+            Mock.Arrange(() => scanCounterDiff.InProgressDiff).Returns(Arg.AnyInt);
+            Mock.ArrangeSet(() => scanCounterDiff.InProgressDiff = Arg.Matches<int>(_ => _ == -1)).MustBeCalled();
+
+            Mock.Arrange(() => computer.Name).Returns(Arg.AnyString);
+            Mock.Arrange(() => computer.DnsName).Returns(Arg.AnyString);
+            Mock.Arrange(() => computer.IPAddress).Returns(Arg.AnyString);
+            Mock.Arrange(() => computer.IsOnline).Returns(Arg.AnyBool);
+            Mock.Arrange(() => computer.IsLocalComputer).Returns(Arg.AnyBool);
+            Mock.Arrange(() => computer.Uid).Returns(Arg.AnyGuid);
+            Mock.Arrange(() => computer.LdapPath).Returns(Arg.AnyString);
+
+            Mock.Arrange(() => context.Sha1).Returns(sha1);
+
+            ThreatInfoItem target = new ThreatInfoItem(computer);
+            target.PendingFilesCount = 1;
+            bool verdictUpdated = false;
+
+            Mock.ArrangeSet(() => file.Parent = Arg.IsAny<IThreatInfoItem>());
+            Mock.Arrange(() => file.BadFile).Returns(badFile);
+            Mock.Arrange(() => file.IsComputer).Returns(false);
+            Mock.Arrange(() => file.FinalVerdict).Returns(() => !verdictUpdated ? UiFinalVerdict.InProgress : verdict);
+            Mock.Arrange(() => file.UpdateFileVerdict(Arg.Matches<IFileVerdictContext>(_ => ReferenceEquals(_, context)))).DoInstead(() => verdictUpdated = true).Returns(true).MustBeCalled();
+            Mock.Arrange(() => badFile.Sha1).Returns(sha1);
+            Mock.Arrange(() => badFile.Cloud).Returns(Arg.IsAny<CloudVerdict>);
+
+            target.AddFile(file);
+            //act
+            target.UpdateVerdictForFiles(new[] { context }, scanCounterDiff);
+
+            //Mock.Assert(() => scanCounterDiff);
+            //Mock.Assert(() => file);
+            Assert.Equal(1, target.CleanFilesCount);
+            Assert.Equal(0, target.PendingFilesCount);
+        }
     }
 }
