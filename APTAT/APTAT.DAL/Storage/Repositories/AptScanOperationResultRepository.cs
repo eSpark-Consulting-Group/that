@@ -43,15 +43,16 @@ namespace APTAT.Core.Storage.Repositories
 
         public static Expression<Func<AptScanOperationResult, bool>> SearchByKeyword(string keyword)
         {
-            return result => result.AptScanResults.Any(r => r.ComputerName.Contains(keyword)
-                     || r.Modules.Any(m => m.Name.Contains(keyword)));
+            return result => result.AptScanResults.Any(r => r.ComputerName.ToLower().Contains(keyword)
+                     || r.IpAddress.ToLower().Contains(keyword)
+                     || r.Modules.Any(m => m.Name.ToLower().Contains(keyword)));
         }
 
         public IAptScanOperationDTO[] Search(string keyword)
         {
             var results = string.IsNullOrEmpty(keyword) ? 
                 DbContext.AptScanOperaionResults : 
-                DbContext.AptScanOperaionResults.Where(SearchByKeyword(keyword));
+                DbContext.AptScanOperaionResults.Where(SearchByKeyword(keyword.ToLower()));
 
             var query = from i in results
 
