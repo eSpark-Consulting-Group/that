@@ -1,22 +1,17 @@
 ﻿
 using System;
-using System.IO;
-using System.Windows;
 using APTAT.Application.Services;
+using System.Threading.Tasks;
 
 namespace APTAT.Application.Models
 {
     public class ReportViewModel : ViewModel
     {
         public event EventHandler ReportOpened;
-        
 
-        private IStorageService _storage;
-        private IAptService _aptService;
+        private readonly IStorageService _storage;
+        private readonly IAptService _aptService;
         private String _header = String.Empty;
-
-        //public Stream ReportStream { get; set; }
-
         public String FileName { get; set; }
 
         public String Header
@@ -38,69 +33,47 @@ namespace APTAT.Application.Models
         protected override void InvokeViewLoaded(Object arg)
         {
             base.InvokeViewLoaded(arg);
-            
+
             ReportKind kind = _storage.GetValue<ReportKind>(KnownKeys.ReportKind, false);
 
-            if(kind == ReportKind.DetailedPerProgram || kind == ReportKind.DetailedPerProgramWithValkyrie)
+            if (kind == ReportKind.DetailedPerProgram || kind == ReportKind.DetailedPerProgramWithValkyrie)
             {
                 Header = "Detailed Per-Program Report";
             }
-            else if(kind == ReportKind.DetailedPerDevice || kind == ReportKind.DetailedPerDeviceWithValkyrie)
+            else if (kind == ReportKind.DetailedPerDevice || kind == ReportKind.DetailedPerDeviceWithValkyrie)
             {
                 Header = "Detailed Per-Device Report";
             }
-            else if(kind == ReportKind.Executive || kind == ReportKind.ExecutiveWithValkyrie)
+            else if (kind == ReportKind.Executive || kind == ReportKind.ExecutiveWithValkyrie)
             {
                 Header = "Executive Report";
             }
 
-            _aptService.BuildReportCompleted += OnBuildReportCompleted;
             IsBusy = true;
-            _aptService.BuildReport(kind, this);
+
+            Task.Run(async () =>
+            {
+                var res = await _aptService.BuildReportAsync(kind);
+                OnBuildReportCompleted(res);
+            });
         }
 
-        protected override void InvokeViewUnloaded(Object arg)
+        private void OnBuildReportCompleted(BuildReportResult e)
         {
-            base.InvokeViewUnloaded(arg);
 
-            _aptService.BuildReportCompleted -= OnBuildReportCompleted;
-
-            //if(ReportStream != null)
-            //{
-            //    ReportStream.Close();
-            //}
-        }
-
-        private void OnBuildReportCompleted(Object sender, BuildReportCompletedEventArgs e)
-        {
-            
             IsBusy = false;
-            if(e.Exception != null)
+            if (e.Exception != null)
             {
                 if (e.Exception is OutOfMemoryException)
                 {
                     Error = e.Exception.Message;
                     HasErrors = true;
                 }
-                
+
                 return;
             }
 
-           // MessageBox.Show(e.FileName);
-
-
-            //try
-            //{
-                FileName = e.FileName;
-            //ReportStream = File.Open(e.FileName, FileMode.Open);
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.ToString());    
-            //    throw;
-            //}
-
-
+            FileName = e.FileName;
 
             ReportOpened?.Invoke(this, EventArgs.Empty);
         }

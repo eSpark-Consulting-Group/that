@@ -13,6 +13,7 @@ using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using System.Collections.Generic;
 using APTAT.Core.Apt;
 using APTAT.Core.FLS;
+using System.Threading.Tasks;
 
 namespace APTAT.Application.Services
 {
@@ -79,31 +80,28 @@ namespace APTAT.Application.Services
                 ValkyrieAnalyzeCompleted?.Invoke(this,e);
             };
             App.Current.Dispatcher.BeginInvoke(action);
-        }
+        }        
 
-
-
-        public void BuildReport(ReportKind reportKind, Object userState)
+        public async Task<BuildReportResult> BuildReportAsync(ReportKind reportKind)
         {
-            IAptReportBuilder reportBuilder = _manager.GetAptReportBuilder();
-            reportBuilder.ReportCompleted += OnReportCompleted;
-            reportBuilder.BeginLastBuildReport(ToReportType(reportKind),true, userState);
+            var result = await _manager.BuildReportAsync(ToReportType(reportKind), true);
+            return new BuildReportResult(result.FileName, result.DocumentBytes, result.Error);
         }
 
-        private void OnReportCompleted(Object sender, ReportCompletedEventArgs e)
-        {
-            BuildReportCompletedEventArgs args = new BuildReportCompletedEventArgs(e.FileName, e.Error, e.State);
-            if (sender is IAptReportBuilder)
-            {
-                var builder = (IAptReportBuilder) sender;
-                builder.ReportCompleted -= OnReportCompleted;
-            }
-            Action action = () =>
-            {
-                BuildReportCompleted?.Invoke(this,args);                   
-            };
-            App.Current.Dispatcher.BeginInvoke(action);
-        }
+        //private void OnReportCompleted(Object sender, ReportCompletedEventArgs e)
+        //{
+        //    BuildReportCompletedEventArgs args = new BuildReportCompletedEventArgs(e.FileName, e.Error, e.State);
+        //    if (sender is IAptReportBuilder)
+        //    {
+        //        var builder = (IAptReportBuilder) sender;
+        //        builder.ReportCompleted -= OnReportCompleted;
+        //    }
+        //    Action action = () =>
+        //    {
+        //        BuildReportCompleted?.Invoke(this,args);                   
+        //    };
+        //    App.Current.Dispatcher.BeginInvoke(action);
+        //}
 
         public void BeginScan(DeploymentTarget[] targets, Object userState, 
             IDevicesSourceDescription devicesSourceDescription, ScanOptions options)

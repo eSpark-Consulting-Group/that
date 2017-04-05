@@ -10,6 +10,7 @@ using APTAT.Core.Descent.Apt;
 using System.Collections.Generic;
 using APTAT.Core.Apt;
 using APTAT.Core.FLS;
+using System.Threading.Tasks;
 
 namespace APTAT.Application.Services
 {
@@ -147,7 +148,7 @@ namespace APTAT.Application.Services
             IDevicesSourceDescription devicesSourceDescription, ScanOptions options);
         void UpdateFlsPorts(int udpPort, int tcpPort);
         void StopScan(Guid[] items);
-        void BuildReport(ReportKind reportKind, Object userState);
+        Task<BuildReportResult> BuildReportAsync(ReportKind reportKind);
         void BeginValkyrieAnalysis(string login, string password, string camLicenseId, string camUserName, 
             string camPassword, NetworkCredential networkCredential);
         double GetProgressOfOperations(HashSet<Guid> operationUids);

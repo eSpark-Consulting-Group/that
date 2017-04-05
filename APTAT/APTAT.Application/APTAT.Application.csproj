@@ -135,6 +135,7 @@
     <Compile Include="Models\IWizardStepViewModel.cs" />
     <Compile Include="Models\Valkyrie\ValkyrieComputer.cs" />
     <Compile Include="Models\Valkyrie\ValkyrieFile.cs" />
+    <Compile Include="Services\BuildReportResult.cs" />
     <Compile Include="Services\MapperHelper.cs" />
     <Compile Include="SplashWindow.xaml.cs">
       <DependentUpon>SplashWindow.xaml</DependentUpon>

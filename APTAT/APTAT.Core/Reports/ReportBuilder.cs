@@ -33,22 +33,23 @@ namespace APTAT.Core.Reports
                     if (reportFromCache != null) return reportFromCache;
 
                     var data = CreateReportData(reportData);
-
-
-                    byte[] reportBytes = new byte[1];
-                    reportBytes = Render(data, reportType);
+                    var reportBytes = Render(data, reportType);
 
                     string fileName = GetFileName(reportType);
+                    var path = Path.Combine(Settings.Default.ReportFolder, fileName);
+
                     if (saveFile)
                     {
-                        using (FileStream fs = new FileStream(fileName, FileMode.Create))
+                        (new FileInfo(path)).Directory.Create();
+
+
+                        using (FileStream fs = new FileStream(path, FileMode.Create))
                         {
                             fs.Write(reportBytes, 0, reportBytes.Length);
                         }
                         _cache.Add(reportKey, fileName);
                     }
 
-                    var path = Path.Combine(Settings.Default.ReportFolder, fileName);
                     return new ReportFile() { FileName = path, DocumentBytes = reportBytes };
                 };
 
