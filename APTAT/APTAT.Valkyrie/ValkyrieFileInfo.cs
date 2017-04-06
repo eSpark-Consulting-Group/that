@@ -7,14 +7,21 @@ using System.Collections.ObjectModel;
 
 namespace APTAT.Valkyrie
 {
-    public class ValkyrieFileInfo
+    public class ValkyrieFileInfo : IValkyrieFileInfo
     {
-        public ValkyrieFileInfo(string sha1, ValkyrieVerdict previousVerdict)
+        public ValkyrieFileInfo(string sha1, string iP, string path, long size, CloudVerdict cloud, 
+            bool isLocal, ValkyrieVerdict previousVerdict)
         {
             Sha1 = sha1;
             PreviousValkyrieVerdict = previousVerdict;
             Paths = new ReadOnlyCollection<string>(_pathList);
+            Ip = iP;
+            Path = path;
+            Size = size;
+            FlsCloud = cloud;
+            IsLocalComputer = isLocal;
         }
+
         public string Path { get; set; }
         private readonly List<string> _pathList = new List<string>();
         public ReadOnlyCollection<string> Paths { get; }

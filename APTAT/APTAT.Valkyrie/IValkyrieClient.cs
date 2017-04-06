@@ -8,10 +8,10 @@ namespace APTAT.Valkyrie
 {
     public interface IValkyrieClient : IDisposable
     {
-        event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieAnalysisResult>> AnalyzeProgressChanged;
+        event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<IValkyrieAnalysisResult>> AnalyzeProgressChanged;
         event EventHandler<AnalyzeCompletedEventArgs> AnalyzeCompleted;
         event EventHandler<ValkyrieAnalyzeStartedEventArgs> AnalyzeStarted;
-        void AddFilesToAnalyze(List<ValkyrieFileInfo> filesToAnalyze, bool shouldStartImmediately);
+        void AddFilesToAnalyze(List<IValkyrieFileInfo> filesToAnalyze, bool shouldStartImmediately);
         void AnalyzeAsyncCancel(bool cancelledByUser = true);
         void StartAnalyze(ICamRegistration camRegistration, string login, string password, int machineCount,
             NetworkCredential proxyCredential, string productName);
@@ -20,7 +20,7 @@ namespace APTAT.Valkyrie
         void SendEndScanAsync();
         Task SendEndScan();
         void SetBaseUri(Uri uri);
-        void AllowSubmit(Dictionary<string, ValkyrieFileInfo> updatedData);
+        void AllowSubmit(Dictionary<string, IValkyrieFileInfo> updatedData);
         ValkyrieResponse SubmitEmail(string[] addresses);
     }
 }

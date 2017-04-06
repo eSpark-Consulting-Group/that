@@ -23,7 +23,7 @@ namespace FAT.Application
             resolver.Register<IScanCounterManager, ScanCounterManager>();
 
             resolver.AllowOverridingRegistrations(true);
-            resolver.RegisterSingleton<IDistinctFileHelper,FATFileFilter>();
+            resolver.RegisterSingleton<IDistinctFileHelper,FatFileFilter>();
             resolver.RegisterSingleton<IReportBuilderFactory, ReportBuilderFactoryFat>();
             resolver.RegisterSingleton<IResultMergeHelper, FatResultMergeHelper>();
         }

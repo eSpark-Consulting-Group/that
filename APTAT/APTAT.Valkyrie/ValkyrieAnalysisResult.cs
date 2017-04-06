@@ -50,23 +50,17 @@ namespace APTAT.Valkyrie
             return result;
         }
 
-        public ValkyrieAnalysisResult(ValkyrieAnalysisResult valkyrie)
-        {
-            AnalyzeId = valkyrie.AnalyzeId;
-            SHA1 = valkyrie.SHA1;
-            AnalysisDate = valkyrie.AnalysisDate;
-        }
 
         public ValkyrieAnalysisResult(string sha1, ValkyrieVerdict verdict)
         {
-            SHA1 = sha1;
+            Sha1 = sha1;
             Verdict = verdict;
             AnalysisDate = DateTime.UtcNow;
         }
 
         public DateTime AnalysisDate { get; }
         public string AnalyzeId { get; private set; }
-        public string SHA1 { get; }
+        public string Sha1 { get; }
         public bool IsWhiteListed { get; private set; }
         public bool IsSubmitted { get; private set; }
         public DateTime? LastAnalysisDate { get; private set; }

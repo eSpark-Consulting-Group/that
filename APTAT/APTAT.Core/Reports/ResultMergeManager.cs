@@ -46,7 +46,7 @@ namespace APTAT.Core.Reports
             }
         }
 
-        protected override void CalculateStatistics(IModule module, ValkyrieAnalysisResult valkyrieAnalysisResult, Statistics computerStatistics)
+        protected override void CalculateStatistics(IModule module, IValkyrieAnalysisResult valkyrieAnalysisResult, Statistics computerStatistics)
         {
             var final = _calculator.GetFinalVerdict(module.Cloud, valkyrieAnalysisResult.Verdict);
             UpdateStatisticsByFinalVerdict(computerStatistics, final);
@@ -61,7 +61,7 @@ namespace APTAT.Core.Reports
             _calculator = calculator;
         }
 
-        public FilesStatistics MergeResults(IEnumerable<IAptScanResult> flsResults, Dictionary<string, ValkyrieAnalysisResult> valkyrieResults, out IEnumerable<ScannedTarget> mergedTargets,
+        public FilesStatistics MergeResults(IEnumerable<IAptScanResult> flsResults, Dictionary<string, IValkyrieAnalysisResult> valkyrieResults, out IEnumerable<ScannedTarget> mergedTargets,
           out IEnumerable<DetailedBadFile> uniqueBadFiles, out IEnumerable<DetailedBadFile> nonUniqueBadFiles)
         {
             int totalFilesCount = 0;
@@ -88,7 +88,7 @@ namespace APTAT.Core.Reports
 
                 foreach (var module in flsResult.Files)
                 {
-                    ValkyrieAnalysisResult valkyrieAnalysisResult = null;
+                    IValkyrieAnalysisResult valkyrieAnalysisResult = null;
                     if (module.IsBad)
                     {
                         valkyrieResults.TryGetValue(module.Sha1, out valkyrieAnalysisResult);
@@ -223,7 +223,7 @@ namespace APTAT.Core.Reports
             }
         }
 
-        protected virtual void CalculateStatistics(IModule module, ValkyrieAnalysisResult valkyrieResult, Statistics computerStatistics)
+        protected virtual void CalculateStatistics(IModule module, IValkyrieAnalysisResult valkyrieResult, Statistics computerStatistics)
         {
             do
             {

@@ -8,7 +8,7 @@ using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 
 namespace APTAT.Core
 {
-    public class FATFileFilter : DistinctFileHelper
+    public class FatFileFilter : DistinctFileHelper
     {
         public override bool ShouldSendToValkyrie(IFlsResult module)
         {
@@ -24,17 +24,17 @@ namespace APTAT.Core
             return module.Cloud == CloudVerdict.Unknown || module.Cloud == CloudVerdict.FirstSeen;
         }
 
-        public List<ValkyrieFileInfo> GetDistinctFileInfo(IAptScanResult[] results)
+        public List<IValkyrieFileInfo> GetDistinctFileInfo(IAptScanResult[] results)
         {            
             return GetDistinctFileInfoDict(results).Values.ToList();
         }
 
-        public Dictionary<string, ValkyrieFileInfo> GetDistinctFileInfoDict(IAptScanResult[] results)
+        public Dictionary<string, IValkyrieFileInfo> GetDistinctFileInfoDict(IAptScanResult[] results)
         {
             IAptScanResult[] scanResults = results.OrderByDescending(r => r.Computer.IsLocalComputer)
                 .ToArray();
 
-            Dictionary<string, ValkyrieFileInfo> files = new Dictionary<string, ValkyrieFileInfo>(StringComparer.OrdinalIgnoreCase);
+            Dictionary<string, IValkyrieFileInfo> files = new Dictionary<string, IValkyrieFileInfo>(StringComparer.OrdinalIgnoreCase);
             foreach (var scanResult in scanResults)
             {
                 var modules = scanResult.Files.Where(ShouldSendToValkyrie);
@@ -43,14 +43,8 @@ namespace APTAT.Core
                 {
                     if (!files.ContainsKey(badFile.Sha1))
                     {
-                        var val = new ValkyrieFileInfo(badFile.Sha1, ValkyrieVerdict.InQueue)
-                        {
-                            Ip = scanResult.Computer.IPAddress,
-                            Path = badFile.Path,
-                            Size = badFile.Size,
-                            FlsCloud = MapCloud(badFile.Cloud),
-                            IsLocalComputer = scanResult.Computer.IsLocalComputer
-                        };
+                        var val = new ValkyrieFileInfo(badFile.Sha1, scanResult.Computer.IPAddress, badFile.Path, 
+                            badFile.Size, MapCloud(badFile.Cloud), scanResult.Computer.IsLocalComputer, ValkyrieVerdict.InQueue);
                         val.AddFullPath(scanResult.Computer.IPAddress, badFile.Path);
 
                         files.Add(badFile.Sha1, val);
@@ -63,25 +57,25 @@ namespace APTAT.Core
             }
             return files;
         }
-        private static APTAT.Valkyrie.CloudVerdict MapCloud(Descent.Apt.CloudVerdict cloud)
+        private static APTAT.Valkyrie.CloudVerdict MapCloud(CloudVerdict cloud)
         {
             switch (cloud)
             {
-                case Descent.Apt.CloudVerdict.Safe:
+                case CloudVerdict.Safe:
                     return APTAT.Valkyrie.CloudVerdict.Safe;
-                case Descent.Apt.CloudVerdict.Unknown:
+                case CloudVerdict.Unknown:
                     return APTAT.Valkyrie.CloudVerdict.Unknown;
 
-                case Descent.Apt.CloudVerdict.Malware:
+                case CloudVerdict.Malware:
                     return APTAT.Valkyrie.CloudVerdict.Malware;
 
-                case Descent.Apt.CloudVerdict.FirstSeen:
+                case CloudVerdict.FirstSeen:
                     return APTAT.Valkyrie.CloudVerdict.FirstSeen;
 
-                case Descent.Apt.CloudVerdict.FailedToAnalyze:
+                case CloudVerdict.FailedToAnalyze:
                     return APTAT.Valkyrie.CloudVerdict.FailedToAnalyze;
 
-                case Descent.Apt.CloudVerdict.NoVerdict:
+                case CloudVerdict.NoVerdict:
                     return APTAT.Valkyrie.CloudVerdict.NoVerdict;
 
                 default:

@@ -15,7 +15,7 @@ namespace APTAT.Valkyrie
         float? MalwareProbability { get; }
         string OperationStatus { get; }
         ErrorCodesEnum ReturnCode { get; }
-        string SHA1 { get; }
+        string Sha1 { get; }
         string SkipReason { get; }
         SkippReasonEnum SkipReasonEnum { get; }
         ValkyrieVerdict Verdict { get; }

@@ -85,6 +85,7 @@
     <Compile Include="FinalVerdictCalculator.cs" />
     <Compile Include="FLS\IFlsResponse.cs" />
     <Compile Include="IFinalVerdictCalculator.cs" />
+    <Compile Include="IOperationResult.cs" />
     <Compile Include="Reports\Data\AptReportDataFAT.cs" />
     <Compile Include="Reports\Data\AptReportDataValkyrie.cs" />
     <Compile Include="Reports\Data\AptRiskAssessmentLevel.cs" />
@@ -283,6 +284,7 @@
     </Compile>
     <Compile Include="Valkyrie\IValkyrieClientEx.cs" />
     <Compile Include="Valkyrie\ValkyrieClientWithStorage.cs" />
+    <Compile Include="Valkyrie\ValkyrieTrackableInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

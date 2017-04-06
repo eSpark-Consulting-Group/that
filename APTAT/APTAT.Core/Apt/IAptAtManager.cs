@@ -8,6 +8,7 @@ using APTAT.Valkyrie;
 using System.Threading.Tasks;
 using APTAT.Core.Apt;
 using APTAT.Core.FLS;
+using APTAT.Core.Valkyrie;
 using APTAT.DeploymentCore;
 
 namespace APTAT.Core
@@ -24,8 +25,8 @@ namespace APTAT.Core
                 
         int GetDistinctFilesCount();
         IAptVerdictContext[] GetModifiedFileVerdicts(DateTime? modifiedDate);
-        FileResult[] GetModifiedValkyrieVerdicts(DateTime? modifiedDate, Dictionary<string, IModule> modules
-            , out Dictionary<string, ValkyrieAnalysisResult> valkyrieAnalysisResults);
+        IValkyrieTrackableInfo GetModifiedValkyrieVerdicts(DateTime? modifiedDate, Dictionary<string, IModule> modules
+            , out Dictionary<string, IValkyrieAnalysisResult> valkyrieAnalysisResults);
 
         void StopScan(Guid[] targets);
         Task OnAppClosing();
@@ -37,7 +38,7 @@ namespace APTAT.Core
         string GetValkyrieDetailsLink();
         string GetValkyrieDetailsLink(string apiKey, string scanId);
 
-        OperationResult SubmitEmail(string[] addresses);
+        IOperationResult SubmitEmail(string[] addresses);
         Task<ReportFile> BuildReportAsync(ReportType reportType, bool saveFile);        
     }    
 }

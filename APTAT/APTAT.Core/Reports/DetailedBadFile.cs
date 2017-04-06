@@ -86,7 +86,7 @@ namespace APTAT.Core.Reports
             }
         }
 
-        public void SetValkyrieAnalysis(ValkyrieAnalysisResult analysisResult)
+        public void SetValkyrieAnalysis(IValkyrieAnalysisResult analysisResult)
         {
             if (analysisResult == null)
                 return;

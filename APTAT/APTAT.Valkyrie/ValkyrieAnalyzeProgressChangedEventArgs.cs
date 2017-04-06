@@ -7,14 +7,10 @@ namespace APTAT.Valkyrie
         public int Percent { get; }
         public ProgressInfo<T> ProgressInfo { get; }
 
-        public bool IsUpdate { get; }
-
-        public ValkyrieAnalyzeProgressChangedEventArgs(int progressInt, ProgressInfo<T> progressInfo
-            , bool isUpdate = false)
+        public ValkyrieAnalyzeProgressChangedEventArgs(int progressInt, ProgressInfo<T> progressInfo)
         {
             Percent = progressInt;
             ProgressInfo = progressInfo;
-            IsUpdate = isUpdate;
         }
     }
 }

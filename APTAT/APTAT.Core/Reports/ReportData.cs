@@ -9,7 +9,7 @@ namespace APTAT.Core.Reports
         public IResultMergeHelper MergeHelper { get; set; }
         public IAggregatedAptScanResult OperationContext { get; set; }
 
-        public Dictionary<string, ValkyrieAnalysisResult> ValkyrieAnalysisResult { get; set; }
+        public Dictionary<string, IValkyrieAnalysisResult> ValkyrieAnalysisResult { get; set; }
         public string OperationUid { get; set; }
     }
 }

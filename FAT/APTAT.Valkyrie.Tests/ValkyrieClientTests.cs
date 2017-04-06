@@ -295,37 +295,54 @@ namespace APTAT.Valkyrie.Tests
                 ananlyzeProgressChangedCalled = true;
             };
 
-
+            var file1 = Mock.Create<IValkyrieFileInfo>(Behavior.Strict); 
+            Mock.Arrange(() => file1.Path).Returns(@"C:\temp\file1.exe");
+            Mock.Arrange(() => file1.GetFullPath()).Returns(@"C:\temp\file1.exe");
+            Mock.Arrange(() => file1.Sha1).Returns(@"1");
+            Mock.Arrange(() => file1.FlsCloud).Returns(CloudVerdict.Unknown);
+            Mock.Arrange(() => file1.PreviousValkyrieVerdict).Returns(ValkyrieVerdict.Malware);
+            Mock.ArrangeSet(() => file1.PreviousValkyrieVerdict = Arg.IsAny<ValkyrieVerdict>());
+            var file2 = Mock.Create<IValkyrieFileInfo>(Behavior.Strict);
+            Mock.Arrange(() => file2.Path).Returns(@"C:\temp\filew.exe");
+            Mock.Arrange(() => file2.GetFullPath()).Returns(@"C:\temp\file2.exe");
+            Mock.Arrange(() => file2.FlsCloud).Returns(CloudVerdict.Unknown);
+            Mock.Arrange(() => file2.Sha1).Returns(@"2");
+            Mock.Arrange(() => file2.PreviousValkyrieVerdict).Returns(ValkyrieVerdict.InQueue);
+            Mock.ArrangeSet(() => file2.PreviousValkyrieVerdict = Arg.IsAny<ValkyrieVerdict>());
+            var file3 = Mock.Create<IValkyrieFileInfo>(Behavior.Strict);
+            Mock.Arrange(() => file3.Path).Returns(@"C:\temp\file3.exe");
+            Mock.Arrange(() => file3.GetFullPath()).Returns(@"C:\temp\file3.exe");
+            Mock.Arrange(() => file3.FlsCloud).Returns(CloudVerdict.Unknown);
+            Mock.Arrange(() => file3.Sha1).Returns(@"3");
+            Mock.Arrange(() => file3.PreviousValkyrieVerdict).Returns(ValkyrieVerdict.Undetected);
+            Mock.ArrangeSet(() => file3.PreviousValkyrieVerdict = Arg.IsAny<ValkyrieVerdict>());
+            var file4 = Mock.Create<IValkyrieFileInfo>(Behavior.Strict);
+            Mock.Arrange(() => file4.Path).Returns(@"C:\temp\file4.exe");
+            Mock.Arrange(() => file4.GetFullPath()).Returns(@"C:\temp\file4.exe");
+            Mock.Arrange(() => file4.FlsCloud).Returns(CloudVerdict.Unknown);
+            Mock.Arrange(() => file4.Sha1).Returns(@"4");
+            Mock.Arrange(() => file4.PreviousValkyrieVerdict).Returns(ValkyrieVerdict.Undetected);
+            Mock.ArrangeSet(() => file4.PreviousValkyrieVerdict = Arg.IsAny<ValkyrieVerdict>());
             var files = new[] {
-                new ValkyrieFileInfo("1", ValkyrieVerdict.Malware) { Path = @"C:\temp\file1.exe" },
-                new ValkyrieFileInfo("2", ValkyrieVerdict.InQueue) { Path = @"C:\temp\file2.exe" },
-                new ValkyrieFileInfo("3", ValkyrieVerdict.Undetected) { Path = @"C:\temp\file3.exe" },
-                new ValkyrieFileInfo("4", ValkyrieVerdict.Undetected) { Path = @"C:\temp\file4.exe" }
+                file1, file2, file3, file4
             };
-
             
-
             client.StartAnalyze(camRegistration, "user", "test", 1, new System.Net.NetworkCredential(), "FAT");
-            ev.Wait(TimeSpan.FromMilliseconds(1000));
-
-
+            Assert.True(ev.Wait(TimeSpan.FromMilliseconds(3000)));
+            
             ev.Reset();
             client.AddFilesToAnalyze(files.ToList(), true);
-            ev.Wait(TimeSpan.FromMilliseconds(1000));
 
-            int eventCounts = 5;
-            for (int i = 0; i < eventCounts; i++)
-            {
-                ev.Reset();
-                Mock.Raise(() => statusTimer.TimeoutCallback += null, args: new object[] { EventArgs.Empty });
-                ev.Wait(TimeSpan.FromMilliseconds(1000));
-                Mock.Raise(() => progressNotify.TimeoutCallback += null, args: new object[] { EventArgs.Empty });
-            }
+            ev.Reset();
+            Mock.Raise(() => statusTimer.TimeoutCallback += null, args: new object[] { EventArgs.Empty });
+            Thread.Sleep(1000);
+            Mock.Raise(() => progressNotify.TimeoutCallback += null, args: new object[] { EventArgs.Empty });
+
 
 
             //Assert
             Assert.True(ananlyzeProgressChangedCalled);
-            int numbersOfCallsShouldBe = (eventCounts + 1) * files.Count();
+            int numbersOfCallsShouldBe = files.Length;
             var hashes = files.Select(f => f.Sha1).ToArray();
             Mock.Assert(() => apiProviderMock.StartScan(Arg.Matches<StartScanRequest>((s) => s.ApiKey == apiKey)), Occurs.Once());
             Mock.Assert(() => apiProviderMock.GetBasicInfo(Arg.Matches<InfoRequest>((f) => hashes.Contains(f.SHA1))), Occurs.Exactly(numbersOfCallsShouldBe));

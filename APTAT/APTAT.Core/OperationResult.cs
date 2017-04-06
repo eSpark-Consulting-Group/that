@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace APTAT.Core
 {
-    public class OperationResult
+    public class OperationResult : IOperationResult
     {
         public Exception Error { get; set; }
         public bool IsSucceeded { get; set; }

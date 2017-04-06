@@ -10,8 +10,8 @@ namespace APTAT.Core
 {
     public class FileResult : IEquatable<FileResult>
     {
-        private ValkyrieAnalysisResult _valkyrieAnalysisResult;
-        public FileResult(IModule badFile, ValkyrieAnalysisResult valkyrieAnalysisResult)
+        private IValkyrieAnalysisResult _valkyrieAnalysisResult;
+        public FileResult(IModule badFile, IValkyrieAnalysisResult valkyrieAnalysisResult)
         {
             Computers = new List<ComputerInformation>();
             Module = badFile;
@@ -22,7 +22,7 @@ namespace APTAT.Core
 
         public IModule Module { get; }
 
-        public ValkyrieAnalysisResult ValkyrieAnalysisResult
+        public IValkyrieAnalysisResult ValkyrieAnalysisResult
         {
             get { return _valkyrieAnalysisResult; }
             private set

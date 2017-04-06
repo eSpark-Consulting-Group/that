@@ -24,8 +24,7 @@ namespace APTAT.Core.Reports
             TargetsNotPerformed = reportData.OperationContext.NotPerformedTargetsCount;
             TotalTargetsCount = reportData.OperationContext.TotalTargetsCount;
             TargetsSucceeded = reportData.OperationContext.SucceededTargetsCount;
-            ValkyrieAnalysisResult = reportData.ValkyrieAnalysisResult
-                    .ToDictionary(k => k.Key, k => k.Value, StringComparer.OrdinalIgnoreCase);
+            ValkyrieAnalysisResult = reportData.ValkyrieAnalysisResult;
             DevicesSourceDescription = reportData.OperationContext.DeviceSourceDescription;
             SetTargets(reportData.OperationContext.ScanResults.ToArray());
             
@@ -402,7 +401,7 @@ namespace APTAT.Core.Reports
 
 
         protected void MergeResults(IEnumerable<IAptScanResult> flsResults,
-         Dictionary<string, ValkyrieAnalysisResult> valkyrieResults, out IEnumerable<ScannedTarget> mergedTargets,
+         Dictionary<string, IValkyrieAnalysisResult> valkyrieResults, out IEnumerable<ScannedTarget> mergedTargets,
          out IEnumerable<DetailedBadFile> uniqueBadFiles, out IEnumerable<DetailedBadFile> nonUniqueBadFiles)
         {
             if (_mergedScanResultsCache != null)
@@ -474,7 +473,7 @@ namespace APTAT.Core.Reports
             public IEnumerable<DetailedBadFile> MergeNonUniqueResults { get; set; }
         }
 
-        public Dictionary<string, ValkyrieAnalysisResult> ValkyrieAnalysisResult { get; set; }
+        public Dictionary<string, IValkyrieAnalysisResult> ValkyrieAnalysisResult { get; set; }
         public Guid FlsLookupOperationUid { get; set; }
 
     }

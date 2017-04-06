@@ -28,19 +28,19 @@ namespace APTAT.Core.Valkyrie
 
         #region IValkyrieClient
 
-        public event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieAnalysisResult>> AnalyzeProgressChanged;
+        public event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<IValkyrieAnalysisResult>> AnalyzeProgressChanged;
         public event EventHandler<AnalyzeCompletedEventArgs> AnalyzeCompleted;
         public event EventHandler<ValkyrieAnalyzeStartedEventArgs> AnalyzeStarted;
 
-        public void AddFilesToAnalyze(List<ValkyrieFileInfo> filesToAnalyze, bool shouldStartImmediately)
+        public void AddFilesToAnalyze(List<IValkyrieFileInfo> filesToAnalyze, bool shouldStartImmediately)
         {
             if(_valkyrieScanId.HasValue)
-                _storage.SaveValkyrieResults(_valkyrieScanId.Value, 
-                    filesToAnalyze.Select(f => new ValkyrieAnalysisResult(f.Sha1, APTAT.Valkyrie.ValkyrieVerdict.InQueue)).ToArray());
+                _storage.SaveValkyrieResults(_valkyrieScanId.Value, filesToAnalyze.Select(f => 
+                (IValkyrieAnalysisResult) new ValkyrieAnalysisResult(f.Sha1, APTAT.Valkyrie.ValkyrieVerdict.InQueue)).ToArray());
             _valkyrieClient.AddFilesToAnalyze(filesToAnalyze, shouldStartImmediately);
         }
 
-        public void AllowSubmit(Dictionary<string, ValkyrieFileInfo> updatedData)
+        public void AllowSubmit(Dictionary<string, IValkyrieFileInfo> updatedData)
         {
             _valkyrieClient.AllowSubmit(updatedData);
         }
@@ -119,13 +119,10 @@ namespace APTAT.Core.Valkyrie
             AnalyzeCompleted?.Invoke(sender, e);
         }
 
-        private void OnAnalyzeProgressChanged(object sender, ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieAnalysisResult> e)
+        private void OnAnalyzeProgressChanged(object sender, ValkyrieAnalyzeProgressChangedEventArgs<IValkyrieAnalysisResult> e)
         {
             if (_valkyrieScanId.HasValue)
-                if (e.IsUpdate)
-                    _storage.UpdateValkyrieResult(_valkyrieScanId.Value, e.ProgressInfo.Results);
-                else
-                    _storage.SaveValkyrieResults(_valkyrieScanId.Value, e.ProgressInfo.Results);
+                    _storage.SaveOrUpdateValkyrieResult(_valkyrieScanId.Value, e.ProgressInfo.Results);
             AnalyzeProgressChanged?.Invoke(sender, e);
         }
 

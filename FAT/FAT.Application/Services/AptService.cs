@@ -239,14 +239,15 @@ namespace FAT.Application.Services
             }
 
             var files = _manager.GetModifiedFileVerdicts(lastFlcUtcTime);
-            Dictionary<string, ValkyrieAnalysisResult> valkyrieAnalysisResults;
+            Dictionary<string, IValkyrieAnalysisResult> valkyrieAnalysisResults;
             var valkyrieResult = _manager.GetModifiedValkyrieVerdicts(lastValkyrieTime, modules, out valkyrieAnalysisResults);
             List<IFileVerdictContext> mappedFiles = files
                 .Select(r => new FileVerdictContext(r.Sha1, r.Cloud, r.ModifiedDateTime)).OfType<IFileVerdictContext>().ToList();
-            mappedFiles.AddRange(valkyrieResult.Select(vr =>
-                new FileVerdictContext(vr.Sha1, vr.ValkyrieAnalysisResult, vr.VerdictModified)));
+            if (valkyrieResult.LastModifiedDate.HasValue)
+                mappedFiles.AddRange(valkyrieResult.Results.Select(vr =>
+                    new FileVerdictContext(vr.Sha1, vr, valkyrieResult.LastModifiedDate.Value)));
             mappedFiles.AddRange(valkyrieAnalysisResults.Values.Select(vr =>
-                new FileVerdictContext(vr.SHA1, vr, DateTime.MinValue)));
+                new FileVerdictContext(vr.Sha1, vr, DateTime.MinValue)));
             return new GetModifiedResultsForOperationEventArgs(mappedResult.ToArray(), mappedFiles.ToArray(), completed);
         }
         
@@ -328,7 +329,7 @@ namespace FAT.Application.Services
             return _manager.GetValkyrieDetailsLink(apiKey, scanId);
         }
 
-        public OperationResult SubmitEmail(string[] addresses)
+        public IOperationResult SubmitEmail(string[] addresses)
         {
             lock (this)
             {
@@ -395,8 +396,6 @@ namespace FAT.Application.Services
             }
         }
         #endregion
-
-
         #region IDisposable
         public void Dispose()
         {

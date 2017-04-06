@@ -28,15 +28,15 @@ namespace APTAT.Valkyrie
         private readonly string _endpointId;
         private string[] _emails = null;
 
-        private readonly ConcurrentDictionary<string, ValkyrieAnalysisResult> _pendingItemsResolved
-            = new ConcurrentDictionary<string, ValkyrieAnalysisResult>(StringComparer.OrdinalIgnoreCase);
+        private readonly ConcurrentDictionary<string, IValkyrieAnalysisResult> _pendingItemsResolved
+            = new ConcurrentDictionary<string, IValkyrieAnalysisResult>(StringComparer.OrdinalIgnoreCase);
 
         private readonly Dictionary<string, ValkyrieAnalyseOperationContext> _automaticAnalyseInProgressByHash
             = new Dictionary<string, ValkyrieAnalyseOperationContext>(StringComparer.OrdinalIgnoreCase);
         private readonly Object _automaticAnalyseSync = new object();
         private string _aptScanId;
         private readonly Object _aptScanIdLock = new object();
-        private readonly HashSet<ValkyrieFileInfo> _lookupContexts = new HashSet<ValkyrieFileInfo>();
+        private readonly HashSet<IValkyrieFileInfo> _lookupContexts = new HashSet<IValkyrieFileInfo>();
 
         private readonly Object _lookupSync = new object();
         private bool _isMainScanFinished = true;
@@ -50,12 +50,12 @@ namespace APTAT.Valkyrie
 
         bool _submitAllowed;
 
-        public event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieAnalysisResult>> AnalyzeProgressChanged;
+        public event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<IValkyrieAnalysisResult>> AnalyzeProgressChanged;
         public event EventHandler<AnalyzeCompletedEventArgs> AnalyzeCompleted;
         public event EventHandler<ValkyrieAnalyzeStartedEventArgs> AnalyzeStarted;
 
         private readonly IValkyrieWebApiProvider _provider;
-        private Dictionary<string, ValkyrieFileInfo> _filesToSubmit;
+        private Dictionary<string, IValkyrieFileInfo> _filesToSubmit;
 
         public ValkyrieClient(IMachineKeyProvider machineKeyProvider, IValkyrieWebApiProvider provider, IScheduler progressNotifyTimer, IScheduler checkStatusTimer)
         {
@@ -68,13 +68,13 @@ namespace APTAT.Valkyrie
             _checkStatusesTimer.TimeoutCallback += CheckStatusesTimerCallback;
         }
 
-        public void AllowSubmit(Dictionary<string, ValkyrieFileInfo> updatedData)
+        public void AllowSubmit(Dictionary<string, IValkyrieFileInfo> updatedData)
         {
             _filesToSubmit = updatedData;
             _submitAllowed = true;
             Task.Factory.StartNew(() => CheckStatusesTimerCallback(this, null));
         }
-        public void AddFilesToAnalyze(List<ValkyrieFileInfo> filesToAnalyze, bool shouldStartImmediately)
+        public void AddFilesToAnalyze(List<IValkyrieFileInfo> filesToAnalyze, bool shouldStartImmediately)
         {
             if (!filesToAnalyze.Any()) return;
             lock (_lookupSync)
@@ -142,7 +142,7 @@ namespace APTAT.Valkyrie
             _progressNotifyTimer.Stop();
             if (_isMainScanFinished)
             {
-                OnAnalyzeProgressChanged(_pendingItemsResolved, true);
+                OnAnalyzeProgressChanged(_pendingItemsResolved);
             }
             _progressNotifyTimer.Start();
         }
@@ -164,20 +164,23 @@ namespace APTAT.Valkyrie
                 _checkStatusesTimer.SetInterval(TimeSpan.FromMilliseconds(_changeTrakingIntervalInMs));
             }
             var waitNextInterval = false;
-            if (_aptScanId == null)
+            if (!_isMainScanFinished)
+                waitNextInterval = true;
+            else if (_aptScanId == null )
             {
-                lock (_aptScanIdLock)
-                {
-                    if (_aptScanId != null)
-                        waitNextInterval = true;
-                }
+                    lock (_aptScanIdLock)
+                    {
+                        if (_aptScanId == null)
+                            waitNextInterval = true;
+                    }
             }
+            CancellationToken cancellationToken = _cancellationTokenSource.Token;
             if (!waitNextInterval)
             {
-                CheckNewStatusesOnValkyrie();
+                CheckNewStatusesOnValkyrie(cancellationToken);
             }
             var resetTimerImmediately = false;
-            if (_cancellationTokenSource.IsCancellationRequested)
+            if (cancellationToken.IsCancellationRequested)
             {
                 lock (_lookupSync)
                 {
@@ -201,10 +204,9 @@ namespace APTAT.Valkyrie
             }
         }
 
-        private void CheckNewStatusesOnValkyrie()
+        private void CheckNewStatusesOnValkyrie(CancellationToken cancellationToken)
         {
-            var cancellationToken = _cancellationTokenSource.Token;
-            List<ValkyrieFileInfo> filesToAnalyze;
+            List<IValkyrieFileInfo> filesToAnalyze;
             lock (_lookupSync)
             {
                 filesToAnalyze = _lookupContexts.ToList();
@@ -239,7 +241,7 @@ namespace APTAT.Valkyrie
             }
         }
 
-        private void MergeResult(ValkyrieAnalysisResult result, ValkyrieFileInfo fileInfo, CancellationToken cancellationToken)
+        private void MergeResult(IValkyrieAnalysisResult result, IValkyrieFileInfo fileInfo, CancellationToken cancellationToken)
         {
             if (!result.IsSubmitted && (result.Verdict == ValkyrieVerdict.FirstSeen ||
                     result.Verdict == ValkyrieVerdict.Undetected || result.Verdict == ValkyrieVerdict.Pending))
@@ -250,11 +252,11 @@ namespace APTAT.Valkyrie
             if (result.Verdict != fileInfo.PreviousValkyrieVerdict)
             {
                 fileInfo.PreviousValkyrieVerdict = result.Verdict;
-                _pendingItemsResolved.TryAdd(result.SHA1, result);
+                _pendingItemsResolved.TryAdd(result.Sha1, result);
             }
         }
 
-        private void AddLookupContext(ValkyrieFileInfo fileInfo, ValkyrieVerdict previousVerdict, CancellationToken cancellationToken)
+        private void AddLookupContext(IValkyrieFileInfo fileInfo, ValkyrieVerdict previousVerdict, CancellationToken cancellationToken)
         {
             if (!cancellationToken.IsCancellationRequested)
                 lock (_lookupSync)
@@ -292,7 +294,7 @@ namespace APTAT.Valkyrie
         }
 
 
-        private void SubmitToAutomaticAnalysis(List<ValkyrieFileInfo> badFiles, CancellationToken cancellationToken)
+        private void SubmitToAutomaticAnalysis(List<IValkyrieFileInfo> badFiles, CancellationToken cancellationToken)
         {
             var endpointId = _endpointId;
             ParallelOptions opt = new ParallelOptions
@@ -305,7 +307,7 @@ namespace APTAT.Valkyrie
             });
         }
 
-        private void GetValkyrieVerdictForOneFile(ValkyrieFileInfo f, string endpointId, CancellationToken cancellationToken)
+        private void GetValkyrieVerdictForOneFile(IValkyrieFileInfo f, string endpointId, CancellationToken cancellationToken)
         {
             try
             {
@@ -315,7 +317,7 @@ namespace APTAT.Valkyrie
             }
             catch (Exception e)
             {
-                ValkyrieAnalysisResult result = null;
+                IValkyrieAnalysisResult result = null;
                 if (e is WebException && e.Message == "The request was aborted: The request was canceled.")
                 {
                     result = ValkyrieAnalysisResult.CreateSkipInfo(f.Sha1, "The request was canceled by user",
@@ -373,16 +375,19 @@ namespace APTAT.Valkyrie
             }
 
             Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : Scan Completed for API_KEY = {_apiKey}");
+
+            _pendingItemsResolved.Clear();
+
+            var cancellationTokenSource = new CancellationTokenSource();
+            _cancellationTokenSource = cancellationTokenSource;
             _isMainScanFinished = true;
             AnalyzeCompleted?.Invoke(this, new AnalyzeCompletedEventArgs(exception, task.IsCanceled, task.AsyncState));
-            lock (_checkStatusesTimer)
-            {
-                _checkStatusesTimer.Start();
-            }
+
+            Task.Factory.StartNew(() => CheckStatusesTimerCallback(this, null));
 
         }
 
-        private void OnAnalyzeProgressChanged(ConcurrentDictionary<string, ValkyrieAnalysisResult> items, bool isUpdate = false)
+        private void OnAnalyzeProgressChanged(ConcurrentDictionary<string, IValkyrieAnalysisResult> items)
         {
             if (items.Count == 0) return;
 
@@ -402,12 +407,12 @@ namespace APTAT.Valkyrie
 
                 foreach (var item in newResults)
                 {
-                    ValkyrieAnalysisResult result;
-                    items.TryRemove(item.SHA1, out result);
+                    IValkyrieAnalysisResult result;
+                    items.TryRemove(item.Sha1, out result);
                 }
                 tmp(this,
-                    new ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieAnalysisResult>(progressInt,
-                         new ProgressInfo<ValkyrieAnalysisResult>(_filesCount, _fileScanned, newResults), isUpdate));
+                    new ValkyrieAnalyzeProgressChangedEventArgs<IValkyrieAnalysisResult>(progressInt,
+                         new ProgressInfo<IValkyrieAnalysisResult>(_filesCount, _fileScanned, newResults)));
 
             }
         }
@@ -417,9 +422,9 @@ namespace APTAT.Valkyrie
             AnalyzeStarted?.Invoke(this, new ValkyrieAnalyzeStartedEventArgs(apiKey, scanId));
         }
 
-        private ValkyrieAnalysisResult UploadFile(ValkyrieFileInfo fileInfo, string endpointId, CancellationToken cancellationToken)
+        private IValkyrieAnalysisResult UploadFile(IValkyrieFileInfo fileInfo, string endpointId, CancellationToken cancellationToken)
         {
-            ValkyrieAnalysisResult result = null;
+            IValkyrieAnalysisResult result = null;
 
             try
             {
@@ -429,8 +434,8 @@ namespace APTAT.Valkyrie
                 {
                     return CancelOperation(originalFilePath, sha1);
                 }
-
-                var infoRequeast = new InfoRequest(sha1: sha1, apiKey: _apiKey, endpointId: endpointId, aptScanId: _aptScanId, path: fileInfo.Path);
+                var infoRequeast = new InfoRequest(sha1: sha1, apiKey: _apiKey, endpointId: endpointId,
+                    aptScanId: _aptScanId, path: fileInfo.Path);
                 BasicInfoResponse basicInfo = _provider.GetBasicInfo(infoRequeast);
                 if (basicInfo.ReturnCode != ErrorCodesEnum.Success)
                     throw new InvalidOperationException(basicInfo.ReturnCode.GetEnumDescription());
@@ -499,7 +504,7 @@ namespace APTAT.Valkyrie
                             }
                             response = _provider.SubmitToAutomaticAnalysis(request, fStream, cancellationToken, fileName);
 
-                            ValkyrieFileInfo fileInfoNew = null;
+                            IValkyrieFileInfo fileInfoNew = null;
                             if (_filesToSubmit != null && _filesToSubmit.ContainsKey(fileInfo.Sha1))
                             {
                                 fileInfoNew = _filesToSubmit[fileInfo.Sha1];
@@ -612,20 +617,20 @@ namespace APTAT.Valkyrie
         {
             _machineCount = machineCount;
             _fileScanned = 0;
-            var cancellationTokenSource = new CancellationTokenSource();
-            var cancellationToken = cancellationTokenSource.Token;
             _filesCount = 0;
             string apiKeyInternal = null;
             string scanIdInternal = null;
             Task.Factory.StartNew(t =>
             {
                 _isMainScanFinished = false;
+                _apiKey = null;
+                _aptScanId = null;
                 _cancellationTokenSource?.Cancel();
                 _cancellationTokenSource?.Dispose();
 
                 _submitAllowed = false;
-                _filesToSubmit = new Dictionary<string, ValkyrieFileInfo>();
-                _cancellationTokenSource = cancellationTokenSource;
+                _filesToSubmit = new Dictionary<string, IValkyrieFileInfo>();
+                _pendingItemsResolved.Clear();
                 lock (_lookupSync)
                 {
                     _lookupContexts.Clear();
@@ -635,8 +640,6 @@ namespace APTAT.Valkyrie
                     _automaticAnalyseInProgressByHash.Clear();
                 }
 
-                _apiKey = null;
-                _aptScanId = null;
 
                 var regInfo = Register(camRegistration, productName, proxyCredential);
                 if (regInfo.ReturnCode != 0)
@@ -645,7 +648,6 @@ namespace APTAT.Valkyrie
                     throw ex;
                 }
                 apiKeyInternal = regInfo.Key;
-                _pendingItemsResolved.Clear();
                 _login = login;
                 _password = password;
 
@@ -673,18 +675,20 @@ namespace APTAT.Valkyrie
                     var ex = new ValkyrieRegistrationFailedException(resp);
                     throw ex;
                 }
-                _apiKey = apiKeyInternal;
-                _aptScanId = scanIdInternal;
 
                 _progressNotifyTimer.Start();
 
-                OnAnalyzeStarted(_apiKey, _aptScanId);
 
                 Thread.Sleep(2000);
 
+                _apiKey = apiKeyInternal;
+                _aptScanId = scanIdInternal;
+                OnAnalyzeStarted(_apiKey, _aptScanId);
+
+
                 if (_emails != null)
                     SubmitEmail(_emails);
-            }, TaskCreationOptions.None, cancellationToken)
+            }, TaskCreationOptions.None)
                 .ContinueWith(OnAnalyzeCompleted, TaskContinuationOptions.NotOnCanceled);
         }
 

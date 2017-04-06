@@ -539,41 +539,21 @@ namespace APTAT.Core.UnitTests
             Assert.Equal(Guid.Empty, aptAtManagerUnderTest.ValkyrieOperationUid);
 
             bool valkyrieAnalyzeEventHanderRaised = false;
-            bool valkyrieAnalyzeCompletedEventHanderRaised = false;
-            bool valkyrieAnalyzeProgressChanged = false;
 
             EventHandler onValkyrieAnalyzeStarted = (s, e) =>
             {
                 valkyrieAnalyzeEventHanderRaised = true;
             };
             aptAtManagerUnderTest.ValkyrieAnalyzeStarted += onValkyrieAnalyzeStarted;
-            EventHandler<AnalyzeCompletedEventArgs> onCompleted = (s, e) =>
-            {
-                valkyrieAnalyzeCompletedEventHanderRaised = true;
-            };
-            aptAtManagerUnderTest.ValkyrieAnalyzeCompleted += onCompleted;
-
-            EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<FileResult>> onValkyrieAnalyzeProgressChanged = (s, e) =>
-            {
-                Assert.Equal(20, e.ProgressInfo.TotalFileCount);
-                Assert.Equal(10, e.ProgressInfo.ProcessedFileCount);
-                Assert.Equal(50, e.ProgressInfo.Percentage);
-                valkyrieAnalyzeProgressChanged = true;
-            };
-
-            aptAtManagerUnderTest.ValkyrieAnalyzeProgressChanged += onValkyrieAnalyzeProgressChanged;
-
-
+            
+            
 
             aptAtManagerUnderTest.StartValkyrieAnalysis("user", "test", "licenceNumber", "user", "test", null, "");
             Mock.AssertAll(descent);
+            var result = Mock.Create<IValkyrieAnalysisResult>();
             Mock.Raise(() => valkyrie.AnalyzeStarted += null, new ValkyrieAnalyzeStartedEventArgs(String.Empty, String.Empty));
-            Mock.Raise(() => valkyrie.AnalyzeProgressChanged += null, new ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieAnalysisResult>(10, new ProgressInfo<ValkyrieAnalysisResult>(20, 10, new ValkyrieAnalysisResult[] { })));
-            Mock.Raise(() => valkyrie.AnalyzeCompleted += null, new AnalyzeCompletedEventArgs(null, false, null));
 
             Assert.True(valkyrieAnalyzeEventHanderRaised);
-            Assert.True(valkyrieAnalyzeProgressChanged);
-            Assert.True(valkyrieAnalyzeCompletedEventHanderRaised);
             Mock.AssertAll(fls);
             Mock.AssertAll(valkyrie);
             Mock.AssertAll(descent);

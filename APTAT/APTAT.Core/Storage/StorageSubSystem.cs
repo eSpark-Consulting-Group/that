@@ -155,7 +155,7 @@ namespace APTAT.Core.Storage
 
         }
 
-        public void SaveValkyrieResults(int scanId, ValkyrieAnalysisResult[] valkyrieResults)
+        public void SaveValkyrieResults(int scanId, IValkyrieAnalysisResult[] valkyrieResults)
         {
             List<ValkyrieFileInfo> files = new List<ValkyrieFileInfo>(valkyrieResults.Length);
             foreach (var valkyrieResult in valkyrieResults)
@@ -163,7 +163,7 @@ namespace APTAT.Core.Storage
                 files.Add(new ValkyrieFileInfo
                 {
                     ValkyrieScanInfoId = scanId,
-                    Sha1 = valkyrieResult.SHA1,
+                    Sha1 = valkyrieResult.Sha1,
                     IsWhiteListed = valkyrieResult.IsWhiteListed,
                     Verdict = (DAL.Entities.ValkyrieVerdict)valkyrieResult.Verdict,
                     MalwareProbability = valkyrieResult.MalwareProbability,
@@ -180,7 +180,7 @@ namespace APTAT.Core.Storage
             }
         }
 
-        public void UpdateValkyrieResult(int scanId, ValkyrieAnalysisResult[] valkyrieResults)
+        public void SaveOrUpdateValkyrieResult(int scanId, IValkyrieAnalysisResult[] valkyrieResults)
         {
             List<ValkyrieFileInfo> files = new List<ValkyrieFileInfo>(valkyrieResults.Length);
             foreach (var valkyrieResult in valkyrieResults)
@@ -188,7 +188,7 @@ namespace APTAT.Core.Storage
                 files.Add(new ValkyrieFileInfo
                 {
                     ValkyrieScanInfoId = scanId,
-                    Sha1 = valkyrieResult.SHA1,
+                    Sha1 = valkyrieResult.Sha1,
                     IsWhiteListed = valkyrieResult.IsWhiteListed,
                     Verdict = (DAL.Entities.ValkyrieVerdict)valkyrieResult.Verdict,
                     MalwareProbability = valkyrieResult.MalwareProbability,
