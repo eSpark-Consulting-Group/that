@@ -40,17 +40,12 @@ namespace APTAT.DeploymentCore.Descent
 
         private void Dispose(bool disposing)
         {
-            if (!_disposed)
+            if (_disposed) return;
+            if (disposing)
             {
-                if (disposing)
-                {
-                    if (_timer != null)
-                    {
-                        _timer.Dispose();
-                    }
-                }
-                _disposed = true;
+                _timer?.Dispose();
             }
+            _disposed = true;
         }
 
         #endregion

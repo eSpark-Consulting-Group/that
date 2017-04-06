@@ -230,9 +230,9 @@ namespace APTAT.Core.UnitTests.DescentAPT
 
             foreach (var target in targetUids)
             {
-                Mock.Arrange(() => scanner1.StopScan(target)).OccursOnce();
-                Mock.Arrange(() => scanner2.StopScan(target)).OccursOnce();
-                Mock.Arrange(() => scanner3.StopScan(target)).OccursOnce();
+                Mock.Arrange(() => scanner1.StopScan(target));
+                Mock.Arrange(() => scanner2.StopScan(target));
+                Mock.Arrange(() => scanner3.StopScan(target));
             }
  
             //Act
@@ -244,9 +244,12 @@ namespace APTAT.Core.UnitTests.DescentAPT
 
             descentSubSystem.StopOperationForTargetUid(targetUids);
             //Assert
-            Mock.Assert(() => scanner1.StopScan(Arg.IsAny<Guid>()), Occurs.Exactly(10));
-            Mock.Assert(() => scanner2.StopScan(Arg.IsAny<Guid>()), Occurs.Exactly(10));
-            Mock.Assert(() => scanner3.StopScan(Arg.IsAny<Guid>()), Occurs.Exactly(10));
+            foreach (var targetUid in targetUids)
+            {
+                Mock.Assert(() => scanner1.StopScan(targetUid), Occurs.Once());
+                Mock.Assert(() => scanner2.StopScan(targetUid), Occurs.Once());
+                Mock.Assert(() => scanner3.StopScan(targetUid), Occurs.Once());
+            }
 
         }
 
@@ -257,8 +260,8 @@ namespace APTAT.Core.UnitTests.DescentAPT
             Guid operationGuid = Guid.NewGuid();
             IChangeTrackingSubSystem tracker = Mock.Create<IChangeTrackingSubSystem>(Behavior.Strict);
             IScheduler timer = Mock.Create<IScheduler>(Behavior.Strict);
-            IScanner scanner = Mock.Create<IScanner>();
-            IDescentQueryResult queryResult = Mock.Create<IDescentQueryResult>();
+            IScanner scanner = Mock.Create<IScanner>(Behavior.Strict);
+            IDescentQueryResult queryResult = Mock.Create<IDescentQueryResult>(Behavior.Strict);
             
             Mock.Arrange(() => timer.SetInterval(Arg.IsAny<TimeSpan>()));
             Mock.Arrange(() => queryResult.TotalTargetsCount).Returns(() => 10);
@@ -297,7 +300,7 @@ namespace APTAT.Core.UnitTests.DescentAPT
 
             foreach (var target in targetUids.Take(3))
             {
-                Mock.Arrange(() => scanner.StopScan(target)).OccursOnce();
+                Mock.Arrange(() => scanner.StopScan(target));
             }
 
             //Act
@@ -377,9 +380,9 @@ namespace APTAT.Core.UnitTests.DescentAPT
             Mock.Arrange(() => scanner3.ValidateAndGetResult()).Returns(() => queryResult3);
             Mock.Arrange(() => tracker.RegisterListener(queryResult3));
 
-            Mock.Arrange(() => scanner1.AbortAllThread(0)).OccursOnce();
-            Mock.Arrange(() => scanner2.AbortAllThread(0)).OccursOnce();
-            Mock.Arrange(() => scanner3.AbortAllThread(0)).OccursOnce();
+            Mock.Arrange(() => scanner1.AbortAllThread(6));
+            Mock.Arrange(() => scanner2.AbortAllThread(6));
+            Mock.Arrange(() => scanner3.AbortAllThread(6));
 
             //Act
             DescentSubSystem descentSubSystem = 
@@ -389,12 +392,12 @@ namespace APTAT.Core.UnitTests.DescentAPT
             descentSubSystem.StartScan(scanner2, out operationUid2);
             descentSubSystem.StartScan(scanner3, out operationUid3);
 
-            descentSubSystem.StopAllScans(0);
+            descentSubSystem.StopAllScans(6);
 
             //Assert
-            Mock.Assert(() => scanner1.AbortAllThread(0), Occurs.Once());
-            Mock.Assert(() => scanner2.AbortAllThread(0), Occurs.Once());
-            Mock.Assert(() => scanner3.AbortAllThread(0), Occurs.Once());
+            Mock.Assert(() => scanner1.AbortAllThread(6), Occurs.Once());
+            Mock.Assert(() => scanner2.AbortAllThread(6), Occurs.Once());
+            Mock.Assert(() => scanner3.AbortAllThread(6), Occurs.Once());
         }
 
 
@@ -434,11 +437,11 @@ namespace APTAT.Core.UnitTests.DescentAPT
 
             foreach (var targetUid in targetUids0_5)
             {
-                Mock.Arrange(() => scanner1.StopScan(targetUid)).OccursOnce();
+                Mock.Arrange(() => scanner1.StopScan(targetUid));
             }
             foreach (var targetUid in targetUids6_10)
             {
-                Mock.Arrange(() => scanner2.StopScan(targetUid)).OccursOnce();
+                Mock.Arrange(() => scanner2.StopScan(targetUid));
             }
 
 
