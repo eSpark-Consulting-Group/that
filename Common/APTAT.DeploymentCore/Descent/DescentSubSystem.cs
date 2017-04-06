@@ -9,14 +9,18 @@ using APTAT.DeploymentCore.Properties;
 
 namespace APTAT.DeploymentCore.Descent
 {
-    public sealed class DescentSubSystem: IDescentSubSystem, IDisposable
+    public sealed class DescentSubSystem: IDescentSubSystem
     {
-        public DescentSubSystem(IChangeTrackingSubSystem changeTrackingSubSystem)
+        public DescentSubSystem(IChangeTrackingSubSystem changeTrackingSubSystem,IScheduler timer)
         {
             _tracker = changeTrackingSubSystem;
-            _descentResultsCleanupTimer = new System.Threading.Timer(DescentResultsCleanupTimerCallback, null,
-                Settings.Default.DescentResultLifetime, TimeSpan.FromMilliseconds(Timeout.Infinite));
+            _timer = timer;
+            _timer.TimeoutCallback += DescentResultsCleanupTimerCallback;
+
+            var period = Settings.Default.DescentResultLifetime.TotalSeconds;
+            _timer.SetInterval(TimeSpan.FromSeconds(period));
         }
+
         private static readonly Guid DescentSubSystemIdentifier = new Guid( @"{6E6F58FD-47AC-4d1e-8063-40C2CA9F332E}" );
 		private const string DescentSubSystemName = @"Descent";
                 
@@ -24,16 +28,14 @@ namespace APTAT.DeploymentCore.Descent
 
         private readonly Dictionary<Guid, IDescentQueryResult> _descentResults = new Dictionary<Guid, IDescentQueryResult>();
 
-
         private readonly IChangeTrackingSubSystem _tracker;
 		private bool _disposed;
-		private System.Threading.Timer _descentResultsCleanupTimer;
+        private readonly IScheduler _timer = null;
 
-		#region IDisposable Members
-
-		public void Dispose()
+        #region IDisposable Members
+        public void Dispose()
 		{
-			Dispose( true );
+			Dispose(true);
 		}
 
         private void Dispose(bool disposing)
@@ -42,9 +44,9 @@ namespace APTAT.DeploymentCore.Descent
             {
                 if (disposing)
                 {
-                    if (_descentResultsCleanupTimer != null)
+                    if (_timer != null)
                     {
-                        _descentResultsCleanupTimer.Dispose();
+                        _timer.Dispose();
                     }
                 }
                 _disposed = true;
@@ -66,6 +68,7 @@ namespace APTAT.DeploymentCore.Descent
 	    {
 	        lock (_descentResults)
 	        {
+                if (_descentResults.Count == 0) return null;
 	            return _descentResults[operationUid];
 	        }
 	    }
@@ -130,14 +133,13 @@ namespace APTAT.DeploymentCore.Descent
 
         #endregion
 
-        private void DescentResultsCleanupTimerCallback(object state)
+        private void DescentResultsCleanupTimerCallback(object state, EventArgs e)
         {
             try
             {
                 LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Descent, "Descent results cleanup running");
                 Debug.WriteLine("");
-
-                _descentResultsCleanupTimer.Change(Timeout.Infinite, Timeout.Infinite);
+        
                 DateTime utcNow = DateTime.UtcNow;
                 List<IDescentQueryResult> toBeRemoved = new List<IDescentQueryResult>();
                 lock (_descentResults)
@@ -161,8 +163,7 @@ namespace APTAT.DeploymentCore.Descent
                             Environment.NewLine, descentResult.OperationUid, descentResult.CompletedTime);
                     }
                 }
-
-                _descentResultsCleanupTimer.Change(Settings.Default.DescentResultCleanupPeriod, TimeSpan.FromMilliseconds(Timeout.Infinite));
+                _timer.Start(false);
             }
             catch (ObjectDisposedException)
             {

@@ -63,6 +63,7 @@
     <Compile Include="Descent\DescentProgressItem.cs" />
     <Compile Include="Descent\DescentResult.cs" />
     <Compile Include="Descent\DescentSubSystem.cs" />
+    <Compile Include="Descent\DescentWatcher.cs" />
     <Compile Include="Descent\DescentWatcherFactory.cs" />
     <Compile Include="Descent\Exceptions\AnotherScanIsInProgressException.cs" />
     <Compile Include="Descent\Exceptions\DescentException.cs" />
