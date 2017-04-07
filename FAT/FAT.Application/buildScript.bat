@@ -1,4 +1,4 @@
-del bin /Q
+rmdir bin /s /Q
 del ForensicAnalysisTool.7z
 rmdir sfx /s/q
 set ZDIR="..\..\SfxPackage\"
@@ -13,8 +13,8 @@ copy cmdapt64.exe bin\cmdapt64.exe
 copy cmdapt86.exe bin\cmdapt86.exe
 mkdir "%CD%\bin\amd64"
 mkdir "%CD%\bin\x86"
-copy amd64\* bin\amd64\*
-copy x86\* bin\x86\*
+xcopy /s amd64 bin\amd64
+xcopy /s x86 bin\x86
 copy *.txt bin\*.txt
 ren FAT.Bootstrapper.exe ForensicAnalysisTool.exe
 Y
@@ -25,8 +25,8 @@ copy /b "%ZDIR%\7zSD.sfx" + "%ZDIR%\config.txt" + "%CD%\ForensicAnalysisTool.7z"
 ren ForensicAnalysisTool.exe FAT.Bootstrapper.exe
 move bin\ForensicAnalysisTool.exe ForensicAnalysisTool.exe
 del ForensicAnalysisTool.7z /Q
-del bin /Q
-del data /Q
+rmdir bin /Q /s
+rmdir data /Q /s
 
 copy ResourceCopy.exe sfx\ResourceCopy.exe
 copy  ForensicAnalysisTool.exe sfx\fat.exe
