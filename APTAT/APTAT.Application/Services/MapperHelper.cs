@@ -22,7 +22,7 @@ namespace APTAT.Application.Services
         {
             return new ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieFile>(result.Percent, 
                 new ProgressInfo<ValkyrieFile>(result.ProgressInfo.TotalFileCount, result.ProgressInfo.ProcessedFileCount, 
-                result.ProgressInfo.Results.Select(r => new ValkyrieFile(r)).ToArray()), result.IsUpdate);
+                result.ProgressInfo.Results.Select(r => new ValkyrieFile(r)).ToArray()));
         }
 
         

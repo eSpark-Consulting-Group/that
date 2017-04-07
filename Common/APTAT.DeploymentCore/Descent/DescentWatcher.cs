@@ -22,11 +22,12 @@ namespace APTAT.DeploymentCore.Descent
             _access = new object();
             _computersActivity = new Dictionary<Guid, DateTime>();
 
+            TimeSpan interval = new TimeSpan(0, 0, 1);
             _timer = timer;
             _timer.TimeoutCallback += TimerCallback;
-            TimeSpan interval = new TimeSpan(0, 0, 1);
             _timer.SetInterval(interval);
         }
+
         public TimeSpan DescentTimeout
         {
             get { return _timeout; }
@@ -87,6 +88,5 @@ namespace APTAT.DeploymentCore.Descent
         {
             _timer.Dispose();
         }
-
     }
 }

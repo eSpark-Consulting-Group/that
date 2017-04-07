@@ -103,30 +103,60 @@ namespace APTAT.Core.UnitTests.DescentAPT
         }
 
 
-        [Fact(DisplayName = "ExcludeIdentity test.")]
-        public void ExcludeIdentityTest()
+        [Fact(DisplayName = "Check that on call Start method" +
+            "all values from computerActivity are removed test.")]
+        public void CheckThatAllValuesAreExcudedFromComputerActivityTest()
         {
             //Arrange
             bool called = false;
             Action<Guid> action = (guid) => { called = true; };
-            ManualResetEventSlim ev = new ManualResetEventSlim(false);
             TimeSpan timeout = new TimeSpan(0, 0, -10);
             IScheduler timer = Mock.Create<IScheduler>(Behavior.Strict);
-            Mock.Arrange(() => timer.SetInterval(Arg.IsAny<TimeSpan>()));
-            Mock.Arrange(() => timer.Start(false)).DoInstead(() => ev.Set()).Returns(true);
-            Mock.Arrange(() => timer.Stop());
 
-            //Act
+            Mock.Arrange(() => timer.SetInterval(Arg.IsAny<TimeSpan>()));
+            Mock.Arrange(() => timer.Start(false)).Returns(true);
+            Mock.Arrange(() => timer.Stop());
+            Mock.Arrange(() => timer.Dispose()).OccursOnce();
             DescentWatcher descentWatcher = new DescentWatcher(timeout, action, timer);
 
-            foreach (var uid in Uids) 
+            foreach (var uid in Uids.Take(1))
                 descentWatcher.AddIdentity(uid);
 
+            //Act
+            descentWatcher.Start();
+            Mock.Raise(() => timer.TimeoutCallback += null, args: new object[] { EventArgs.Empty });
             descentWatcher.Start();
             Mock.Raise(() => timer.TimeoutCallback += null, args: new object[] { EventArgs.Empty });
 
             //Assert
             Assert.True(called);
+            Mock.Assert(() => timer.Dispose(),Occurs.Once());
         }
+
+
+        [Fact(DisplayName = "Check that timeoutCallback calls 10 times " +
+            "in case when computer activity value" +
+            "is less than dead line value test.")]
+        public void CheckThatTimeoutCallbackCalls10TimesTest()
+        {
+            //Arrange
+            int cntTimeoutCallbackCalls = 0;
+            Action<Guid> action = (guid) => {cntTimeoutCallbackCalls++; };
+            TimeSpan timeout = new TimeSpan(0, 0, -10);
+            IScheduler timer = Mock.Create<IScheduler>(Behavior.Strict);
+            Mock.Arrange(() => timer.SetInterval(Arg.IsAny<TimeSpan>()));
+            Mock.Arrange(() => timer.Start(false)).Returns(true);
+            DescentWatcher descentWatcher = new DescentWatcher(timeout, action, timer);
+            foreach (var uid in Uids)
+                descentWatcher.AddIdentity(uid);
+
+            //Act
+            descentWatcher.Start();
+            Mock.Raise(() => timer.TimeoutCallback += null, args: new object[] { EventArgs.Empty });
+
+            //Assert
+            Mock.Equals(cntTimeoutCallbackCalls, 10);
+        }
+        
     }
 }

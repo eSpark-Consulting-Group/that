@@ -10,6 +10,16 @@ namespace APTAT.DeploymentCore.Descent
         public Guid TargetUid { get; }
         public IComputer Computer { get; }
         public Guid OperationUid { get; }
+        public double Percentage { get; private set; }
+        public TimeSpan Modified { get; protected set; }
+        public bool Completed { get; private set; }
+        public bool Succeeded { get; private set; }
+        public FormattedText StatusMessage { get; private set; }
+        public FormattedText ShortStatusMessage { get; private set; }
+        public string ErrorCode { get; private set; }
+        public bool IsCanceled { get; private set; }
+        public string SystemMessage { get; private set; }
+        public int SystemCode { get; private set; }
         public ComputerDescentResult(IComputer computer, Guid operationUid, ITimeStampProvider timeStampProvider)
         {
             Computer = computer;
@@ -64,8 +74,6 @@ namespace APTAT.DeploymentCore.Descent
             }
 		}
 
-
-
         public void Invalidate(DescentStatus errorCode, string shortMessage, string detailedMessage)
 		{
 			Succeeded = false;
@@ -77,22 +85,10 @@ namespace APTAT.DeploymentCore.Descent
 			SystemMessage = detailedMessage;
             Modified = TimeStampProvider.GetCurretTimestamp();
         }
-
         public void SetSystemKind(SystemKind systemKind)
         {
             Computer.SystemKind = systemKind;
             Modified = TimeStampProvider.GetCurretTimestamp();
         }
-
-        public double Percentage { get; private set; }
-        public TimeSpan Modified { get; protected set; }
-		public bool Completed { get; private set; }
-		public bool Succeeded { get; private set; }
-		public FormattedText StatusMessage { get; private set; }
-		public FormattedText ShortStatusMessage { get; private set; }
-	    public string ErrorCode { get; private set; }
-        public bool IsCanceled { get; private set; }
-        public string SystemMessage { get; private set; }
-		public int SystemCode { get; private set; }
     }
 }

@@ -40,7 +40,7 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
             Mock.Arrange(() => Computer3.Name).Returns("comp3");
             _descentWatcher = Mock.Create<IDescentWatcher>();
             _descentWatcherFactory = Mock.Create<IDescentWatcherFactory>(Behavior.Strict);
-            Mock.Arrange(() => _descentWatcherFactory.CreateDescentWatcher(Arg.IsAny<Action<Guid>>(), Arg.IsAny<IScheduler>()))
+            Mock.Arrange(() => _descentWatcherFactory.CreateDescentWatcher(Arg.IsAny<Action<Guid>>()))
                 .Returns(_descentWatcher);
             _computerDescentResultFactory = Mock.Create<IComputerDescentResultFactory>(Behavior.Strict);
             Mock.Arrange(() => _computerDescentResultFactory.CreateComputerDescentResult(Arg.IsAny<IComputer>(), 
@@ -82,7 +82,7 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
                 Mock.Arrange(() => descentWatcher.AddIdentity(compUid));
             }
             var descentWatcherFactory = Mock.Create<IDescentWatcherFactory>(Behavior.Strict);
-            Mock.Arrange(() => descentWatcherFactory.CreateDescentWatcher(Arg.IsAny<Action<Guid>>(),  Arg.IsAny<IScheduler>()))
+            Mock.Arrange(() => descentWatcherFactory.CreateDescentWatcher(Arg.IsAny<Action<Guid>>()))
                 .Returns(descentWatcher);
             var target = new DescentResult(Targets, _deviceSourceDescription,
                 _computerDescentResultFactory, descentWatcherFactory);
@@ -111,7 +111,7 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
             Mock.Arrange(() => descentWatcher.AddIdentity(Arg.Matches<Guid>(uid => CompUids.Contains(uid))))
                 .Occurs(3);
             var descentWatcherFactory = Mock.Create<IDescentWatcherFactory>(Behavior.Strict);
-            Mock.Arrange(() => descentWatcherFactory.CreateDescentWatcher(Arg.IsAny<Action<Guid>>(), Arg.IsAny<IScheduler>()))
+            Mock.Arrange(() => descentWatcherFactory.CreateDescentWatcher(Arg.IsAny<Action<Guid>>()))
                 .Returns(descentWatcher);
             var target = new DescentResult(Targets, _deviceSourceDescription, _computerDescentResultFactory, descentWatcherFactory);
             Assert.Equal(Targets.Count, target.TotalTargetsCount);
@@ -225,7 +225,7 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
                 .Occurs(3);
             Mock.Arrange(() => descentWatcher.ExcludeIdentity(Comp1Uid)).OccursOnce();//.MustBeCalled();
             var descentWatcherFactory = Mock.Create<IDescentWatcherFactory>(Behavior.Strict);
-            Mock.Arrange(() => descentWatcherFactory.CreateDescentWatcher(Arg.IsAny<Action<Guid>>(), Arg.IsAny<IScheduler>()))
+            Mock.Arrange(() => descentWatcherFactory.CreateDescentWatcher(Arg.IsAny<Action<Guid>>()))
                 .Returns((Action<Guid> action) =>
                 {
                     callbackAction = action;
@@ -258,7 +258,7 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
                 .Occurs(3);
             Mock.Arrange(() => descentWatcher.ExcludeIdentity(Comp1Uid)).OccursOnce();//.MustBeCalled();
             var descentWatcherFactory = Mock.Create<IDescentWatcherFactory>(Behavior.Strict);
-            Mock.Arrange(() => descentWatcherFactory.CreateDescentWatcher(Arg.IsAny<Action<Guid>>(), Arg.IsAny<IScheduler>()))
+            Mock.Arrange(() => descentWatcherFactory.CreateDescentWatcher(Arg.IsAny<Action<Guid>>()))
                 .Returns((Action<Guid> action) =>
                 {
                     callbackAction = action;
@@ -329,7 +329,7 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
             var factory = CreateAndArrangeComputerDescentFactory(out results);
             var descentWatcher = Mock.Create<IDescentWatcher>();
             var descentWatcherFactory = Mock.Create<IDescentWatcherFactory>(Behavior.Strict);
-            Mock.Arrange(() => descentWatcherFactory.CreateDescentWatcher(Arg.IsAny<Action<Guid>>(), Arg.IsAny<IScheduler>()))
+            Mock.Arrange(() => descentWatcherFactory.CreateDescentWatcher(Arg.IsAny<Action<Guid>>()))
                 .Returns(descentWatcher);
             var target = new DescentResult(Targets, _deviceSourceDescription, factory
                 , descentWatcherFactory);
@@ -355,7 +355,7 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
             var factory = CreateAndArrangeComputerDescentFactory(out results);
             var descentWatcher = Mock.Create<IDescentWatcher>();
             var descentWatcherFactory = Mock.Create<IDescentWatcherFactory>(Behavior.Strict);
-            Mock.Arrange(() => descentWatcherFactory.CreateDescentWatcher(Arg.IsAny<Action<Guid>>(), Arg.IsAny<IScheduler>()))
+            Mock.Arrange(() => descentWatcherFactory.CreateDescentWatcher(Arg.IsAny<Action<Guid>>()))
                 .Returns(descentWatcher);
             var target = new DescentResult(Targets, _deviceSourceDescription, factory, descentWatcherFactory);
             var item = Mock.Create<Common.IChangesTrackingItem>(Behavior.Strict);
@@ -375,7 +375,7 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
             var factory = CreateAndArrangeComputerDescentFactory(out results);
             var descentWatcher = Mock.Create<IDescentWatcher>();
             var descentWatcherFactory = Mock.Create<IDescentWatcherFactory>(Behavior.Strict);
-            Mock.Arrange(() => descentWatcherFactory.CreateDescentWatcher(Arg.IsAny<Action<Guid>>(), Arg.IsAny<IScheduler>()))
+            Mock.Arrange(() => descentWatcherFactory.CreateDescentWatcher(Arg.IsAny<Action<Guid>>()))
                 .Returns(descentWatcher);
             var target = new DescentResult(Targets, _deviceSourceDescription, factory
                 , descentWatcherFactory);            
@@ -400,7 +400,7 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
             var factory = CreateAndArrangeComputerDescentFactory(out results);
             var descentWatcher = Mock.Create<IDescentWatcher>();
             var descentWatcherFactory = Mock.Create<IDescentWatcherFactory>(Behavior.Strict);
-            Mock.Arrange(() => descentWatcherFactory.CreateDescentWatcher(Arg.IsAny<Action<Guid>>(), Arg.IsAny<IScheduler>()))
+            Mock.Arrange(() => descentWatcherFactory.CreateDescentWatcher(Arg.IsAny<Action<Guid>>()))
                 .Returns(descentWatcher);
             var target = new DescentResult(Targets, _deviceSourceDescription, factory
                 , descentWatcherFactory);
@@ -429,7 +429,7 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
             var factory = CreateAndArrangeComputerDescentFactory(out results);
             var descentWatcher = Mock.Create<IDescentWatcher>();
             var descentWatcherFactory = Mock.Create<IDescentWatcherFactory>(Behavior.Strict);
-            Mock.Arrange(() => descentWatcherFactory.CreateDescentWatcher(Arg.IsAny<Action<Guid>>(), Arg.IsAny<IScheduler>()))
+            Mock.Arrange(() => descentWatcherFactory.CreateDescentWatcher(Arg.IsAny<Action<Guid>>()))
                 .Returns(descentWatcher);
             var target = new DescentResult(Targets, _deviceSourceDescription, factory
                 , descentWatcherFactory);
@@ -463,7 +463,7 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
             var factory = CreateAndArrangeComputerDescentFactory(out results);
             var descentWatcher = Mock.Create<IDescentWatcher>();
             var descentWatcherFactory = Mock.Create<IDescentWatcherFactory>(Behavior.Strict);
-            Mock.Arrange(() => descentWatcherFactory.CreateDescentWatcher(Arg.IsAny<Action<Guid>>(),Arg.IsAny<IScheduler>()))
+            Mock.Arrange(() => descentWatcherFactory.CreateDescentWatcher(Arg.IsAny<Action<Guid>>()))
                 .Returns(descentWatcher);
 
 
@@ -497,7 +497,7 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
             var factory = CreateAndArrangeComputerDescentFactory(out results);
             var descentWatcher = Mock.Create<IDescentWatcher>();
             var descentWatcherFactory = Mock.Create<IDescentWatcherFactory>(Behavior.Strict);
-            Mock.Arrange(() => descentWatcherFactory.CreateDescentWatcher(Arg.IsAny<Action<Guid>>(), Arg.IsAny<IScheduler>()))
+            Mock.Arrange(() => descentWatcherFactory.CreateDescentWatcher(Arg.IsAny<Action<Guid>>()))
                 .Returns(descentWatcher);
             var target = new DescentResult(Targets, _deviceSourceDescription, factory
                 , descentWatcherFactory);
@@ -525,7 +525,7 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
             var factory = CreateAndArrangeComputerDescentFactory(out results);
             var descentWatcher = Mock.Create<IDescentWatcher>();
             var descentWatcherFactory = Mock.Create<IDescentWatcherFactory>(Behavior.Strict);
-            Mock.Arrange(() => descentWatcherFactory.CreateDescentWatcher(Arg.IsAny<Action<Guid>>(), Arg.IsAny<IScheduler>()))
+            Mock.Arrange(() => descentWatcherFactory.CreateDescentWatcher(Arg.IsAny<Action<Guid>>()))
                 .Returns(descentWatcher);
             var target = new DescentResult(Targets, _deviceSourceDescription, factory
                 , descentWatcherFactory);

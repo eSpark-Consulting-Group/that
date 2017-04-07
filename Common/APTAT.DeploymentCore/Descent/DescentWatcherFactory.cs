@@ -6,13 +6,14 @@ namespace APTAT.DeploymentCore.Descent
 {
     public sealed class DescentWatcherFactory : IDescentWatcherFactory
     {
-        public IDescentWatcher CreateDescentWatcher(Action<Guid> onDescentTimeout, IScheduler timer)
+        public IDescentWatcher CreateDescentWatcher(Action<Guid> onDescentTimeout)
         {
-            return new DescentWatcher(Settings.Default.AgentDescentingTimeout, onDescentTimeout, timer);
+            Scheduler scheduler = new Scheduler();
+            return new DescentWatcher(Settings.Default.AgentDescentingTimeout, onDescentTimeout, scheduler);
         }
     }
     public interface IDescentWatcherFactory
     {
-        IDescentWatcher CreateDescentWatcher(Action<Guid> onDescentTimeout, IScheduler timer);
+        IDescentWatcher CreateDescentWatcher(Action<Guid> onDescentTimeout);
     }
 }

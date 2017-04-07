@@ -32,12 +32,22 @@ namespace APTAT.DeploymentCore.Descent
 		private bool _disposed;
         private readonly IScheduler _timer = null;
 
+        #region ISubSystem Members
+        public string Name
+        {
+            get { return DescentSubSystemName; }
+        }
+        public Guid Identifier
+        {
+            get { return DescentSubSystemIdentifier; }
+        }
+        #endregion
+
         #region IDisposable Members
         public void Dispose()
 		{
 			Dispose(true);
 		}
-
         private void Dispose(bool disposing)
         {
             if (_disposed) return;
@@ -64,8 +74,8 @@ namespace APTAT.DeploymentCore.Descent
 	        lock (_descentResults)
 	        {
                 if (_descentResults.Count == 0) return null;
-	            return _descentResults[operationUid];
-	        }
+                return _descentResults[operationUid];
+            }
 	    }
 
 	    public void StartScan(IScanner scanner, out Guid operationUid)
@@ -114,20 +124,6 @@ namespace APTAT.DeploymentCore.Descent
         }
 
         #endregion
-
-        #region ISubSystem Members
-
-        public string Name
-		{
-			get { return DescentSubSystemName; }
-		}
-		public Guid Identifier
-		{
-			get { return DescentSubSystemIdentifier; }
-		}
-
-        #endregion
-
         private void DescentResultsCleanupTimerCallback(object state, EventArgs e)
         {
             try

@@ -1064,7 +1064,7 @@ namespace APTAT.Application.Models
         {
             var info = e.ProgressInfo;
 
-            if (info != null && e.IsUpdate)
+            if (info != null)
             {
                 UpdateResults(info.Results);
                 return;

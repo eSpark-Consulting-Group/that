@@ -27,10 +27,7 @@ namespace APTAT.DeploymentCore.Descent
             IComputerDescentResultFactory computerDescentResultFactory, IDescentWatcherFactory descentWatcherFactory)
         {
             _stopWatch.Start();
-
-            Scheduler scheduler = new Scheduler();
-
-            _descentWatcher = descentWatcherFactory.CreateDescentWatcher(OnDescentTimeout, scheduler);
+            _descentWatcher = descentWatcherFactory.CreateDescentWatcher(OnDescentTimeout);
 
             DevicesSourceDescription = devicesSourceDescription;
             OperationUid = Guid.NewGuid();
