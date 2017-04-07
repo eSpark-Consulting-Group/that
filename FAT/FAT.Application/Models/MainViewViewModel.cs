@@ -567,9 +567,6 @@ namespace FAT.Application.Models
 
                 RaisePropertyChanged(nameof(Email));
                 SubmitEmailCommand.InvalidateCanExecute();
-
-                if (!string.IsNullOrEmpty(_email))
-                    Set(() => HideSubmitEmail, true);
             }
         }
 
@@ -705,8 +702,8 @@ namespace FAT.Application.Models
         {
             Set(() => Loaded, true);
 
-            InvokeLoadInitialData();
             InvokeStartAutoDiscovery(null);
+            InvokeLoadInitialData();
 
             var name = await TryAction(GetCurrentDomainName());
 
@@ -721,7 +718,14 @@ namespace FAT.Application.Models
             ThreadHelper.Instance.RunOnThread(() =>
             {
                 var email = _scanOperationsManager.GetEmail();
-                App.Current.Dispatcher.Invoke(() => Email = email);
+                if (!string.IsNullOrEmpty(email))
+                {
+                    App.Current.Dispatcher.Invoke(() =>
+                    {
+                        Email = email;
+                        Set(() => HideSubmitEmail, true);
+                    });
+                }
             });
 
             ThreadHelper.Instance.RunOnThread(() =>
