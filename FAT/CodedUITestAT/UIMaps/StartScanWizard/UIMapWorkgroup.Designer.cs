@@ -133,6 +133,23 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
             Assert.AreEqual(this.AssertLoginTextBoxTextExpectedValues.UILoginWatermarkTextBoEditText, uILoginWatermarkTextBoEdit.Text);
         }
         
+        /// <summary>
+        /// DeleteWorkgroupName - Use 'DeleteWorkgroupNameParams' to pass parameters into this method.
+        /// </summary>
+        public void DeleteWorkgroupName()
+        {
+            #region Variable Declarations
+            WpfText uIEnterWorkgroupNameText = this.UIForensicAnalysisToolWindow.UIWorkgroupViewCustom.UIWorkgroupWatermarkTeEdit.UIEnterWorkgroupNameText;
+            WpfEdit uIWorkgroupWatermarkTeEdit = this.UIForensicAnalysisToolWindow.UIWorkgroupViewCustom.UIWorkgroupWatermarkTeEdit;
+            #endregion
+
+            // Double-Click 'Enter Workgroup Name' label
+            Mouse.DoubleClick(uIEnterWorkgroupNameText, new Point(36, 7));
+
+            // Type '{Delete}' in 'WorkgroupWatermarkTextBox' text box
+            Keyboard.SendKeys(uIWorkgroupWatermarkTeEdit, this.DeleteWorkgroupNameParams.UIWorkgroupWatermarkTeEditSendKeys, ModifierKeys.None);
+        }
+        
         #region Properties
         public virtual AssertWorkgroupTreeExpectedValues AssertWorkgroupTreeExpectedValues
         {
@@ -230,6 +247,18 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
             }
         }
         
+        public virtual DeleteWorkgroupNameParams DeleteWorkgroupNameParams
+        {
+            get
+            {
+                if ((this.mDeleteWorkgroupNameParams == null))
+                {
+                    this.mDeleteWorkgroupNameParams = new DeleteWorkgroupNameParams();
+                }
+                return this.mDeleteWorkgroupNameParams;
+            }
+        }
+        
         public UIUnknownFileHunterWindow UIUnknownFileHunterWindow
         {
             get
@@ -283,6 +312,8 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
         private AssertWorkgroupTextBoxTextExpectedValues mAssertWorkgroupTextBoxTextExpectedValues;
         
         private AssertLoginTextBoxTextExpectedValues mAssertLoginTextBoxTextExpectedValues;
+        
+        private DeleteWorkgroupNameParams mDeleteWorkgroupNameParams;
         
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
         
@@ -409,6 +440,21 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
         /// Verify that the 'Text' property of 'LoginWatermarkTextBox' text box equals 'Administrator'
         /// </summary>
         public string UILoginWatermarkTextBoEditText = "Administrator";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'DeleteWorkgroupName'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class DeleteWorkgroupNameParams
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Type '{Delete}' in 'WorkgroupWatermarkTextBox' text box
+        /// </summary>
+        public string UIWorkgroupWatermarkTeEditSendKeys = "{Delete}";
         #endregion
     }
     
@@ -1141,17 +1187,13 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
         }
         
         #region Properties
-        public WpfEdit UIWorkgroupWatermarkTeEdit
+        public UIWorkgroupWatermarkTeEdit UIWorkgroupWatermarkTeEdit
         {
             get
             {
                 if ((this.mUIWorkgroupWatermarkTeEdit == null))
                 {
-                    this.mUIWorkgroupWatermarkTeEdit = new WpfEdit(this);
-                    #region Search Criteria
-                    this.mUIWorkgroupWatermarkTeEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "WorkgroupWatermarkTextBox";
-                    this.mUIWorkgroupWatermarkTeEdit.WindowTitles.Add("Forensic Analysis Tool");
-                    #endregion
+                    this.mUIWorkgroupWatermarkTeEdit = new UIWorkgroupWatermarkTeEdit(this);
                 }
                 return this.mUIWorkgroupWatermarkTeEdit;
             }
@@ -1171,9 +1213,45 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
         #endregion
         
         #region Fields
-        private WpfEdit mUIWorkgroupWatermarkTeEdit;
+        private UIWorkgroupWatermarkTeEdit mUIWorkgroupWatermarkTeEdit;
         
         private UIWorkgroupTreeTree1 mUIWorkgroupTreeTree;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIWorkgroupWatermarkTeEdit : WpfEdit
+    {
+        
+        public UIWorkgroupWatermarkTeEdit(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "WorkgroupWatermarkTextBox";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfText UIEnterWorkgroupNameText
+        {
+            get
+            {
+                if ((this.mUIEnterWorkgroupNameText == null))
+                {
+                    this.mUIEnterWorkgroupNameText = new WpfText(this);
+                    #region Search Criteria
+                    this.mUIEnterWorkgroupNameText.SearchProperties[WpfText.PropertyNames.Name] = "Enter Workgroup Name";
+                    this.mUIEnterWorkgroupNameText.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIEnterWorkgroupNameText;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfText mUIEnterWorkgroupNameText;
         #endregion
     }
     

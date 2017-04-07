@@ -551,9 +551,9 @@ namespace CodedUITestFAT
         /// <param name="workgroupName">Set a workgroup name to input.</param>
         private void InputWorkgroup(string workgroupName)
         {
-            WpfEdit workgroupEdit = UIMapWorkgroup.UIUnknownFileHunterWindow1.UIWorkgroupViewCustom.UIWorkgroupWatermarkTeEdit;
+            WpfEdit workgroupEdit = UIMapWorkgroup.UIForensicAnalysisToolWindow.UIWorkgroupViewCustom.UIWorkgroupWatermarkTeEdit;            
             if (workgroupEdit.Text == Settings.General.Default.EmptyWatermarkTextBoxText || workgroupEdit.Text != workgroupName) workgroupEdit.Text = workgroupName;
-        }
+        }       
 
         #endregion
 
@@ -942,15 +942,19 @@ namespace CodedUITestFAT
         {
             string workgroup = SysHelper.GetWorkgroupName();
 
-            //UIMapMain.ClickScanNowButton();
+            UIHelper.WaitForControlIsClickable(SkipDiscoveryButton());
+            UIMapDiscovery.ClickSkipDiscoveryButton();
+            UIHelper.WaitForControlIsClickable(CustomScanButton());
+            UIMapDiscovery.ClickCustomScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanWizard.ClickWorkgroupButton();
             UIHelper.WaitForControlIsClickable(NextButton());
 
             // Workgroup
             UIMapWorkgroup.SelectUseKnownWorkgroupRadioButton();
+            UIMapWorkgroup.DeleteWorkgroupName();
             UIMapStartScanWizard.ClickNextButton();
-            AssertErrorText(Settings.Errors.Default.SpecifyWorkgroup, TestContext);            
+            AssertErrorText(Settings.Errors.Default.SpecifyWorkgroup, TestContext); 
             InputWorkgroup(workgroup);
             UIMapStartScanWizard.ClickNextButton();
 
