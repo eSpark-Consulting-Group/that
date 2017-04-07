@@ -46,11 +46,8 @@ namespace CodedUITestFAT
         /// <summary> The product executable name. </summary>
         internal static readonly string ProductExeName = Environment.GetEnvironmentVariable("_ProductExeName", EnvironmentVariableTarget.Machine);
 
-        /// <summary> The product zip name. </summary>
-        internal static readonly string ProductZipName = Environment.GetEnvironmentVariable("_ProductZipName", EnvironmentVariableTarget.Machine);
-
-        /// <summary> A path to the extracted product archive. </summary>
-        internal static readonly string ExtractedProductPath = Path.Combine(GetWorkingFolder(), ProductZipName.WithoutExtension());
+        /// <summary> A path to the extracted product archive. </summary>        
+        internal static readonly string ExtractedProductPath = Path.Combine(GetWorkingFolder(), ProductExeName.WithoutExtension());
 
         /// <summary> Determines whether the autotests will run using FLS staging server. Gets the data from a local environment variable. </summary>
         internal static bool IsFlsStaging()
