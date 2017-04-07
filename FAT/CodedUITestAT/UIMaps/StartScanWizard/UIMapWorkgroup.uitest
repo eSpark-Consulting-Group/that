@@ -162,15 +162,12 @@
       <WorkItemId>0</WorkItemId>
       <MarkerRegionType>Assertion</MarkerRegionType>
     </TestStepMarkerAction>
-    <MouseAction UIObjectName="UIMapWorkgroup.UIForensicAnalysisToolWindow.UIWorkgroupViewCustom.UIWorkgroupWatermarkTeEdit.UIEnterWorkgroupNameText">
+    <SendKeysAction UIObjectName="UIMapWorkgroup.UIForensicAnalysisToolWindow.UIWorkgroupViewCustom.UIWorkgroupWatermarkTeEdit">
       <ParameterName />
-      <ModifierKeys>None</ModifierKeys>
+      <ModifierKeys>Control</ModifierKeys>
       <IsGlobalHotkey>false</IsGlobalHotkey>
-      <Location X="36" Y="7" />
-      <WheelDirection>0</WheelDirection>
-      <ActionType>DoubleClick</ActionType>
-      <MouseButton>Left</MouseButton>
-    </MouseAction>
+      <Text Encoded="false">a</Text>
+    </SendKeysAction>
     <SendKeysAction UIObjectName="UIMapWorkgroup.UIForensicAnalysisToolWindow.UIWorkgroupViewCustom.UIWorkgroupWatermarkTeEdit">
       <ParameterName />
       <ModifierKeys>None</ModifierKeys>
@@ -667,6 +664,19 @@
                       </Descendants>
                     </UIObject>
                   </Descendants>
+                </UIObject>
+                <UIObject ControlType="RadioButton" Id="UIUseKnownWorkgroupNamRadioButton" FriendlyName="Use Known Workgroup Name" SpecialControlType="None">
+                  <TechnologyName>UIA</TechnologyName>
+                  <WindowTitles>
+                    <WindowTitle>Forensic Analysis Tool</WindowTitle>
+                  </WindowTitles>
+                  <AndCondition>
+                    <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+                    <PropertyCondition Name="ControlType">RadioButton</PropertyCondition>
+                    <PropertyCondition Name="AutomationId">UseKnownWorkgroupRadioButton</PropertyCondition>
+                  </AndCondition>
+                  <SupportLevel>0</SupportLevel>
+                  <Descendants />
                 </UIObject>
               </Descendants>
             </UIObject>

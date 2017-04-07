@@ -139,15 +139,14 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
         public void DeleteWorkgroupName()
         {
             #region Variable Declarations
-            WpfText uIEnterWorkgroupNameText = this.UIForensicAnalysisToolWindow.UIWorkgroupViewCustom.UIWorkgroupWatermarkTeEdit.UIEnterWorkgroupNameText;
             WpfEdit uIWorkgroupWatermarkTeEdit = this.UIForensicAnalysisToolWindow.UIWorkgroupViewCustom.UIWorkgroupWatermarkTeEdit;
             #endregion
 
-            // Double-Click 'Enter Workgroup Name' label
-            Mouse.DoubleClick(uIEnterWorkgroupNameText, new Point(36, 7));
+            // Type 'Control + a' in 'WorkgroupWatermarkTextBox' text box
+            Keyboard.SendKeys(uIWorkgroupWatermarkTeEdit, this.DeleteWorkgroupNameParams.UIWorkgroupWatermarkTeEditSendKeys, ModifierKeys.Control);
 
             // Type '{Delete}' in 'WorkgroupWatermarkTextBox' text box
-            Keyboard.SendKeys(uIWorkgroupWatermarkTeEdit, this.DeleteWorkgroupNameParams.UIWorkgroupWatermarkTeEditSendKeys, ModifierKeys.None);
+            Keyboard.SendKeys(uIWorkgroupWatermarkTeEdit, this.DeleteWorkgroupNameParams.UIWorkgroupWatermarkTeEditSendKeys1, ModifierKeys.None);
         }
         
         #region Properties
@@ -452,9 +451,14 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
         
         #region Fields
         /// <summary>
+        /// Type 'Control + a' in 'WorkgroupWatermarkTextBox' text box
+        /// </summary>
+        public string UIWorkgroupWatermarkTeEditSendKeys = "a";
+        
+        /// <summary>
         /// Type '{Delete}' in 'WorkgroupWatermarkTextBox' text box
         /// </summary>
-        public string UIWorkgroupWatermarkTeEditSendKeys = "{Delete}";
+        public string UIWorkgroupWatermarkTeEditSendKeys1 = "{Delete}";
         #endregion
     }
     
@@ -1210,12 +1214,30 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
                 return this.mUIWorkgroupTreeTree;
             }
         }
+        
+        public WpfRadioButton UIUseKnownWorkgroupNamRadioButton
+        {
+            get
+            {
+                if ((this.mUIUseKnownWorkgroupNamRadioButton == null))
+                {
+                    this.mUIUseKnownWorkgroupNamRadioButton = new WpfRadioButton(this);
+                    #region Search Criteria
+                    this.mUIUseKnownWorkgroupNamRadioButton.SearchProperties[WpfRadioButton.PropertyNames.AutomationId] = "UseKnownWorkgroupRadioButton";
+                    this.mUIUseKnownWorkgroupNamRadioButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIUseKnownWorkgroupNamRadioButton;
+            }
+        }
         #endregion
         
         #region Fields
         private UIWorkgroupWatermarkTeEdit mUIWorkgroupWatermarkTeEdit;
         
         private UIWorkgroupTreeTree1 mUIWorkgroupTreeTree;
+        
+        private WpfRadioButton mUIUseKnownWorkgroupNamRadioButton;
         #endregion
     }
     
