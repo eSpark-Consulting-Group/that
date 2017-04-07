@@ -1,5 +1,6 @@
 ﻿using FAT.Application.Helpers;
 using System;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -22,11 +23,14 @@ namespace FAT.Application
             {
                 var sri = App.GetResourceStream(new Uri("EULA.pdf", UriKind.Relative));
                 if (sri != null)
+                {
+                    Thread.Sleep(500);
                     Dispatcher.BeginInvoke((Action)delegate
                     {
                         using (var stream = sri.Stream)
                             pdf.DocumentSource = new PdfDocumentSource(stream);
                     });
+                }
             });
             Activate();
         }

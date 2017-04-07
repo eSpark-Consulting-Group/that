@@ -61,6 +61,7 @@ namespace FAT.Application.Models
         private Boolean _isAutoDiscoveryCompleted;
         private Boolean _cancelInProgress;
         private Boolean _submitingEmail;
+        private Boolean _previousScansAvailable;
         private IThreatInfoItem[] _onlineItems;
         private readonly DispatcherTimer _scanIteratorTimer;
 
@@ -563,8 +564,12 @@ namespace FAT.Application.Models
             set
             {
                 _email = value;
+
                 RaisePropertyChanged(nameof(Email));
                 SubmitEmailCommand.InvalidateCanExecute();
+
+                if (!string.IsNullOrEmpty(_email))
+                    Set(() => HideSubmitEmail, true);
             }
         }
 
@@ -666,7 +671,7 @@ namespace FAT.Application.Models
             StartAutoDiscoveryCommand = new DelegateCommand(InvokeStartAutoDiscovery);
 
             OpenPreviousScansCommand = new DelegateCommand(InvokeOpenPreviousScans,
-                o => _scanOperationsManager.HasPreviousScans());
+                o => Loaded && _previousScansAvailable);
             OpenCurrentScanCommand = new DelegateCommand(InvokeOpenCurrentScan);
             OpenPreviousScanDetailsCommand = new DelegateCommand(InvokeOpenPreviousScanDetails);
             SearchPreviousScansCommand = new DelegateCommand(InvokeSearchPreviousScans);
@@ -700,18 +705,30 @@ namespace FAT.Application.Models
         {
             Set(() => Loaded, true);
 
+            InvokeLoadInitialData();
             InvokeStartAutoDiscovery(null);
 
             var name = await TryAction(GetCurrentDomainName());
+
             CurrentUser = _targetsDiscoveryService.GetLoggedInUser();
             CurrentDomainName = name?.Replace("DC=", "").Replace(",", ".");
-
-            Email = _scanOperationsManager.GetEmail();
-            if (!string.IsNullOrEmpty(Email))
-                Set(() => HideSubmitEmail, true);
-
             RaisePropertyChanged(nameof(CurrentDomainNameContent));
             RaisePropertyChanged(nameof(HasCurrentDomainName));
+        }
+
+        private void InvokeLoadInitialData()
+        {
+            ThreadHelper.Instance.RunOnThread(() =>
+            {
+                var email = _scanOperationsManager.GetEmail();
+                App.Current.Dispatcher.Invoke(() => Email = email);
+            });
+
+            ThreadHelper.Instance.RunOnThread(() =>
+            {
+                _previousScansAvailable = _scanOperationsManager.HasPreviousScans();
+                App.Current.Dispatcher.Invoke(() => OpenPreviousScansCommand.InvalidateCanExecute());
+            });
         }
 
         private async Task<string> GetCurrentDomainName()
@@ -1202,7 +1219,11 @@ namespace FAT.Application.Models
 
                 CancelInProgress = false;
 
-                OpenPreviousScansCommand.InvalidateCanExecute();
+                if (!_previousScansAvailable)
+                {
+                    _previousScansAvailable = _scanOperationsManager.HasPreviousScans();
+                    OpenPreviousScansCommand.InvalidateCanExecute();
+                }
 
                 ScanProcessCompleted?.Invoke(this, new DomainEventArgs());
             }
