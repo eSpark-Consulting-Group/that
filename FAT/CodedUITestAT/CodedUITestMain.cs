@@ -992,11 +992,14 @@ namespace CodedUITestFAT
             string domainName = SysHelper.GetDomainName();
             Computer endpoint = DataHelper.GetEndpoint();
 
-            //UIMapMain.ClickScanNowButton();
+            UIHelper.WaitForControlIsClickable(SkipDiscoveryButton());
+            UIMapDiscovery.ClickSkipDiscoveryButton();
+            UIHelper.WaitForControlIsClickable(CustomScanButton());
+            UIMapDiscovery.ClickCustomScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanWizard.ClickActiveDirectoryButton();
             UIHelper.WaitForControlIsClickable(NextButton());
-
+           
             // Domain Name
             UIMapStartScanWizard.ClickNextButton();
             AssertErrorText(Settings.Errors.Default.SpecifyDomainName, TestContext);            
@@ -1017,24 +1020,10 @@ namespace CodedUITestFAT
             UIHelper.WaitForControl(AdTree());
             UIMapStartScanWizard.ClickNextButton();
             AssertErrorText(Settings.Errors.Default.SpecifyComputer, TestContext);
-            ExpandAdRow(Settings.General.Default.AdTreeComputersElement);
+            ExpandAdRow(Settings.General.Default.AdTreeComputersElement);           
             CheckAdRow(endpoint.Name);
             UIMapStartScanWizard.ClickNextButton();
-            UIHelper.WaitForControl(QuickScanButton());
-
-            /* 
-            // Credentials input does not function here
-            // Login
-            InputScanLogin(String.Empty);
-            UIMapStartScanWizard.ClickQuickScanButton();
-            AssertErrorText(Settings.Errors.Default.SpecifyLogin, TestContext);
-
-            // Password
-            InputScanLogin(DataHelper.Username);
-            InputPassword(String.Empty);
-            UIMapStartScanWizard.ClickQuickScanButton();
-            AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
-            */
+            UIHelper.WaitForControl(QuickScanButton());          
             UIMapStartScanWizard.ClickBackButton();
             UIHelper.WaitForControl(NextButton());
             UIMapStartScanWizard.ClickBackButton();
