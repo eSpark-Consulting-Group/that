@@ -71,6 +71,9 @@ namespace APTAT.Core.TelerikReports
         {
             var bgColor = Color.FromArgb(251, 251, 251);
 
+            var hasBadFiles = dataSource.AllBadFilesSorted.Length > 0;
+            panelSpaceBeforeDetailsPerProgram.Visible = hasBadFiles;
+
             var isActiveDirectory = dataSource.DevicesSourceDescription.Type == DeploymentCore.Directory.ETargetsDiscovererType.ActiveDirectory;
             List<Telerik.Reporting.Panel> panelToColor = new List<Telerik.Reporting.Panel>();
             if (!isActiveDirectory)

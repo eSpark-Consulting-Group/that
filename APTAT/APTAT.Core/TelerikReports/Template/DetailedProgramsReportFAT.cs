@@ -35,6 +35,9 @@ namespace APTAT.Core.TelerikReports
         {
             var graph = (Telerik.Reporting.Processing.DataItem)sender;
             var obj =(Reports.AptReportData)graph.DataObject.RawData;
+
+            var hasBadFiles = obj.AllBadFilesSorted.Length > 0;
+            panelSpaceBeforeDetailsPerProgram.Visible = hasBadFiles;
             var len = obj.Top10PopularBadFiles.Length;
             if (len < 5) ChangeScaleForOne();
             ((CategoryScale)graphAxis2.Scale).SpacingSlotCount = ChartHelper.CalculateSpacingSlotCount(len, 8);
