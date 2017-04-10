@@ -69,7 +69,6 @@ namespace FAT.Application.Models
         void RemoteScanCompleted();
         void RestoreConnectingState();
         string ToString();
-        void TrySetCancelledStatus();
         void TrySetFailedStatus();
         void UpdateCounters(IScanResultItem scanProgress, IScanCounterDiff counterDiff);
         bool UpdateFileVerdict(IFileVerdictContext fileVerdictContext);

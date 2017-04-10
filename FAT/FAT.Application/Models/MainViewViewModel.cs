@@ -29,44 +29,52 @@ namespace FAT.Application.Models
         public event EventHandler ScanProcessCompleted;
         public event EventHandler<DomainEventArgs> ErrorOccurred;
 
-        private string _tcpPort = "80";
-        private string _udpPort = "53";
-        private Double _percentage;
-        private IThreatInfoItem _selectedItem;
-
         private readonly IAptService _aptService;
         private readonly ITargetsDiscoveryService _targetsDiscoveryService;
         private readonly IStorageService _storage;
         private readonly IScanCounterManager _scanCounterManager;
         private readonly IScanOperationsManager _scanOperationsManager;
 
-        private Boolean _isReportEnabled;
         private ObservableCollection<IThreatInfoItem> _files;
         private ObservableCollection<IThreatInfoItem> _computers;
 
+        private bool _groupEnabled;
         private bool _groupByFiles;
         private bool _groupByComputers;
         private bool _isFailed;
         private bool _isSearchInitiated;
+        private bool _raisedHasUnknowns;
+        private bool _raisedHasMalwares;
+        private bool _isReportEnabled;
+        private bool _isAutoDiscoveryInProgress;
+        private bool _isAutoDiscoveryCompleted;
+        private bool _cancelInProgress;
+        private bool _submitingEmail;
+        private bool _previousScansAvailable;
+        private bool _valkyrieDetailsLinkAvailable;
+
+        private bool? _isScanInProgress = false;
 
         private TimeSpan? _lastModifiesComputerDate = null;
         private DateTime? _lastModifiesFlsVerdictDate = null;
         private DateTime? _lastModifiesValkyrieVerdictDate = null;
 
+        private IThreatInfoItem _selectedItem;
         private List<IThreatInfoItem> _selectedItems = new List<IThreatInfoItem>();
+        private IThreatInfoItem[] _onlineItems;
 
         private Guid _operationGuid;
-        private Boolean? _isScanInProgress = false;
-        private Boolean _isAutoDiscoveryInProgress;
-        private Boolean _isAutoDiscoveryCompleted;
-        private Boolean _cancelInProgress;
-        private Boolean _submitingEmail;
-        private Boolean _previousScansAvailable;
-        private IThreatInfoItem[] _onlineItems;
+
         private readonly DispatcherTimer _scanIteratorTimer;
 
+        private int _scannedItemsCount;
+        private double _percentage;
+
+        private string _tcpPort = "80";
+        private string _udpPort = "53";
         private string _email = string.Empty;
         private string _scanKeyword;
+        private string _valkyrieDetailsLink;
 
         #region Props
 
@@ -232,8 +240,6 @@ namespace FAT.Application.Models
             }
         }
 
-
-        private int _scannedItemsCount;
         public int ScannedItemsCount
         {
             get { return _scannedItemsCount; }
@@ -247,7 +253,6 @@ namespace FAT.Application.Models
 
         public int TotalItemsCount { get; set; }
 
-        private bool _raisedHasMalwares;
         public bool RaisedHasMalwares
         {
             get { return _raisedHasMalwares; }
@@ -258,7 +263,6 @@ namespace FAT.Application.Models
             }
         }
 
-        private bool _raisedHasUnknowns;
         public bool RaisedHasUnknowns
         {
             get { return _raisedHasUnknowns; }
@@ -348,7 +352,7 @@ namespace FAT.Application.Models
             }
         }
 
-        public Boolean IsDetailsEnabled
+        public bool IsDetailsEnabled
         {
             get { return SelectedItem != null && !SelectedItem.IsComputer; }
         }
@@ -427,17 +431,12 @@ namespace FAT.Application.Models
             }
         }
 
-        private string _valkyrieDetailsLink;
         public string ValkyrieDetailsLink
         {
             get { return string.IsNullOrEmpty(_valkyrieDetailsLink) ? _aptService.GetValkyrieDetailsLink() : _valkyrieDetailsLink; }
-            set
-            {
-                _valkyrieDetailsLink = value;
-            }
+            set { _valkyrieDetailsLink = value; }
         }
 
-        private bool _valkyrieDetailsLinkAvailable;
         public bool ValkyrieDetailsLinkAvailable
         {
             get { return _valkyrieDetailsLinkAvailable; }
@@ -483,11 +482,11 @@ namespace FAT.Application.Models
             }
         }
 
-        public IEnumerable<IScanOperation> ScanOperations
+        public IScanOperationCollection ScanOperations
         {
             get
             {
-                return _scanOperationsManager.ScanOperations;
+                return _scanOperationsManager.OperationCollection;
             }
         }
 
@@ -497,7 +496,6 @@ namespace FAT.Application.Models
 
         public bool IsQuickScan { get; set; }
 
-        private bool _groupEnabled;
         public bool GroupEnabled
         {
             get { return _groupEnabled; }
@@ -629,11 +627,14 @@ namespace FAT.Application.Models
             _scanCounterManager = scanCounterManager;
             _scanCounterManager.SelectedOrdersChanged = orders => Set(() => FilterOrders, orders);
 
-            _scanIteratorTimer = new DispatcherTimer(DispatcherPriority.Normal, App.Current.Dispatcher);
-            _scanIteratorTimer.Interval = TimeSpan.FromMilliseconds(500d);
-            _scanIteratorTimer.Tick += IterateThroughScan;
-
             InitCommands();
+
+            if (App.Current != null)
+            {
+                _scanIteratorTimer = new DispatcherTimer(DispatcherPriority.Normal, App.Current.Dispatcher);
+                _scanIteratorTimer.Interval = TimeSpan.FromMilliseconds(500d);
+                _scanIteratorTimer.Tick += IterateThroughScan;
+            }
         }
 
         private void InitCommands()
@@ -668,7 +669,7 @@ namespace FAT.Application.Models
             StartAutoDiscoveryCommand = new DelegateCommand(InvokeStartAutoDiscovery);
 
             OpenPreviousScansCommand = new DelegateCommand(InvokeOpenPreviousScans,
-                o => Loaded && _previousScansAvailable);
+                o => _previousScansAvailable);
             OpenCurrentScanCommand = new DelegateCommand(InvokeOpenCurrentScan);
             OpenPreviousScanDetailsCommand = new DelegateCommand(InvokeOpenPreviousScanDetails);
             SearchPreviousScansCommand = new DelegateCommand(InvokeSearchPreviousScans);
@@ -1158,7 +1159,6 @@ namespace FAT.Application.Models
             IsScanFailed = false;
             IsReportEnabled = false;
 
-
             GroupByComputers = true;
 
             var value = _storage.GetValue<ICollection<Object>>(KnownKeys.CheckedDirectoryItems, true);
@@ -1417,7 +1417,8 @@ namespace FAT.Application.Models
                 if (IsScanCancelled && localPercentage < 100 && infoItem.ScanStage != ScanStage.OperationCancelling
                     && infoItem.ScanStage != ScanStage.OperationCanceled)
                 {
-                    infoItem.TrySetCancelledStatus();
+                    if (infoItem.ScanStage == ScanStage.ScanInProgress)
+                        infoItem.ScanStage = ScanStage.OperationCancelling;
 
                     counterDiff.MalwareDiff += (-1) * infoItem.MalwareFilesCount;
                     counterDiff.CleanDiff += (-1) * infoItem.CleanFilesCount;
@@ -1439,7 +1440,7 @@ namespace FAT.Application.Models
                     scanned++;
                 percentages += localPercentage;
             }
-            if (Math.Abs(Percentage - 100) > 0.01 && _onlineItems.Length > 0)
+            if (Math.Abs(Percentage - 100) > 0.0001 && _onlineItems.Length > 0)
                 Percentage = percentages / (double)_onlineItems.Length;
 
             foreach (var result in files)
@@ -1471,7 +1472,7 @@ namespace FAT.Application.Models
                     RaisedHasUnknowns = false;
             }
 
-            if (Math.Abs(Percentage - 100) < 0.01)
+            if (Math.Abs(Percentage - 100) < 0.0001)
                 OnScanCompleted();
 
             if (!_scanIteratorTimer.IsEnabled)

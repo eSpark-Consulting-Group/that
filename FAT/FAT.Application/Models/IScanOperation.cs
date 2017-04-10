@@ -1,9 +1,15 @@
 ﻿using System;
 using APTAT.Core.Descent.Apt;
 using APTAT.DeploymentCore.Directory;
+using System.Collections.Generic;
 
 namespace FAT.Application.Models
 {
+    public interface IScanOperationCollection : IList<IScanOperation>
+    {
+
+    }
+
     public interface IScanOperation
     {
         string DiscovererDescription { get; set; }

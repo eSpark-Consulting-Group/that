@@ -215,7 +215,7 @@ namespace FAT.Application.Models
                 var count = FilesToCheckOnValkyrieCount.Count(f => f.ValkyrieVerdict != ValkyrieVerdict.PendingFls
                                                                    && f.ValkyrieVerdict != ValkyrieVerdict.InQueue);
                 var percentage = count / (double) FilesToCheckOnValkyrieCount.Length * 100;
-                if (Math.Abs(percentage - 100) < 0.001)
+                if (Math.Abs(percentage - 100) < 0.0001)
                 {
                     if( ScanStage == ScanStage.OperationCancelling)
                     {
@@ -540,7 +540,7 @@ namespace FAT.Application.Models
 
             
             
-            if (Math.Abs(TotalProgressPercentage - 100) < 0.1)
+            if (Math.Abs(TotalProgressPercentage - 100) < 0.0001)
             {
                 string message = $"Completed: Total files scanned: {TotalFilesCount}. Unknown: {UnknownFilesCount}. Malicious: {MalwareFilesCount}.";
                 if (PendingFilesCount > 0)
@@ -907,13 +907,6 @@ namespace FAT.Application.Models
             }
             else
                 Items.Add(threatInfoItem);
-        }
-
-        public void TrySetCancelledStatus()
-        {
-            if (ScanStage == ScanStage.ScanInProgress)
-                ScanStage = ScanStage.OperationCancelling;
-            
         }
 
         public void TrySetFailedStatus()

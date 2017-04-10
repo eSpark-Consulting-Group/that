@@ -2,9 +2,15 @@
 using APTAT.Core.Descent.Apt;
 using APTAT.DeploymentCore.Directory;
 using FAT.Application.Models.Apt;
+using System.Collections.Generic;
 
 namespace FAT.Application.Models
 {
+    public class ScanOperationCollection : List<IScanOperation>, IScanOperationCollection
+    {
+    }
+
+
     public class ScanOperation : IScanOperation
     {
         public int ComputersScanned { get; set; }

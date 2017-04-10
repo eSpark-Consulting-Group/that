@@ -1,6 +1,6 @@
-﻿using FAT.Application.Services;
+﻿using APTAT.Common;
+using FAT.Application.Services;
 using System.Linq;
-using System.Collections.Generic;
 
 namespace FAT.Application.Models
 {
@@ -8,7 +8,7 @@ namespace FAT.Application.Models
     {
         void GetPreviousScans(string keyword);
         bool HasPreviousScans();
-        IEnumerable<IScanOperation> ScanOperations { get; }
+        IScanOperationCollection OperationCollection { get; }
 
         string GetEmail();
     }
@@ -24,12 +24,14 @@ namespace FAT.Application.Models
             _aptService = aptService;
         }
 
-        public IEnumerable<IScanOperation> ScanOperations { get; private set; }
+        public IScanOperationCollection OperationCollection { get; private set; }
 
         public void GetPreviousScans(string keyword)
         {
-            ScanOperations = _dataService.GetPreviousScans(keyword);
-            foreach (var scan in ScanOperations)
+            OperationCollection = CompositionHelper.Instance.Resolve<IScanOperationCollection>();
+
+            var scans = _dataService.GetPreviousScans(keyword);
+            foreach (var scan in scans)
             {
                 if (scan.ValkyrieOperationInfo != null && 
                     !string.IsNullOrEmpty(scan.ValkyrieOperationInfo.ScanId) &&
@@ -37,6 +39,7 @@ namespace FAT.Application.Models
                     scan.ValkyrieOperationInfo.DetailedLink = _aptService.GetValkyrieDetailsLink(
                         scan.ValkyrieOperationInfo.ApiKey,
                         scan.ValkyrieOperationInfo.ScanId);
+                OperationCollection.Add(scan);
             }
         }
 
