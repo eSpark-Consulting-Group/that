@@ -155,9 +155,7 @@ namespace APTAT.Core.UnitTests.DescentAPT
 
             //Act
             Mock.Raise(() => queryResult1.DescentCompleted += null, queryResult1);
-            Mock.Raise(() => queryResult1.DescentCompleted += null, queryResult1);
-
-            Mock.Raise(() => queryResult2.DescentCompleted += null, queryResult2);
+            
             Mock.Raise(() => queryResult2.DescentCompleted += null, queryResult2);
 
             //Assert
@@ -331,9 +329,9 @@ namespace APTAT.Core.UnitTests.DescentAPT
 
             foreach (var target in targetUids)
             {
-                Mock.Arrange(() => scanner1.StopScan(target)).OccursOnce();
-                Mock.Arrange(() => scanner2.StopScan(target)).OccursOnce();
-                Mock.Arrange(() => scanner3.StopScan(target)).OccursOnce();
+                Mock.Arrange(() => scanner1.StopScan(target));
+                Mock.Arrange(() => scanner2.StopScan(target));
+                Mock.Arrange(() => scanner3.StopScan(target));
             }
  
             //Act
@@ -345,9 +343,12 @@ namespace APTAT.Core.UnitTests.DescentAPT
 
             descentSubSystem.StopOperationForTargetUid(targetUids);
             //Assert
-            Mock.Assert(() => scanner1.StopScan(Arg.IsAny<Guid>()), Occurs.Exactly(10));
-            Mock.Assert(() => scanner2.StopScan(Arg.IsAny<Guid>()), Occurs.Exactly(10));
-            Mock.Assert(() => scanner3.StopScan(Arg.IsAny<Guid>()), Occurs.Exactly(10));
+            foreach (var targetUid in targetUids)
+            {
+                Mock.Assert(() => scanner1.StopScan(targetUid), Occurs.Once());
+                Mock.Assert(() => scanner2.StopScan(targetUid), Occurs.Once());
+                Mock.Assert(() => scanner3.StopScan(targetUid), Occurs.Once());
+            }
         }
 
         [Fact(DisplayName = "Test call methods inside StartScan by order Test.")]
@@ -357,8 +358,8 @@ namespace APTAT.Core.UnitTests.DescentAPT
             Guid operationGuid = Guid.NewGuid();
             IChangeTrackingSubSystem tracker = Mock.Create<IChangeTrackingSubSystem>(Behavior.Strict);
             IScheduler timer = Mock.Create<IScheduler>(Behavior.Strict);
-            IScanner scanner = Mock.Create<IScanner>();
-            IDescentQueryResult queryResult = Mock.Create<IDescentQueryResult>();
+            IScanner scanner = Mock.Create<IScanner>(Behavior.Strict);
+            IDescentQueryResult queryResult = Mock.Create<IDescentQueryResult>(Behavior.Strict);
             
             Mock.Arrange(() => timer.SetInterval(Arg.IsAny<TimeSpan>()));
             Mock.Arrange(() => queryResult.TotalTargetsCount).Returns(() => 10);
@@ -396,7 +397,7 @@ namespace APTAT.Core.UnitTests.DescentAPT
 
             foreach (var target in targetUids.Take(3))
             {
-                Mock.Arrange(() => scanner.StopScan(target)).OccursOnce();
+                Mock.Arrange(() => scanner.StopScan(target));
             }
 
             //Act
@@ -474,9 +475,9 @@ namespace APTAT.Core.UnitTests.DescentAPT
             Mock.Arrange(() => scanner3.ValidateAndGetResult()).Returns(() => queryResult3);
             Mock.Arrange(() => tracker.RegisterListener(queryResult3));
 
-            Mock.Arrange(() => scanner1.AbortAllThread(0)).OccursOnce();
-            Mock.Arrange(() => scanner2.AbortAllThread(0)).OccursOnce();
-            Mock.Arrange(() => scanner3.AbortAllThread(0)).OccursOnce();
+            Mock.Arrange(() => scanner1.AbortAllThread(6));
+            Mock.Arrange(() => scanner2.AbortAllThread(6));
+            Mock.Arrange(() => scanner3.AbortAllThread(6));
 
             //Act
             DescentSubSystem descentSubSystem = 
@@ -486,12 +487,12 @@ namespace APTAT.Core.UnitTests.DescentAPT
             descentSubSystem.StartScan(scanner2, out operationUid2);
             descentSubSystem.StartScan(scanner3, out operationUid3);
 
-            descentSubSystem.StopAllScans(0);
+            descentSubSystem.StopAllScans(6);
 
             //Assert
-            Mock.Assert(() => scanner1.AbortAllThread(0), Occurs.Once());
-            Mock.Assert(() => scanner2.AbortAllThread(0), Occurs.Once());
-            Mock.Assert(() => scanner3.AbortAllThread(0), Occurs.Once());
+            Mock.Assert(() => scanner1.AbortAllThread(6), Occurs.Once());
+            Mock.Assert(() => scanner2.AbortAllThread(6), Occurs.Once());
+            Mock.Assert(() => scanner3.AbortAllThread(6), Occurs.Once());
         }
 
         [Fact(DisplayName = "Create two scans." +
@@ -521,7 +522,14 @@ namespace APTAT.Core.UnitTests.DescentAPT
             Mock.Arrange(() => scanner1.ValidateAndGetResult()).Returns(() => queryResult1);
             Mock.Arrange(() => tracker.RegisterListener(queryResult1));
             Mock.Arrange(() => scanner1.AbortAllThread(0)).OccursOnce();
-            Mock.Arrange(() => scanner1.StopScan(Arg.IsAny<Guid>()));
+            foreach (var targetUid in targetUids0_5)
+            {
+                Mock.Arrange(() => scanner1.StopScan(targetUid));
+            }
+            foreach (var targetUid in targetUids6_10)
+            {
+                Mock.Arrange(() => scanner1.StopScan(targetUid));
+            }
 
             Mock.Arrange(() => queryResult2.TotalTargetsCount).Returns(() => 12);
             Mock.Arrange(() => queryResult2.OperationUid).Returns(() => operationUid2);
@@ -529,7 +537,14 @@ namespace APTAT.Core.UnitTests.DescentAPT
             Mock.Arrange(() => scanner2.ValidateAndGetResult()).Returns(() => queryResult2);
             Mock.Arrange(() => tracker.RegisterListener(queryResult2));
             Mock.Arrange(() => scanner2.AbortAllThread(0)).OccursOnce();
-            Mock.Arrange(() => scanner2.StopScan(Arg.IsAny<Guid>()));
+            foreach (var targetUid in targetUids0_5)
+            {
+                Mock.Arrange(() => scanner2.StopScan(targetUid));
+            }
+            foreach (var targetUid in targetUids6_10)
+            {
+                Mock.Arrange(() => scanner2.StopScan(targetUid));
+            }
 
             //Act
             DescentSubSystem descentSubSystem = new DescentSubSystem(tracker, timer);
@@ -538,14 +553,25 @@ namespace APTAT.Core.UnitTests.DescentAPT
             descentSubSystem.StartScan(scanner2, out operationUid2);
 
             descentSubSystem.StopOperationForTargetUid(targetUids0_5);
-            
-            Mock.Assert(() => scanner1.StopScan(Arg.IsAny<Guid>()), Occurs.Exactly(5));
-            Mock.Assert(() => scanner2.StopScan(Arg.IsAny<Guid>()), Occurs.Exactly(5));
+            foreach (var targetUid in targetUids0_5)
+            {
+                Mock.Assert(() => scanner2.StopScan(targetUid), Occurs.Once());
+            }
+            foreach (var targetUid in targetUids0_5)
+            {
+                Mock.Assert(() => scanner1.StopScan(targetUid), Occurs.Once());
+            }
 
             descentSubSystem.StopOperationForTargetUid(targetUids6_10);
 
-            Mock.Assert(() => scanner1.StopScan(Arg.IsAny<Guid>()));
-            Mock.Assert(() => scanner2.StopScan(Arg.IsAny<Guid>()));
+            foreach (var targetUid in targetUids6_10)
+            {
+                Mock.Assert(() => scanner2.StopScan(targetUid), Occurs.Once());
+            }
+            foreach (var targetUid in targetUids6_10)
+            {
+                Mock.Assert(() => scanner1.StopScan(targetUid), Occurs.Once());
+            }
         }
 
         [Fact(DisplayName = "When called validate and get result and result filed" +

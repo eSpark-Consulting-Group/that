@@ -8,7 +8,7 @@ namespace APTAT.DeploymentCore.Descent
     {
         public IDescentWatcher CreateDescentWatcher(Action<Guid> onDescentTimeout)
         {
-            Scheduler scheduler = new Scheduler();
+            IScheduler scheduler = CompositionHelper.Instance.Resolve<IScheduler>();
             return new DescentWatcher(Settings.Default.AgentDescentingTimeout, onDescentTimeout, scheduler);
         }
     }
