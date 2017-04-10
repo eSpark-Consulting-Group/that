@@ -67,8 +67,8 @@ namespace APTAT.Core.Reports
                 }
             }
         }
-        public bool IsActiveDirectoryDevicesSource { get { return DevicesSourceDescription.Type == ETargetsDiscovererType.ActiveDirectory; } }
-        
+        public bool IsActiveDirectoryDevicesSource => DevicesSourceDescription.Type == ETargetsDiscovererType.ActiveDirectory;
+
         public int TargetsNotPerformed { get; set; }
         public int TargetsScanned
         {
@@ -312,7 +312,7 @@ namespace APTAT.Core.Reports
 
                 var itemRatingInfoList = new List<ItemRatingInfo>()
                 {
-                    new FileRatingInfo(){CloudVerdict = CloudVerdict.Safe, Count = SafeFilesCount, Value = string.Format("Trusted: ({0:P2})", SafeFilesCount  / (double)total)},
+                    new FileRatingInfo(){CloudVerdict = CloudVerdict.Safe, Count = SafeFilesCount, Value = string.Format("Trusted ({0:P2})", SafeFilesCount  / (double)total)},
                     new FileRatingInfo(){CloudVerdict = CloudVerdict.Unknown, Count = UnknownFilesFound, Value = string.Format("Unknown  ({0:P2})", UnknownFilesFound / (double) total)},
                     new FileRatingInfo() { CloudVerdict = CloudVerdict.Malware, Count = MalwareFilesFound, Value = string.Format("Malicious ({0:P2})", MalwareFilesFound / (double) total)},
                     new FileRatingInfo() { CloudVerdict = CloudVerdict.FailedToAnalyze, Count = LookupInProgressFilesCount, Value = string.Format("Lookup In Progress ({0:P2})" , LookupInProgressFilesCount / (double) total)},

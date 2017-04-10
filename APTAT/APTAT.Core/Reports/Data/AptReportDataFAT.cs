@@ -20,7 +20,7 @@ namespace APTAT.Core.Reports
                 var top10 = (from target in targets
                              where target.BadFilesCount > 0
                              orderby target.BadFilesCount descending
-                             select target).Take(10);
+                             select target).Take(10).ToArray();
 
                 if (top10.All(t => (t.UnknownFilesCount + t.MalwareFilesCount + t.NotAnalyzedFilesCount + t.PendingAnalysisFilesCount) == 0)) return new VulnerableDeviceInfoEx[0];
                 List<VulnerableDeviceInfoEx> devices = new List<VulnerableDeviceInfoEx>();
@@ -48,11 +48,21 @@ namespace APTAT.Core.Reports
                 if (total == 0) return new ItemRatingInfo[0];
                 var itemRatingInfoList = new List<ItemRatingInfo>
                 {
-                    new FileRatingInfoFAT{ CloudVerdict = (int)FinalVerdict.Clean, Count = SafeFilesCount, Value = string.Format("Trusted: ({0:P2})", total == 0?0: SafeFilesCount / (double) total)},
-                    new FileRatingInfoFAT{ CloudVerdict = (int)FinalVerdict.Unknown, Count = UnknownFilesFound, Value = string.Format("Unknown  ({0:P2})", total == 0?0:UnknownFilesFound / (double) total)},
-                    new FileRatingInfoFAT{ CloudVerdict = (int)FinalVerdict.Malware, Count = MalwareFilesFound, Value = string.Format("Malicious ({0:P2})", total == 0?0:MalwareFilesFound / (double) total)},
-                    new FileRatingInfoFAT{ CloudVerdict = (int)FinalVerdict.InProgress, Count = PendingAnalysisFilesCount, Value = string.Format("In Analysis ({0:P2})" , total == 0?0:PendingAnalysisFilesCount / (double) total )},
-                    new FileRatingInfoFAT{ CloudVerdict = (int)FinalVerdict.NotAnalyzed, Count = NotAnalyzedFilesCount, Value = string.Format("Not Analyzed ({0:P2})" , total == 0?0:NotAnalyzedFilesCount / (double) total )}
+                    new FileRatingInfoFAT{ CloudVerdict = (int)FinalVerdict.Clean, Count = SafeFilesCount, Value =
+                        $"Trusted ({(total == 0 ? 0 : SafeFilesCount / (double) total):P2})"
+                    },
+                    new FileRatingInfoFAT{ CloudVerdict = (int)FinalVerdict.Unknown, Count = UnknownFilesFound, Value =
+                        $"Unknown  ({(total == 0 ? 0 : UnknownFilesFound / (double) total):P2})"
+                    },
+                    new FileRatingInfoFAT{ CloudVerdict = (int)FinalVerdict.Malware, Count = MalwareFilesFound, Value =
+                        $"Malicious ({(total == 0 ? 0 : MalwareFilesFound / (double) total):P2})"
+                    },
+                    new FileRatingInfoFAT{ CloudVerdict = (int)FinalVerdict.InProgress, Count = PendingAnalysisFilesCount, Value =
+                        $"In Analysis ({(total == 0 ? 0 : PendingAnalysisFilesCount / (double) total):P2})"
+                    },
+                    new FileRatingInfoFAT{ CloudVerdict = (int)FinalVerdict.NotAnalyzed, Count = NotAnalyzedFilesCount, Value =
+                        $"Not Analyzed ({(total == 0 ? 0 : NotAnalyzedFilesCount / (double) total):P2})"
+                    }
                 };
 
                 return itemRatingInfoList.ToArray();
