@@ -63,13 +63,13 @@ namespace FAT.Application
 
             await Dispatcher.Yield(DispatcherPriority.Background);
 
-            await Dispatcher.BeginInvoke((Action)delegate
+            Dispatcher.BeginInvoke((Action)delegate
             {
                 Left = location.X;
                 Top = location.Y;
                 Width = Owner.ActualWidth + 6;
                 MaxHeight = Owner.ActualHeight + 6;
-            }, DispatcherPriority.Render);
+            });
         }
     }
 }
