@@ -45,7 +45,7 @@ namespace FAT.Application.Services
         public event EventHandler<GetDirectoryItemsEventArgs> GetDirectoryRootCompleted;
         public event EventHandler<GetDirectoryItemsEventArgs> GetWorkgroupCompleted;
         public event EventHandler<GetByIpAddressEventArgs> GetByIpAddressesCompleted;
-        public event EventHandler<DeploymentTargetResolvingEventArg> DeploymentTargetsAutoResolving;
+        public event EventHandler<DeploymentTargetResolvingEventArgs> DeploymentTargetsAutoResolving;
 
         public void ResolveDirectoryItems(DeploymentItem[] directoryItems, String admin, String password,
             Object userState)

@@ -3,9 +3,9 @@ using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 
 namespace APTAT.DeploymentCore
 {
-    public class DeploymentTargetResolvingEventArg:EventArgs
+    public class DeploymentTargetResolvingEventArgs : EventArgs
     {
-        public DeploymentTargetResolvingEventArg(DeploymentTarget target, double  progress, Exception exception = null)
+        public DeploymentTargetResolvingEventArgs(DeploymentTarget target, double  progress, Exception exception = null)
         {
             this.Target = target;
             this.Progress = progress;

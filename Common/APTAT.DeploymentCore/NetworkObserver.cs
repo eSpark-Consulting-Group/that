@@ -155,7 +155,7 @@ namespace APTAT.DeploymentCore
             return target;
         }
 
-        public event EventHandler<DeploymentTargetResolvingEventArg> DeploymentTargetResolving;
+        public event EventHandler<DeploymentTargetResolvingEventArgs> DeploymentTargetResolving;
 
         public List<Tuple<IPAddress, IPAddress>> GetLocalAddressRange()
         {
@@ -225,11 +225,11 @@ namespace APTAT.DeploymentCore
                         }
                         if (target != null && target.IsOnline)
                         {
-                            OnDeploymentTargetResolving(new DeploymentTargetResolvingEventArg(target, progress));
+                            OnDeploymentTargetResolving(new DeploymentTargetResolvingEventArgs(target, progress));
                         }
                         else
                         {
-                            OnDeploymentTargetResolving(new DeploymentTargetResolvingEventArg(null, progress));
+                            OnDeploymentTargetResolving(new DeploymentTargetResolvingEventArgs(null, progress));
                         }
                     }
                 };
@@ -238,7 +238,7 @@ namespace APTAT.DeploymentCore
             }
             catch (Exception e)
             {
-                OnDeploymentTargetResolving(new DeploymentTargetResolvingEventArg(null, 0, e));
+                OnDeploymentTargetResolving(new DeploymentTargetResolvingEventArgs(null, 0, e));
             }           
 
         }
@@ -619,7 +619,7 @@ namespace APTAT.DeploymentCore
         #endregion
         private static object lockObject = new object();
 
-        protected virtual void OnDeploymentTargetResolving(DeploymentTargetResolvingEventArg e)
+        protected virtual void OnDeploymentTargetResolving(DeploymentTargetResolvingEventArgs e)
         {
             DeploymentTargetResolving?.Invoke(this, e);
         }

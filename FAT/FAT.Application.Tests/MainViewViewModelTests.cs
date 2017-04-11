@@ -1,6 +1,9 @@
-﻿using FAT.Application.Models;
+﻿using APTAT.DeploymentCore;
+using FAT.Application.Models;
 using FAT.Application.Services;
 using System;
+using System.Threading.Tasks;
+using System.Windows.Threading;
 using Telerik.JustMock;
 using Xunit;
 
@@ -53,6 +56,49 @@ namespace FAT.Application.Tests
             Assert.Same(col, target.ScanCounters);
             Assert.Same(col2, target.ScanOperations);
             Mock.Assert(service4);
+        }
+
+        [Theory]
+        [InlineData("testname", "DiscoveryResults")]
+        [InlineData(null, "HasCurrentDomainName")]
+        public void OnLoadedCommandTest(string name, string propertyChanged)
+        {
+            var service1 = Mock.Create<ITargetsDiscoveryService>(Behavior.Strict);
+            var service2 = Mock.Create<IAptService>(Behavior.Strict);
+            var service3 = Mock.Create<IStorageService>(Behavior.Strict);
+            var service4 = Mock.Create<IScanCounterManager>(Behavior.Strict);
+            var service5 = Mock.Create<IScanOperationsManager>(Behavior.Strict);
+
+            Func<GetDomainNameResponse> func = () => new GetDomainNameResponse(name, null);
+
+            Mock.Arrange(() => service4.Clear()).MustBeCalled();
+            Mock.ArrangeSet(() => service4.SelectedOrdersChanged = Arg.IsAny<Action<int[]>>());
+            Mock.Arrange(() => service1.GetCurrentDomainName()).Returns(Task.Run(func)).MustBeCalled();
+            Mock.Arrange(() => service1.StartTargetsAutoDiscovery()).MustBeCalled();
+            Mock.Arrange(() => service1.GetLoggedInUser()).Returns(name).MustBeCalled();
+            Mock.Arrange(() => service5.HasPreviousScans()).Returns(Arg.AnyBool).OnAllThreads().MustBeCalled();
+            Mock.Arrange(() => service5.GetEmail()).Returns(Arg.AnyString).OnAllThreads().MustBeCalled();
+
+            MainViewViewModel target = new MainViewViewModel(service1, service2, service3, service4, service5);
+
+            //act
+            Action a = () =>
+            {
+                target.OnLoadedCommand.Execute(null);
+                Mock.Raise(() => service1.DeploymentTargetsAutoResolving += null, args: new[] { new DeploymentTargetResolvingEventArgs(null, 0.5) });
+            };
+
+            Assert.PropertyChanged(target, propertyChanged, a);
+            Assert.True(target.Loaded);
+            Assert.True(target.IsAutoDiscoveryInProgress);
+            Assert.NotNull(target.DiscoveryResults);
+            Assert.Equal("/Views/DiscoveryResults.xaml", target.Uri);
+            Assert.Equal(name, target.CurrentDomainName);
+            Assert.Equal(name, target.CurrentUser);
+            Assert.Equal(50, target.Percentage);
+            Mock.Assert(service1);
+            Mock.Assert(service4);
+            Mock.Assert(service5);
         }
     }
 }

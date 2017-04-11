@@ -14,7 +14,7 @@ namespace FAT.Application.Services
         event EventHandler<DirectoryItemsResolvedEventArgs> DirectoryItemsResolved;
         event EventHandler<GetDirectoryItemsEventArgs> GetWorkgroupCompleted;
         event EventHandler<GetByIpAddressEventArgs> GetByIpAddressesCompleted;
-        event EventHandler<DeploymentTargetResolvingEventArg> DeploymentTargetsAutoResolving;
+        event EventHandler<DeploymentTargetResolvingEventArgs> DeploymentTargetsAutoResolving;
         void GetByIpAddresses(IEnumerable<IpAddressWrapper> ipAddresses, Action<bool> localAction, Object userState);
 
         void GetWorkgroup(String workgroupName, DirectoryItem parent, Object userState);

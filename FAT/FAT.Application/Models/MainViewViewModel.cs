@@ -629,12 +629,10 @@ namespace FAT.Application.Models
 
             InitCommands();
 
-            if (App.Current != null)
-            {
-                _scanIteratorTimer = new DispatcherTimer(DispatcherPriority.Normal, App.Current.Dispatcher);
-                _scanIteratorTimer.Interval = TimeSpan.FromMilliseconds(500d);
-                _scanIteratorTimer.Tick += IterateThroughScan;
-            }
+            _scanIteratorTimer = new DispatcherTimer(DispatcherPriority.Normal, App.Current?.Dispatcher ?? Dispatcher.CurrentDispatcher);
+            _scanIteratorTimer.Interval = TimeSpan.FromMilliseconds(500d);
+            _scanIteratorTimer.Tick += IterateThroughScan;
+
         }
 
         private void InitCommands()
@@ -704,7 +702,7 @@ namespace FAT.Application.Models
             Set(() => Loaded, true);
 
             InvokeStartAutoDiscovery(null);
-            InvokeLoadInitialData();
+            InvokeLoadInitialData(App.Current?.Dispatcher);
 
             var name = await TryAction(GetCurrentDomainName());
 
@@ -714,14 +712,14 @@ namespace FAT.Application.Models
             RaisePropertyChanged(nameof(HasCurrentDomainName));
         }
 
-        private void InvokeLoadInitialData()
+        private void InvokeLoadInitialData(Dispatcher dispatcher)
         {
             ThreadHelper.Instance.RunOnThread(() =>
             {
                 var email = _scanOperationsManager.GetEmail();
                 if (!string.IsNullOrEmpty(email))
                 {
-                    App.Current.Dispatcher.Invoke(() =>
+                    dispatcher?.Invoke(() =>
                     {
                         Email = email;
                         Set(() => HideSubmitEmail, true);
@@ -732,7 +730,7 @@ namespace FAT.Application.Models
             ThreadHelper.Instance.RunOnThread(() =>
             {
                 _previousScansAvailable = _scanOperationsManager.HasPreviousScans();
-                App.Current.Dispatcher.Invoke(() => OpenPreviousScansCommand.InvalidateCanExecute());
+                dispatcher?.Invoke(() => OpenPreviousScansCommand.InvalidateCanExecute());
             });
         }
 
@@ -857,7 +855,7 @@ namespace FAT.Application.Models
             _targetsDiscoveryService.StopTargetsAutoDiscovery();
         }
 
-        private void OnDeploymentTargetsAutoResolving(object sender, DeploymentTargetResolvingEventArg e)
+        private void OnDeploymentTargetsAutoResolving(object sender, DeploymentTargetResolvingEventArgs e)
         {
             if (e.Error != null)
             {
