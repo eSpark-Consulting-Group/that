@@ -58,8 +58,10 @@ namespace FAT.Application
         {
             var element = e.OriginalSource as FrameworkElement;
 
+            var chk = element?.GetVisualParent<CheckBox>();
+
             var item = element?.DataContext as IThreatInfoItem;
-            if (item != null && !item.IsComputer)
+            if (item != null && !item.IsComputer && chk == null)
                 item_Click(sender, e);
         }
 
