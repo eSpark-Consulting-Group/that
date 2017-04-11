@@ -1211,8 +1211,8 @@
                 </Border>
             </Button>
 
-            <Popup x:Name="PART_DropDownPopup" VerticalOffset="-4" HorizontalOffset="-130">
-                <Popup.StaysOpen>True</Popup.StaysOpen>
+            <Popup x:Name="PART_DropDownPopup" VerticalOffset="-4" HorizontalOffset="-130" Panel.ZIndex="99">
+                <Popup.StaysOpen>False</Popup.StaysOpen>
                 <Popup.AllowsTransparency>True</Popup.AllowsTransparency>
 
             </Popup>

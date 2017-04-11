@@ -5,7 +5,7 @@
         xmlns:converters="clr-namespace:FAT.Application.Converters"
         Title="Scan Completed" MaxWidth="955" MinWidth="955"  ShowInTaskbar="False" ResizeMode="NoResize"
         AllowsTransparency="True" Background="Transparent" BorderThickness="3" WindowStyle="None" SizeToContent="Height" 
-        Loaded="Window_Loaded">
+        Loaded="Window_Loaded" Panel.ZIndex="100">
 
     <Border x:Name="Shadow" CornerRadius="4" BorderBrush="#11000000" BorderThickness="1" Margin="0">
         <Border CornerRadius="3" BorderBrush="#22000000" BorderThickness="1">
