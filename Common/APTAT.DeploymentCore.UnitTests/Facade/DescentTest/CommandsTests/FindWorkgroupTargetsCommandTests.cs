@@ -36,24 +36,23 @@ namespace APTAT.DeploymentCore.UnitTests.Facade.DescentTest.CommandsTests
             criteria.WorkgroupName = "test";
             FindTargetsRequest request = new FindTargetsRequest();
             request.SearchCriterion = criteria;
-            List<string> expectedComps = new List<string>();
-            expectedComps.Add("comp1");
-            expectedComps.Add("comp2");
-            expectedComps.Add("comp3");
+
             var networkBrowserMock = Mock.Create<INetworkBrowser>(Behavior.Strict);
             FindWorkgroupTargetsCommand target = new FindWorkgroupTargetsCommand(networkBrowserMock, request);
+
+            var computers = new List<string>();
+            for (int i = 0; i < 5; i++)
+                computers.Add(Guid.NewGuid().ToString());
+
             networkBrowserMock
-                .Arrange(browser => browser.GetNetworkComputers(ServerType.All, criteria.WorkgroupName, Arg.IsAny<List<string>>()))
-                .DoInstead((ServerType type, string name, List<string> comps) =>
-               {
-                   comps.AddRange(expectedComps);
-               }).Returns(NetServerEnumResults.NERR_Success)
+                .Arrange(browser => browser.GetNetworkComputers(ServerType.All, criteria.WorkgroupName))
+                .Returns(new NetworkComputersResult()
+                { Result = NetServerEnumResults.NERR_Success, Computers = computers })
                 .MustBeCalled();
-            
 
             target.Execute();
             var response = target.Response;
-            Assert.Equal(expectedComps, response.Targets.Select(t => ((WorkgroupTarget)t).Name));
+            Assert.Equal(computers, response.Targets.Select(t => ((WorkgroupTarget)t).Name));
         }
 
         [Fact]
@@ -65,11 +64,14 @@ namespace APTAT.DeploymentCore.UnitTests.Facade.DescentTest.CommandsTests
             request.SearchCriterion = criteria;
             var networkBrowserMock = Mock.Create<INetworkBrowser>(Behavior.Strict);
             FindWorkgroupTargetsCommand target = new FindWorkgroupTargetsCommand(networkBrowserMock, request);
+
             networkBrowserMock
-                .Arrange(browser => browser.GetNetworkComputers(ServerType.All, criteria.WorkgroupName, Arg.IsAny<List<string>>()))
-                .Returns(NetServerEnumResults.ERROR_NO_BROWSER_SERVERS_FOUND)
-                .MustBeCalled();
-            
+                .Arrange(browser => browser.GetNetworkComputers(ServerType.All, criteria.WorkgroupName))
+                .Returns(new NetworkComputersResult()
+                {
+                    Result = NetServerEnumResults.ERROR_NO_BROWSER_SERVERS_FOUND ,
+                    Computers = null
+                }).MustBeCalled();
 
             Assert.Throws<InvalidOperationException>(() =>
             {

@@ -19,6 +19,7 @@ namespace APTAT.DeploymentCore.Descent
 
             var period = Settings.Default.DescentResultLifetime.TotalSeconds;
             _timer.SetInterval(TimeSpan.FromSeconds(period));
+            _timer.Start(false);
         }
 
         private static readonly Guid DescentSubSystemIdentifier = new Guid( @"{6E6F58FD-47AC-4d1e-8063-40C2CA9F332E}" );

@@ -1,26 +1,19 @@
-﻿
-using System;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using APTAT.Core.Properties;
-using APTAT.Core.Descent.Apt;
 using System.Threading;
-using System.Collections.Concurrent;
 using APTAT.Common;
+using APTAT.Core.Descent.Apt;
 using APTAT.DeploymentCore.Descent;
-using APTAT.DeploymentCore;
-using APTAT.DeploymentCore.Facade;
-using APTAT.DeploymentCore.Directory;
-using APTAT.DeploymentCore.Properties;
 using APTAT.DeploymentCore.Descent.Exceptions;
-
+using APTAT.DeploymentCore.Directory;
+using APTAT.DeploymentCore.Facade;
+using APTAT.DeploymentCore.Properties;
 using Telerik.JustMock;
 using Xunit;
 
-
-namespace APTAT.Core.UnitTests.DescentAPT
+namespace APTAT.DeploymentCore.UnitTests.Descent
 {
     public class DescentSubSystemTest
     {
@@ -31,15 +24,9 @@ namespace APTAT.Core.UnitTests.DescentAPT
         private IScanOptions scanOptions;
         private IComputerDescentResultFactory computerDescentResultFactory;
         private IDescentWatcherFactory descentWatcherFactory;
+
         public DescentSubSystemTest()
         {
-            int length = 10;
-            for (int i = 0; i < length; i++)
-            {
-                _scanners[Guid.NewGuid()] = Mock.Create<IScanner>();
-                _descentResults[Guid.NewGuid()] = Mock.Create<IDescentQueryResult>();
-            }
-
             var computers = new List<IComputer>();
             for (int i = 0; i <= 9; i++)
             {
@@ -58,6 +45,17 @@ namespace APTAT.Core.UnitTests.DescentAPT
             scanOptions = Mock.Create<IScanOptions>(Behavior.Strict);
             computerDescentResultFactory = Mock.Create<IComputerDescentResultFactory>();
             descentWatcherFactory = Mock.Create<IDescentWatcherFactory>(Behavior.Strict);
+ 
+            for (int i = 0; i < 10; i++)
+            {
+                _scanners[Guid.NewGuid()] = Mock.Create<IScanner>();
+
+                var operationUid = Guid.NewGuid();
+                var descentResult = Mock.Create<IDescentQueryResult>(Behavior.Strict);
+                Mock.Arrange(() => descentResult.Completed).Returns(() => false);
+                Mock.Arrange(() => descentResult.CompletedTime).Returns(() => DateTime.Now.AddMinutes(-42));
+                _descentResults[operationUid] = descentResult;
+            }
         }
 
         [Fact(DisplayName = "DescentSubSystem constructor test.")]
@@ -67,16 +65,14 @@ namespace APTAT.Core.UnitTests.DescentAPT
             IChangeTrackingSubSystem tracker = Mock.Create<IChangeTrackingSubSystem>(Behavior.Strict);
             var timer = Mock.Create<IScheduler>(Behavior.Strict);
             TimeSpan period;
-
+            Mock.Arrange(() => timer.Start(false)).Returns(true);
             var descentResultLifetime = Settings.Default.DescentResultLifetime.ToString();
-           
             //APTAT.Core
             TimeSpan.TryParse(descentResultLifetime, out period);
             Mock.Arrange(() => timer.SetInterval(period)).OccursOnce();
             //Act
             DescentSubSystem descentSubSystem = new DescentSubSystem(tracker, timer);
             //Assert
-            Mock.Assert(descentSubSystem);
             Mock.Assert(timer);
             Mock.Arrange(() => timer.Dispose());
             descentSubSystem.Dispose();
@@ -110,12 +106,12 @@ namespace APTAT.Core.UnitTests.DescentAPT
             Mock.Arrange(() => queryResult.TotalTargetsCount).Returns(() => 10);
             Mock.Arrange(() => scanner.ValidateAndGetResult()).Returns(() => queryResult);
 
-            DescentSubSystem DescentSubSystem = new DescentSubSystem(tracker, timer);
-            DescentSubSystem.DescentCompleted += (s, e) =>
+            DescentSubSystem descentSubSystem = new DescentSubSystem(tracker, timer);
+            descentSubSystem.DescentCompleted += (s, e) =>
             {
                 raised = true;
             };
-            DescentSubSystem.StartScan(scanner, out operationGuid);
+            descentSubSystem.StartScan(scanner, out operationGuid);
             //Act
             Mock.Raise(() => queryResult.DescentCompleted += null, queryResult);
             //Assert
@@ -173,12 +169,15 @@ namespace APTAT.Core.UnitTests.DescentAPT
             IDescentQueryResult queryResult = Mock.Create<IDescentQueryResult>();
             Mock.Arrange(() => queryResult.TotalTargetsCount).Returns(() => 10);
             Mock.Arrange(() => scanner.ValidateAndGetResult()).Returns(() => queryResult);
+
             DescentSubSystem descentSubSystem = new DescentSubSystem(tracker, timer);
             descentSubSystem.StartScan(scanner, out operationGuid);
             //Act
             Mock.Raise(() => queryResult.DescentCompleted += null, queryResult);
+
             //Assert
-            Mock.Assert(scanner);
+            descentSubSystem.StopAllScans(0);
+            Mock.Assert(() => scanner.AbortAllThread(0), Occurs.Never());
         }
 
         [Fact(DisplayName = "For twice raise event OnDescentCompleted should be raised once.")]
@@ -194,12 +193,12 @@ namespace APTAT.Core.UnitTests.DescentAPT
             IScanner scanner = Mock.Create<IScanner>();
             Mock.Arrange(() => scanner.ValidateAndGetResult()).Returns(() => queryResult);
 
-            DescentSubSystem DescentSubSystem = new DescentSubSystem(tracker, timer);
-            DescentSubSystem.DescentCompleted += (s, e) =>
+            DescentSubSystem descentSubSystem = new DescentSubSystem(tracker, timer);
+            descentSubSystem.DescentCompleted += (s, e) =>
             {
                 raised = true;
             };
-            DescentSubSystem.StartScan(scanner, out operationGuid);
+            descentSubSystem.StartScan(scanner, out operationGuid);
             //Act
             Mock.Raise(() => queryResult.DescentCompleted += null, queryResult);
             raised = false;
@@ -212,7 +211,7 @@ namespace APTAT.Core.UnitTests.DescentAPT
         "_descentResults collection is not empty and method GetDescentResultsByOperationUid " +
         "return right value, on call DescentResultsCleanupTimerCallback _descentResults " +
         "should be empty test.")]
-        public void DescentResultsCleanupTimerCallbackTest()
+        public void GetDescentResultsByOperationUidTest()
         {
             //Arrange
             Guid operationGuid = Guid.NewGuid();
@@ -231,6 +230,68 @@ namespace APTAT.Core.UnitTests.DescentAPT
 
             //Assert
             Assert.Null(resultByOperationUidAfter);
+        }
+
+
+        [Theory(DisplayName = "Check descent results. case where uts minus completed time" +
+        " is more than descentResultFiletile. queryResult.CompletedTime > -6 -5 -4  ")]
+        [InlineData(-10, true)]
+        [InlineData(-9, true)]
+        [InlineData(-8, true)]
+        [InlineData(-7,  true)]
+        [InlineData(-6,  true)]
+        [InlineData(-5,  true)]
+        public void DescentResultsCleanupTimerCallbackTest(int shiftHours,bool completed)
+        {
+            //Arrange
+            Guid operationGuid=Guid.NewGuid();
+            IChangeTrackingSubSystem tracker = Mock.Create<IChangeTrackingSubSystem>();
+            IScanner scanner = Mock.Create<IScanner>();
+            var timer = Mock.Create<IScheduler>();
+
+            IDescentQueryResult queryResult = Mock.Create<IDescentQueryResult>();
+            Mock.Arrange(() => queryResult.TotalTargetsCount).Returns(() => 10);
+            Mock.Arrange(() => queryResult.Completed).Returns(() => completed);
+            Mock.Arrange(() => queryResult.OperationUid).Returns(() => operationGuid);
+            Mock.Arrange(() => queryResult.CompletedTime).Returns(() =>DateTime.UtcNow.AddHours(shiftHours));
+            Mock.Arrange(() => scanner.ValidateAndGetResult()).Returns(() => queryResult);
+ 
+            DescentSubSystem descentSubSystem = new DescentSubSystem(tracker, timer);
+            descentSubSystem.StartScan(scanner, out operationGuid);
+            //Act
+            Mock.Raise(() => timer.TimeoutCallback += null, args: new object[] { EventArgs.Empty });
+
+            //Assert
+            IDescentQueryResult descentResultByOpUid = descentSubSystem.GetDescentResultsByOperationUid(operationGuid);
+            Assert.Null(descentResultByOpUid);
+        }
+
+        [Theory(DisplayName = "Where completed is false descent result not removed." +
+                              " queryResult.completedTime > -6 -5 test.")]
+        [InlineData(-6, false)]
+        [InlineData(-5, false)]
+        public void DescentResultsCleanupTimerCallbackCaseWhenCompetedIsFalseTest(int completedTime, bool completed)
+        {
+            //Arrange
+            Guid operationGuid = Guid.NewGuid();
+            IChangeTrackingSubSystem tracker = Mock.Create<IChangeTrackingSubSystem>();
+            IScanner scanner = Mock.Create<IScanner>();
+            var timer = Mock.Create<IScheduler>();
+            IDescentQueryResult queryResult = Mock.Create<IDescentQueryResult>();
+            Mock.Arrange(() => queryResult.TotalTargetsCount).Returns(() => 10);
+            Mock.Arrange(() => queryResult.Completed).Returns(() => completed);
+            Mock.Arrange(() => queryResult.OperationUid).Returns(() => operationGuid);
+            Mock.Arrange(() => queryResult.CompletedTime).Returns(() => DateTime.UtcNow.AddHours(completedTime));
+            Mock.Arrange(() => scanner.ValidateAndGetResult()).Returns(() => queryResult);
+
+            DescentSubSystem descentSubSystem = new DescentSubSystem(tracker, timer);
+            descentSubSystem.StartScan(scanner, out operationGuid);
+            //Act
+            Mock.Raise(() => timer.TimeoutCallback += null, args: new object[] { EventArgs.Empty });
+
+            //Assert
+            IDescentQueryResult descentResultByOpUid =descentSubSystem.GetDescentResultsByOperationUid(operationGuid);
+            Assert.NotNull(descentResultByOpUid);
         }
 
         [Fact(DisplayName = "Try to get value for not existing operationId test.")]
@@ -271,6 +332,7 @@ namespace APTAT.Core.UnitTests.DescentAPT
             Guid operationGuid = Guid.NewGuid();
             IChangeTrackingSubSystem tracker = Mock.Create<IChangeTrackingSubSystem>(Behavior.Strict);
             IScheduler timer = Mock.Create<IScheduler>(Behavior.Strict);
+            Mock.Arrange(() => timer.Start(false)).Returns(true);
             IScanner scanner = Mock.Create<IScanner>();
             IDescentQueryResult queryResult = Mock.Create<IDescentQueryResult>();
             Mock.Arrange(() => timer.SetInterval(Arg.IsAny<TimeSpan>()));
@@ -278,6 +340,8 @@ namespace APTAT.Core.UnitTests.DescentAPT
             Mock.Arrange(() => queryResult.OperationUid).Returns(() => operationGuid);
             Mock.Arrange(() => scanner.ValidateAndGetResult()).Returns(() => queryResult);
             Mock.Arrange(() => tracker.RegisterListener(queryResult));
+
+
             DescentSubSystem descentSubSystem = new DescentSubSystem(tracker, timer);
             //Act
             descentSubSystem.StartScan(scanner,out operationGuid);
@@ -285,7 +349,6 @@ namespace APTAT.Core.UnitTests.DescentAPT
             //Assert
             Assert.Equal(queryResult.OperationUid, result.OperationUid);
         }
-
 
         [Fact(DisplayName = "StopOperationForTargetUidForFewScansTest.")]
         public void StopOperationForTargetUidForFewScansTest()
@@ -362,6 +425,7 @@ namespace APTAT.Core.UnitTests.DescentAPT
             IDescentQueryResult queryResult = Mock.Create<IDescentQueryResult>(Behavior.Strict);
             
             Mock.Arrange(() => timer.SetInterval(Arg.IsAny<TimeSpan>()));
+            Mock.Arrange(() => timer.Start(false)).Returns(true);
             Mock.Arrange(() => queryResult.TotalTargetsCount).Returns(() => 10);
             Mock.Arrange(() => queryResult.OperationUid).Returns(() => operationGuid);
                        

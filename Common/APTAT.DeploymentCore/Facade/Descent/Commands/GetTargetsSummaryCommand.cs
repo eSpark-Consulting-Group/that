@@ -102,7 +102,7 @@ namespace APTAT.DeploymentCore.Facade.Descent.Commands
                                                          });
                                   }
                               })
-                              select _taskFactory.FromAsync(asyncResult, searcher.EndSearch);
+                              select _taskFactory.FromAsync(asyncResult, _workgroupObserver.EndSearch);
 
 
 		    var searchTasks = searchTasks1.Union(searchTasks2).ToArray();

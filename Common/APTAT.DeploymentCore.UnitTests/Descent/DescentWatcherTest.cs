@@ -12,12 +12,12 @@ using System.Threading.Tasks;
 using Telerik.JustMock;
 using Xunit;
 
-namespace APTAT.Core.UnitTests.DescentAPT
+namespace APTAT.DeploymentCore.UnitTests.Descent
 {
     public class DescentWatcherTest
     {
-        private  List<IComputer> Targets=new List<IComputer>();
-        private  List<Guid> Uids=new List<Guid>();
+        private readonly List<IComputer> _targets=new List<IComputer>();
+        private readonly List<Guid> _uids=new List<Guid>();
         public DescentWatcherTest()
         {
             for (int i = 0; i <= 9; i++)
@@ -29,9 +29,9 @@ namespace APTAT.Core.UnitTests.DescentAPT
                 Mock.Arrange(() => computer.IsOnline).Returns(true);
                 Mock.Arrange(() => computer.Name).Returns("ComputerName_" + i);
                 Mock.Arrange(() => computer.Source).Returns(DeploymentTargetSource.Ip);
-                Targets.Add(computer);
+                _targets.Add(computer);
             }
-            Uids = Targets.Select(c=>c.Uid).ToList();
+            _uids = _targets.Select(c=>c.Uid).ToList();
         }
 
         [Fact(DisplayName = "DescentWatcher Constructor test.")]
@@ -92,7 +92,7 @@ namespace APTAT.Core.UnitTests.DescentAPT
             //Act
             DescentWatcher descentWatcher = new DescentWatcher(timeout, action, timer);
 
-            foreach (var uid in Uids) 
+            foreach (var uid in _uids) 
                 descentWatcher.AddIdentity(uid);
 
             descentWatcher.Start();
@@ -119,7 +119,7 @@ namespace APTAT.Core.UnitTests.DescentAPT
             Mock.Arrange(() => timer.Dispose()).OccursOnce();
             DescentWatcher descentWatcher = new DescentWatcher(timeout, action, timer);
 
-            foreach (var uid in Uids.Take(1))
+            foreach (var uid in _uids.Take(1))
                 descentWatcher.AddIdentity(uid);
 
             //Act
@@ -147,7 +147,7 @@ namespace APTAT.Core.UnitTests.DescentAPT
             Mock.Arrange(() => timer.SetInterval(Arg.IsAny<TimeSpan>()));
             Mock.Arrange(() => timer.Start(false)).Returns(true);
             DescentWatcher descentWatcher = new DescentWatcher(timeout, action, timer);
-            foreach (var uid in Uids)
+            foreach (var uid in _uids)
                 descentWatcher.AddIdentity(uid);
 
             //Act

@@ -85,7 +85,9 @@
     <Compile Include="Descent\ComputerDescentResultTests.cs" />
     <Compile Include="Descent\DescentResultTests.cs" />
     <Compile Include="Descent\DescentSubSystemTest.cs" />
+    <Compile Include="Descent\DescentWatcherTest.cs" />
     <Compile Include="Descent\OperationDescentResultTests.cs" />
+    <Compile Include="Descent\WorkgroupObserverTest.cs" />
     <Compile Include="Facade\DescentTest\CommandsTests\CommandFactoryTests.cs" />
     <Compile Include="Facade\DescentTest\CommandsTests\FindADTargetsCommandTests.cs" />
     <Compile Include="Facade\DescentTest\CommandsTests\FindEndpointTargetsCommandTests.cs" />

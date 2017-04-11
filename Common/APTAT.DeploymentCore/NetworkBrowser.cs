@@ -10,7 +10,7 @@ namespace APTAT.DeploymentCore
 {
     public interface INetworkBrowser : IService
     {
-        NetServerEnumResults GetNetworkComputers(ServerType serverType, string domainName, List<string> comps);
+        NetworkComputersResult GetNetworkComputers(ServerType serverType, string domainName);
         /// <summary>
 		/// Retrieving available workgroups 
 		/// </summary>
@@ -18,6 +18,13 @@ namespace APTAT.DeploymentCore
 		string[] EnumerateWorkgroups();
 
         bool IsWorkgroupName(string workgroupName);
+    }
+
+
+    public class NetworkComputersResult
+    {
+        public NetServerEnumResults Result { get; set; }
+        public List<string> Computers { get; set; }
     }
 
     #region NetworkBrowser CLASS
@@ -68,17 +75,21 @@ namespace APTAT.DeploymentCore
 
     	private static int SERVER_INFO_101_SIZE;
 
-        public NetServerEnumResults GetNetworkComputers(ServerType serverType, string domainName, List<string> comps)
+
+        public NetworkComputersResult GetNetworkComputers(ServerType serverType, string domainName)
         {
             uint level = 101, prefMaxLen = 0xFFFFFFFF, entriesRead = 0, totalEntries = 0;
             IntPtr serverInfoPtr = IntPtr.Zero;
             NetServerEnumResults result = NetServerEnumResults.NERR_Success;
+            NetworkComputersResult networkComputersResult = null;
+            var comps = new List<string>();
+
             try
             {
-				DateTime start = DateTime.UtcNow;
-				LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Network,
-					"NetServerEnum started{0} serverType: {1}{0} domainName: {2}{0}",
-					Environment.NewLine, serverType, domainName );
+                DateTime start = DateTime.UtcNow;
+                LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Network,
+                    "NetServerEnum started{0} serverType: {1}{0} domainName: {2}{0}",
+                    Environment.NewLine, serverType, domainName);
                 result = (NetServerEnumResults)NetBiosAPI.NetServerEnum(
                     IntPtr.Zero,            // Server Name: Reserved; must be NULL. 		
                     level,                  // Return server names, types, and associated software. The bufptr parameter points to an array of SERVER_INFO_101 structures.			
@@ -99,9 +110,12 @@ namespace APTAT.DeploymentCore
                     comps.Add(name);
                 }
 
-				LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Network,
-					"NetServerEnum finished{0} serverType: {3}{0} domainName: {4}{0} result: {1}{0} found computers: {2}{0} elapsed: {5}{0}",
-					Environment.NewLine, result, comps.Count, serverType, domainName, DateTime.UtcNow - start);
+                networkComputersResult = new NetworkComputersResult() { Computers = comps, Result = result };
+
+
+                LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Network,
+                    "NetServerEnum finished{0} serverType: {3}{0} domainName: {4}{0} result: {1}{0} found computers: {2}{0} elapsed: {5}{0}",
+                    Environment.NewLine, result, comps.Count, serverType, domainName, DateTime.UtcNow - start);
             }
             finally
             {
@@ -111,9 +125,10 @@ namespace APTAT.DeploymentCore
                     serverInfoPtr = IntPtr.Zero;
                 }
             }
-            return result;
+            return networkComputersResult;
         }
-        #endregion GetNetworkComputers (2)
+
+            #endregion GetNetworkComputers (2)
 
         public bool IsWorkgroupName(string name)
         {

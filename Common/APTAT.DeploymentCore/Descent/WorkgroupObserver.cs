@@ -30,35 +30,38 @@ namespace APTAT.DeploymentCore.Descent
 
         private void FindComputers(string path, Action<IComputer[]> foundComputersAction)
         {
-            var computers = new List<string>();
-            var result = _networkBrowser.GetNetworkComputers(ServerType.All, path, computers);
-            if (result == NetServerEnumResults.ERROR_INVALID_PARAMETER)
+            var networkComputersResult = _networkBrowser.GetNetworkComputers(ServerType.All, path);
+
+            if (networkComputersResult.Result == NetServerEnumResults.ERROR_INVALID_PARAMETER)
             {
                 return;
                 //throw new FaultException<WorkgroupInvalidFault>( new WorkgroupInvalidFault { WorkgroupName = criteria.WorkgroupName }, "Workgroup name is invalid." );
                 //throw new InvalidOperationException("Workgroup name is invalid.");
             }
-            else if (result == NetServerEnumResults.ERROR_NO_BROWSER_SERVERS_FOUND)
+            else if (networkComputersResult.Result == NetServerEnumResults.ERROR_NO_BROWSER_SERVERS_FOUND)
             {
                 return;
                 //throw new FaultException<WorkgroupNotFoundFault>( new WorkgroupNotFoundFault { WorkgroupName = criteria.WorkgroupName }, "Workgroup not found." );
                 //throw new InvalidOperationException("Workgroup not found.");
             }
-            else if (result == NetServerEnumResults.ERROR_MORE_DATA)
+            else if (networkComputersResult.Result == NetServerEnumResults.ERROR_MORE_DATA)
             {
                 return;
                 //throw new FaultException<WorkgroupQueryFault>( new WorkgroupQueryFault { WorkgroupName = criteria.WorkgroupName }, "Too many items are in the workgroup." );
                 //throw new InvalidOperationException("Too many items are in the workgroup.");
             }
-            else if (result == NetServerEnumResults.UNKNOWN_ERROR)
+            else if (networkComputersResult.Result == NetServerEnumResults.UNKNOWN_ERROR)
             {
                 return;
                 //throw new InvalidOperationException("Unknown error occured.");
             }
-            IComputer[] targets = (from name in computers
-                select new WorkgroupTarget {Uid = Guid.NewGuid(), Name = name, SmbName = name}).ToArray();
-            
-            
+
+            IComputer[] targets = networkComputersResult
+                .Computers.Select(name => new WorkgroupTarget {
+                    Uid = Guid.NewGuid(),
+                    Name = name,
+                    SmbName = name
+                }).ToArray();
 
             if (targets.Length > 0)
             {
