@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows;
-using System.Windows.Media;
+using System.Windows.Controls.Primitives;
+using System.Windows.Interop;
 using System.Windows.Navigation;
 
 namespace FAT.Application
@@ -29,6 +31,17 @@ namespace FAT.Application
                 Left = (visual.ActualWidth - ActualWidth) / 2d + location.X;
                 Top = location.Y;
             }
+            ClosePopups();
+        }
+
+        private void ClosePopups()
+        {
+            var popup = PresentationSource.CurrentSources.OfType<HwndSource>().
+                            Select(h => h.RootVisual).OfType<FrameworkElement>().
+                            Select(f => f.Parent).OfType<Popup>().
+                            FirstOrDefault(p => p.IsOpen);
+            if (popup != null)
+                popup.IsOpen = false;
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
