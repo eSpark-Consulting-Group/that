@@ -1,6 +1,5 @@
 ﻿using FAT.Application.Helpers;
 using System;
-using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -24,12 +23,11 @@ namespace FAT.Application
                 var sri = App.GetResourceStream(new Uri("EULA.pdf", UriKind.Relative));
                 if (sri != null)
                 {
-                    Thread.Sleep(500);
                     Dispatcher.BeginInvoke((Action)delegate
                     {
                         using (var stream = sri.Stream)
                             pdf.DocumentSource = new PdfDocumentSource(stream);
-                    });
+                    }, DispatcherPriority.Background);
                 }
             });
             Activate();
@@ -56,16 +54,22 @@ namespace FAT.Application
             App.Current.Shutdown();
         }
 
-        private void Hyperlink_MouseDown(object sender, MouseButtonEventArgs e)
+        private async void Hyperlink_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            var location = Owner.PointToScreen(new Point(-3, -3));
+
             eula.Opacity = 0;
             pdf.MaxHeight = 700;
 
-            var location = Owner.PointToScreen(new Point(-3, -3));
-            Left = location.X;
-            Top = location.Y;
-            Width = Owner.ActualWidth + 6;
-            MaxHeight = Owner.ActualHeight + 6;
+            await Dispatcher.Yield(DispatcherPriority.Background);
+
+            await Dispatcher.BeginInvoke((Action)delegate
+            {
+                Left = location.X;
+                Top = location.Y;
+                Width = Owner.ActualWidth + 6;
+                MaxHeight = Owner.ActualHeight + 6;
+            }, DispatcherPriority.Render);
         }
     }
 }
