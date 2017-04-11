@@ -25,7 +25,7 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
             string DomainName = "WORKGROUP";
             ManualResetEventSlim ev = new ManualResetEventSlim(false);
             var iNetworkBrowser = Mock.Create<INetworkBrowser>(Behavior.Strict);
-            Action<IComputer[]> action = (a) => { raised = true; };
+            Action<IComputer[]> action = (a) => { raised = true; ev.Set();};
             var computers = new List<string>();
             for (int i = 0; i < 5; i++) 
                 computers.Add(Guid.NewGuid().ToString());
@@ -42,7 +42,7 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
             WorkgroupObserver workgroupObserver = new WorkgroupObserver(iNetworkBrowser);
             workgroupObserver.BeginSearch(DomainName, action);
 
-            ev.Wait(TimeSpan.FromSeconds(10));
+            ev.Wait(TimeSpan.FromMilliseconds(300));
             Assert.True(raised);
         }
     }
