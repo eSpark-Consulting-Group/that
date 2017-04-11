@@ -23,8 +23,9 @@ namespace FAT.Application
             resolver.Register<IScanCounterFactory, ScanCounterFactory>();
             resolver.Register<IScanCounterManager, ScanCounterManager>();
 
+            //overriding APTAT.Core registrations 
             resolver.AllowOverridingRegistrations(true);
-            resolver.RegisterSingleton<IDistinctFileHelper,FatFileFilter>();
+            resolver.RegisterSingleton<IDistinctFileHelper, FatFileFilter>();
             resolver.RegisterSingleton<IReportBuilderFactory, ReportBuilderFactoryFat>();
             resolver.RegisterSingleton<IResultMergeHelper, FatResultMergeHelper>();
         }

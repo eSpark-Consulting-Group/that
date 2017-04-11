@@ -6,24 +6,20 @@ using APTAT.Core.Reports;
 using APTAT.Core.Storage;
 using APTAT.Core.Valkyrie;
 using APTAT.DeploymentCore.Descent;
-using System;
 
 namespace APTAT.Core.DependencyLocator
 {
     public class DependencyLocator : IDependencyLocatorModule
     {
         public void RegisterDependencies(ICompositionHelper resolver)
-        {
-            APTAT.DAL.DependencyLocator.DependencyLocator d = new APTAT.DAL.DependencyLocator.DependencyLocator();
-            d.RegisterDependencies(resolver);
+        { 
             resolver.RegisterSingleton<ICamLicenseProvider, CamLicenseProvider>();
             resolver.RegisterSingleton<IAptScannerFactory, AptScannerFactory>();
             resolver.RegisterSingleton<IDescentScannerFactory, AptDescentScannerFactory>();
             resolver.RegisterSingleton<IAptFactory, AptFactory>();
-
             resolver.RegisterSingleton<IAptAtManager , AptAtManager>();
-            resolver.Register<IRemoteFactory, RemoteFactory>();
 
+            resolver.Register<IRemoteFactory, RemoteFactory>();
 
             resolver.RegisterSingleton<IFlsManager, FlsManager>();
             resolver.RegisterSingleton<IFlsApiProvider, FlsApiProvider>();

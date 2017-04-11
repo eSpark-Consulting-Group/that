@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
@@ -42,6 +41,7 @@ namespace FAT.Application
                         typeof(APTAT.Common.DependencyLocator),
                         typeof(APTAT.DeploymentCore.DependencyLocator),
                         typeof(APTAT.Valkyrie.DependencyLocator.DependencyLocator),
+                        typeof(APTAT.DAL.DependencyLocator.DependencyLocator),
                         typeof(APTAT.Core.DependencyLocator.DependencyLocator),
                         typeof(DependencyLocator)
                     });
