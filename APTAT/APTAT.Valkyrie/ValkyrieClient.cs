@@ -174,13 +174,17 @@ namespace APTAT.Valkyrie
                             waitNextInterval = true;
                     }
             }
-            CancellationToken cancellationToken = _cancellationTokenSource.Token;
+            CancellationToken? cancellationToken = null;
+            if (_cancellationTokenSource == null)
+                waitNextInterval = true;
+            else
+                cancellationToken = _cancellationTokenSource.Token;
             if (!waitNextInterval)
             {
-                CheckNewStatusesOnValkyrie(cancellationToken);
+                CheckNewStatusesOnValkyrie(cancellationToken.Value);
             }
             var resetTimerImmediately = false;
-            if (cancellationToken.IsCancellationRequested)
+            if (cancellationToken?.IsCancellationRequested??false)
             {
                 lock (_lookupSync)
                 {
