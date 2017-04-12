@@ -21,8 +21,6 @@ namespace APTAT.Core.TelerikReports.Template
             Telerik.Reporting.TableGroup tableGroup10 = new Telerik.Reporting.TableGroup();
             Telerik.Reporting.Group group1 = new Telerik.Reporting.Group();
             Telerik.Reporting.ReportParameter reportParameter1 = new Telerik.Reporting.ReportParameter();
-            Telerik.Reporting.ReportParameter reportParameter2 = new Telerik.Reporting.ReportParameter();
-            Telerik.Reporting.ReportParameter reportParameter3 = new Telerik.Reporting.ReportParameter();
             Telerik.Reporting.Drawing.StyleRule styleRule1 = new Telerik.Reporting.Drawing.StyleRule();
             this.groupFooterSection = new Telerik.Reporting.GroupFooterSection();
             this.groupHeaderSection = new Telerik.Reporting.GroupHeaderSection();
@@ -63,10 +61,12 @@ namespace APTAT.Core.TelerikReports.Template
             // 
             // groupHeaderSection
             // 
+            this.groupHeaderSection.Bindings.Add(new Telerik.Reporting.Binding("PageBreak", "= IIF(RowNumber()>1, \'Before\', \'None\')"));
             this.groupHeaderSection.Height = Telerik.Reporting.Drawing.Unit.Cm(0.9677082896232605D);
             this.groupHeaderSection.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
             this.textBox1});
             this.groupHeaderSection.Name = "groupHeaderSection";
+            this.groupHeaderSection.PageBreak = Telerik.Reporting.PageBreak.None;
             // 
             // textBox1
             // 
@@ -77,7 +77,7 @@ namespace APTAT.Core.TelerikReports.Template
             this.textBox1.Style.Color = System.Drawing.Color.DimGray;
             this.textBox1.Style.Font.Name = "Segoe UI Semibold";
             this.textBox1.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(14D);
-            this.textBox1.Value = "= Parameters.Title.Value";
+            this.textBox1.Value = "= FileTypeName(Fields.FileType) + \" (\"+ Count(Fields.FileType) +\"):\"";
             // 
             // pageHeaderSection1
             // 
@@ -95,7 +95,7 @@ namespace APTAT.Core.TelerikReports.Template
             // 
             // shape1
             // 
-            this.shape1.Bindings.Add(new Telerik.Reporting.Binding("Style.BackgroundColor", "= Parameters.MarkColor.Value"));
+            this.shape1.Bindings.Add(new Telerik.Reporting.Binding("Style.BackgroundColor", "= ColorFromFileType(Fields.FileType)"));
             this.shape1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.20000003278255463D), Telerik.Reporting.Drawing.Unit.Cm(0.26770833134651184D));
             this.shape1.Name = "shape1";
             this.shape1.ShapeType = new Telerik.Reporting.Drawing.Shapes.EllipseShape(0D);
@@ -225,7 +225,6 @@ namespace APTAT.Core.TelerikReports.Template
             // 
             // textBox5
             // 
-            this.textBox5.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.47916698455810547D), Telerik.Reporting.Drawing.Unit.Cm(2.4120831489562988D));
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(1.9999996423721314D), Telerik.Reporting.Drawing.Unit.Cm(0.5D));
             this.textBox5.Style.Color = System.Drawing.Color.DimGray;
@@ -275,7 +274,6 @@ namespace APTAT.Core.TelerikReports.Template
             // 
             // textBox8
             // 
-            this.textBox8.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(2.7677087783813477D), Telerik.Reporting.Drawing.Unit.Cm(2.4120831489562988D));
             this.textBox8.Name = "textBox8";
             this.textBox8.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(3.2999997138977051D), Telerik.Reporting.Drawing.Unit.Cm(0.5D));
             this.textBox8.Style.Color = System.Drawing.Color.DimGray;
@@ -335,7 +333,6 @@ namespace APTAT.Core.TelerikReports.Template
             // 
             // textBox18
             // 
-            this.textBox18.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(6D), Telerik.Reporting.Drawing.Unit.Cm(2.4120831489562988D));
             this.textBox18.Name = "textBox18";
             this.textBox18.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(2D), Telerik.Reporting.Drawing.Unit.Cm(0.49999994039535522D));
             this.textBox18.Style.Color = System.Drawing.Color.DimGray;
@@ -407,7 +404,9 @@ namespace APTAT.Core.TelerikReports.Template
             this.DataSource = this.dsModule;
             group1.GroupFooter = this.groupFooterSection;
             group1.GroupHeader = this.groupHeaderSection;
+            group1.Groupings.Add(new Telerik.Reporting.Grouping("= Fields.FileType"));
             group1.Name = "group";
+            group1.Sortings.Add(new Telerik.Reporting.Sorting("= FileTypeGroupOrder(Fields.FileType)", Telerik.Reporting.SortDirection.Asc));
             this.Groups.AddRange(new Telerik.Reporting.Group[] {
             group1});
             this.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
@@ -419,16 +418,9 @@ namespace APTAT.Core.TelerikReports.Template
             this.Name = "FileDetailsSubreport";
             this.PageSettings.Margins = new Telerik.Reporting.Drawing.MarginsU(Telerik.Reporting.Drawing.Unit.Mm(25.399999618530273D), Telerik.Reporting.Drawing.Unit.Mm(25.399999618530273D), Telerik.Reporting.Drawing.Unit.Mm(25.399999618530273D), Telerik.Reporting.Drawing.Unit.Mm(25.399999618530273D));
             this.PageSettings.PaperKind = System.Drawing.Printing.PaperKind.A4;
-            reportParameter1.Name = "Title";
-            reportParameter1.Text = "Not set";
-            reportParameter1.Value = "Files";
-            reportParameter2.Name = "MarkColor";
-            reportParameter2.Value = "Red";
-            reportParameter3.Name = "DataSourceBinding";
-            reportParameter3.Text = "none";
+            reportParameter1.Name = "DataSourceBinding";
+            reportParameter1.Text = "none";
             this.ReportParameters.Add(reportParameter1);
-            this.ReportParameters.Add(reportParameter2);
-            this.ReportParameters.Add(reportParameter3);
             styleRule1.Selectors.AddRange(new Telerik.Reporting.Drawing.ISelector[] {
             new Telerik.Reporting.Drawing.TypeSelector(typeof(Telerik.Reporting.TextItemBase)),
             new Telerik.Reporting.Drawing.TypeSelector(typeof(Telerik.Reporting.HtmlTextBox))});

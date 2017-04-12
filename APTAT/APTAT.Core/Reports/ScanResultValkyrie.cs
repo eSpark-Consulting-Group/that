@@ -34,5 +34,6 @@ namespace APTAT.Core.Reports
             }
         }
 
+        public DetailedBadFile[] EndPointFiles { get; set; }
     }
 }
