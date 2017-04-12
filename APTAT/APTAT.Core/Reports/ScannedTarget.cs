@@ -85,11 +85,28 @@ namespace APTAT.Core.Reports
             get { return UnknownFilesCount + MalwareFilesCount + PendingAnalysisFilesCount + NotAnalyzedFilesCount; }
         }
 
+        public string InstancesHtml
+        {
+            get
+            {
+                StringBuilder sb = new StringBuilder("<ul>");
+                foreach (var instance in BadFileInstances)
+                {
+                    string str = "<li style=\"padding-bottom: 3; padding-top:3;\">" + instance.Path+"</li>";
+                    sb.AppendLine(str);
+                }
+
+                sb.Append("</ul>");
+                var html=  sb.ToString();
+                return html;
+            }
+        }
         public string Instances
         {
             get
             {
                 StringBuilder sb = new StringBuilder();
+
                 foreach (var instance in BadFileInstances)
                 {
                     string str = String.Format("{0}\n", instance.Path);

@@ -22,14 +22,7 @@ namespace APTAT.Core.TelerikReports
             Telerik.Reporting.Drawing.FormattingRule formattingRule6 = new Telerik.Reporting.Drawing.FormattingRule();
             Telerik.Reporting.Drawing.FormattingRule formattingRule7 = new Telerik.Reporting.Drawing.FormattingRule();
             Telerik.Reporting.Drawing.FormattingRule formattingRule8 = new Telerik.Reporting.Drawing.FormattingRule();
-            Telerik.Reporting.TableGroup tableGroup1 = new Telerik.Reporting.TableGroup();
-            Telerik.Reporting.TableGroup tableGroup2 = new Telerik.Reporting.TableGroup();
             Telerik.Reporting.TypeReportSource typeReportSource1 = new Telerik.Reporting.TypeReportSource();
-            Telerik.Reporting.Drawing.FormattingRule formattingRule9 = new Telerik.Reporting.Drawing.FormattingRule();
-            Telerik.Reporting.Drawing.FormattingRule formattingRule10 = new Telerik.Reporting.Drawing.FormattingRule();
-            Telerik.Reporting.Drawing.FormattingRule formattingRule11 = new Telerik.Reporting.Drawing.FormattingRule();
-            Telerik.Reporting.Drawing.FormattingRule formattingRule12 = new Telerik.Reporting.Drawing.FormattingRule();
-            Telerik.Reporting.Drawing.FormattingRule formattingRule13 = new Telerik.Reporting.Drawing.FormattingRule();
             Telerik.Reporting.Drawing.StyleRule styleRule1 = new Telerik.Reporting.Drawing.StyleRule();
             this.pageHeaderSection1 = new Telerik.Reporting.PageHeaderSection();
             this.shape2 = new Telerik.Reporting.Shape();
@@ -108,45 +101,11 @@ namespace APTAT.Core.TelerikReports
             this.textBox13 = new Telerik.Reporting.TextBox();
             this.textBox19 = new Telerik.Reporting.TextBox();
             this.panelSpaceBeforeDetailsPerProgram = new Telerik.Reporting.Panel();
+            this.subReportProgramDetails = new Telerik.Reporting.SubReport();
             this.dsAptReportData = new Telerik.Reporting.ObjectDataSource();
             this.pageFooterSection1 = new Telerik.Reporting.PageFooterSection();
             this.textBox18 = new Telerik.Reporting.TextBox();
             this.shape4 = new Telerik.Reporting.Shape();
-            this.panel1 = new Telerik.Reporting.Panel();
-            this.textBox47 = new Telerik.Reporting.TextBox();
-            this.list1 = new Telerik.Reporting.List();
-            this.panel2 = new Telerik.Reporting.Panel();
-            this.panel6 = new Telerik.Reporting.Panel();
-            this.subReportDevices = new Telerik.Reporting.SubReport();
-            this.textBox44 = new Telerik.Reporting.TextBox();
-            this.shape9 = new Telerik.Reporting.Shape();
-            this.panel20 = new Telerik.Reporting.Panel();
-            this.textBox35 = new Telerik.Reporting.TextBox();
-            this.shape5 = new Telerik.Reporting.Shape();
-            this.panel21 = new Telerik.Reporting.Panel();
-            this.textBox65 = new Telerik.Reporting.TextBox();
-            this.textBox50 = new Telerik.Reporting.TextBox();
-            this.panel22 = new Telerik.Reporting.Panel();
-            this.textBox64 = new Telerik.Reporting.TextBox();
-            this.textBox49 = new Telerik.Reporting.TextBox();
-            this.panel23 = new Telerik.Reporting.Panel();
-            this.textBox63 = new Telerik.Reporting.TextBox();
-            this.textBox48 = new Telerik.Reporting.TextBox();
-            this.panel24 = new Telerik.Reporting.Panel();
-            this.textBox58 = new Telerik.Reporting.TextBox();
-            this.textBox43 = new Telerik.Reporting.TextBox();
-            this.panel25 = new Telerik.Reporting.Panel();
-            this.textBox57 = new Telerik.Reporting.TextBox();
-            this.textBox42 = new Telerik.Reporting.TextBox();
-            this.panel26 = new Telerik.Reporting.Panel();
-            this.textBox56 = new Telerik.Reporting.TextBox();
-            this.textBox41 = new Telerik.Reporting.TextBox();
-            this.panel28 = new Telerik.Reporting.Panel();
-            this.textBox45 = new Telerik.Reporting.TextBox();
-            this.textBox38 = new Telerik.Reporting.TextBox();
-            this.panel29 = new Telerik.Reporting.Panel();
-            this.textBox55 = new Telerik.Reporting.TextBox();
-            this.textBox40 = new Telerik.Reporting.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             // 
             // pageHeaderSection1
@@ -234,12 +193,12 @@ namespace APTAT.Core.TelerikReports
             // detail
             // 
             this.detail.CanShrink = true;
-            this.detail.Height = Telerik.Reporting.Drawing.Unit.Cm(43.432292938232422D);
+            this.detail.Height = Telerik.Reporting.Drawing.Unit.Cm(34.232295989990234D);
             this.detail.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
             this.panelCharts,
             this.panel5,
             this.panelSpaceBeforeDetailsPerProgram,
-            this.panel1});
+            this.subReportProgramDetails});
             this.detail.KeepTogether = false;
             this.detail.Name = "detail";
             // 
@@ -948,7 +907,7 @@ namespace APTAT.Core.TelerikReports
             this.textBox19});
             this.panel13.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(1.1000001430511475D), Telerik.Reporting.Drawing.Unit.Cm(9.501617431640625D));
             this.panel13.Name = "panel13";
-            this.panel13.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(14.865623474121094D), Telerik.Reporting.Drawing.Unit.Cm(0.6600000262260437D));
+            this.panel13.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(14.865623474121094D), Telerik.Reporting.Drawing.Unit.Cm(0.68819594383239746D));
             this.panel13.Style.BackgroundColor = System.Drawing.Color.WhiteSmoke;
             this.panel13.Style.Font.Name = "Segoe UI";
             // 
@@ -977,6 +936,18 @@ namespace APTAT.Core.TelerikReports
             this.panelSpaceBeforeDetailsPerProgram.Name = "panelSpaceBeforeDetailsPerProgram";
             this.panelSpaceBeforeDetailsPerProgram.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.90000057220459D), Telerik.Reporting.Drawing.Unit.Cm(8.2998056411743164D));
             this.panelSpaceBeforeDetailsPerProgram.Style.BackgroundColor = System.Drawing.Color.White;
+            // 
+            // subReportProgramDetails
+            // 
+            this.subReportProgramDetails.KeepTogether = false;
+            this.subReportProgramDetails.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(33.200000762939453D));
+            this.subReportProgramDetails.Name = "subReportProgramDetails";
+            typeReportSource1.Parameters.Add(new Telerik.Reporting.Parameter("IsActiveDirectory", "True"));
+            typeReportSource1.Parameters.Add(new Telerik.Reporting.Parameter("DataSourceBinding", "AllBadFilesSorted"));
+            typeReportSource1.TypeName = "APTAT.Core.TelerikReports.Template.ProgramDetails, APTAT.Core, Version=2.0.0.0, C" +
+    "ulture=neutral, PublicKeyToken=null";
+            this.subReportProgramDetails.ReportSource = typeReportSource1;
+            this.subReportProgramDetails.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.667495727539063D), Telerik.Reporting.Drawing.Unit.Cm(1.0322916507720947D));
             // 
             // dsAptReportData
             // 
@@ -1010,379 +981,6 @@ namespace APTAT.Core.TelerikReports
             this.shape4.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.9197998046875D), Telerik.Reporting.Drawing.Unit.Cm(0.19999989867210388D));
             this.shape4.Style.Color = System.Drawing.Color.LightSlateGray;
             this.shape4.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Point(2D);
-            // 
-            // panel1
-            // 
-            this.panel1.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
-            this.list1,
-            this.textBox47});
-            this.panel1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(3.9418537198798731E-05D), Telerik.Reporting.Drawing.Unit.Inch(13.110237121582031D));
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(6.3172140121459961D), Telerik.Reporting.Drawing.Unit.Inch(3.9890916347503662D));
-            this.panel1.Style.BackgroundColor = System.Drawing.Color.White;
-            // 
-            // textBox47
-            // 
-            this.textBox47.Bindings.Add(new Telerik.Reporting.Binding("Visible", "= Fields.AllBadFilesSorted.Length > 0"));
-            this.textBox47.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.18520833551883698D), Telerik.Reporting.Drawing.Unit.Inch(-8.2784229471499771E-10D));
-            this.textBox47.Multiline = false;
-            this.textBox47.Name = "textBox47";
-            this.textBox47.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(6.9146909713745117D), Telerik.Reporting.Drawing.Unit.Cm(0.69990068674087524D));
-            this.textBox47.Style.Color = System.Drawing.Color.DimGray;
-            this.textBox47.Style.Font.Name = "Segoe UI Semibold";
-            this.textBox47.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(13.5D);
-            this.textBox47.TextWrap = false;
-            this.textBox47.Value = "Details per Program";
-            // 
-            // list1
-            // 
-            this.list1.Bindings.Add(new Telerik.Reporting.Binding("DataSource", "=ReportItem.DataObject.AllBadFilesSorted"));
-            this.list1.Bindings.Add(new Telerik.Reporting.Binding("Visible", "=ReportItem.DataObject.AllBadFilesSorted.Length > 0"));
-            this.list1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(15.8301420211792D)));
-            this.list1.Body.Rows.Add(new Telerik.Reporting.TableBodyRow(Telerik.Reporting.Drawing.Unit.Cm(9.3385429382324219D)));
-            this.list1.Body.SetCellContent(0, 0, this.panel2);
-            tableGroup1.Name = "ColumnGroup";
-            this.list1.ColumnGroups.Add(tableGroup1);
-            this.list1.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
-            this.panel2});
-            this.list1.KeepTogether = false;
-            this.list1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.10583332926034927D), Telerik.Reporting.Drawing.Unit.Cm(0.793749988079071D));
-            this.list1.Name = "list1";
-            tableGroup2.Groupings.Add(new Telerik.Reporting.Grouping(null));
-            tableGroup2.Name = "DetailGroup";
-            this.list1.RowGroups.Add(tableGroup2);
-            this.list1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.8301420211792D), Telerik.Reporting.Drawing.Unit.Cm(9.3385429382324219D));
-            // 
-            // panel2
-            // 
-            this.panel2.CanShrink = true;
-            this.panel2.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
-            this.panel6,
-            this.panel20});
-            this.panel2.KeepTogether = false;
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.8301420211792D), Telerik.Reporting.Drawing.Unit.Cm(9.3385429382324219D));
-            // 
-            // panel6
-            // 
-            this.panel6.CanShrink = true;
-            this.panel6.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
-            this.subReportDevices,
-            this.textBox44,
-            this.shape9});
-            this.panel6.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(6.7062458992004395D));
-            this.panel6.Name = "panel6";
-            this.panel6.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.9197998046875D), Telerik.Reporting.Drawing.Unit.Cm(2.3385469913482666D));
-            // 
-            // subReportDevices
-            // 
-            this.subReportDevices.Bindings.Add(new Telerik.Reporting.Binding("Visible", "=ReportItem.DataObject.TargetsCount>0"));
-            this.subReportDevices.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(1.3062552213668823D));
-            this.subReportDevices.Name = "subReportDevices";
-            typeReportSource1.Parameters.Add(new Telerik.Reporting.Parameter("IsActiveDirectory", "True"));
-            typeReportSource1.Parameters.Add(new Telerik.Reporting.Parameter("DataSourceBinding", "Targets"));
-            typeReportSource1.TypeName = "APTAT.Core.TelerikReports.Template.Devices, APTAT.Core, Version=2.0.0.0, Culture=" +
-    "neutral, PublicKeyToken=null";
-            this.subReportDevices.ReportSource = typeReportSource1;
-            this.subReportDevices.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.667495727539063D), Telerik.Reporting.Drawing.Unit.Cm(1.0322916507720947D));
-            // 
-            // textBox44
-            // 
-            this.textBox44.CanShrink = true;
-            this.textBox44.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(0.10625750571489334D));
-            this.textBox44.Name = "textBox44";
-            this.textBox44.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.100000381469727D), Telerik.Reporting.Drawing.Unit.Cm(0.87728726863861084D));
-            this.textBox44.Style.Color = System.Drawing.Color.DimGray;
-            this.textBox44.Style.Font.Name = "Segoe UI Semibold";
-            this.textBox44.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(13.5D);
-            this.textBox44.Value = "=\"Devices (\" + Fields.TargetsCount + \"):\"";
-            // 
-            // shape9
-            // 
-            this.shape9.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(1.1062556505203247D));
-            this.shape9.Name = "shape9";
-            this.shape9.ShapeType = new Telerik.Reporting.Drawing.Shapes.LineShape(Telerik.Reporting.Drawing.Shapes.LineDirection.EW);
-            this.shape9.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.9197998046875D), Telerik.Reporting.Drawing.Unit.Cm(0.19999989867210388D));
-            this.shape9.Style.Color = System.Drawing.Color.LightSlateGray;
-            this.shape9.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Point(1D);
-            // 
-            // panel20
-            // 
-            this.panel20.CanShrink = true;
-            this.panel20.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
-            this.textBox35,
-            this.shape5,
-            this.panel21,
-            this.panel22,
-            this.panel23,
-            this.panel24,
-            this.panel25,
-            this.panel26,
-            this.panel28,
-            this.panel29});
-            this.panel20.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(0.00010658384417183697D));
-            this.panel20.Name = "panel20";
-            this.panel20.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.667495727539063D), Telerik.Reporting.Drawing.Unit.Cm(6.6061387062072754D));
-            // 
-            // textBox35
-            // 
-            this.textBox35.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.099999949336051941D), Telerik.Reporting.Drawing.Unit.Cm(0.10614230483770371D));
-            this.textBox35.Multiline = false;
-            this.textBox35.Name = "textBox35";
-            this.textBox35.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(14.574169158935547D), Telerik.Reporting.Drawing.Unit.Cm(0.82270979881286621D));
-            this.textBox35.Style.Color = System.Drawing.Color.DimGray;
-            this.textBox35.Style.Font.Name = "Segoe UI Semibold";
-            this.textBox35.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(13.5D);
-            this.textBox35.TextWrap = false;
-            this.textBox35.Value = "=Fields.Name+ \" (Instances: \" + Fields.InstancesTotalCount + \")\"";
-            // 
-            // shape5
-            // 
-            formattingRule9.Filters.Add(new Telerik.Reporting.Filter("=Fields.FinalVerdict", Telerik.Reporting.FilterOperator.Equal, "1"));
-            formattingRule9.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(154)))), ((int)(((byte)(199)))), ((int)(((byte)(54)))));
-            formattingRule10.Filters.Add(new Telerik.Reporting.Filter("=Fields.FinalVerdict", Telerik.Reporting.FilterOperator.Equal, "3"));
-            formattingRule10.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(199)))), ((int)(((byte)(0)))));
-            formattingRule11.Filters.Add(new Telerik.Reporting.Filter("=Fields.FinalVerdict", Telerik.Reporting.FilterOperator.Equal, "2"));
-            formattingRule11.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(71)))), ((int)(((byte)(74)))));
-            formattingRule12.Filters.Add(new Telerik.Reporting.Filter("=Fields.FinalVerdict", Telerik.Reporting.FilterOperator.Equal, "5"));
-            formattingRule12.Style.BackgroundColor = System.Drawing.Color.Empty;
-            formattingRule12.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(82)))), ((int)(((byte)(133)))), ((int)(((byte)(194)))));
-            formattingRule13.Filters.Add(new Telerik.Reporting.Filter("=Fields.FinalVerdict", Telerik.Reporting.FilterOperator.Equal, "4"));
-            formattingRule13.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(197)))), ((int)(((byte)(206)))), ((int)(((byte)(213)))));
-            this.shape5.ConditionalFormatting.AddRange(new Telerik.Reporting.Drawing.FormattingRule[] {
-            formattingRule9,
-            formattingRule10,
-            formattingRule11,
-            formattingRule12,
-            formattingRule13});
-            this.shape5.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.76729166507720947D), Telerik.Reporting.Drawing.Unit.Cm(1.1061426401138306D));
-            this.shape5.Name = "shape5";
-            this.shape5.ShapeType = new Telerik.Reporting.Drawing.Shapes.LineShape(Telerik.Reporting.Drawing.Shapes.LineDirection.NS);
-            this.shape5.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(0.29999998211860657D), Telerik.Reporting.Drawing.Unit.Cm(5.3999958038330078D));
-            this.shape5.Stretch = false;
-            this.shape5.Style.BackgroundColor = System.Drawing.Color.White;
-            this.shape5.Style.Color = System.Drawing.Color.LightGreen;
-            this.shape5.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Point(2D);
-            // 
-            // panel21
-            // 
-            this.panel21.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
-            this.textBox65,
-            this.textBox50});
-            this.panel21.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(1.1999999284744263D), Telerik.Reporting.Drawing.Unit.Cm(1.1061426401138306D));
-            this.panel21.Name = "panel21";
-            this.panel21.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(14.199999809265137D), Telerik.Reporting.Drawing.Unit.Cm(0.65291661024093628D));
-            // 
-            // textBox65
-            // 
-            this.textBox65.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.19999980926513672D), Telerik.Reporting.Drawing.Unit.Cm(0.052916664630174637D));
-            this.textBox65.Name = "textBox65";
-            this.textBox65.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(3.440971851348877D), Telerik.Reporting.Drawing.Unit.Cm(0.599999725818634D));
-            this.textBox65.Style.Color = System.Drawing.Color.DimGray;
-            this.textBox65.Style.Font.Name = "Segoe UI";
-            this.textBox65.Value = "Cloud Verdict:";
-            // 
-            // textBox50
-            // 
-            this.textBox50.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(4.0000004768371582D), Telerik.Reporting.Drawing.Unit.Cm(0.052916664630174637D));
-            this.textBox50.Name = "textBox50";
-            this.textBox50.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(10.000001907348633D), Telerik.Reporting.Drawing.Unit.Cm(0.59999996423721313D));
-            this.textBox50.Style.Color = System.Drawing.Color.DimGray;
-            this.textBox50.Style.Font.Name = "Segoe UI";
-            this.textBox50.Value = "=IIF(Fields.FinalVerdictString <> \"\", Fields.FinalVerdictString, \"N/A\")";
-            // 
-            // panel22
-            // 
-            this.panel22.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
-            this.textBox64,
-            this.textBox49});
-            this.panel22.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(1.1999999284744263D), Telerik.Reporting.Drawing.Unit.Cm(1.7936426401138306D));
-            this.panel22.Name = "panel22";
-            this.panel22.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(14.199999809265137D), Telerik.Reporting.Drawing.Unit.Cm(0.65291661024093628D));
-            this.panel22.Style.BackgroundColor = System.Drawing.Color.WhiteSmoke;
-            // 
-            // textBox64
-            // 
-            this.textBox64.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.19999980926513672D), Telerik.Reporting.Drawing.Unit.Cm(0.052916664630174637D));
-            this.textBox64.Name = "textBox64";
-            this.textBox64.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(3.440971851348877D), Telerik.Reporting.Drawing.Unit.Cm(0.599999725818634D));
-            this.textBox64.Style.Color = System.Drawing.Color.DimGray;
-            this.textBox64.Style.Font.Name = "Segoe UI";
-            this.textBox64.Value = "Size:";
-            // 
-            // textBox49
-            // 
-            this.textBox49.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(4.0000004768371582D), Telerik.Reporting.Drawing.Unit.Cm(0.052916664630174637D));
-            this.textBox49.Name = "textBox49";
-            this.textBox49.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(10.000001907348633D), Telerik.Reporting.Drawing.Unit.Cm(0.59999996423721313D));
-            this.textBox49.Style.Color = System.Drawing.Color.DimGray;
-            this.textBox49.Style.Font.Name = "Segoe UI";
-            this.textBox49.Value = "=IIF(Fields.FileSizeFormatted <> \"\", Fields.FileSizeFormatted, \"N/A\")";
-            // 
-            // panel23
-            // 
-            this.panel23.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
-            this.textBox63,
-            this.textBox48});
-            this.panel23.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(1.1999999284744263D), Telerik.Reporting.Drawing.Unit.Cm(2.481142520904541D));
-            this.panel23.Name = "panel23";
-            this.panel23.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(14.199999809265137D), Telerik.Reporting.Drawing.Unit.Cm(0.65291661024093628D));
-            // 
-            // textBox63
-            // 
-            this.textBox63.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.19999980926513672D), Telerik.Reporting.Drawing.Unit.Cm(0.052916664630174637D));
-            this.textBox63.Name = "textBox63";
-            this.textBox63.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(3.440971851348877D), Telerik.Reporting.Drawing.Unit.Cm(0.599999725818634D));
-            this.textBox63.Style.Color = System.Drawing.Color.DimGray;
-            this.textBox63.Style.Font.Name = "Segoe UI";
-            this.textBox63.Value = "SHA1:";
-            // 
-            // textBox48
-            // 
-            this.textBox48.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(4.0000004768371582D), Telerik.Reporting.Drawing.Unit.Cm(0.052916664630174637D));
-            this.textBox48.Name = "textBox48";
-            this.textBox48.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(10.000001907348633D), Telerik.Reporting.Drawing.Unit.Cm(0.59999996423721313D));
-            this.textBox48.Style.Color = System.Drawing.Color.DimGray;
-            this.textBox48.Style.Font.Name = "Segoe UI";
-            this.textBox48.Value = "=IIF(Fields.Sha1 <> \"\", Fields.Sha1, \"N/A\")\r\n";
-            // 
-            // panel24
-            // 
-            this.panel24.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
-            this.textBox58,
-            this.textBox43});
-            this.panel24.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(1.1999999284744263D), Telerik.Reporting.Drawing.Unit.Cm(3.168642520904541D));
-            this.panel24.Name = "panel24";
-            this.panel24.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(14.199999809265137D), Telerik.Reporting.Drawing.Unit.Cm(0.65291661024093628D));
-            this.panel24.Style.BackgroundColor = System.Drawing.Color.WhiteSmoke;
-            // 
-            // textBox58
-            // 
-            this.textBox58.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.19999980926513672D), Telerik.Reporting.Drawing.Unit.Cm(0.052916664630174637D));
-            this.textBox58.Name = "textBox58";
-            this.textBox58.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(3.440971851348877D), Telerik.Reporting.Drawing.Unit.Cm(0.599999725818634D));
-            this.textBox58.Style.Color = System.Drawing.Color.DimGray;
-            this.textBox58.Style.Font.Name = "Segoe UI";
-            this.textBox58.Value = "Signer:";
-            // 
-            // textBox43
-            // 
-            this.textBox43.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(4.0000004768371582D), Telerik.Reporting.Drawing.Unit.Cm(0.052916664630174637D));
-            this.textBox43.Name = "textBox43";
-            this.textBox43.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(10.000001907348633D), Telerik.Reporting.Drawing.Unit.Cm(0.59999996423721313D));
-            this.textBox43.Style.Color = System.Drawing.Color.DimGray;
-            this.textBox43.Style.Font.Name = "Segoe UI";
-            this.textBox43.Value = "=IIF(Fields.Signer <> \"\", Fields.Signer, \"N/A\")";
-            // 
-            // panel25
-            // 
-            this.panel25.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
-            this.textBox57,
-            this.textBox42});
-            this.panel25.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(1.1999999284744263D), Telerik.Reporting.Drawing.Unit.Cm(3.85614275932312D));
-            this.panel25.Name = "panel25";
-            this.panel25.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(14.199999809265137D), Telerik.Reporting.Drawing.Unit.Cm(0.60000002384185791D));
-            // 
-            // textBox57
-            // 
-            this.textBox57.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.19999980926513672D), Telerik.Reporting.Drawing.Unit.Cm(0D));
-            this.textBox57.Name = "textBox57";
-            this.textBox57.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(3.440971851348877D), Telerik.Reporting.Drawing.Unit.Cm(0.599999725818634D));
-            this.textBox57.Style.Color = System.Drawing.Color.DimGray;
-            this.textBox57.Style.Font.Name = "Segoe UI";
-            this.textBox57.Value = "Version:";
-            // 
-            // textBox42
-            // 
-            this.textBox42.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(4.0000004768371582D), Telerik.Reporting.Drawing.Unit.Cm(0D));
-            this.textBox42.Name = "textBox42";
-            this.textBox42.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(10.000001907348633D), Telerik.Reporting.Drawing.Unit.Cm(0.59999996423721313D));
-            this.textBox42.Style.Color = System.Drawing.Color.DimGray;
-            this.textBox42.Style.Font.Name = "Segoe UI";
-            this.textBox42.Value = "=IIF(Fields.Version <> \"\", Fields.Version, \"N/A\")";
-            // 
-            // panel26
-            // 
-            this.panel26.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
-            this.textBox56,
-            this.textBox41});
-            this.panel26.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(1.1999999284744263D), Telerik.Reporting.Drawing.Unit.Cm(4.543642520904541D));
-            this.panel26.Name = "panel26";
-            this.panel26.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(14.199999809265137D), Telerik.Reporting.Drawing.Unit.Cm(0.60000002384185791D));
-            this.panel26.Style.BackgroundColor = System.Drawing.Color.WhiteSmoke;
-            // 
-            // textBox56
-            // 
-            this.textBox56.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.19999980926513672D), Telerik.Reporting.Drawing.Unit.Cm(0D));
-            this.textBox56.Name = "textBox56";
-            this.textBox56.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(3.440971851348877D), Telerik.Reporting.Drawing.Unit.Cm(0.599999725818634D));
-            this.textBox56.Style.Color = System.Drawing.Color.DimGray;
-            this.textBox56.Style.Font.Name = "Segoe UI";
-            this.textBox56.Value = "Product:";
-            // 
-            // textBox41
-            // 
-            this.textBox41.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(4.0000004768371582D), Telerik.Reporting.Drawing.Unit.Cm(0D));
-            this.textBox41.Name = "textBox41";
-            this.textBox41.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(10.000001907348633D), Telerik.Reporting.Drawing.Unit.Cm(0.59999996423721313D));
-            this.textBox41.Style.Color = System.Drawing.Color.DimGray;
-            this.textBox41.Style.Font.Name = "Segoe UI";
-            this.textBox41.Value = "=IIF(Fields.Product <> \"\", Fields.Product, \"N/A\")";
-            // 
-            // panel28
-            // 
-            this.panel28.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
-            this.textBox45,
-            this.textBox38});
-            this.panel28.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(1.1999999284744263D), Telerik.Reporting.Drawing.Unit.Cm(5.231142520904541D));
-            this.panel28.Name = "panel28";
-            this.panel28.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(14.199999809265137D), Telerik.Reporting.Drawing.Unit.Cm(0.60000002384185791D));
-            // 
-            // textBox45
-            // 
-            this.textBox45.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.19999980926513672D), Telerik.Reporting.Drawing.Unit.Cm(0D));
-            this.textBox45.Name = "textBox45";
-            this.textBox45.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(3.440971851348877D), Telerik.Reporting.Drawing.Unit.Cm(0.599999725818634D));
-            this.textBox45.Style.Color = System.Drawing.Color.DimGray;
-            this.textBox45.Style.Font.Name = "Segoe UI";
-            this.textBox45.Value = "Trusted Vendor:";
-            // 
-            // textBox38
-            // 
-            this.textBox38.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(4.0000004768371582D), Telerik.Reporting.Drawing.Unit.Cm(0D));
-            this.textBox38.Name = "textBox38";
-            this.textBox38.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(10.000001907348633D), Telerik.Reporting.Drawing.Unit.Cm(0.59999996423721313D));
-            this.textBox38.Style.Color = System.Drawing.Color.DimGray;
-            this.textBox38.Style.Font.Name = "Segoe UI";
-            this.textBox38.Value = "=IIF(Fields.WhiteListed <> \"\", Fields.WhiteListed, \"N/A\")";
-            // 
-            // panel29
-            // 
-            this.panel29.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
-            this.textBox55,
-            this.textBox40});
-            this.panel29.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(1.1999999284744263D), Telerik.Reporting.Drawing.Unit.Cm(5.9061422348022461D));
-            this.panel29.Name = "panel29";
-            this.panel29.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(14.199999809265137D), Telerik.Reporting.Drawing.Unit.Cm(0.60000002384185791D));
-            this.panel29.Style.BackgroundColor = System.Drawing.Color.WhiteSmoke;
-            // 
-            // textBox55
-            // 
-            this.textBox55.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.19999980926513672D), Telerik.Reporting.Drawing.Unit.Cm(0D));
-            this.textBox55.Name = "textBox55";
-            this.textBox55.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(3.440971851348877D), Telerik.Reporting.Drawing.Unit.Cm(0.599999725818634D));
-            this.textBox55.Style.Color = System.Drawing.Color.DimGray;
-            this.textBox55.Style.Font.Name = "Segoe UI";
-            this.textBox55.Value = "Copyright:";
-            // 
-            // textBox40
-            // 
-            this.textBox40.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(4.0000004768371582D), Telerik.Reporting.Drawing.Unit.Cm(0D));
-            this.textBox40.Name = "textBox40";
-            this.textBox40.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(10.000001907348633D), Telerik.Reporting.Drawing.Unit.Cm(0.59999996423721313D));
-            this.textBox40.Style.Color = System.Drawing.Color.DimGray;
-            this.textBox40.Style.Font.Name = "Segoe UI";
-            this.textBox40.Value = "=IIF(Fields.Copyright <> \"\", Fields.Copyright, \"N/A\")";
             // 
             // DetailedProgramsReportFAT
             // 
@@ -1488,40 +1086,6 @@ namespace APTAT.Core.TelerikReports
         private Telerik.Reporting.TextBox textBox30;
         private Telerik.Reporting.Shape shape12;
         private Telerik.Reporting.TextBox textBox39;
-        private Telerik.Reporting.Panel panel1;
-        private Telerik.Reporting.List list1;
-        private Telerik.Reporting.Panel panel2;
-        private Telerik.Reporting.Panel panel6;
-        private Telerik.Reporting.SubReport subReportDevices;
-        private Telerik.Reporting.TextBox textBox44;
-        private Telerik.Reporting.Shape shape9;
-        private Telerik.Reporting.Panel panel20;
-        private Telerik.Reporting.TextBox textBox35;
-        private Telerik.Reporting.Shape shape5;
-        private Telerik.Reporting.Panel panel21;
-        private Telerik.Reporting.TextBox textBox65;
-        private Telerik.Reporting.TextBox textBox50;
-        private Telerik.Reporting.Panel panel22;
-        private Telerik.Reporting.TextBox textBox64;
-        private Telerik.Reporting.TextBox textBox49;
-        private Telerik.Reporting.Panel panel23;
-        private Telerik.Reporting.TextBox textBox63;
-        private Telerik.Reporting.TextBox textBox48;
-        private Telerik.Reporting.Panel panel24;
-        private Telerik.Reporting.TextBox textBox58;
-        private Telerik.Reporting.TextBox textBox43;
-        private Telerik.Reporting.Panel panel25;
-        private Telerik.Reporting.TextBox textBox57;
-        private Telerik.Reporting.TextBox textBox42;
-        private Telerik.Reporting.Panel panel26;
-        private Telerik.Reporting.TextBox textBox56;
-        private Telerik.Reporting.TextBox textBox41;
-        private Telerik.Reporting.Panel panel28;
-        private Telerik.Reporting.TextBox textBox45;
-        private Telerik.Reporting.TextBox textBox38;
-        private Telerik.Reporting.Panel panel29;
-        private Telerik.Reporting.TextBox textBox55;
-        private Telerik.Reporting.TextBox textBox40;
-        private Telerik.Reporting.TextBox textBox47;
+        private Telerik.Reporting.SubReport subReportProgramDetails;
     }
 }

@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace APTAT.Core.TelerikReports
 {
     using APTAT.Core.TelerikReports.Helpers;
@@ -39,8 +41,22 @@ namespace APTAT.Core.TelerikReports
             var hasBadFiles = obj.AllBadFilesSorted.Length > 0;
             panelSpaceBeforeDetailsPerProgram.Visible = hasBadFiles;
             var len = obj.Top10PopularBadFiles.Length;
-            if (len < 5) ChangeScaleForOne();
-            ((CategoryScale)graphAxis2.Scale).SpacingSlotCount = ChartHelper.CalculateSpacingSlotCount(len, 8);
+            if (len > 0)
+            {
+                ((CategoryScale)graphAxis2.Scale).SpacingSlotCount = ChartHelper.CalculateSpacingSlotCount(len, 8);
+            }
+
+            var max = obj.Top10PopularBadFiles.Max(v=>v.Count);
+            if (max < 5) ChangeScaleForOne();
+            else
+            {
+                var step = max / 6;
+                if (max % 6 > 0)
+                    step++;
+                ((NumericalScale)graphAxis1.Scale).LabelStep = step;
+                ((NumericalScale)graphAxis1.Scale).MajorStep = step;
+            }
+            
         }
     }
 }

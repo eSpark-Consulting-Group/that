@@ -240,6 +240,18 @@
     <Compile Include="TelerikReports\Template\DetailedProgramsValkyrieReport.Designer.cs">
       <DependentUpon>DetailedProgramsValkyrieReport.cs</DependentUpon>
     </Compile>
+    <Compile Include="TelerikReports\Template\DeviceDetailsSubReport.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TelerikReports\Template\DeviceDetailsSubReport.Designer.cs">
+      <DependentUpon>DeviceDetailsSubReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TelerikReports\Template\ProgramDetails.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TelerikReports\Template\ProgramDetails.Designer.cs">
+      <DependentUpon>ProgramDetails.cs</DependentUpon>
+    </Compile>
     <Compile Include="TelerikReports\Template\Devices.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -327,6 +339,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TelerikReports\Template\DetailedProgramsValkyrieReport.resx">
       <DependentUpon>DetailedProgramsValkyrieReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TelerikReports\Template\DeviceDetailsSubReport.resx">
+      <DependentUpon>DeviceDetailsSubReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TelerikReports\Template\ProgramDetails.resx">
+      <DependentUpon>ProgramDetails.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TelerikReports\Template\Devices.resx">
       <DependentUpon>Devices.cs</DependentUpon>

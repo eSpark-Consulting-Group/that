@@ -10,7 +10,7 @@ namespace APTAT.Core.TelerikReports.Helpers
     {
         public static double CalculateSpacingSlotCount(int barsCount, double barWidthInPercent)
         {
-            if (barsCount == 0) throw new ArgumentException(nameof(barsCount));
+            if (barsCount == 0) return 0;
             if (barWidthInPercent == 0) throw new ArgumentException(nameof(barWidthInPercent));
 
             return 100 / (barsCount * barWidthInPercent) -1;
