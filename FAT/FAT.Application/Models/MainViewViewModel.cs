@@ -325,7 +325,7 @@ namespace FAT.Application.Models
                 if (IsAutoDiscoveryInProgress)
                 {
                     if (Percentage > 0)
-                        header = String.Format("{0:0.00}% Discovering In Progress...", Percentage).Replace(".00", string.Empty);
+                        header = String.Format("{0}% Discovering In Progress...", Math.Round(Percentage));
                     return header;
                 }
                 if (IsScanInProgress == true)
