@@ -27,13 +27,13 @@ namespace APTAT.Core.TelerikReports
             Telerik.Reporting.Drawing.FormattingRule formattingRule9 = new Telerik.Reporting.Drawing.FormattingRule();
             Telerik.Reporting.TableGroup tableGroup1 = new Telerik.Reporting.TableGroup();
             Telerik.Reporting.TableGroup tableGroup2 = new Telerik.Reporting.TableGroup();
-            Telerik.Reporting.TypeReportSource typeReportSource1 = new Telerik.Reporting.TypeReportSource();
             Telerik.Reporting.Drawing.FormattingRule formattingRule10 = new Telerik.Reporting.Drawing.FormattingRule();
             Telerik.Reporting.Drawing.FormattingRule formattingRule11 = new Telerik.Reporting.Drawing.FormattingRule();
             Telerik.Reporting.Drawing.FormattingRule formattingRule12 = new Telerik.Reporting.Drawing.FormattingRule();
             Telerik.Reporting.Drawing.FormattingRule formattingRule13 = new Telerik.Reporting.Drawing.FormattingRule();
             Telerik.Reporting.Drawing.FormattingRule formattingRule14 = new Telerik.Reporting.Drawing.FormattingRule();
             Telerik.Reporting.Drawing.FormattingRule formattingRule15 = new Telerik.Reporting.Drawing.FormattingRule();
+            Telerik.Reporting.TypeReportSource typeReportSource1 = new Telerik.Reporting.TypeReportSource();
             Telerik.Reporting.Drawing.StyleRule styleRule1 = new Telerik.Reporting.Drawing.StyleRule();
             this.pageHeaderSection1 = new Telerik.Reporting.PageHeaderSection();
             this.textBox34 = new Telerik.Reporting.TextBox();
@@ -86,9 +86,6 @@ namespace APTAT.Core.TelerikReports
             this.panel3 = new Telerik.Reporting.Panel();
             this.list1 = new Telerik.Reporting.List();
             this.panel1 = new Telerik.Reporting.Panel();
-            this.panel2 = new Telerik.Reporting.Panel();
-            this.subReportDevices = new Telerik.Reporting.SubReport();
-            this.textBox44 = new Telerik.Reporting.TextBox();
             this.panel6 = new Telerik.Reporting.Panel();
             this.textBox35 = new Telerik.Reporting.TextBox();
             this.textBox65 = new Telerik.Reporting.TextBox();
@@ -111,6 +108,7 @@ namespace APTAT.Core.TelerikReports
             this.pageFooterSection1 = new Telerik.Reporting.PageFooterSection();
             this.textBox18 = new Telerik.Reporting.TextBox();
             this.shape4 = new Telerik.Reporting.Shape();
+            this.subReportDevices = new Telerik.Reporting.SubReport();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             // 
             // pageHeaderSection1
@@ -184,7 +182,7 @@ namespace APTAT.Core.TelerikReports
             // 
             // detail
             // 
-            this.detail.Height = Telerik.Reporting.Drawing.Unit.Cm(43.464035034179688D);
+            this.detail.Height = Telerik.Reporting.Drawing.Unit.Cm(41.788345336914062D);
             this.detail.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
             this.panelCharts,
             this.panel5,
@@ -671,14 +669,14 @@ namespace APTAT.Core.TelerikReports
             this.panel3.KeepTogether = false;
             this.panel3.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(9.9957847851328552E-05D), Telerik.Reporting.Drawing.Unit.Cm(32.599998474121094D));
             this.panel3.Name = "panel3";
-            this.panel3.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.899901390075684D), Telerik.Reporting.Drawing.Unit.Cm(10.864038467407227D));
+            this.panel3.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.899901390075684D), Telerik.Reporting.Drawing.Unit.Cm(9.1883449554443359D));
             this.panel3.Style.BackgroundColor = System.Drawing.Color.Empty;
             // 
             // list1
             // 
             this.list1.Bindings.Add(new Telerik.Reporting.Binding("DataSource", "=ReportItem.DataObject.AllBadFilesSorted"));
             this.list1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(15.667496681213379D)));
-            this.list1.Body.Rows.Add(new Telerik.Reporting.TableBodyRow(Telerik.Reporting.Drawing.Unit.Cm(9.6385421752929688D)));
+            this.list1.Body.Rows.Add(new Telerik.Reporting.TableBodyRow(Telerik.Reporting.Drawing.Unit.Cm(7.9628477096557617D)));
             this.list1.Body.SetCellContent(0, 0, this.panel1);
             tableGroup1.Name = "ColumnGroup";
             this.list1.ColumnGroups.Add(tableGroup1);
@@ -689,46 +687,15 @@ namespace APTAT.Core.TelerikReports
             tableGroup2.Groupings.Add(new Telerik.Reporting.Grouping(null));
             tableGroup2.Name = "DetailGroup";
             this.list1.RowGroups.Add(tableGroup2);
-            this.list1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.667496681213379D), Telerik.Reporting.Drawing.Unit.Cm(9.6385421752929688D));
+            this.list1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.667496681213379D), Telerik.Reporting.Drawing.Unit.Cm(7.9628477096557617D));
             // 
             // panel1
             // 
             this.panel1.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
-            this.panel2,
-            this.panel6});
+            this.panel6,
+            this.subReportDevices});
             this.panel1.Name = "panel1";
-            this.panel1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.667496681213379D), Telerik.Reporting.Drawing.Unit.Cm(9.6385421752929688D));
-            // 
-            // panel2
-            // 
-            this.panel2.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
-            this.subReportDevices,
-            this.textBox44});
-            this.panel2.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(6.7385420799255371D));
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.83013916015625D), Telerik.Reporting.Drawing.Unit.Cm(2.3731241226196289D));
-            // 
-            // subReportDevices
-            // 
-            this.subReportDevices.Bindings.Add(new Telerik.Reporting.Binding("Visible", "=ReportItem.DataObject.TargetsCount>0"));
-            this.subReportDevices.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(1.2999981641769409D));
-            this.subReportDevices.Name = "subReportDevices";
-            typeReportSource1.Parameters.Add(new Telerik.Reporting.Parameter("IsActiveDirectory", "True"));
-            typeReportSource1.Parameters.Add(new Telerik.Reporting.Parameter("DataSourceBinding", "Targets"));
-            typeReportSource1.TypeName = "APTAT.Core.TelerikReports.Template.Devices, APTAT.Core, Version=2.1.0.0, Culture=" +
-    "neutral, PublicKeyToken=null";
-            this.subReportDevices.ReportSource = typeReportSource1;
-            this.subReportDevices.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.667495727539063D), Telerik.Reporting.Drawing.Unit.Cm(1.0322916507720947D));
-            // 
-            // textBox44
-            // 
-            this.textBox44.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(0.20000070333480835D));
-            this.textBox44.Name = "textBox44";
-            this.textBox44.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.667496681213379D), Telerik.Reporting.Drawing.Unit.Cm(1.0999997854232788D));
-            this.textBox44.Style.Color = System.Drawing.Color.Gray;
-            this.textBox44.Style.Font.Name = "Segoe UI Light";
-            this.textBox44.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(18D);
-            this.textBox44.Value = "=\"Devices (\" + Fields.TargetsCount + \"):\"";
+            this.panel1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.667496681213379D), Telerik.Reporting.Drawing.Unit.Cm(7.9628477096557617D));
             // 
             // panel6
             // 
@@ -967,6 +934,19 @@ namespace APTAT.Core.TelerikReports
             this.shape4.Style.Color = System.Drawing.Color.LightSlateGray;
             this.shape4.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Point(2D);
             // 
+            // subReportDevices
+            // 
+            this.subReportDevices.Bindings.Add(new Telerik.Reporting.Binding("Visible", "=ReportItem.DataObject.TargetsCount>0"));
+            this.subReportDevices.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.0793749988079071D), Telerik.Reporting.Drawing.Unit.Cm(6.774505615234375D));
+            this.subReportDevices.Name = "subReportDevices";
+            typeReportSource1.Parameters.Add(new Telerik.Reporting.Parameter("IsActiveDirectory", "True"));
+            typeReportSource1.Parameters.Add(new Telerik.Reporting.Parameter("DataSourceBinding", "Targets"));
+            typeReportSource1.Parameters.Add(new Telerik.Reporting.Parameter("TargetsCount", "=Fields.TargetsCount"));
+            typeReportSource1.TypeName = "APTAT.Core.TelerikReports.Template.Devices, APTAT.Core, Version=2.1.0.0, Culture=" +
+    "neutral, PublicKeyToken=null";
+            this.subReportDevices.ReportSource = typeReportSource1;
+            this.subReportDevices.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.667495727539063D), Telerik.Reporting.Drawing.Unit.Cm(1.0322916507720947D));
+            // 
             // DetailedPrograms
             // 
             this.DataSource = this.dsAptReportData;
@@ -1045,9 +1025,6 @@ namespace APTAT.Core.TelerikReports
         private Telerik.Reporting.Panel panel3;
         private Telerik.Reporting.List list1;
         private Telerik.Reporting.Panel panel1;
-        private Telerik.Reporting.Panel panel2;
-        private Telerik.Reporting.SubReport subReportDevices;
-        private Telerik.Reporting.TextBox textBox44;
         private Telerik.Reporting.Panel panel6;
         private Telerik.Reporting.TextBox textBox35;
         private Telerik.Reporting.TextBox textBox65;
@@ -1066,5 +1043,6 @@ namespace APTAT.Core.TelerikReports
         private Telerik.Reporting.TextBox textBox41;
         private Telerik.Reporting.TextBox textBox40;
         private Telerik.Reporting.TextBox textBox36;
+        private Telerik.Reporting.SubReport subReportDevices;
     }
 }
