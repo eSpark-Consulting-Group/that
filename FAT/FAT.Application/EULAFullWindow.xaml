@@ -8,7 +8,7 @@
       MinHeight="745" MinWidth="1015"  Height="745" Width="1015"
       ShowInTaskbar="False" ResizeMode="NoResize"  WindowStartupLocation="CenterOwner"
       AllowsTransparency="True" WindowStyle="None" MouseLeftButtonDown="Window_MouseLeftButtonDown"
-      mc:Ignorable="d" 
+      mc:Ignorable="d"  Background="Transparent"
       d:DesignHeight="300" d:DesignWidth="300" >
 
     <Border x:Name="Shadow" CornerRadius="4" BorderBrush="#11000000" BorderThickness="1" Margin="0">

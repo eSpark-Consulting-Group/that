@@ -230,6 +230,7 @@ namespace FAT.Application.Models
                    ValkyrieProgressPercentage = percentage;
             }
 
+            var status = ScanStatusAsString;
             RaisePropertyChanged(nameof(ScanStatusAsString));
             RaisePropertyChanged(nameof(ScanStatus));
             RaisePropertyChanged(nameof(StatusMessage));
@@ -416,6 +417,9 @@ namespace FAT.Application.Models
         {
             get
             {
+                if (!IsComputer)
+                    return string.Empty;
+
                 var newValue = ScanStatus.AsString;
                 if (!string.IsNullOrEmpty(_previousScanStatusAsString))
                 {
@@ -446,6 +450,7 @@ namespace FAT.Application.Models
                     && string.IsNullOrEmpty(_statusMessageMemento))
                     _statusMessageMemento = StatusMessageSystem;
 
+                var status = ScanStatusAsString;
                 RaisePropertyChanged(nameof(ScanStatusAsString));
                 RaisePropertyChanged(nameof(ScanStatus));
                 RaisePropertyChanged(nameof(StatusMessage));
