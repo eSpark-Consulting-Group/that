@@ -159,7 +159,9 @@ namespace APTAT.Application.Services
             var scanResults = _manager.AggregatedScanResults.ScanResults
                 .Where(r => operationUids.Contains(r.OperationUid)).OfType<IAptScanResult>()
                 .Where(r => r.ResultType != Core.ScanResultType.NotPerformed).ToArray();
-            var result = scanResults.Sum(sr => sr.Percentage) / (scanResults.Count() * 100) * 100d;
+            var scanResultsCount= scanResults.Count();
+            if (scanResultsCount == 0) return 0;
+            var result = scanResults.Sum(sr => sr.Percentage) / (scanResultsCount * 100) * 100d;
             return result;
         }
 
