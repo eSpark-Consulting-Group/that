@@ -39,6 +39,7 @@ namespace APTAT.Application
                     {
                         typeof(Common.DependencyLocator),
                         typeof(DeploymentCore.DependencyLocator),
+                        typeof(APTAT.DAL.DependencyLocator.DependencyLocator),
                         typeof(DependencyLocator),
                         typeof(Valkyrie.DependencyLocator.DependencyLocator),
                         typeof(Core.DependencyLocator.DependencyLocator)
