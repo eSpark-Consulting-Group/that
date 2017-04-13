@@ -63,27 +63,6 @@
                                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="14" VerticalAlignment="Top"
                                     Margin="170,0,0,0" Grid.Row="5" Text="COMODO Forensic Analysis Tool License Agreement" Opacity="{Binding ElementName=eula, Path=Opacity}"/>
 
-                                <telerik:RadPdfViewer AutomationProperties.AutomationId="EulaDocument" Grid.RowSpan="7" MaxHeight="0" 
-                                          x:Name="pdf" Mode="TextSelection" DocumentChanged="pdf_DocumentChanged" BorderThickness="0" VerticalAlignment="Stretch" 
-                                          HorizontalAlignment="Stretch" Background="#FFFCFCFC" >
-                                    <telerik:RadPdfViewer.Triggers>
-                                        <EventTrigger RoutedEvent="FrameworkElement.SizeChanged">
-                                            <BeginStoryboard>
-                                                <Storyboard>
-                                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetName="pdf" Storyboard.TargetProperty="Opacity" BeginTime="0">
-                                                        <EasingDoubleKeyFrame KeyTime="0" Value="0" >
-                                                        </EasingDoubleKeyFrame>
-                                                    </DoubleAnimationUsingKeyFrames>
-                                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetName="pdf" Storyboard.TargetProperty="Opacity" BeginTime="0:0:0.2">
-                                                        <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1" >
-                                                        </EasingDoubleKeyFrame>
-                                                    </DoubleAnimationUsingKeyFrames>
-                                                </Storyboard>
-                                            </BeginStoryboard>
-                                        </EventTrigger>
-                                    </telerik:RadPdfViewer.Triggers>
-                                </telerik:RadPdfViewer>
-
                                 <Border  Grid.Row="7" VerticalAlignment="Bottom"  Background="White">
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                         <Button AutomationProperties.AutomationId="CancelButton" Content="Cancel"  Margin="0,15,5,15" Click="NoClick" Height="32" 

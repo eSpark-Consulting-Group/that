@@ -136,6 +136,9 @@
     </ApplicationDefinition>
     <Compile Include="Converters\ColorToWhiteConverter.cs" />
     <Compile Include="Converters\ProgressBarHighlightConverter.cs" />
+    <Compile Include="EULAFullWindow.xaml.cs">
+      <DependentUpon>EULAFullWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Models\Apt\FatFileResult.cs" />
     <Compile Include="Models\Apt\FatScanComputerResult.cs" />
     <Compile Include="Models\Apt\FileVerdictContext.cs" />
@@ -293,6 +296,10 @@
       <DependentUpon>ThreatDetailsWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="AppResources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="EULAFullWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
