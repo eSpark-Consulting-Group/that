@@ -82,6 +82,7 @@
     <Compile Include="Descent\Apt\ContextFactory.cs" />
     <Compile Include="Descent\Apt\IAptDescentMod.cs" />
     <Compile Include="Descent\Apt\IAptFactory.cs" />
+    <Compile Include="Descent\Apt\ScanResultExt.cs" />
     <Compile Include="FinalVerdictCalculator.cs" />
     <Compile Include="FLS\IFlsResponse.cs" />
     <Compile Include="IFinalVerdictCalculator.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="Reports\Data\FileRatingValkyrieInfo.cs" />
     <Compile Include="Reports\Data\IAptReportData.cs" />
     <Compile Include="Reports\IReportBuilderFactory.cs" />
+    <Compile Include="Reports\IReportData.cs" />
     <Compile Include="Reports\IReportNamesCache.cs" />
     <Compile Include="Reports\IResultMergeManager.cs" />
     <Compile Include="Reports\ITargetVerdict.cs" />

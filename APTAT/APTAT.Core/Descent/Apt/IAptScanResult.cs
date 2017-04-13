@@ -19,7 +19,6 @@ namespace APTAT.Core.Descent.Apt
         int FailedToAnalyzeFilesCount { get; set; }
         int NoVerdictFilesCount { get; set; }
         int PendingAnalysisFilesCount { get; set; }
-        int TotalErrorFilesCount { get; }
         int SkippedFilesCount { get; set; }
         int RunningProgramsCount { get; set; }
         int AutorunsCount { get; set; }
@@ -30,15 +29,10 @@ namespace APTAT.Core.Descent.Apt
         IModule[] Files { get; }
         IModule[] BadFiles { get; }
         AptReport AptReport { get; }
-        IModule[] GetFilesByStatus(CloudVerdict cloudVerdict);        
-        IModule[] GetBadFiles();         
+     
         void RecalculateStatistics();
-        IModule[] MalwareFiles { get; }
-        IModule[] UnknownFiles { get; }
-        IModule[] LookupInProgressFiles { get; }
         void SetAptReportInstance(AptReport report);
-
-
+        
         int BadFilesCount { get;  }
     }
 }

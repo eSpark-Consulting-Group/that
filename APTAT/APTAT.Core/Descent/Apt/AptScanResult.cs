@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using APTAT.Core.Reports;
 using APTAT.DeploymentCore;
 using APTAT.DeploymentCore.Descent;
@@ -9,16 +8,17 @@ namespace APTAT.Core.Descent.Apt
 {
     public class AptScanResult : ComputerDescentResult, IAptScanResultInternal
     {
-        public AptScanResult(IComputer computer, Guid operationUid, ITimeStampProvider timeStampProvider) 
+        public AptScanResult(IComputer computer, Guid operationUid, ITimeStampProvider timeStampProvider)
             : base(computer, operationUid, timeStampProvider)
         {
             ResultType = ScanResultType.InProgress;
         }
-     
+
         public string FileName { get; set; }
         public int TotalFilesCount { get; set; }
         public int UnknownFilesCount { get; set; }
         public int SafeFilesCount { get; set; }
+        public int BadFilesCount => UnknownFilesCount + MalwareFilesCount + PendingAnalysisFilesCount + LookupInProgressFilesCount;
         public AptScanStage ScanStage { get; set; }
 
         public int MalwareFilesCount { get; set; }
@@ -26,7 +26,7 @@ namespace APTAT.Core.Descent.Apt
         public int EmptyFilesCount { get; set; }
 
         public int LookupInProgressFilesCount => FailedToAnalyzeFilesCount + NoVerdictFilesCount;
-        
+
         public void RecalculateStatistics()
         {
             Int32 unknownFiles = 0;
@@ -68,18 +68,10 @@ namespace APTAT.Core.Descent.Apt
 
         }
 
-        public int FailedToAnalyzeFilesCount { get; set; }       
+        public int FailedToAnalyzeFilesCount { get; set; }
         public int NoVerdictFilesCount { get; set; }
-    
+
         public int PendingAnalysisFilesCount { get; set; }
-        public int TotalErrorFilesCount
-        {
-            get
-            {
-                return this.FailedToAnalyzeFilesCount + this.NoVerdictFilesCount;
-            }
-        }
-        
         public int SkippedFilesCount { get; set; }
         public int RunningProgramsCount { get; set; }
         public int AutorunsCount { get; set; }
@@ -121,110 +113,51 @@ namespace APTAT.Core.Descent.Apt
                 }
             }
         }
-
-        private IModule[] ScanModules
-        {
-            get
-            {
-                if (Files == null) return new ScanModule[] {};
-                var q = from module in Files
-                        where !module.Sha1.StartsWith("0000000000000000000000000000000000000000")
-                        select new ScanModule()
-                        {
-                            Sha1 = module.Sha1,
-                            Accessed = module.Accessed,
-                            AccessedInternal = module.AccessedInternal,
-                            Attributes = module.Attributes,
-                            Cloud = module.Cloud,
-                            CloudDate = module.CloudDate,
-                            Copyright = module.Copyright,
-                            Created = module.Created,
-                            CreatedInternal = module.CreatedInternal,
-                            Description = module.Description,
-                            FileAge = module.FileAge,
-                            FileAttributes = module.FileAttributes,
-                            FileSizeFormatted = module.FileSizeFormatted,
-                            Id = module.Id,
-                            IsBad = module.IsBad,
-                            IsUnknownOrFailed = module.IsUnknownOrFailed,
-                            Modified = module.Modified,
-                            ModifiedInternal = module.ModifiedInternal,
-                            Path = module.Path,
-                            Product = module.Product,
-                            Signer = module.Signer,
-                            Size = module.Size,
-                            Version = module.Version
-                        };
-                return q.ToArray();
-            }
-        }
-
+        
         public IModule[] Files
         {
             get
             {
-                if (_aptReport != null)
+                if (_aptReport == null) return new IModule[0];
+                // Sort out empty files (size = 0 and hash = 000000000...)
+                if (_aptReport.Modules != null)
                 {
-
-                    // Sort out empty files (size = 0 and hash = 000000000...)
-                    if (_aptReport.Modules != null)
-                    {
-                        var notEmptyFiles = from file in _aptReport.Modules
-                                            where !file.Sha1.StartsWith("0000000000000000000000000000000000000000")
-                                            select file;
-                        return notEmptyFiles.ToArray();
-                    }
+                    var notEmptyFiles = from file in _aptReport.Modules
+                                        where !file.Sha1.StartsWith("0000000000000000000000000000000000000000")
+                                        select file;
+                    return notEmptyFiles.ToArray();
                 }
                 return new IModule[0];
             }
         }
-        
+
 
         public IModule[] BadFiles
         {
             get
             {
-                return GetBadFiles();
+                var files = Files;
+                if (files == null)
+                    return new IModule[0];
+                return (from file in files where file.IsBad select file).ToArray();
             }
         }
 
-
-        public IModule[] GetFilesByStatus(CloudVerdict cloudVerdict)
-        {
-            return (from file in Files where file.Cloud == cloudVerdict select file).ToArray();
-        }
-
-        public IModule[] GetBadFiles()
-        {
-            var files = Files;
-            if (files == null)
-                return new IModule[0];
-            return (from file in files where file.IsBad select file).ToArray();
-        }
-        
         public void SetAptReportInstance(AptReport report)
         {
             _aptReport = report;
 
             if (_aptReport != null)
             {
-                RunningProgramsCount = _aptReport.Processes != null ? _aptReport.Processes.Length : 0;
-                AutorunsCount = _aptReport.Autoruns != null ? _aptReport.Autoruns.Length : 0;
+                RunningProgramsCount = _aptReport.Processes?.Length ?? 0;
+                AutorunsCount = _aptReport.Autoruns?.Length ?? 0;
             }
         }
 
         private AptReport _aptReport;
+
+        public AptReport AptReport => _aptReport;
         
-        public AptReport AptReport
-        {
-            get { return _aptReport; }
-        }
-
-        internal IModule[] GetPendingAnalysisFiles()
-        {
-            return new IModule[] { };
-        }
-
         public override void UpdateStatus(IDescentProgressItem progress)
         {
             base.UpdateStatus(progress);
@@ -264,44 +197,6 @@ namespace APTAT.Core.Descent.Apt
                 ScanStage = AptScanStage.OperationCompleted;
             Modified = TimeStampProvider.GetCurretTimestamp();
         }
-
-        public IModule[] MalwareFiles
-        {
-            get
-            {
-                return (from file in ScanModules where file.Cloud == CloudVerdict.Malware select file).ToArray();
-            }
-        }
-        public IModule[] UnknownFiles
-        {
-            get
-            {
-                return (from file in ScanModules where file.Cloud == CloudVerdict.Unknown || file.Cloud == CloudVerdict.FirstSeen select file).ToArray();
-            }
-        }
-
-        public IModule[] LookupInProgressFiles
-        {
-            get
-            {
-                return (from file in ScanModules where file.Cloud == CloudVerdict.FailedToAnalyze || file.Cloud == CloudVerdict.NoVerdict select file).ToArray();
-            }
-        }
-
-        public IModule[] PendingFiles
-        {
-            get
-            {
-                return (from file in Files where file.Cloud == CloudVerdict.FailedToAnalyze || file.Cloud == CloudVerdict.NoVerdict select file).ToArray();
-            }
-        }
-        
-        public int BadFilesCount
-        {
-            get { return UnknownFilesCount + MalwareFilesCount + PendingAnalysisFilesCount + LookupInProgressFilesCount; }
-        }
-
+     
     }
-
-
 }

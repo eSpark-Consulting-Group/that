@@ -12,7 +12,7 @@ namespace APTAT.Core.Reports
     public class AptReportData : IAptReportData
     {
 
-        public AptReportData(IResultMergeHelper mergeHelper, ReportData reportData)
+        public AptReportData(IResultMergeHelper mergeHelper, IReportData reportData)
         {
             _Targets = new IAptScanResult[] { };
             _mergeHelper = mergeHelper;
@@ -247,14 +247,15 @@ namespace APTAT.Core.Reports
                 foreach (var t in targets)
                 {
                     ScanResultType resultType = t.ResultType.ToBusiness();
-                    var scanResult = new ScanResult()
+                    ScanModule[] scanModules = t.Files.MapToBusiness();
+                    var scanResult = new ScanResult
                     {
                         HostName = t.Computer.Name,
                         IPAddress = t.Computer.IPAddress,
                         OsName = t.AptReport?.Computer.Os.ToString(),
                         OrganizationUnit = t.Computer.OrganizationUnit,
-                        RunningProgramsCount = t.AptReport.Processes != null ? t.AptReport.Processes.Length : 0,
-                        AutorunsCount = t.AptReport.Autoruns != null ? t.AptReport.Autoruns.Length : 0,
+                        RunningProgramsCount = t.AptReport?.Processes?.Length ?? 0,
+                        AutorunsCount = t.AptReport?.Autoruns?.Length ?? 0,
                         MalwareFilesCount = t.MalwareFilesCount,
                         UnknownFilesCount = t.UnknownFilesCount,
                         SafeFilesCount = t.SafeFilesCount,
@@ -264,11 +265,11 @@ namespace APTAT.Core.Reports
                         FailedToAnalyzeFilesCount = t.FailedToAnalyzeFilesCount,
                         NoVerdictFilesCount = t.NoVerdictFilesCount,
                         PendingAnalysisFilesCount = t.PendingAnalysisFilesCount,
-                        MalwareFiles = t.MalwareFiles.Select(s => s.Map()).DefaultIfEmpty().ToArray(),
-                        UnknownFiles = t.UnknownFiles.Select(s => s.Map()).DefaultIfEmpty().ToArray(),
-                        LookupInProgressFiles = t.LookupInProgressFiles.Select(s => s.Map()).DefaultIfEmpty().ToArray()
+                        MalwareFiles = scanModules.Where(m => m.Cloud == CloudVerdict.Malware).ToArray(),
+                        UnknownFiles = scanModules.Where(m => m.Cloud.IsUnknown()).ToArray(),
+                        LookupInProgressFiles = scanModules.Where(m => m.Cloud.IsLookupInProgress()).ToArray()
                     };
-
+                    
                     scanResults.Add(scanResult);
                 }
                 return scanResults.ToArray();

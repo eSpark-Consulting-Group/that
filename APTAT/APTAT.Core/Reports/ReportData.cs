@@ -4,7 +4,7 @@ using APTAT.Valkyrie;
 
 namespace APTAT.Core.Reports
 {
-    public class ReportData
+    public class ReportData : IReportData
     {
         public IResultMergeHelper MergeHelper { get; set; }
         public IAggregatedAptScanResult OperationContext { get; set; }
