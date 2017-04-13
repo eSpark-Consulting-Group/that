@@ -9,4 +9,5 @@ ExtractTitle="Comodo Forensic Analysis Tool"
 ErrorTitle="Comodo Forensic Analysis Tool Setup"
 WarningTitle="Comodo Forensic Analysis Tool Setup"
 ExtractCancelText="Cancel"
+RunProgram="explorer \"%%T\""                                                                    
 ;!@InstallEnd@!
