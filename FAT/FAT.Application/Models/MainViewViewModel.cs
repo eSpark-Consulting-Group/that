@@ -179,7 +179,8 @@ namespace FAT.Application.Models
                 RaisePropertyChanged(nameof(Header));
                 RaisePropertyChanged(nameof(ComputersHeader));
 
-                App.Current.Dispatcher.BeginInvoke((Action)delegate
+                if (App.Current != null)
+                    App.Current.Dispatcher.BeginInvoke((Action)delegate
                 {
                     StopScanCommand.InvalidateCanExecute();
                 });
@@ -202,7 +203,8 @@ namespace FAT.Application.Models
                 RaisePropertyChanged(nameof(Header));
                 RaisePropertyChanged(nameof(ComputersHeader));
 
-                App.Current.Dispatcher.BeginInvoke((Action)delegate
+                if (App.Current != null)
+                    App.Current.Dispatcher.BeginInvoke((Action)delegate
                 {
                     StartScanCommand.InvalidateCanExecute();
                     StopScanCommand.InvalidateCanExecute();
@@ -621,18 +623,14 @@ namespace FAT.Application.Models
             _targetsDiscoveryService = targetsDiscoveryService;
             _aptService = aptService;
             _storage = storage;
-
-            _scanOperationsManager = scanOperationsManager;
-
             _scanCounterManager = scanCounterManager;
-            _scanCounterManager.SelectedOrdersChanged = orders => Set(() => FilterOrders, orders);
+            _scanOperationsManager = scanOperationsManager;
 
             InitCommands();
 
             _scanIteratorTimer = new DispatcherTimer(DispatcherPriority.Normal, App.Current?.Dispatcher ?? Dispatcher.CurrentDispatcher);
             _scanIteratorTimer.Interval = TimeSpan.FromMilliseconds(500d);
             _scanIteratorTimer.Tick += IterateThroughScan;
-
         }
 
         private void InitCommands()
@@ -683,6 +681,8 @@ namespace FAT.Application.Models
             _aptService.FatScanStarted += OnScanStarted;
             _aptService.FatScanCompleted += OnScanCompleted;
             _aptService.CancelScanStarted += OnCancelScanStarted;
+
+            _scanCounterManager.SelectedOrdersChanged = orders => Set(() => FilterOrders, orders);
         }
 
         protected override void InvokeViewUnloaded(Object arg)
@@ -692,9 +692,9 @@ namespace FAT.Application.Models
             _targetsDiscoveryService.DirectoryItemsResolved -= OnDirectoryItemsResolved;
             _targetsDiscoveryService.DeploymentTargetsAutoResolving -= OnDeploymentTargetsAutoResolving;
 
-            _aptService.CancelScanStarted -= OnCancelScanStarted;
             _aptService.FatScanStarted -= OnScanStarted;
             _aptService.FatScanCompleted -= OnScanCompleted;
+            _aptService.CancelScanStarted -= OnCancelScanStarted;
         }
 
         private async void OnLoaded(object o)
@@ -702,7 +702,7 @@ namespace FAT.Application.Models
             Set(() => Loaded, true);
 
             InvokeStartAutoDiscovery(null);
-            InvokeLoadInitialData(App.Current?.Dispatcher);
+            InvokeLoadInitialData();
 
             var name = await TryAction(GetCurrentDomainName());
 
@@ -712,14 +712,14 @@ namespace FAT.Application.Models
             RaisePropertyChanged(nameof(HasCurrentDomainName));
         }
 
-        private void InvokeLoadInitialData(Dispatcher dispatcher)
+        private void InvokeLoadInitialData()
         {
             ThreadHelper.Instance.RunOnThread(() =>
             {
                 var email = _scanOperationsManager.GetEmail();
                 if (!string.IsNullOrEmpty(email))
                 {
-                    dispatcher?.Invoke(() =>
+                    App.Current?.Dispatcher.Invoke(() =>
                     {
                         Email = email;
                         Set(() => HideSubmitEmail, true);
@@ -730,7 +730,7 @@ namespace FAT.Application.Models
             ThreadHelper.Instance.RunOnThread(() =>
             {
                 _previousScansAvailable = _scanOperationsManager.HasPreviousScans();
-                dispatcher?.Invoke(() => OpenPreviousScansCommand.InvalidateCanExecute());
+                App.Current?.Dispatcher.Invoke(() => OpenPreviousScansCommand.InvalidateCanExecute());
             });
         }
 

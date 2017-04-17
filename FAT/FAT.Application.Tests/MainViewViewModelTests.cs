@@ -3,7 +3,6 @@ using FAT.Application.Models;
 using FAT.Application.Services;
 using System;
 using System.Threading.Tasks;
-using System.Windows.Threading;
 using Telerik.JustMock;
 using Xunit;
 
@@ -23,7 +22,6 @@ namespace FAT.Application.Tests
             var col2 = Mock.Create<IScanOperationCollection>(Behavior.Strict);
 
             Mock.Arrange(() => service4.CounterCollection).Returns(col);
-            Mock.ArrangeSet(() => service4.SelectedOrdersChanged = Arg.IsAny<Action<int[]>>()).MustBeCalled();
             Mock.Arrange(() => service5.OperationCollection).Returns(col2);
 
             //act
@@ -72,7 +70,6 @@ namespace FAT.Application.Tests
             Func<GetDomainNameResponse> func = () => new GetDomainNameResponse(name, null);
 
             Mock.Arrange(() => service4.Clear()).MustBeCalled();
-            Mock.ArrangeSet(() => service4.SelectedOrdersChanged = Arg.IsAny<Action<int[]>>());
             Mock.Arrange(() => service1.GetCurrentDomainName()).Returns(Task.Run(func)).MustBeCalled();
             Mock.Arrange(() => service1.StartTargetsAutoDiscovery()).MustBeCalled();
             Mock.Arrange(() => service1.GetLoggedInUser()).Returns(name).MustBeCalled();
@@ -99,6 +96,32 @@ namespace FAT.Application.Tests
             Mock.Assert(service1);
             Mock.Assert(service4);
             Mock.Assert(service5);
+        }
+
+        [Fact]
+        public void ViewLoadedCommandTest()
+        {
+            var service1 = Mock.Create<ITargetsDiscoveryService>(Behavior.Strict);
+            var service2 = Mock.Create<IAptService>(Behavior.Strict);
+            var service3 = Mock.Create<IStorageService>(Behavior.Strict);
+            var service4 = Mock.Create<IScanCounterManager>(Behavior.Strict);
+            var service5 = Mock.Create<IScanOperationsManager>(Behavior.Strict);
+
+            Mock.ArrangeSet(() => service4.SelectedOrdersChanged = Arg.IsAny<Action<int[]>>()).MustBeCalled();
+            Mock.Arrange(() => service4.Clear()).MustBeCalled();
+
+            MainViewViewModel target = new MainViewViewModel(service1, service2, service3, service4, service5);
+
+            //act
+            target.ViewLoadedCommand.Execute(null);
+            Mock.Raise(() => service1.DirectoryItemsResolved += null, args: new[] { new DirectoryItemsResolvedEventArgs(null, target) });
+            Mock.Raise(() => service2.FatScanStarted += null, args: new[] { new APTAT.Core.ScanStartedEventArgs() });
+            Mock.Raise(() => service2.CancelScanStarted += null, args: new[] { new EventArgs() });
+
+            Assert.True(target.CancelInProgress);
+            Assert.True(target.IsScanCancelled);
+            Assert.True(target.IsScanInProgress);
+            Mock.Assert(service4);
         }
     }
 }
