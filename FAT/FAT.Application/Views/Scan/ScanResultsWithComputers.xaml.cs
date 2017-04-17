@@ -21,9 +21,9 @@ namespace FAT.Application
             DataContext = App.Current.MainWindow.DataContext;
         }
 
-        private MainViewViewModel ViewModel
+        private MainViewModel ViewModel
         {
-            get { return DataContext as MainViewViewModel; }
+            get { return DataContext as MainViewModel; }
         }
 
         private void treeList_SelectionChanged(object sender, SelectionChangeEventArgs e)

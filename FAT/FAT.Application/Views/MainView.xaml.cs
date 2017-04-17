@@ -19,7 +19,7 @@ namespace FAT.Application
 {
     public partial class MainView
     {
-        private MainViewViewModel _viewModel;
+        private MainViewModel _viewModel;
 
         public MainView()
         {
@@ -31,7 +31,7 @@ namespace FAT.Application
             }
 
             DataContext = App.Current.MainWindow.DataContext;
-            _viewModel = DataContext as MainViewViewModel;
+            _viewModel = DataContext as MainViewModel;
 
             _viewModel.ScanProcessCompleted += OnScanCompleted;
             _viewModel.ErrorOccurred += OnErrorOccurred;

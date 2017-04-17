@@ -24,7 +24,7 @@ using FAT.Application.Helpers;
 
 namespace FAT.Application.Models
 {
-    public sealed class MainViewViewModel : ViewModel, IMainViewModel
+    public sealed class MainViewModel : ViewModel, IMainViewModel
     {
         public event EventHandler ScanProcessCompleted;
         public event EventHandler<DomainEventArgs> ErrorOccurred;
@@ -34,6 +34,7 @@ namespace FAT.Application.Models
         private readonly IStorageService _storage;
         private readonly IScanCounterManager _scanCounterManager;
         private readonly IScanOperationsManager _scanOperationsManager;
+        private readonly IScanTimer _scanTimer;
 
         private ObservableCollection<IThreatInfoItem> _files;
         private ObservableCollection<IThreatInfoItem> _computers;
@@ -64,12 +65,8 @@ namespace FAT.Application.Models
         private IThreatInfoItem[] _onlineItems;
 
         private Guid _operationGuid;
-
-        private readonly DispatcherTimer _scanIteratorTimer;
-
         private int _scannedItemsCount;
         private double _percentage;
-
         private string _tcpPort = "80";
         private string _udpPort = "53";
         private string _email = string.Empty;
@@ -106,9 +103,9 @@ namespace FAT.Application.Models
             get { return this; }
         }
 
-        public MainViewViewModel PreviousScansViewModel { get; private set; }
+        public MainViewModel PreviousScansViewModel { get; private set; }
 
-        public MainViewViewModel DataContextSwitcher
+        public MainViewModel DataContextSwitcher
         {
             get { return PreviousScansViewModel ?? this; }
         }
@@ -613,24 +610,22 @@ namespace FAT.Application.Models
         public DelegateCommand ClearScanKeywordCommand { get; private set; }
         #endregion
 
-        public MainViewViewModel(
+        public MainViewModel(
             ITargetsDiscoveryService targetsDiscoveryService,
             IAptService aptService, 
             IStorageService storage, 
             IScanCounterManager scanCounterManager, 
-            IScanOperationsManager scanOperationsManager)
+            IScanOperationsManager scanOperationsManager,
+            IScanTimer scanTimer)
         {
             _targetsDiscoveryService = targetsDiscoveryService;
             _aptService = aptService;
             _storage = storage;
             _scanCounterManager = scanCounterManager;
             _scanOperationsManager = scanOperationsManager;
+            _scanTimer = scanTimer;
 
             InitCommands();
-
-            _scanIteratorTimer = new DispatcherTimer(DispatcherPriority.Normal, App.Current?.Dispatcher ?? Dispatcher.CurrentDispatcher);
-            _scanIteratorTimer.Interval = TimeSpan.FromMilliseconds(500d);
-            _scanIteratorTimer.Tick += IterateThroughScan;
         }
 
         private void InitCommands()
@@ -683,6 +678,7 @@ namespace FAT.Application.Models
             _aptService.CancelScanStarted += OnCancelScanStarted;
 
             _scanCounterManager.SelectedOrdersChanged = orders => Set(() => FilterOrders, orders);
+            _scanTimer.ScanIterationHandler = IterateThroughScan;
         }
 
         protected override void InvokeViewUnloaded(Object arg)
@@ -750,9 +746,9 @@ namespace FAT.Application.Models
 
         private void InvokeStartAutoDiscovery(Object arg)
         {
-            if (_scanIteratorTimer.IsEnabled)
+            if (_scanTimer.ScanActive)
             {
-                _scanIteratorTimer.Stop();
+                _scanTimer.Stop();
                 _aptService.StopScan(new Guid[0]);
             }
 
@@ -920,10 +916,11 @@ namespace FAT.Application.Models
         {
             if (PreviousScansViewModel == null)
             {
-                var model = CompositionHelper.Instance.Resolve<MainViewViewModel>();
+                var model = CompositionHelper.Instance.Resolve<MainViewModel>();
                 model.Uri = "/Views/Scan/PreviousScanResults.xaml";
 
                 PreviousScansViewModel = model;
+                PreviousScansViewModel.ViewLoadedCommand.Execute(null);
                 RaisePropertyChanged(nameof(PreviousScansViewModel));
                 RaisePropertyChanged(nameof(CurrentScanAvailable));
                 RaisePropertyChanged(nameof(IsReportEnabled));
@@ -943,6 +940,7 @@ namespace FAT.Application.Models
 
         private void InvokeOpenCurrentScan(Object arg)
         {
+            PreviousScansViewModel.ViewUnloadedCommand.Execute(null);
             PreviousScansViewModel = null;
             RaisePropertyChanged(nameof(PreviousScansViewModel));
             RaisePropertyChanged(nameof(CurrentScanAvailable));
@@ -1315,25 +1313,25 @@ namespace FAT.Application.Models
 
             _scanCounterManager.Clear();
 
-            if (!_scanIteratorTimer.IsEnabled)
-                _scanIteratorTimer.Start();
+            _scanTimer.Start();
         }
 
         private void OnCancelScanStarted(object sender, EventArgs e)
         {
-            if (_scanIteratorTimer.IsEnabled)
+            if (_scanTimer.ScanActive)
             {
                 CancelInProgress = true;
                 IsScanCancelled = true;
             }
         }
 
-        private void IterateThroughScan(object sender, EventArgs e)
+        private void IterateThroughScan()
         {
-            if (_scanIteratorTimer.IsEnabled)
-                _scanIteratorTimer.Stop();
-            else
+            if (!_scanTimer.ScanActive)
                 return;
+
+            _scanTimer.Stop();
+
             var operationResult = _aptService.GetModifiedResultsForOperation(_operationGuid, _lastModifiesComputerDate,
                 _lastModifiesFlsVerdictDate, _lastModifiesValkyrieVerdictDate);
             var computers = operationResult.Computers.ToDictionary(c => c.TargetUid);
@@ -1473,8 +1471,7 @@ namespace FAT.Application.Models
             if (Math.Abs(Percentage - 100) < 0.0001)
                 OnScanCompleted();
 
-            if (!_scanIteratorTimer.IsEnabled)
-                _scanIteratorTimer.Start();
+            _scanTimer.Start();
         }
 
         public Predicate<object> FilterPredicate

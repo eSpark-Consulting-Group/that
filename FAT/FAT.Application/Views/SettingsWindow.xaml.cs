@@ -73,7 +73,7 @@ namespace FAT.Application
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            MainViewViewModel model = DataContext as MainViewViewModel;
+            MainViewModel model = DataContext as MainViewModel;
             string message;
             if (!ShowProxyCredentials && !ShowCredentials && !model.ValidatePorts(out message))
             {

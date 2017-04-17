@@ -153,17 +153,19 @@
     <Compile Include="Models\Counter\IScanCounterManager.cs" />
     <Compile Include="Models\Counter\ScanCounterFactory.cs" />
     <Compile Include="Models\Counter\ScanCounterManager.cs" />
-    <Compile Include="Models\DalMapper.cs" />
-    <Compile Include="Models\Directory\StartScanCredentialsViewModel.cs" />
+    <Compile Include="Models\Apt\DalMapper.cs" />
+    <Compile Include="Models\IScanTimer.cs" />
+    <Compile Include="Models\ScanTimer.cs" />
+    <Compile Include="Models\Wizard\StartScanCredentialsViewModel.cs" />
     <Compile Include="Models\Counter\IScanCounter.cs" />
     <Compile Include="Models\Counter\IScanCounterCollection.cs" />
     <Compile Include="Models\Counter\IScanCounterDiff.cs" />
-    <Compile Include="Models\IScanOperation.cs" />
-    <Compile Include="Models\ModelBase\IWizardStepViewModel.cs" />
+    <Compile Include="Models\Operation\IScanOperation.cs" />
+    <Compile Include="Models\Wizard\IWizardStepViewModel.cs" />
     <Compile Include="Models\Counter\ScanCounter.cs" />
     <Compile Include="Models\Counter\ScanCounterCollection.cs" />
-    <Compile Include="Models\ScanOperation.cs" />
-    <Compile Include="Models\ScanOperationsManager.cs" />
+    <Compile Include="Models\Operation\ScanOperation.cs" />
+    <Compile Include="Models\Operation\ScanOperationsManager.cs" />
     <Compile Include="Services\DataService.cs" />
     <Compile Include="Services\EventArgs\ErrorEventArgs.cs" />
     <Compile Include="Services\EventArgs\GetModifiedResultsForOperationEventArgs.cs" />
@@ -184,11 +186,11 @@
     <Compile Include="DependencyLocator\DependencyLocator.cs" />
     <Compile Include="Helpers\ThreadHelper.cs" />
     <Compile Include="MarkupExtensions\ConverterMarkupExtension.cs" />
-    <Compile Include="Models\Apt\CustomScanOptions.cs" />
-    <Compile Include="Models\Directory\StartScanLocalViewModel.cs" />
-    <Compile Include="Models\FolderItem.cs" />
-    <Compile Include="Models\ModelBase\IMainViewModel.cs" />
-    <Compile Include="Models\ModelBase\ISelectableItem.cs" />
+    <Compile Include="Models\Wizard\CustomScanOptions.cs" />
+    <Compile Include="Models\Wizard\StartScanLocalViewModel.cs" />
+    <Compile Include="Models\Wizard\FolderItem.cs" />
+    <Compile Include="Models\IMainViewModel.cs" />
+    <Compile Include="Models\Wizard\ISelectableItem.cs" />
     <Compile Include="Services\FileBrowserService.cs" />
     <Compile Include="Services\IFileBrowserService.cs" />
     <Compile Include="Converters\EmptyStringToBoolConverter.cs" />
@@ -197,8 +199,8 @@
     <Compile Include="Converters\StringToVisibiltyConverter.cs" />
     <Compile Include="Messages\MessageManager.cs" />
     <Compile Include="Messages\MessageTokens.cs" />
-    <Compile Include="Models\DomainObject.cs" />
-    <Compile Include="Models\ViewModel.cs" />
+    <Compile Include="Models\ModelBase\DomainObject.cs" />
+    <Compile Include="Models\ModelBase\ViewModel.cs" />
     <Compile Include="Services\ITargetsDiscoveryService.cs" />
     <Compile Include="Services\TargetsDiscoveryService.cs" />
     <Compile Include="Extensions\PortValidationExtensions.cs" />
@@ -232,13 +234,13 @@
     <Compile Include="Views\ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\Directory\IpAddressItem.cs" />
-    <Compile Include="Models\Directory\OperationContext.cs" />
+    <Compile Include="Models\Wizard\IpAddressItem.cs" />
+    <Compile Include="Models\Wizard\OperationContext.cs" />
     <Compile Include="Models\ReportViewModel.cs" />
-    <Compile Include="Models\Directory\StartScanByIpViewModel.cs" />
-    <Compile Include="Models\Directory\StartScanDomainViewModel.cs" />
-    <Compile Include="Models\Directory\StartScanWorkgroupViewModel.cs" />
-    <Compile Include="Models\ModelBase\WizardViewModel.cs" />
+    <Compile Include="Models\Wizard\StartScanByIpViewModel.cs" />
+    <Compile Include="Models\Wizard\StartScanDomainViewModel.cs" />
+    <Compile Include="Models\Wizard\StartScanWorkgroupViewModel.cs" />
+    <Compile Include="Models\Wizard\WizardViewModel.cs" />
     <Compile Include="Views\ReportView.xaml.cs">
       <DependentUpon>ReportView.xaml</DependentUpon>
     </Compile>
@@ -257,12 +259,12 @@
     <Compile Include="Extensions\SearchExtensions.cs" />
     <Compile Include="Services\AptService.cs" />
     <Compile Include="Models\ModelBase\BasePage.cs" />
-    <Compile Include="Models\Directory\DirectoryItem.cs" />
+    <Compile Include="Models\Wizard\DirectoryItem.cs" />
     <Compile Include="Services\IAptService.cs" />
     <Compile Include="Services\IStorageService.cs" />
-    <Compile Include="Models\MainViewViewModel.cs" />
+    <Compile Include="Models\MainViewModel.cs" />
     <Compile Include="Services\StorageService.cs" />
-    <Compile Include="Models\Apt\ThreatDetailsViewModel.cs" />
+    <Compile Include="Models\ThreatDetailsViewModel.cs" />
     <Compile Include="Models\Apt\ThreatInfoItem.cs" />
     <Compile Include="Views\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
@@ -282,7 +284,7 @@
     <Compile Include="Views\Scan\StartScanByWorkgroupView.xaml.cs">
       <DependentUpon>StartScanByWorkgroupView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TemplateSelectors\ComputerFileTemplateSelector.cs" />
+    <Compile Include="Views\TemplateSelectors\ComputerFileTemplateSelector.cs" />
     <Compile Include="Views\StartingPage.xaml.cs">
       <DependentUpon>StartingPage.xaml</DependentUpon>
     </Compile>

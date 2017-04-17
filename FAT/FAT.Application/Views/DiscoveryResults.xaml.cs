@@ -28,9 +28,9 @@ namespace FAT.Application
 
         private bool _lockSelections;
 
-        private MainViewViewModel ViewModel
+        private MainViewModel ViewModel
         {
-            get { return DataContext as MainViewViewModel; }
+            get { return DataContext as MainViewModel; }
         }
 
         #region SelectAllProperty (DependencyProperty)

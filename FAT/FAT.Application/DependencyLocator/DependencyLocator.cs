@@ -22,6 +22,7 @@ namespace FAT.Application
             resolver.Register<IScanCounterCollection, ScanCounterCollection>();
             resolver.Register<IScanCounterFactory, ScanCounterFactory>();
             resolver.Register<IScanCounterManager, ScanCounterManager>();
+            resolver.Register<IScanTimer, ScanTimer>();
 
             //overriding APTAT.Core registrations 
             resolver.AllowOverridingRegistrations(true);

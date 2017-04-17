@@ -16,7 +16,7 @@ namespace FAT.Application
         {
             InitializeComponent();
 
-            DataContext = CompositionHelper.Instance.Resolve<MainViewViewModel>();
+            DataContext = CompositionHelper.Instance.Resolve<MainViewModel>();
 
             MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
         }
