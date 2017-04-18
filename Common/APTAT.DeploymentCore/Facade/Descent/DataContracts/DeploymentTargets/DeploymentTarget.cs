@@ -83,8 +83,11 @@ namespace APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets
             {
                 _isSelected = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSelected)));
+                SelectAction?.Invoke(this);
             }
         }
+
+        public Action<DeploymentTarget> SelectAction { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
     }

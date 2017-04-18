@@ -342,7 +342,7 @@
                         </ListBox.ItemsPanel>
                     </ListBox>
 
-                    <Button AutomationProperties.AutomationId="SkipDiscoveryButton" MinWidth="180" MaxWidth="180"
+                    <Button AutomationProperties.AutomationId="SkipDiscoveryButton" MinWidth="192" MaxWidth="192"
                     Visibility="{Binding IsAutoDiscoveryInProgress, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" VerticalAlignment="Top" 
                     HorizontalAlignment="Right" Margin="0,0,32,20" Command="{Binding StopAutoDiscoveryCommand}" HorizontalContentAlignment="Left">
                         <Grid>
@@ -357,7 +357,7 @@
 
                     <StackPanel Orientation="Horizontal" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,0,32,0" Visibility="{Binding IsAutoDiscoveryCompleted, Converter={converters:BoolToVisibilityConverter2}}">
                         <StackPanel>
-                            <Button AutomationProperties.AutomationId="ScanNowButton" MinWidth="180" MaxWidth="180"
+                            <Button AutomationProperties.AutomationId="ScanNowButton" MinWidth="192" MaxWidth="192"
                             Height="32" Command="{Binding StartScanWithDiscoveryResultsCommand}" HorizontalContentAlignment="Left"
                             Visibility="{Binding ScanWasOnceStarted, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}">
                                 <Grid>
@@ -370,7 +370,7 @@
                                 </Grid>
                             </Button>
 
-                            <Button AutomationProperties.AutomationId="CustomScanButton" MinWidth="180" MaxWidth="180" 
+                            <Button AutomationProperties.AutomationId="CustomScanButton" MinWidth="192" MaxWidth="192" 
                             Height="32" Margin="0 5 0 0" Command="{Binding StartScanCommand}" Background="#FF91ADBD" BorderBrush="#FF91ADBD" 
                             Visibility="{Binding ScanWasOnceStarted, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}" HorizontalContentAlignment="Left">
                                 <Grid>
@@ -386,7 +386,7 @@
 
                         <Grid Visibility="{Binding IsScanInProgress, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}">
                             <Button AutomationProperties.AutomationId="NewCustomScanButton" HorizontalContentAlignment="Left"
-                            MinWidth="180" MaxWidth="180" Height="32"  Command="{Binding StartScanCommand}" 
+                            MinWidth="192" MaxWidth="192" Height="32"  Command="{Binding StartScanCommand}" 
                             Visibility="{Binding ScanWasOnceStarted, Converter={converters:BoolToVisibilityConverter2}}">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -401,7 +401,7 @@
 
                     </StackPanel>
 
-                    <Button AutomationProperties.AutomationId="StopScanButton" HorizontalContentAlignment="Left" MinWidth="180" MaxWidth="180"
+                    <Button AutomationProperties.AutomationId="StopScanButton" HorizontalContentAlignment="Left" MinWidth="192" MaxWidth="192"
                     Visibility="{Binding IsScanInProgress, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" VerticalAlignment="Top" 
                     HorizontalAlignment="Right" Margin="0,0,32,20" Command="{Binding StopScanCommand}">
                         <Grid>
@@ -416,7 +416,7 @@
 
                     <Grid Visibility="{Binding IsScanInProgress, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Right" >
                         <Button AutomationProperties.AutomationId="DetailedScanResultsButton" 
-                    MinWidth="180" MaxWidth="180" Background="#FF91ADBD" BorderBrush="#FF91ADBD"  HorizontalContentAlignment="Left" 
+                    MinWidth="192" MaxWidth="192" Background="#FF91ADBD" BorderBrush="#FF91ADBD"  HorizontalContentAlignment="Left" 
                     IsEnabled="{Binding ValkyrieDetailsLinkAvailable}" Height="32"  Click="Button_Click" Visibility="{Binding ScanWasOnceStarted, Converter={converters:BoolToVisibilityConverter2}}" Margin="0,37,32,0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -431,7 +431,7 @@
 
                     <Grid Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,74,32,20" Visibility="{Binding Loaded, Converter={converters:BoolToVisibilityConverter2}}">
                         <Grid Visibility="{Binding IsAutoDiscoveryInProgress, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}">
-                            <Button AutomationProperties.AutomationId="StartAutoDiscoveryButton" MinWidth="180" MaxWidth="180" Visibility="{Binding IsScanInProgress, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"
+                            <Button AutomationProperties.AutomationId="RestartAutoDiscoveryButton" MinWidth="192" MaxWidth="192" Visibility="{Binding IsScanInProgress, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"
                                      Command="{Binding StartAutoDiscoveryCommand}" Height="32" HorizontalContentAlignment="Left" >
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -440,9 +440,23 @@
                                     </Grid.ColumnDefinitions>
                                     <Path SnapsToDevicePixels="True" Data="M8.9999995,16 C9.5529999,16 9.9999999,16.448 10,17 9.9999999,17.552 9.5529999,18 8.9999995,18 8.4449999,18 7.9999998,17.552 7.9999998,17 7.9999998,16.448 8.4449999,16 8.9999995,16 z M6,16 C6.553,16 7,16.448 7,17 7,17.552 6.553,18 6,18 5.4449997,18 5,17.552 5,17 5,16.448 5.4449997,16 6,16 z M3,16 C3.553,16 4,16.448 4,17 4,17.552 3.553,18 3,18 2.4449997,18 2,17.552 2,17 2,16.448 2.4449997,16 3,16 z M3,13 C3.553,13 4,13.448 4,14 4,14.552 3.553,15 3,15 2.4449997,15 2,14.552 2,14 2,13.448 2.4449997,13 3,13 z M15.854,12.539 C16.061,12.539 16.229,12.707 16.229,12.914 L16.229,14.287 17.601999,14.287 C17.808999,14.287 17.976999,14.455 17.976999,14.662 17.976999,14.871 17.808999,15.037 17.601999,15.037 L16.229,15.037 16.229,16.41 C16.229,16.619 16.061,16.787 15.854,16.787 15.647,16.787 15.479001,16.619 15.479001,16.41 L15.479001,15.037 14.106001,15.037 C13.899001,15.037 13.731001,14.871 13.731001,14.662 13.731001,14.455 13.899001,14.287 14.106001,14.287 L15.479001,14.287 15.479001,12.914 C15.479001,12.707 15.647,12.539 15.854,12.539 z M15.854,10.902 C13.779999,10.902 12.093998,12.59 12.093998,14.662 12.093998,16.735999 13.779999,18.422 15.854,18.422 17.927997,18.422 19.613997,16.735999 19.613997,14.662 19.613997,12.59 17.927997,10.902 15.854,10.902 z M3,10 C3.553,9.9999998 4,10.448 4,11 4,11.552 3.553,12 3,12 2.4449997,12 2,11.552 2,11 2,10.448 2.4449997,9.9999998 3,10 z M15.854,9.9060002 C18.476997,9.9060001 20.61,12.041 20.61,14.662 20.61,17.285001 18.476997,19.418 15.854,19.418 13.230999,19.418 11.098,17.285001 11.098,14.662 11.098,12.041 13.230999,9.9060001 15.854,9.9060002 z M4,2 L3.9689999,6.9999998 14,6.9999998 14.029,4 12.029,3.9689999 12,2 z M2,0 L12,0 13,0 14,0 16,2.2030001 16,6.9999998 17,6.9999998 17,6.4999998 C17,6.224 17.223,6 17.5,6 17.775,6 18,6.224 18,6.4999998 L18,6.9999998 18,7.9999999 18,8.4999998 C18,8.7759998 17.775,8.9999998 17.5,8.9999998 17.223,8.9999998 17,8.7759998 17,8.4999998 L17,7.9999999 1,7.9999999 1,8.4999998 C1,8.7759998 0.77499962,8.9999998 0.5,8.9999998 0.22299957,8.9999998 0,8.7759998 0,8.4999998 L0,7.9999999 0,6.9999998 0,6.4999998 C0,6.224 0.22299957,6 0.5,6 0.77499962,6 1,6.224 1,6.4999998 L1,6.9999998 2,6.9999998 z" Fill="White" Height="19.418" Stretch="Fill" Margin="0 0 10 0" Width="20.61"/>
 
-                                    <TextBlock Text="Start Auto Discovery" VerticalAlignment="Center" Grid.Column="1" Margin="0 1 0 0"/>
+                                    <TextBlock Text="Restart Auto Discovery" VerticalAlignment="Center" Grid.Column="1" Margin="0 1 0 0"/>
                                 </Grid>
                             </Button>
+                            <Grid Visibility="{Binding ScanWasOnceStarted, Converter={converters:BoolToVisibilityConverter2}}">
+                                <Button AutomationProperties.AutomationId="StartAutoDiscoveryButton" MinWidth="192" MaxWidth="192" Visibility="{Binding IsScanInProgress, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"
+                                     Command="{Binding StartAutoDiscoveryCommand}" Height="32" HorizontalContentAlignment="Left" >
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <Path SnapsToDevicePixels="True" Data="M8.9999995,16 C9.5529999,16 9.9999999,16.448 10,17 9.9999999,17.552 9.5529999,18 8.9999995,18 8.4449999,18 7.9999998,17.552 7.9999998,17 7.9999998,16.448 8.4449999,16 8.9999995,16 z M6,16 C6.553,16 7,16.448 7,17 7,17.552 6.553,18 6,18 5.4449997,18 5,17.552 5,17 5,16.448 5.4449997,16 6,16 z M3,16 C3.553,16 4,16.448 4,17 4,17.552 3.553,18 3,18 2.4449997,18 2,17.552 2,17 2,16.448 2.4449997,16 3,16 z M3,13 C3.553,13 4,13.448 4,14 4,14.552 3.553,15 3,15 2.4449997,15 2,14.552 2,14 2,13.448 2.4449997,13 3,13 z M15.854,12.539 C16.061,12.539 16.229,12.707 16.229,12.914 L16.229,14.287 17.601999,14.287 C17.808999,14.287 17.976999,14.455 17.976999,14.662 17.976999,14.871 17.808999,15.037 17.601999,15.037 L16.229,15.037 16.229,16.41 C16.229,16.619 16.061,16.787 15.854,16.787 15.647,16.787 15.479001,16.619 15.479001,16.41 L15.479001,15.037 14.106001,15.037 C13.899001,15.037 13.731001,14.871 13.731001,14.662 13.731001,14.455 13.899001,14.287 14.106001,14.287 L15.479001,14.287 15.479001,12.914 C15.479001,12.707 15.647,12.539 15.854,12.539 z M15.854,10.902 C13.779999,10.902 12.093998,12.59 12.093998,14.662 12.093998,16.735999 13.779999,18.422 15.854,18.422 17.927997,18.422 19.613997,16.735999 19.613997,14.662 19.613997,12.59 17.927997,10.902 15.854,10.902 z M3,10 C3.553,9.9999998 4,10.448 4,11 4,11.552 3.553,12 3,12 2.4449997,12 2,11.552 2,11 2,10.448 2.4449997,9.9999998 3,10 z M15.854,9.9060002 C18.476997,9.9060001 20.61,12.041 20.61,14.662 20.61,17.285001 18.476997,19.418 15.854,19.418 13.230999,19.418 11.098,17.285001 11.098,14.662 11.098,12.041 13.230999,9.9060001 15.854,9.9060002 z M4,2 L3.9689999,6.9999998 14,6.9999998 14.029,4 12.029,3.9689999 12,2 z M2,0 L12,0 13,0 14,0 16,2.2030001 16,6.9999998 17,6.9999998 17,6.4999998 C17,6.224 17.223,6 17.5,6 17.775,6 18,6.224 18,6.4999998 L18,6.9999998 18,7.9999999 18,8.4999998 C18,8.7759998 17.775,8.9999998 17.5,8.9999998 17.223,8.9999998 17,8.7759998 17,8.4999998 L17,7.9999999 1,7.9999999 1,8.4999998 C1,8.7759998 0.77499962,8.9999998 0.5,8.9999998 0.22299957,8.9999998 0,8.7759998 0,8.4999998 L0,7.9999999 0,6.9999998 0,6.4999998 C0,6.224 0.22299957,6 0.5,6 0.77499962,6 1,6.224 1,6.4999998 L1,6.9999998 2,6.9999998 z" Fill="White" Height="19.418" Stretch="Fill" Margin="0 0 10 0" Width="20.61"/>
+
+                                        <TextBlock Text="Start Auto Discovery" VerticalAlignment="Center" Grid.Column="1" Margin="0 1 0 0"/>
+                                    </Grid>
+                                </Button>
+                            </Grid>
                         </Grid>
                     </Grid>
 
@@ -496,7 +510,7 @@
                         </ListBox.ItemsPanel>
                     </ListBox>
 
-                    <Button MinWidth="180" MaxWidth="180"  HorizontalContentAlignment="Left"
+                    <Button MinWidth="192" MaxWidth="192"  HorizontalContentAlignment="Left"
                     Visibility="{Binding PreviousScansViewModel.GroupEnabled, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" Command="{Binding OpenPreviousScansCommand}" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="32 0">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -508,7 +522,7 @@
                         </Grid>
                     </Button>
 
-                    <Button MinWidth="180" MaxWidth="180" Background="#FF91ADBD" BorderBrush="#FF91ADBD" HorizontalContentAlignment="Left" IsEnabled="{Binding PreviousScansViewModel.ValkyrieDetailsLinkAvailable}"
+                    <Button MinWidth="192" MaxWidth="192" Background="#FF91ADBD" BorderBrush="#FF91ADBD" HorizontalContentAlignment="Left" IsEnabled="{Binding PreviousScansViewModel.ValkyrieDetailsLinkAvailable}"
                     Visibility="{Binding PreviousScansViewModel.GroupEnabled, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" Click="Button_Click2" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,37,32,20" >
                         <Grid>
                             <Grid.ColumnDefinitions>

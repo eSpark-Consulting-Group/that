@@ -232,6 +232,8 @@ namespace FAT.Application.Models
                     IsAutoDiscoveryInProgress = false;
                     _targetsDiscoveryService.DeploymentTargetsAutoResolving -= OnDeploymentTargetsAutoResolving;
                     Percentage = 0;
+                    if (!DiscoveryResults.Any(_ => _.IsSelected))
+                        Set(() => SelectDiscoveryResults, true);
                 }
 
                 StartScanCommand.InvalidateCanExecute();
@@ -320,11 +322,11 @@ namespace FAT.Application.Models
                 if (CancelInProgress)
                     return "Canceling...";
                 if (IsScanInProgress == null)
-                    return "Discovering In Progress...";
+                    return "Searching for Available Devices...";
                 if (IsAutoDiscoveryInProgress)
                 {
                     if (Percentage > 0)
-                        header = String.Format("{0}% Discovering In Progress...", Math.Round(Percentage));
+                        header = String.Format("{0}% Searching for Available Devices...", Math.Round(Percentage));
                     return header;
                 }
                 if (IsScanInProgress == true)
@@ -656,7 +658,7 @@ namespace FAT.Application.Models
 
             StopAutoDiscoveryCommand = new DelegateCommand(InvokeStopAutoDiscovery);
             StartScanWithDiscoveryResultsCommand = new DelegateCommand(InvokeScanWithDiscoveryResults,
-                o => DiscoveryResults != null && DiscoveryResults.Any());
+                o => DiscoveryResults != null && DiscoveryResults.Any(_ => _.IsSelected));
             StartAutoDiscoveryCommand = new DelegateCommand(InvokeStartAutoDiscovery);
 
             OpenPreviousScansCommand = new DelegateCommand(InvokeOpenPreviousScans,
@@ -783,9 +785,6 @@ namespace FAT.Application.Models
 
         private void InvokeScanWithDiscoveryResults(Object arg)
         {
-            if (!DiscoveryResults.Any(_ => _.IsSelected))
-                Set(() => SelectDiscoveryResults, true);
-
             var model = CompositionHelper.Instance.Resolve<StartScanCredentialsViewModel>();
             model.ViewLoadedCommand.Execute(null);
             model.CheckIfCanUseCurrentCredentials(DiscoveryResults.Where(_ => _.IsSelected));
@@ -863,6 +862,7 @@ namespace FAT.Application.Models
             {
                 if (!e.Target.IsLocalComputer || !DiscoveryResults.Any(_ => _.IsLocalComputer))
                 {
+                    e.Target.SelectAction = _ => StartScanWithDiscoveryResultsCommand.InvalidateCanExecute();
                     DiscoveryResults.Add(e.Target);
                     _scanCounterManager.AddComputer();
                     if (SelectDiscoveryResults.GetValueOrDefault())
