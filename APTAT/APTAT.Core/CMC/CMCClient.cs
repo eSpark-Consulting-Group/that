@@ -8,6 +8,16 @@ using APTAT.Core.CMC.Request;
 
 namespace APTAT.Core.CMC
 {
+    public class RequestParameters
+    {
+        public string SessionIdentifier { get; set; }
+        public string AnalizeIdentifier { get; set; }
+        public string AccountIdentifier { get; set; }
+        public string EventParamValue { get; set; }
+        public string EventId { get; set; }
+        public string EventGroupId { get; set; }
+    }
+
     public class CmcClient : ICmcClient
     {
         private readonly ICmcWebApiProvider _webAptProvider;
@@ -94,17 +104,17 @@ namespace APTAT.Core.CMC
             return requestFields;
         }
 
-        private GeneralInfo GenerateRequest(
-            string sessionIdentifier,string analizeIdentifier,string accountIdentifier,
-            string eventParamValue,string eventId,string eventGroupId,
-            List<Parameter> additionalParameters,IRequest request) {
 
+        private GeneralInfo GenerateRequest(
+          RequestParameters requestParameters,
+            List<Parameter> additionalParameters, IRequest request)
+        {
             if (request == null) return null;
             var requestFieldsAndValues = GetCmcRequestFieldsAndValues(request);
 
-            if (accountIdentifier != null) requestFieldsAndValues["acid"] =accountIdentifier;
-            if (sessionIdentifier != null) requestFieldsAndValues["sid"] = sessionIdentifier;
-            if (analizeIdentifier!=null)   requestFieldsAndValues["aid"] = analizeIdentifier;
+            if (requestParameters.AccountIdentifier != null) requestFieldsAndValues["acid"] = requestParameters.AccountIdentifier;
+            if (requestParameters.SessionIdentifier != null) requestFieldsAndValues["sid"] = requestParameters.SessionIdentifier;
+            if (requestParameters.AnalizeIdentifier !=null)   requestFieldsAndValues["aid"] = requestParameters.AnalizeIdentifier;
              
             GeneralInfo generalInfo = 
             new GeneralInfo(_applicationIdentifier, _machineCode, _machineCode, _productIdentifier);
@@ -116,12 +126,12 @@ namespace APTAT.Core.CMC
 
             EventInfo eventInfo = new EventInfo
             {
-                EventGroupIdentifier = eventGroupId,
-                EventIdentifier = eventId
+                EventGroupIdentifier = requestParameters.EventGroupId,
+                EventIdentifier = requestParameters.EventId
             };
 
             List<Parameter> eventValues = new List<Parameter>();
-            Parameter eventParam = new Parameter() { Name = "ev_for_hashing", Value = eventParamValue };
+            Parameter eventParam = new Parameter() { Name = "ev_for_hashing", Value = requestParameters.EventParamValue };
             eventValues.Add(eventParam);
             foreach (var evtField in requestFieldsAndValues)
             eventValues.Add(new Parameter(){Name = evtField.Key,Value = evtField.Value});
@@ -164,10 +174,15 @@ namespace APTAT.Core.CMC
                new Parameter() { Name = "iu_ts", Value =GetLinuxFormatTime(localTimeZone) }
             };
 
-            GeneralInfo generatedrequest = 
-                GenerateRequest(_sessionIdentifier,_analyzeIdentifier, _accountIdentifier,
-                    eventParamValue, eventId, eventGroupId, additionalParameters, request);
-
+            RequestParameters requestParameters=new RequestParameters(){
+                SessionIdentifier = _sessionIdentifier,
+                AnalizeIdentifier = _analyzeIdentifier,
+                AccountIdentifier = _accountIdentifier,
+                EventParamValue = eventParamValue,
+                EventId = eventId,
+                EventGroupId = eventGroupId
+            };
+            GeneralInfo generatedrequest =GenerateRequest(requestParameters, additionalParameters, request);
             _webAptProvider.SendData(generatedrequest);
         }
 
@@ -178,10 +193,16 @@ namespace APTAT.Core.CMC
             string eventGroupId = "eg_da";
             List<Parameter> additionalParameters = new List<Parameter>();
 
-            GeneralInfo generatedrequest = 
-                GenerateRequest(_sessionIdentifier, _analyzeIdentifier, _accountIdentifier,
-                    eventParamValue, eventId, eventGroupId, additionalParameters, request);
-
+            RequestParameters requestParameters = new RequestParameters()
+            {
+                SessionIdentifier = _sessionIdentifier,
+                AnalizeIdentifier = _analyzeIdentifier,
+                AccountIdentifier = _accountIdentifier,
+                EventParamValue = eventParamValue,
+                EventId = eventId,
+                EventGroupId = eventGroupId
+            };
+            GeneralInfo generatedrequest = GenerateRequest(requestParameters, additionalParameters, request);
             _webAptProvider.SendData(generatedrequest);
         }
 
@@ -194,10 +215,16 @@ namespace APTAT.Core.CMC
             List<Parameter> additionalParameters = new List<Parameter>();
             _analyzeIdentifier = Guid.NewGuid().ToString();
 
-            GeneralInfo generatedrequest = 
-                GenerateRequest(_sessionIdentifier, _analyzeIdentifier, _accountIdentifier,
-                    eventParamValue, eventId, eventGroupId, additionalParameters, request);
-
+            RequestParameters requestParameters = new RequestParameters()
+            {
+                SessionIdentifier = _sessionIdentifier,
+                AnalizeIdentifier = _analyzeIdentifier,
+                AccountIdentifier = _accountIdentifier,
+                EventParamValue = eventParamValue,
+                EventId = eventId,
+                EventGroupId = eventGroupId
+            };
+            GeneralInfo generatedrequest = GenerateRequest(requestParameters, additionalParameters, request);
             _webAptProvider.SendData(generatedrequest);
         }
 
@@ -208,10 +235,16 @@ namespace APTAT.Core.CMC
             string eventGroupId = "eg_da";
 
             List<Parameter> additionalParameters = new List<Parameter>();
-            GeneralInfo generatedrequest =
-                GenerateRequest(_sessionIdentifier, _analyzeIdentifier, _accountIdentifier,
-                eventParamValue, eventId, eventGroupId, additionalParameters, request);
-
+            RequestParameters requestParameters = new RequestParameters()
+            {
+                SessionIdentifier = _sessionIdentifier,
+                AnalizeIdentifier = _analyzeIdentifier,
+                AccountIdentifier = _accountIdentifier,
+                EventParamValue = eventParamValue,
+                EventId = eventId,
+                EventGroupId = eventGroupId
+            };
+            GeneralInfo generatedrequest = GenerateRequest(requestParameters, additionalParameters, request);
             _webAptProvider.SendData(generatedrequest);
         }
 
@@ -222,10 +255,16 @@ namespace APTAT.Core.CMC
             string eventGroupId = "eg_da"; 
 
             List<Parameter> additionalParameters = new List<Parameter>();
-            GeneralInfo generatedrequest =
-                GenerateRequest(_sessionIdentifier, _analyzeIdentifier, _accountIdentifier,
-                    eventParamValue, eventId, eventGroupId, additionalParameters, request);
-             
+            RequestParameters requestParameters = new RequestParameters()
+            {
+                SessionIdentifier = _sessionIdentifier,
+                AnalizeIdentifier = _analyzeIdentifier,
+                AccountIdentifier = _accountIdentifier,
+                EventParamValue = eventParamValue,
+                EventId = eventId,
+                EventGroupId = eventGroupId
+            };
+            GeneralInfo generatedrequest = GenerateRequest(requestParameters, additionalParameters, request);
             _webAptProvider.SendData(generatedrequest);
         }
 
@@ -236,10 +275,16 @@ namespace APTAT.Core.CMC
             string eventGroupId = "eg_da";
 
             List<Parameter> additionalParameters = new List<Parameter>();
-            GeneralInfo generatedrequest = 
-                GenerateRequest(_sessionIdentifier, _analyzeIdentifier, _accountIdentifier,
-                    eventParamValue, eventId, eventGroupId, additionalParameters, request);
-
+            RequestParameters requestParameters = new RequestParameters()
+            {
+                SessionIdentifier = _sessionIdentifier,
+                AnalizeIdentifier = _analyzeIdentifier,
+                AccountIdentifier = _accountIdentifier,
+                EventParamValue = eventParamValue,
+                EventId = eventId,
+                EventGroupId = eventGroupId
+            };
+            GeneralInfo generatedrequest = GenerateRequest(requestParameters, additionalParameters, request);
             _webAptProvider.SendData(generatedrequest);
         }
 
@@ -250,10 +295,16 @@ namespace APTAT.Core.CMC
             string eventGroupId = "eg_da";
 
             List<Parameter> additionalParameters = new List<Parameter>();
-            GeneralInfo generatedrequest = 
-                GenerateRequest(_sessionIdentifier, _analyzeIdentifier, _accountIdentifier,
-                    eventParamValue, eventId, eventGroupId, additionalParameters, request);
-
+            RequestParameters requestParameters = new RequestParameters()
+            {
+                SessionIdentifier = _sessionIdentifier,
+                AnalizeIdentifier = _analyzeIdentifier,
+                AccountIdentifier = _accountIdentifier,
+                EventParamValue = eventParamValue,
+                EventId = eventId,
+                EventGroupId = eventGroupId
+            };
+            GeneralInfo generatedrequest = GenerateRequest(requestParameters, additionalParameters, request);
             _webAptProvider.SendData(generatedrequest);
         }
 
@@ -264,10 +315,16 @@ namespace APTAT.Core.CMC
             string eventGroupId = "eg_da"; 
               
             List<Parameter> additionalParameters = new List<Parameter>();
-            GeneralInfo generatedrequest =
-                GenerateRequest(_sessionIdentifier, _analyzeIdentifier, _accountIdentifier,
-                    eventParamValue, eventId, eventGroupId, additionalParameters, request);
-
+            RequestParameters requestParameters = new RequestParameters()
+            {
+                SessionIdentifier = _sessionIdentifier,
+                AnalizeIdentifier = _analyzeIdentifier,
+                AccountIdentifier = _accountIdentifier,
+                EventParamValue = eventParamValue,
+                EventId = eventId,
+                EventGroupId = eventGroupId
+            };
+            GeneralInfo generatedrequest = GenerateRequest(requestParameters, additionalParameters, request);
             _webAptProvider.SendData(generatedrequest);
         }
     }

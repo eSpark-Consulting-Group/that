@@ -1,25 +1,24 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.IO;
 using System.Net;
 using System.Text;
 using Newtonsoft.Json;
+using Valkyrie.WebApiProvider;
 
 namespace APTAT.Core.CMC
 {
-    public class CmcWebApiProvider:ICmcWebApiProvider
+    public class CmcWebApiProvider: ICmcWebApiProvider
     {
         private Uri _cmcBaseUri;
-
         public Uri GetBaseUri()
         {
             return _cmcBaseUri;
         }
-
         public void SetBaseUri(Uri uri)
         {
             _cmcBaseUri = uri;
         }
-
         static string Get(string url)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
@@ -43,26 +42,23 @@ namespace APTAT.Core.CMC
                 throw;
             }
         }
-
         static void Post(string url, Object obj)
         {
-            string jsonContent =  JsonConvert.SerializeObject(obj);
-            
+            System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
+            string jsonContent = JsonConvert.SerializeObject(obj);
+            Byte[] byteArray = encoding.GetBytes(jsonContent);
+            long length = 0;
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.Method = "POST";
-
-            System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
-            Byte[] byteArray = encoding.GetBytes(jsonContent);
-             
-            request.ContentLength = byteArray.Length;
-            request.ContentType = @"application/json";
+                           request.Method = "POST";
+                           request.ContentLength = byteArray.Length;
+                           request.ContentType = @"application/json";
 
             using (Stream dataStream = request.GetRequestStream())
             {
                 dataStream.Write(byteArray, 0, byteArray.Length);
             }
-            long length = 0;
+
             try
             {
                 using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
@@ -70,7 +66,7 @@ namespace APTAT.Core.CMC
                     length = response.ContentLength;
                 }
             }
-            catch (WebException ex){  }
+            catch (WebException ex) { }
         }
 
         public void SendData(IGeneralInfo request)

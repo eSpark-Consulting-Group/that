@@ -82,6 +82,7 @@
     <Compile Include="Apt\IAggregatedAptScanResult.cs" />
     <Compile Include="CMC\CmcClient.cs" />
     <Compile Include="CMC\CmcWebApiProvider.cs" />
+    <Compile Include="CMC\CultureInfoProvider.cs" />
     <Compile Include="CMC\EventInfo.cs" />
     <Compile Include="CMC\ICmcClient.cs" />
     <Compile Include="CMC\ICultureInfoProvider.cs" />
@@ -110,6 +111,8 @@
     <Compile Include="CMC\ScanType.cs" />
     <Compile Include="CMC\Request\AutoDiscoveryFinishedRequest.cs" />
     <Compile Include="Apt\IDescentScannerFactory.cs" />
+    <Compile Include="CMC\SystemInfo.cs" />
+    <Compile Include="CMC\SystemInfoProvider.cs" />
     <Compile Include="Descent\Apt\AptComputerDescentResultFactory.cs" />
     <Compile Include="Descent\Apt\AptFactory.cs" />
     <Compile Include="Descent\Apt\ContextFactory.cs" />
