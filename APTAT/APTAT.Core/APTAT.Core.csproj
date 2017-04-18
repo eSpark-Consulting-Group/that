@@ -49,6 +49,9 @@
       <HintPath>..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -56,6 +59,7 @@
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -76,6 +80,35 @@
     <Compile Include="Apt\AptDescentScannerFactory.cs" />
     <Compile Include="Apt\AptVerdictContext.cs" />
     <Compile Include="Apt\IAggregatedAptScanResult.cs" />
+    <Compile Include="CMC\CmcClient.cs" />
+    <Compile Include="CMC\CmcWebApiProvider.cs" />
+    <Compile Include="CMC\EventInfo.cs" />
+    <Compile Include="CMC\ICmcClient.cs" />
+    <Compile Include="CMC\ICultureInfoProvider.cs" />
+    <Compile Include="CMC\IGeneralInfo.cs" />
+    <Compile Include="CMC\IRequest.cs" />
+    <Compile Include="CMC\ISystemInfo.cs" />
+    <Compile Include="CMC\ISystemInfoProvider.cs" />
+    <Compile Include="CMC\Request\ApplicationClosedRequest.cs" />
+    <Compile Include="CMC\ICmcWebApiProvider.cs" />
+    <Compile Include="CMC\GeneralInfo.cs" />
+    <Compile Include="CMC\Request\IApplicationClosedRequest.cs" />
+    <Compile Include="CMC\Request\IAutoDiscoveryFinishedRequest.cs" />
+    <Compile Include="CMC\Request\ILaunchedRequest.cs" />
+    <Compile Include="CMC\Request\IReportGeneratedRequest.cs" />
+    <Compile Include="CMC\Request\IReportPrintedOrSavedRequest.cs" />
+    <Compile Include="CMC\Request\IScanFinishedRequest.cs" />
+    <Compile Include="CMC\Request\IScanStartedRequest.cs" />
+    <Compile Include="CMC\Request\IScanUpdatedRequest.cs" />
+    <Compile Include="CMC\Request\LaunchedRequest.cs" />
+    <Compile Include="CMC\Parameter.cs" />
+    <Compile Include="CMC\Request\ReportGeneratedRequest.cs" />
+    <Compile Include="CMC\Request\ReportPrintedOrSavedRequest.cs" />
+    <Compile Include="CMC\Request\ScanFinishedRequest.cs" />
+    <Compile Include="CMC\Request\ScanStartedRequest.cs" />
+    <Compile Include="CMC\Request\ScanUpdatedRequest.cs" />
+    <Compile Include="CMC\ScanType.cs" />
+    <Compile Include="CMC\Request\AutoDiscoveryFinishedRequest.cs" />
     <Compile Include="Apt\IDescentScannerFactory.cs" />
     <Compile Include="Descent\Apt\AptComputerDescentResultFactory.cs" />
     <Compile Include="Descent\Apt\AptFactory.cs" />
