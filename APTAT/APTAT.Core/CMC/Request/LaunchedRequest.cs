@@ -2,9 +2,9 @@
 {
     public class LaunchedRequest : ILaunchedRequest
     {
-        public string Acid { get; }
-        public string ProductVersion { get; }
-        public string ProductIdentifier { get; }
+        public string AcId { get; set; }
+        public string ProductVersion { get; set; }
+        public string ProductIdentifier { get; set; }
     }
 }
 

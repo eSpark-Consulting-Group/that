@@ -8,19 +8,9 @@ using APTAT.Core.CMC.Request;
 
 namespace APTAT.Core.CMC
 {
-    public class RequestParameters
-    {
-        public string SessionIdentifier { get; set; }
-        public string AnalizeIdentifier { get; set; }
-        public string AccountIdentifier { get; set; }
-        public string EventParamValue { get; set; }
-        public string EventId { get; set; }
-        public string EventGroupId { get; set; }
-    }
-
     public class CmcClient : ICmcClient
     {
-        private readonly ICmcWebApiProvider _webAptProvider;
+        private readonly ICmcWebApiProvider _webApiProvider;
         private string _accountIdentifier;
         private string _sessionIdentifier;
         private string _analyzeIdentifier;
@@ -31,55 +21,47 @@ namespace APTAT.Core.CMC
 
         private readonly ICultureInfoProvider _cultureInfoProvider;
         private readonly ISystemInfoProvider _systemInfoProvider;
-         
+
         public CmcClient(ICmcWebApiProvider icmcWebApiProvider, IMachineKeyProvider machineKeyProvider,
             ISystemInfoProvider systemInfoProvider, ICultureInfoProvider cultureInfoProvider)
         {
-            _webAptProvider = icmcWebApiProvider;
+            _webApiProvider = icmcWebApiProvider;
             _machineCode = machineKeyProvider.GlobalMachineKey;
             _systemInfoProvider = systemInfoProvider;
             _cultureInfoProvider = cultureInfoProvider;
-          //_productIdentifier = SetProductIdentifier();
         }
-
-        //private string SetProductIdentifier()
-        //{
-        //    return "enp.c1.fat";
-        //}
 
         private string GetRequestFieldValue(string fieldName)
         {
             List<Parameter> requestFields = new List<Parameter>
             {
-                new Parameter() {Value = "acid", Name = "Acid"},
-                new Parameter() {Value = "sid", Name = "Sid"},
-                new Parameter() {Value = "app_op_sy", Name = "OperationSystemFamilyName"},
-                new Parameter() {Value = "app_op_ve", Name = "OperationSystemVersion"},
-                new Parameter() {Value = "app_op_pl", Name = "OperationSystemPlatform"},
-                new Parameter() {Value = "app_pr_ve", Name = "ProductVersion"},
-                new Parameter() {Value = "app_cul", Name = "UICulture"},
-                new Parameter() {Value = "iu_tz", Name = "UsersTimeZone"},
-                new Parameter() {Value = "iu_ts", Name = "LinuxFormatOfDateTime"},
-                new Parameter() {Value = "ds", Name = "DiscoveryStatus"},
-                new Parameter() {Value = "pc_cc", Name = "CountOfPotentiallyScanableDiscoveredComputers"},
-                new Parameter() {Value = "sc_trg_tp", Name = "ScanTriggerType"},
-                new Parameter() {Value = "sc_tg", Name = "ScanTarget"},
-                new Parameter() {Value = "sc_tp", Name = "ScanType"},
-                new Parameter() {Value = "pc_cc", Name = "TotalCountOfDiscoveredComputers"},
-                new Parameter() {Value = "pc_sc", Name = "CountOfScannedComputers"},
-                new Parameter() {Value = "u_fc", Name = "CountOfNewUnknownFilesWhichWasFoundAfterTheScanWasFinished"},
-                new Parameter()
-                {
-                    Value = "mlc_fc",
-                    Name = "CountOfNewMaliciousFilesWhichWasFoundAfterTheScanWasFinished"
-                },
-                new Parameter() {Value = "sc_st", Name = "ScanStatus"},
-                new Parameter() {Value = "ps_sc_s", Name = "CountOfSuccessScans"},
-                new Parameter() {Value = "ps_sc_f", Name = "CountOfFailedScans"},
-                new Parameter() {Value = "u_fc", Name = "CountOfUnknownFiles"},
-                new Parameter() {Value = "mlc_fc", Name = "CountOfMaliciousFiles"},
-                new Parameter() {Value = "rp_kd", Name = "ReportKind"},
-                new Parameter() {Value = "act", Name = "ReportAction"}
+                new Parameter() {Value = "acid", Name =nameof(ILaunchedRequest.AcId)},
+
+
+                new Parameter() {Value = "app_pr_ve", Name =nameof(ILaunchedRequest.ProductVersion)},
+
+                new Parameter() {Value = "ds", Name =nameof(IAutoDiscoveryFinishedRequest.DiscoveryStatus)},
+                new Parameter() {Value = "pc_cc", Name =nameof(IAutoDiscoveryFinishedRequest.CountOfPotentiallyScanableDiscoveredComputers)},
+
+                new Parameter() {Value = "sc_trg_tp", Name =nameof(IScanStartedRequest.ScanTriggerType)},
+                new Parameter() {Value = "sc_tg", Name =nameof(IScanStartedRequest.ScanTarget)}, 
+                new Parameter() {Value = "sc_tp", Name =nameof(IScanStartedRequest.ScanType)}, 
+                new Parameter() {Value = "pc_cc", Name =nameof(IScanStartedRequest.TotalCountOfDiscoveredComputers)}, 
+                new Parameter() {Value = "pc_sc", Name =nameof(IScanStartedRequest.CountOfScannedComputers)}, 
+
+                new Parameter() {Value = "u_fc", Name = nameof(IScanUpdatedRequest.CountOfNewUnknownFilesWhichWasFoundAfterTheScanWasFinished)},
+                new Parameter() {Value = "mlc_fc", Name =nameof(IScanUpdatedRequest.CountOfNewMaliciousFilesWhichWasFoundAfterTheScanWasFinished)},
+
+                new Parameter() {Value = "sc_st", Name =nameof(IScanFinishedRequest.ScanStatus)},
+                new Parameter() {Value = "ps_sc_s", Name =nameof(IScanFinishedRequest.CountOfSuccessScans)},
+                new Parameter() {Value = "ps_sc_f", Name =nameof(IScanFinishedRequest.CountOfFailedScans)},
+                new Parameter() {Value = "u_fc", Name =nameof(IScanFinishedRequest.CountOfUnknownFiles)},
+                new Parameter() {Value = "mlc_fc", Name =nameof(IScanFinishedRequest.CountOfMaliciousFiles)}, 
+
+                new Parameter() {Value = "rp_kd", Name =nameof(IReportGeneratedRequest.ReportKind)},
+                new Parameter() {Value = "act",Name =nameof(IReportPrintedOrSavedRequest.ReportAction)},
+
+                new Parameter() {Value = "sid", Name =nameof(IApplicationClosedRequest.SId)}
             };
 
             string findedfieldValue = string.Empty;
@@ -104,10 +86,7 @@ namespace APTAT.Core.CMC
             return requestFields;
         }
 
-
-        private GeneralInfo GenerateRequest(
-          RequestParameters requestParameters,
-            List<Parameter> additionalParameters, IRequest request)
+        private GeneralInfo GenerateRequest(RequestParameters requestParameters,List<Parameter> additionalParameters, IRequest request)
         {
             if (request == null) return null;
             var requestFieldsAndValues = GetCmcRequestFieldsAndValues(request);
@@ -116,10 +95,10 @@ namespace APTAT.Core.CMC
             if (requestParameters.SessionIdentifier != null) requestFieldsAndValues["sid"] = requestParameters.SessionIdentifier;
             if (requestParameters.AnalizeIdentifier !=null)   requestFieldsAndValues["aid"] = requestParameters.AnalizeIdentifier;
              
-            GeneralInfo generalInfo = 
-            new GeneralInfo(_applicationIdentifier, _machineCode, _machineCode, _productIdentifier);
+            GeneralInfo generalInfo = new GeneralInfo(_applicationIdentifier, _machineCode, _machineCode, _productIdentifier);
 
-            List <Parameter> applicationValues=new List<Parameter>();
+
+            List<Parameter> applicationValues = new List<Parameter>();
             var applicationParameters = additionalParameters.Where(c => c.IsApplication);
             applicationValues.AddRange(applicationParameters);
             generalInfo.Values = applicationValues;
@@ -136,12 +115,10 @@ namespace APTAT.Core.CMC
             foreach (var evtField in requestFieldsAndValues)
             eventValues.Add(new Parameter(){Name = evtField.Key,Value = evtField.Value});
 
-            var eventsParameters = additionalParameters.Where(c => !c.IsApplication);
-            eventValues.AddRange(eventsParameters);
-
-            eventInfo.EventValues = eventValues;
-            generalInfo.EventsInfo.Add(eventInfo);
-
+                var eventsParameters = additionalParameters.Where(c => !c.IsApplication);
+                eventValues.AddRange(eventsParameters);
+                eventInfo.EventValues = eventValues;
+                generalInfo.EventsInfo.Add(eventInfo);
             return generalInfo;
         }
 
@@ -154,7 +131,7 @@ namespace APTAT.Core.CMC
 
         public void Launched(ILaunchedRequest request)
         {
-            _accountIdentifier = request.Acid;
+            _accountIdentifier = request.AcId;
             _sessionIdentifier = Guid.NewGuid().ToString();
             var systemInfo = _systemInfoProvider.GetSystemInfo();
             var culture = _cultureInfoProvider.GetCulture();
@@ -173,7 +150,6 @@ namespace APTAT.Core.CMC
                new Parameter() { Name = "iu_tz", Value = localTimeZone.ToString(CultureInfo.InvariantCulture)  },
                new Parameter() { Name = "iu_ts", Value =GetLinuxFormatTime(localTimeZone) }
             };
-
             RequestParameters requestParameters=new RequestParameters(){
                 SessionIdentifier = _sessionIdentifier,
                 AnalizeIdentifier = _analyzeIdentifier,
@@ -182,8 +158,9 @@ namespace APTAT.Core.CMC
                 EventId = eventId,
                 EventGroupId = eventGroupId
             };
-            GeneralInfo generatedrequest =GenerateRequest(requestParameters, additionalParameters, request);
-            _webAptProvider.SendData(generatedrequest);
+
+            IGeneralInfo generatedrequest = GenerateRequest(requestParameters, additionalParameters, request);
+            _webApiProvider.SendData(generatedrequest);
         }
 
         public void AutoDiscoveryFinished(IAutoDiscoveryFinishedRequest request)
@@ -203,7 +180,7 @@ namespace APTAT.Core.CMC
                 EventGroupId = eventGroupId
             };
             GeneralInfo generatedrequest = GenerateRequest(requestParameters, additionalParameters, request);
-            _webAptProvider.SendData(generatedrequest);
+            _webApiProvider.SendData(generatedrequest);
         }
 
         public void ScanStarted(IScanStartedRequest request)
@@ -225,7 +202,7 @@ namespace APTAT.Core.CMC
                 EventGroupId = eventGroupId
             };
             GeneralInfo generatedrequest = GenerateRequest(requestParameters, additionalParameters, request);
-            _webAptProvider.SendData(generatedrequest);
+            _webApiProvider.SendData(generatedrequest);
         }
 
         public void ScanFinished(IScanFinishedRequest request)
@@ -245,7 +222,7 @@ namespace APTAT.Core.CMC
                 EventGroupId = eventGroupId
             };
             GeneralInfo generatedrequest = GenerateRequest(requestParameters, additionalParameters, request);
-            _webAptProvider.SendData(generatedrequest);
+            _webApiProvider.SendData(generatedrequest);
         }
 
         public void ScanUpdated(IScanUpdatedRequest request)
@@ -265,7 +242,7 @@ namespace APTAT.Core.CMC
                 EventGroupId = eventGroupId
             };
             GeneralInfo generatedrequest = GenerateRequest(requestParameters, additionalParameters, request);
-            _webAptProvider.SendData(generatedrequest);
+            _webApiProvider.SendData(generatedrequest);
         }
 
         public void ReportGenerated(IReportGeneratedRequest request)
@@ -285,7 +262,7 @@ namespace APTAT.Core.CMC
                 EventGroupId = eventGroupId
             };
             GeneralInfo generatedrequest = GenerateRequest(requestParameters, additionalParameters, request);
-            _webAptProvider.SendData(generatedrequest);
+            _webApiProvider.SendData(generatedrequest);
         }
 
         public void ReportPrintedOrSaved(IReportPrintedOrSavedRequest request)
@@ -305,7 +282,7 @@ namespace APTAT.Core.CMC
                 EventGroupId = eventGroupId
             };
             GeneralInfo generatedrequest = GenerateRequest(requestParameters, additionalParameters, request);
-            _webAptProvider.SendData(generatedrequest);
+            _webApiProvider.SendData(generatedrequest);
         }
 
         public void AppicationClosed(IApplicationClosedRequest request)
@@ -325,7 +302,7 @@ namespace APTAT.Core.CMC
                 EventGroupId = eventGroupId
             };
             GeneralInfo generatedrequest = GenerateRequest(requestParameters, additionalParameters, request);
-            _webAptProvider.SendData(generatedrequest);
+            _webApiProvider.SendData(generatedrequest);
         }
     }
 }

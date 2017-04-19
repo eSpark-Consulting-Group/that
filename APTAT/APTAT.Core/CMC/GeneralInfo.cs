@@ -15,7 +15,7 @@ namespace APTAT.Core.CMC
         public string GlobalMachineCode { get; set; }
 
         [JsonProperty("product_identifier")]
-        public string ProductIdentifier { get; private set; }
+        public string ProductIdentifier { get; set; }
 
         [JsonProperty("application_values_array")]
         public List<Parameter> Values { get; set; }

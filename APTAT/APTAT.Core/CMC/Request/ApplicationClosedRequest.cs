@@ -2,6 +2,6 @@
 {
     public class ApplicationClosedRequest: IApplicationClosedRequest
     {
-        public string Sid { get; set; }
+        public string SId { get; set; }
     }
 }

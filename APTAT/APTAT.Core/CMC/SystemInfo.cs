@@ -1,6 +1,6 @@
 namespace APTAT.Core.CMC
 {
-    class SystemInfo: ISystemInfo
+    public class SystemInfo
     {
         public string FamilyName { get; set; }
         public string Version { get; set; }

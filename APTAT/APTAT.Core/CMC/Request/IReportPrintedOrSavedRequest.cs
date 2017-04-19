@@ -1,8 +1,7 @@
 ﻿namespace APTAT.Core.CMC.Request
 {
-    public interface IReportPrintedOrSavedRequest : IRequest
+    public interface IReportPrintedOrSavedRequest : IRequest, IReportGeneratedRequest
     {
-        ReportKind ReportKind { get; set; }
         ReportAction ReportAction { get; set; }
     }
 }

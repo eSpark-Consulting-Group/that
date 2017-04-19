@@ -2,8 +2,8 @@
 {
     public interface ILaunchedRequest : IRequest
     {
-        string Acid { get; }
-        string ProductVersion { get; }
-        string ProductIdentifier { get; }
+        string AcId { get; set; }
+        string ProductVersion { get; set; }
+        string ProductIdentifier { get; set; }
     }
 }
