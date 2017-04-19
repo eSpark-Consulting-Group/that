@@ -1,8 +1,4 @@
-﻿using APTAT.Core.Apt;
-using APTAT.Valkyrie;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace APTAT.Core.Reports
 {

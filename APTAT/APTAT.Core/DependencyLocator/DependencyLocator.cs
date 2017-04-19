@@ -30,7 +30,6 @@ namespace APTAT.Core.DependencyLocator
             resolver.RegisterSingleton<IStorageSubSystem, IValkyrieStorageSubSystem, StorageSubSystem>();
             resolver.RegisterSingleton<IReportBuilder, ReportBuilder>();
             resolver.RegisterSingleton<IFinalVerdictCalculator, FinalVerdictCalculator>();
-            resolver.RegisterSingleton<IResultMergeHelper, ResultMergeHelper>(); 
             resolver.RegisterSingleton<IReportBuilderFactory, ReportBuilderFactory>();
             resolver.RegisterSingleton<IReportNamesCache, ReportNamesCache>();
         }

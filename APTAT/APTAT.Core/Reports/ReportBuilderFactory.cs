@@ -5,12 +5,12 @@ namespace APTAT.Core.Reports
     public class ReportBuilderFactory : IReportBuilderFactory
     {
         protected IReportNamesCache Cache { get; }
-        protected IResultMergeHelper MergeHelper { get; }
+        private ResultMergeHelper MergeHelper { get; }
 
-        public ReportBuilderFactory(IReportNamesCache cache, IResultMergeHelper mergeHelper)
+        public ReportBuilderFactory(IReportNamesCache cache )
         {
             Cache = cache;
-            MergeHelper = mergeHelper;
+            MergeHelper = new ResultMergeHelper();
         }
 
         public virtual  IReportBuilder GetReportBuilder(ReportScanStage stage)
@@ -18,10 +18,10 @@ namespace APTAT.Core.Reports
             switch (stage)
             {
                 case ReportScanStage.FlsScan:
-                    return new ReportBuilder(Cache, MergeHelper);
+                    return new ReportBuilder(Cache);
                     
                 case ReportScanStage.ValkyrieScan:
-                    return  new ReportBuilderValkyrie(Cache, MergeHelper);
+                    return  new ReportBuilderValkyrie(Cache);
                 default:
                     throw new NotSupportedException(nameof(stage));
             }

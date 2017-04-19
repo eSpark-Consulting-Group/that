@@ -1,22 +1,42 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using APTAT.Core.Descent.Apt;
-using APTAT.Valkyrie;
-using Valkyrie.WebApiProvider.Enums;
-using ValkyrieVerdict = APTAT.Valkyrie.ValkyrieVerdict;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 
 namespace APTAT.Core.Reports
 {
-    public class DetailedBadFile : ScanModule
+    public class DetailedBadFile : IModule
     {
+        public string Sha1 { get; set; }
+        public CloudVerdict Cloud { get; set; }
+        public string Id { get; set; }
+        public string Path { get; set; }
+        public DateTime CloudDate { get; set; }
+        public long Size { get; set; }
+        public string Attributes { get; set; }
+        public DateTime CreatedInternal { get; set; }
+        public DateTime ModifiedInternal { get; set; }
+        public DateTime AccessedInternal { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime Modified { get; set; }
+        public DateTime Accessed { get; set; }
+        public string Signer { get; set; }
+        public string Description { get; set; }
+        public string Version { get; set; }
+        public string Copyright { get; set; }
+        public string Product { get; set; }
+        public FileAttributes FileAttributes { get; set; }
+        public string FileSizeFormatted { get; set; }
+        public string FileAge { get; set; }
+        public bool IsBad { get; set; }
+        public bool IsUnknownOrFailed { get; set; }
         private readonly List<ScannedTarget> _targets = new List<ScannedTarget>();
-        private readonly IFinalVerdictCalculator _calculator;
-        public DetailedBadFile(IModule module, ScannedTarget target, IFinalVerdictCalculator calculator)
+
+
+        public DetailedBadFile(IModule module, ScannedTarget target)
         {
-            _calculator = calculator;
-            Verdict = ValkyrieVerdict.InQueue;
             if (module != null)
             {
                 Sha1 = module.Sha1;
@@ -33,74 +53,27 @@ namespace APTAT.Core.Reports
                 Accessed = module.Accessed;
                 Modified = module.Modified;
                 FileAge = module.FileAge;
+                target.BadFileInstances.Add(module.Path);
             }
-
-            target.BadFileInstances.Add(new BadFileInstanceInfo(module));
+            
             _targets.Add(target);
         }
 
         public string Name { get; set; }
 
-        public BadFileType FileType
+        public virtual BadFileType FileType
         {
             get
             {
-                if (this.FinalVerdict.HasValue)
-                {
-                    return GetBadFileTypeFromVerdict();
-                }
-                else
-                {
-                    if (Verdict == ValkyrieVerdict.FirstSeen || Verdict == ValkyrieVerdict.Pending)
-                    {
-                        return BadFileType.Pending;
-                    }
 
-                    if (Verdict == ValkyrieVerdict.NotAnalyzed)
-                    {
-                        if (Cloud == CloudVerdict.NoVerdict || Cloud == CloudVerdict.FailedToAnalyze)
-                            return BadFileType.NotAnalyzed;
-
-                        return Cloud == CloudVerdict.Unknown || Cloud == CloudVerdict.FirstSeen ? BadFileType.Unknown : BadFileType.Infected;
-                    }
-                    return Verdict == ValkyrieVerdict.Undetected ? BadFileType.Unknown : BadFileType.Infected;
-                }
-            }
-        }
-
-        private BadFileType GetBadFileTypeFromVerdict()
-        {
-            switch (this.FinalVerdict.Value)
-            {
-                case Core.FinalVerdict.Malware:
-                    return BadFileType.Infected;
-                case Core.FinalVerdict.Unknown:
-                    return BadFileType.Unknown;
-                case Core.FinalVerdict.NotAnalyzed:
+                if (Cloud == CloudVerdict.NoVerdict || Cloud == CloudVerdict.FailedToAnalyze)
                     return BadFileType.NotAnalyzed;
-                case Core.FinalVerdict.InProgress:
-                    return BadFileType.Pending;
-                default:
-                    throw new ArgumentOutOfRangeException("FinalVerdict");
+
+                return Cloud == CloudVerdict.Unknown || Cloud == CloudVerdict.FirstSeen ? BadFileType.Unknown : BadFileType.Infected;
+
 
             }
         }
-
-        public void SetValkyrieAnalysis(IValkyrieAnalysisResult analysisResult)
-        {
-            if (analysisResult == null)
-                return;
-            IsWhiteListed = analysisResult.IsWhiteListed;
-            MalwareProbability = analysisResult.MalwareProbability;
-            ReturnCode = analysisResult.ReturnCode;
-            Verdict = analysisResult.Verdict;
-            IsWhiteListed = analysisResult.IsWhiteListed;
-            IsSkipped = analysisResult.IsSkipped;
-            SkipReason = analysisResult.SkipReason;
-            OperationStatus = analysisResult.OperationStatus;
-        }
-
-
 
         public int TargetsCount
         {
@@ -132,10 +105,7 @@ namespace APTAT.Core.Reports
         }
 
 
-        public List<ScannedTarget> Targets
-        {
-            get { return _targets; }
-        }
+        public List<ScannedTarget> Targets => _targets;
 
         public int InstancesTotalCount
         {
@@ -144,98 +114,5 @@ namespace APTAT.Core.Reports
                 return _targets.Sum(t => t.BadFileInstances.Count);
             }
         }
-        public class BadFileInstanceInfo
-        {
-            public BadFileInstanceInfo()
-            {
-            }
-
-            public BadFileInstanceInfo(IModule module)
-            {
-                if (module != null)
-                {
-                    Id = module.Id;
-                    Path = module.Path;
-                    Created = module.Created;
-                    Modified = module.Modified;
-                    Accessed = module.Accessed;
-                }
-            }
-
-            public string Id { get; set; }
-            public string Path { get; set; }
-            public DateTime Created { get; set; }
-            public DateTime Modified { get; set; }
-            public DateTime Accessed { get; set; }
-        }
-
-        public bool IsWhiteListed { get; set; }
-
-        public string WhiteListed
-        {
-            get { return IsWhiteListed ? "Yes" : "No"; }
-        }
-
-        public float? MalwareProbability { get; set; }
-
-        public string MalwareProbabilityFormatted
-        {
-            get { return string.Format("{0:P}", MalwareProbability / 100); }
-        }
-
-        public ErrorCodesEnum ReturnCode { get; set; }
-
-        public ValkyrieVerdict Verdict { get; set; }
-
-        public FinalVerdict? FinalVerdict
-        {
-            get
-            {
-                if (_calculator == null) return null;
-                return _calculator.GetFinalVerdict(this.Cloud, this.Verdict);
-            }
-        }
-
-        public string FinalVerdictString
-        {
-            get
-            {
-                if (_calculator == null) return String.Empty;
-                if (!this.FinalVerdict.HasValue) return String.Empty;
-
-                return _calculator.GetVerdictString(this.FinalVerdict.Value, this.OperationStatus);
-            }
-
-        }
-        public string ValkyrieVerdictString
-        {
-            get
-            {
-                string result = this.Verdict.GetEnumDescription();
-                if (this.IsSkipped)
-                {
-                    if (!String.IsNullOrWhiteSpace(this.OperationStatus))
-                    {
-                        if (OperationStatus.Length > 80)
-                        {
-                            var s = OperationStatus.Substring(0, 80);
-                            s = s.Substring(0, s.LastIndexOf(" "));
-                            return result += " (" + s + ")";
-                        }
-                        result += " (" + this.OperationStatus + ")";
-                    }
-                }
-
-                return result;
-            }
-        }
-
-        public bool IsSkipped { get; set; }
-
-        public string SkipReason { get; set; }
-
-        public string OperationStatus { get; set; }
-
-
     }
 }

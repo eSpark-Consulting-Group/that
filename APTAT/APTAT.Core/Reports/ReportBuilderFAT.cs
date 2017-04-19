@@ -6,13 +6,13 @@ namespace APTAT.Core.Reports
 {
     public class ReportBuilderFAT : ReportBuilder
     {
-        public ReportBuilderFAT(IReportNamesCache cache, IResultMergeHelper mergeHelper) : base(cache, mergeHelper)
+        public ReportBuilderFAT(IReportNamesCache cache) : base(cache)
         {
         }
 
         protected override AptReportData CreateReportData(ReportData reportData)
         {
-            return new AptReportDataFAT(MergeHelper, reportData);
+            return new AptReportDataFAT(reportData, new FinalVerdictCalculator());
         }
 
         protected override string GetFileName(ReportType reportType)

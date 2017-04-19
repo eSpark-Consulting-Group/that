@@ -4,17 +4,20 @@ namespace APTAT.Core.Reports
 {
     public class AptReportDataFAT : AptReportDataValkyrie
     {
-        public AptReportDataFAT(IResultMergeHelper mergeHelper, ReportData reportData) : base(mergeHelper, reportData)
+        private ResultMergeHelperFat _mergeHelper;
+        public AptReportDataFAT(ReportData reportData, IFinalVerdictCalculator calculator) : base(reportData, calculator)
         {
+            
         }
 
+        protected override ResultMergeHelperValkyrie MergeHelper => _mergeHelper ?? (_mergeHelper = new ResultMergeHelperFat(Calculator));
 
         public override VulnerableDeviceInfoEx[] Top10VulnerableDevices
         {
             get
             {
                 IEnumerable<ScannedTarget> targets = new ScannedTarget[] { };
-                IEnumerable<DetailedBadFile> files;
+                IEnumerable<DetailedBadFileWithValkyrie> files;
                 MergeResults(_Targets, ValkyrieAnalysisResult, out targets, out files, out files);
 
                 var top10 = (from target in targets
@@ -74,7 +77,7 @@ namespace APTAT.Core.Reports
             get
             {
                 IEnumerable<ScannedTarget> targets;
-                IEnumerable<DetailedBadFile> files;
+                IEnumerable<DetailedBadFileWithValkyrie> files;
 
                 MergeResults(_Targets, ValkyrieAnalysisResult, out targets, out files, out files);
 

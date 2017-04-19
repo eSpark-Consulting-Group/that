@@ -131,6 +131,9 @@
     <Compile Include="Reports\Data\FileRatingInfoFAT.cs" />
     <Compile Include="Reports\Data\FileRatingValkyrieInfo.cs" />
     <Compile Include="Reports\Data\IAptReportData.cs" />
+    <Compile Include="Reports\Data\MergedScanResults.cs" />
+    <Compile Include="Reports\DetailedBadFileWithValkyrie.cs" />
+    <Compile Include="Reports\ResultMergeHelperFat.cs" />
     <Compile Include="Reports\IReportBuilderFactory.cs" />
     <Compile Include="Reports\IReportData.cs" />
     <Compile Include="Reports\IReportNamesCache.cs" />
@@ -145,14 +148,14 @@
     <Compile Include="Reports\ReportBuilderValkyrie.cs" />
     <Compile Include="Reports\ReportData.cs" />
     <Compile Include="Reports\ReportNamesCache.cs" />
-    <Compile Include="Reports\ResultMergeManager.cs" />
+    <Compile Include="Reports\ResultMergeHelperValkyrie.cs" />
+    <Compile Include="Reports\ResultMergeHelper.cs" />
     <Compile Include="Reports\Data\ScanResultMapper.cs" />
     <Compile Include="Reports\Data\ScanResultType.cs" />
     <Compile Include="Reports\Data\TargetRatingInfo.cs" />
     <Compile Include="Reports\Data\TargetVerdict.cs" />
     <Compile Include="Reports\Data\VulnerableDeviceInfo.cs" />
     <Compile Include="Reports\Data\VulnerableDeviceInfoEx.cs" />
-    <Compile Include="Reports\Data\ScanModuleMapper.cs" />
     <Compile Include="Storage\Mappers\CloudVerdictMapper.cs" />
     <Compile Include="Storage\Mappers\ScanKindMapper.cs" />
     <Compile Include="Storage\Mappers\Mapper.cs" />
@@ -213,7 +216,6 @@
     <Compile Include="Reports\ScanResult.cs" />
     <Compile Include="Reports\DetailedBadFile.cs" />
     <Compile Include="Reports\ReportCompletedEventArgs.cs" />
-    <Compile Include="Reports\ScanModule.cs" />
     <Compile Include="Reports\ScannedTarget.cs" />
     <Compile Include="Reports\ScanResultValkyrie.cs" />
     <Compile Include="Reports\StringExt.cs" />
@@ -238,7 +240,6 @@
     <Compile Include="TelerikReports\Helpers\FileHelper.cs" />
     <Compile Include="TelerikReports\Helpers\IFileHelper.cs" />
     <Compile Include="TelerikReports\Helpers\IRenderStrategy.cs" />
-    <Compile Include="TelerikReports\Helpers\IReportFileGenerator.cs" />
     <Compile Include="TelerikReports\Helpers\RenderPdfStrategy.cs" />
     <Compile Include="TelerikReports\Helpers\RenderStrategyFactory.cs" />
     <Compile Include="TelerikReports\Helpers\ReportType.cs" />

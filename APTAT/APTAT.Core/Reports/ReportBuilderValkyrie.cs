@@ -2,13 +2,13 @@
 {
     public class ReportBuilderValkyrie : ReportBuilder
     {
-        public ReportBuilderValkyrie(IReportNamesCache cache, IResultMergeHelper mergeHelper) : base(cache, mergeHelper)
+        public ReportBuilderValkyrie(IReportNamesCache cache) : base(cache)
         {
         }
 
         protected override AptReportData CreateReportData(ReportData reportData)
         {
-            return new AptReportDataValkyrie(MergeHelper, reportData);
+            return new AptReportDataValkyrie(reportData, new FinalVerdictCalculator());
         }
     }
 }

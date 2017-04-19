@@ -13,12 +13,11 @@ namespace APTAT.Core.Reports
     public class ReportBuilder : IReportBuilder
     {
         private readonly IReportNamesCache _cache;
-        protected IResultMergeHelper MergeHelper { get; }
+        
 
-        public ReportBuilder(IReportNamesCache cache, IResultMergeHelper mergeHelper)
+        public ReportBuilder(IReportNamesCache cache )
         {
             _cache = cache;
-            MergeHelper = mergeHelper;
         }             
                
         public async Task<ReportFile> BuildReportAsync(ReportData reportData, ReportType reportType, bool saveFile = true)
@@ -92,7 +91,6 @@ namespace APTAT.Core.Reports
                     return renderer.Render(ddrep, data);
 
                 case ReportType.ExecutiveWithValkyrie:
-                    data.GetAllBadFilesSorted(false);
                     return renderer.Render(new ExecutiveValkyrieReport(), data);
 
                 case ReportType.DetailedPerDeviceWithValkyrie:
@@ -134,7 +132,7 @@ namespace APTAT.Core.Reports
 
         protected virtual AptReportData CreateReportData(ReportData operationData)
         {
-            return new AptReportData(MergeHelper, operationData);
+            return new AptReportData(operationData);
         }
 
     }

@@ -6,10 +6,10 @@ namespace APTAT.Core.Reports
 
     public class ScanResultValkyrie : ScanResult
     {
-        public DetailedBadFile[] PendingAnalysisFilesValkyrie { get; internal set; }
-        public DetailedBadFile[] MaliciousFilesValkyrie { get; internal set; }
-        public DetailedBadFile[] FailedToAnalyzeFilesValkyrie { get; internal set; }
-        public DetailedBadFile[] UknownFilesValkyrie { get; internal set; }
+        public DetailedBadFileWithValkyrie[] PendingAnalysisFilesValkyrie { get; internal set; }
+        public DetailedBadFileWithValkyrie[] MaliciousFilesValkyrie { get; internal set; }
+        public DetailedBadFileWithValkyrie[] FailedToAnalyzeFilesValkyrie { get; internal set; }
+        public DetailedBadFileWithValkyrie[] UknownFilesValkyrie { get; internal set; }
 
         public int SeverityIndex
         {
@@ -34,6 +34,6 @@ namespace APTAT.Core.Reports
             }
         }
 
-        public DetailedBadFile[] EndPointFiles { get; set; }
+        public DetailedBadFileWithValkyrie[] EndPointFiles { get; set; }
     }
 }

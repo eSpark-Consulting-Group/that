@@ -4,7 +4,7 @@ namespace APTAT.Core.Reports
 {
     public class ReportBuilderFactoryFat : ReportBuilderFactory
     {
-        public ReportBuilderFactoryFat(IReportNamesCache cache, IResultMergeHelper mergeHelper) : base(cache, mergeHelper)
+        public ReportBuilderFactoryFat(IReportNamesCache cache) : base(cache)
         {
         }
 
@@ -13,7 +13,7 @@ namespace APTAT.Core.Reports
             switch (stage)
             {
                 case ReportScanStage.ValkyrieScan:
-                    return new ReportBuilderFAT(Cache, MergeHelper);
+                    return new ReportBuilderFAT(Cache);
                 default:
                     throw new NotSupportedException(nameof(stage));
             }

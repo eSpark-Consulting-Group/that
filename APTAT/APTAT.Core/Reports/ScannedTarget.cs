@@ -8,8 +8,6 @@ namespace APTAT.Core.Reports
 {
     public class ScannedTarget : ITargetVerdicted
     {
-        private readonly List<DetailedBadFile.BadFileInstanceInfo> _badFileInstances = new List<DetailedBadFile.BadFileInstanceInfo>();
-
         public ScannedTarget()
         {
         }
@@ -22,7 +20,7 @@ namespace APTAT.Core.Reports
             HostName = aptScanResult.Computer?.Name;
             IpAddress = aptScanResult.Computer?.IPAddress;
             OsName = aptScanResult.AptReport.Computer?.Os?.ToString();
-            OrganizationUnit = aptScanResult.Computer.OrganizationUnit;
+            OrganizationUnit = aptScanResult.Computer?.OrganizationUnit;
             TotalFilesCount = aptScanResult.TotalFilesCount;
             UnknownFilesCount = aptScanResult.UnknownFilesCount;
             FailedToAnalyzeFilesCount = aptScanResult.FailedToAnalyzeFilesCount;
@@ -92,7 +90,7 @@ namespace APTAT.Core.Reports
                 StringBuilder sb = new StringBuilder("<ul>");
                 foreach (var instance in BadFileInstances)
                 {
-                    string str = "<li style=\"padding-bottom: 3; padding-top:3;\">" + instance.Path+"</li>";
+                    string str = "<li style=\"padding-bottom: 3; padding-top:3;\">" + instance+"</li>";
                     sb.AppendLine(str);
                 }
 
@@ -109,16 +107,13 @@ namespace APTAT.Core.Reports
 
                 foreach (var instance in BadFileInstances)
                 {
-                    string str = String.Format("{0}\n", instance.Path);
+                    string str = String.Format("{0}\n", instance);
                     sb.AppendLine(str);
                 }
                 return sb.ToString();
             }
         }
 
-        public List<DetailedBadFile.BadFileInstanceInfo> BadFileInstances
-        {
-            get { return _badFileInstances; }
-        }
+        public List<string> BadFileInstances { get; } = new List<string>();
     }
 }

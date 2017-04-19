@@ -16,14 +16,15 @@ namespace APTAT.Core.Descent.Apt
             return verdict == CloudVerdict.Unknown|| verdict == CloudVerdict.FirstSeen;
         }
 
-        public  static ScanModule[] MapToBusiness(this IEnumerable<IModule> files)
+        public  static DetailedBadFile[] MapToBusiness(this IEnumerable<IModule> files, ScannedTarget scannedTarget)
         {
             
-            if (files == null) return new ScanModule[] { };
+            if (files == null) return new DetailedBadFile[] { };
             var q = from module in files
                 where !module.Sha1.StartsWith("0000000000000000000000000000000000000000")
-                select module.Map();
+                select new DetailedBadFile(module, scannedTarget);
             return q.ToArray();
+
         }
     }
 }

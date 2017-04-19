@@ -6,6 +6,6 @@ namespace APTAT.Core
     public interface IFinalVerdictCalculator
     {
         FinalVerdict GetFinalVerdict(Descent.Apt.CloudVerdict cloud, ValkyrieVerdict valkyrie);
-        string GetVerdictString(FinalVerdict FinalVerdict, string operationStatus = null);
+        string GetVerdictString(FinalVerdict finalVerdict, string operationStatus = null);
     }
 }

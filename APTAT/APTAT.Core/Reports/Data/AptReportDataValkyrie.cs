@@ -1,30 +1,92 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using APTAT.Core.Descent.Apt;
+using APTAT.Valkyrie;
+
 namespace APTAT.Core.Reports
 {
-    public class AptReportDataValkyrie : AptReportData
+    public class AptReportDataValkyrie: AptReportData
     {
-        public AptReportDataValkyrie(IResultMergeHelper mergeHelper, ReportData reportData) : base(mergeHelper, reportData)
+        protected IFinalVerdictCalculator Calculator { get; }
+
+        private ResultMergeHelperValkyrie _mergeHelper;
+
+        protected virtual ResultMergeHelperValkyrie MergeHelper => _mergeHelper ?? (_mergeHelper = new ResultMergeHelperValkyrie(Calculator));
+
+        public AptReportDataValkyrie(ReportData reportData, IFinalVerdictCalculator calculator) : base(reportData)
         {
+            Calculator = calculator;
+
+            ValkyrieAnalysisResult = reportData.ValkyrieAnalysisResult;
+        }
+        private DetailedBadFileWithValkyrie[] GetAllBadFilesSorted(bool isUniqueSetOfFiles = true)
+        {
+            IEnumerable<ScannedTarget> targets;
+            IEnumerable<DetailedBadFileWithValkyrie> allUniqueBadFiles;
+            IEnumerable<DetailedBadFileWithValkyrie> allNonUniqueBadFiles;
+            if (_Targets == null) throw new InvalidOperationException("Targets required");
+            MergeResults(_Targets, ValkyrieAnalysisResult, out targets, out allUniqueBadFiles, out allNonUniqueBadFiles);
+            
+            return (isUniqueSetOfFiles ? allUniqueBadFiles : allNonUniqueBadFiles)
+                .OrderByDescending(file => file.InstancesTotalCount).ThenBy(file => file.Name).ToArray();
+        }
+        public Dictionary<string, IValkyrieAnalysisResult> ValkyrieAnalysisResult { get; set; }
+
+        private DetailedBadFileWithValkyrie[] _allBadFilesSorted;
+        public new DetailedBadFileWithValkyrie[] AllBadFilesSorted
+        {
+            get
+            {
+                if (_allBadFilesSorted == null)
+                {
+                    _allBadFilesSorted = GetAllBadFilesSorted();
+                }
+
+                return _allBadFilesSorted;
+            }
 
         }
-
         public override ItemRatingInfo[] DevicesRating
         {
             get
             {
                 IEnumerable<ScannedTarget> targets;
-                IEnumerable<DetailedBadFile> files;
+                IEnumerable<DetailedBadFileWithValkyrie> files;
                 MergeResults(_Targets, ValkyrieAnalysisResult, out targets, out files, out files);
                 return CalculateTargetVerdict(targets);
             }
         }
+        private MergedScanResults<DetailedBadFileWithValkyrie> _mergedScanResultsCache;
+        
+        protected virtual void MergeResults(IEnumerable<IAptScanResult> flsResults, Dictionary<string, IValkyrieAnalysisResult> valkyrieResults, out IEnumerable<ScannedTarget> mergedTargets,
+            out IEnumerable<DetailedBadFileWithValkyrie> uniqueBadFiles, out IEnumerable<DetailedBadFileWithValkyrie> nonUniqueBadFiles)
+        {
+        
+            if (_mergedScanResultsCache != null)
+            {
+                mergedTargets = _mergedScanResultsCache.MergedTargets;
+                uniqueBadFiles = _mergedScanResultsCache.MergeUniqueResults;
+                nonUniqueBadFiles = _mergedScanResultsCache.MergeNonUniqueResults;
+                return;
+            }
+            var statistics = MergeHelper.MergeResults(flsResults, valkyrieResults, out mergedTargets, out uniqueBadFiles, out nonUniqueBadFiles);
+            if (statistics != null) ReplaceStatistics(statistics);
+            _mergedScanResultsCache = new MergedScanResults<DetailedBadFileWithValkyrie>
+            {
+                MergeUniqueResults = uniqueBadFiles,
+                MergeNonUniqueResults = nonUniqueBadFiles,
+                MergedTargets = mergedTargets
+            };
+        }
+    
+
         public override VulnerableDeviceInfoEx[] Top10VulnerableDevices
         {
             get
             {
                 IEnumerable<ScannedTarget> targets = new ScannedTarget[] { };
-                IEnumerable<DetailedBadFile> files;
+                IEnumerable<DetailedBadFileWithValkyrie> files;
                 MergeResults(_Targets, ValkyrieAnalysisResult, out targets, out files, out files);
 
                 var top10 = (from target in targets
@@ -81,14 +143,14 @@ namespace APTAT.Core.Reports
             get
             {
                 IEnumerable<ScannedTarget> targets;
-                IEnumerable<DetailedBadFile> files;
+                IEnumerable<DetailedBadFileWithValkyrie> files;
                 MergeResults(_Targets, ValkyrieAnalysisResult, out targets, out files, out files);
-                var detailedBadFiles = files as DetailedBadFile[] ?? files.ToArray();
+                DetailedBadFileWithValkyrie[] detailedBadFiles =  files.ToArray();
 
                 List<ScanResultValkyrie> scanResults = new List<ScanResultValkyrie>();
                 foreach (var t in targets)
                 {
-                    var endPointFiles = (from file in detailedBadFiles where file.Targets.Any(tg => tg.TargetUid == t.TargetUid) select file).ToArray();
+                    DetailedBadFileWithValkyrie[] endPointFiles = (from file in detailedBadFiles where file.Targets.Any(tg => tg.TargetUid == t.TargetUid) select file).ToArray();
                     ScanResultType resultType = t.ResultType.ToBusiness();
                     var scanResult = new ScanResultValkyrie
                     {

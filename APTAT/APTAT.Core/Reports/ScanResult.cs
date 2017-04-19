@@ -1,4 +1,5 @@
 ﻿using System;
+using APTAT.Core.Descent.Apt;
 
 namespace APTAT.Core.Reports
 {
@@ -56,8 +57,8 @@ namespace APTAT.Core.Reports
             }
         }
 
-        public ScanModule[] MalwareFiles { get; internal set; }
-        public ScanModule[] UnknownFiles { get; internal set; }
-        public ScanModule[] LookupInProgressFiles { get; internal set; }
+        public DetailedBadFile[] MalwareFiles { get; internal set; }
+        public DetailedBadFile[] UnknownFiles { get; internal set; }
+        public DetailedBadFile[] LookupInProgressFiles { get; internal set; }
     }
 }
