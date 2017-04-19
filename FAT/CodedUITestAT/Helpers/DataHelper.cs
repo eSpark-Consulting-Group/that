@@ -8,7 +8,7 @@ namespace CodedUITestFAT
     internal static class DataHelper
     {
         #region Global constants
-        
+
         /// <summary> Default waiting time for tests. </summary>
         internal const int DefaultWaitTime = 15000; // Milliseconds
 
@@ -29,29 +29,38 @@ namespace CodedUITestFAT
         internal static bool IsRedirectedToValkyrieStaging = false;
 
         /// <summary> Indicates whether the product archive is extracted. </summary>
-        internal static bool IsProductExtracted = false;               
+        internal static bool IsProductExtracted = false;
 
         #endregion
 
         #region Environment variables
 
         /// <summary> A user name for authentication. </summary>
-        internal static readonly string Username = Environment.GetEnvironmentVariable("_ServerLogin", EnvironmentVariableTarget.Machine);
+        internal static readonly string Username;
 
         /// <summary> A user password for authentication. </summary>
-        internal static readonly string Password = Environment.GetEnvironmentVariable("_ServerPassword", EnvironmentVariableTarget.Machine);
+        internal static readonly string Password;
 
-        internal static readonly string EncryptedPassword = Playback.EncryptText(Password);
-                
+        internal static readonly string EncryptedPassword;
+
         /// <summary> The product executable name. </summary>
-        internal static readonly string ProductExeName = Environment.GetEnvironmentVariable("_ProductExeName", EnvironmentVariableTarget.Machine);
-
-        /// <summary> A path to the extracted product archive. </summary>                
-        internal static readonly string ExtractedProductPath = Path.Combine(WorkingFolder, ProductExeName.WithoutExtension());
+        internal static readonly string ProductExeName;
 
         /// <summary> Working folder. </summary>
-        internal static readonly string WorkingFolder = Environment.GetEnvironmentVariable("_TargetDir", EnvironmentVariableTarget.Machine);
+        internal static readonly string WorkingFolder;
 
+        /// <summary> A path to the extracted product archive. </summary>                
+        internal static readonly string ExtractedProductPath;
+
+        static DataHelper()
+        {
+            Username = Environment.GetEnvironmentVariable("_ServerLogin", EnvironmentVariableTarget.Machine);
+            Password = Environment.GetEnvironmentVariable("_ServerPassword", EnvironmentVariableTarget.Machine);
+            EncryptedPassword = Playback.EncryptText(Password);
+            ProductExeName = Environment.GetEnvironmentVariable("_ProductExeName", EnvironmentVariableTarget.Machine);
+            WorkingFolder = Environment.GetEnvironmentVariable("_TargetDir", EnvironmentVariableTarget.Machine);
+            ExtractedProductPath = Path.Combine(WorkingFolder, ProductExeName.WithoutExtension());
+        }
         /// <summary> Determines whether the autotests will run using FLS staging server. Gets the data from a local environment variable. </summary>
         internal static bool IsFlsStaging()
         {
@@ -60,7 +69,7 @@ namespace CodedUITestFAT
 
             if (isStaging == 0) return false;
             else return true;
-        }               
+        }
 
         /// <summary> Determines whether the autotests will run using Valkyrie staging server. Gets the data from a local environment variable. </summary>
         internal static bool IsValkyrieStaging()
@@ -70,15 +79,15 @@ namespace CodedUITestFAT
 
             if (isStaging == 0) return false;
             else return true;
-        }               
+        }
 
         /// <summary> Gets data on an internal endpoint obtained from a local environment variable. </summary>
         internal static Computer GetEndpoint()
         {
-           string computerName = Environment.GetEnvironmentVariable("_EndpointName", EnvironmentVariableTarget.Machine);
-           return new Computer(computerName);
+            string computerName = Environment.GetEnvironmentVariable("_EndpointName", EnvironmentVariableTarget.Machine);
+            return new Computer(computerName);
         }
-       
+
 
         /// <summary> Gets a root directory of endpoint machine in the environment from a local environment variable. </summary>
         /// <param name="IsAdminShare">Determines whether the root should be returned in a form of admin share. </param>        
@@ -109,7 +118,7 @@ namespace CodedUITestFAT
             string malFolder = Environment.GetEnvironmentVariable("_MalwaresFolder", EnvironmentVariableTarget.Machine);
             if (isServer) return String.Format(@"{0}{1}", GetServerRoot(), malFolder);
             else return String.Format(@"{0}{1}", GetEndpointRoot(), malFolder);
-            
+
             //return @"C:\Malfolder";
         }
 
