@@ -66,26 +66,27 @@ namespace CodedUITestFAT
         /// <summary> Extracts the product archive for further testing. </summary>
         private static void ExtractProduct()
         {
-            string sevenZArgument = String.Format(@"x {0} -o{1}", Path.Combine(DataHelper.GetWorkingFolder(), DataHelper.ProductExeName), DataHelper.ExtractedProductPath);
+            string pathToZippedFat = Path.Combine(DataHelper.WorkingFolder, DataHelper.ProductExeName);            
+            string pathToExtracetdFat = DataHelper.ExtractedProductPath;
+
+            string sevenZArgument = String.Format(@"x {0} -o{1}", pathToZippedFat, pathToExtracetdFat);
             string sevenZPath;
 
             // Installs 7z
             Install7z();
 
-            // Uses 7z to dearchive the product archive
-            if (Environment.Is64BitOperatingSystem) sevenZPath = Path.Combine(Environment.ExpandEnvironmentVariables("%ProgramW6432%"), Settings.General.Default.SevenZFolder);
-            else sevenZPath = Path.Combine(Environment.ExpandEnvironmentVariables("%ProgramFiles(x86)%"), Settings.General.Default.SevenZFolder);
+            // Uses 7z to extract the product archive           
+            sevenZPath = Path.Combine(Environment.ExpandEnvironmentVariables("%ProgramFiles%"), Settings.General.Default.SevenZFolder);
             StartProcess(sevenZPath, Settings.General.Default.SevenZExeName, sevenZArgument);
         }
 
         /// <summary> Installs 7-zip at the local machine. </summary>
         private static void Install7z()
         {
-            string workingFolder = DataHelper.GetWorkingFolder();
+            string workingFolder = DataHelper.WorkingFolder;
             string argument = @"/S";
-
-            if (Environment.Is64BitOperatingSystem) StartProcess(workingFolder, Settings.General.Default.SevenZInstallerNameX64, argument);
-            else StartProcess(workingFolder, Settings.General.Default.SevenZInstallerNameX32, argument);
+            
+            StartProcess(workingFolder, Settings.General.Default.SevenZInstallerNameX32, argument);
         }
 
         /// <summary> Edits the product configuration file and adds Valkyrie and CAM staging servers addresses. </summary>
@@ -137,7 +138,7 @@ namespace CodedUITestFAT
         /// <returns> Returns the product version or null in the case the product file is not found. </returns>
         internal static string GetProductVersion()
         {
-            string filePath = Path.Combine(DataHelper.GetWorkingFolder(), DataHelper.ProductExeName);
+            string filePath = Path.Combine(DataHelper.WorkingFolder, DataHelper.ProductExeName);
             try
             {
                 var versionInfo = FileVersionInfo.GetVersionInfo(filePath);
@@ -238,7 +239,7 @@ namespace CodedUITestFAT
         internal static void KillProcessesRemotely(string procName, Computer machine = null)
         {
             if (machine == null) machine = new Computer();
-            StartProcess(DataHelper.GetWorkingFolder(), Settings.General.Default.KillProcToolExe, String.Format(@"\\{0} {1}", machine.Name, procName));
+            StartProcess(DataHelper.WorkingFolder, Settings.General.Default.KillProcToolExe, String.Format(@"\\{0} {1}", machine.Name, procName));
         }
 
         /// <summary> Checks whether a given process is present at an indicated endpoint. </summary>
