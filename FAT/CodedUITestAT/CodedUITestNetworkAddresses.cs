@@ -1,12 +1,14 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Linq;
 using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UITest.Extension;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
 using CodedUITestFAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses;
+using CodedUITestFAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses;
 
 namespace CodedUITestFAT
 {
@@ -16,27 +18,7 @@ namespace CodedUITestFAT
     {
         public CodedUITestNetworkAddresses()
         {
-        }
-
-        #region UIMap properties
-
-        /// <summary> UIMap for Network Addresses Scanning Wizard screen branch, UIMapNetworkAddresses.uitest. </summary>
-        public UIMapNetworkAddresses UIMapNetworkAddresses
-        {
-            get
-            {
-                if ((this.mapNetworkAddresses == null))
-                {
-                    this.mapNetworkAddresses = new UIMapNetworkAddresses();
-                }
-
-                return this.mapNetworkAddresses;
-            }
-        }
-        private UIMapNetworkAddresses mapNetworkAddresses;
-                
-        #endregion
-
+        }       
         #region Initialize and cleanup
 
         [TestInitialize]
@@ -70,7 +52,8 @@ namespace CodedUITestFAT
         #region Control methods       
 
         #region Start Scan Wizard
-                        
+        #endregion
+
         #region Network Addresses
 
         private WpfList NetworkAddressesList()
@@ -78,13 +61,22 @@ namespace CodedUITestFAT
             return UIMapNetworkAddresses.UIForensicAnalysisToolWindow.UINetworkAddressesViewCustom.UITextEntryListViewCustom.UINetworkAddressItemsLList;
         }
 
-        private WpfText ErrorTextBlock()
+
+        internal WpfButton RemoveAllButton()
         {
-            return UIMapStartScanWizard.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIPleaseSpecifyPassworText;
+            return UIMapNetworkAddresses.UIForensicAnalysisToolWindow.UINetworkAddressesViewCustom.UITextEntryListViewCustom.UIRemoveAllButton;
         }
 
-        #endregion        
+        internal WpfButton StopScanButton()
+        {
+            return UIMapMain.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIPleaseWaitProgressBar.UIStopScanButtonButton;
+        }
 
+        internal WpfEdit SearchField()
+        {
+            return UIMapMain.UIForensicAnalysisToolWindow.UISearchControlCustom.UISearchWatermarkTextBEdit;
+        }
+     
         #endregion
 
         #endregion
@@ -107,7 +99,7 @@ namespace CodedUITestFAT
                 UIMapNetworkAddresses.InputNetworkAddress();
                 UIMapNetworkAddresses.ClickAddButton();
             }
-            UIMapStartScanWizard.ClickNextButton();
+            UIMapStartScanWizard.ClickNextButton();            
             InputScanLogin(username);
             InputPassword(password);
 
@@ -133,7 +125,7 @@ namespace CodedUITestFAT
         {
             StartEndpointScan(scanType, DataHelper.Username, DataHelper.Password, testContext, endpoint);
         }
-               
+
         /// <summary> Cleans Network Addresses list. </summary>
         private void CleanNetworkAddressesList()
         {
@@ -147,6 +139,19 @@ namespace CodedUITestFAT
             UIHelper.WaitForControl(YesDialogButton());
             UIMapStopScanWindow.ClickYesButton();
             testContext.WriteLine("The scanning has been canceled.");
+        }
+
+
+        /// <summary> Verify is tested host in the scanning list</summary>
+        /// <param name="endpointName">Endpoint name.</param>
+        private void VerifyAdressListContainsHost(string endpointName)
+        {
+            if ((from x in NetworkAddressesList().Items
+                 where x.Name.Equals(endpointName)
+                 select new UITestControl()).Any())
+                TestContext.WriteLine(String.Format("Endpoint name '{0}' is still present in Network Addresses list.", endpointName));
+            else
+                Assert.Fail(String.Format("Endpoint name '{0}' is no longer present in Network Addresses list!", endpointName));
         }
 
         #endregion
@@ -178,12 +183,12 @@ namespace CodedUITestFAT
         public void QuickScanOfIpRangeTest()
         {
             Computer endpoint = DataHelper.GetEndpoint();
-            Computer server = new Computer();
+            Computer server = new Computer();                   
             IPAddress internalAddress = SysHelper.GetLocalIpAddress(true);
-            string ipRange = String.Format("{0}-{1}", internalAddress.ChangeLastByte(0), internalAddress.ChangeLastByte(255));
+            string ipRange = String.Format("{0}-{1}", internalAddress.ChangeLastByte(0), internalAddress.ChangeLastByte(255));           
             UnknownFile unknownFile = SysHelper.AddUnknownFileForScan(endpoint);
             Malware malware = SysHelper.InfectForScan(endpoint);
-                        
+
             CleanNetworkAddressesList();
             UIMapNetworkAddresses.InputNetworkAddressParams.UINetworkAddressTextBoEditText = ipRange;
             UIMapNetworkAddresses.InputNetworkAddress();
@@ -219,7 +224,7 @@ namespace CodedUITestFAT
             string subnet = String.Format("{0}/{1}", internalAddress.ChangeLastByte(0), 24);
             UnknownFile unknownFile = SysHelper.AddUnknownFileForScan(endpoint);
             Malware malware = SysHelper.InfectForScan(endpoint);
-                        
+
             CleanNetworkAddressesList();
             UIMapNetworkAddresses.InputNetworkAddressParams.UINetworkAddressTextBoEditText = subnet;
             UIMapNetworkAddresses.InputNetworkAddress();
@@ -459,7 +464,7 @@ namespace CodedUITestFAT
 
             // Performs a scan
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
-            WaitForScanCompleted(ScanType.Quick);            
+            WaitForScanCompleted(ScanType.Quick);
             //UIHelper.WaitForControlIsClickable(StartScanButton());
 
             // Opens a threat details via context menu
@@ -714,14 +719,15 @@ namespace CodedUITestFAT
             SysHelper.DisinfectForQuickScan(endpoint, TestContext);
             int waitTime = Settings.WaitingTime.Default.EndpointResolvingWaitTime;
 
+            UIHelper.WaitForControlIsClickable(RemoveAllButton());
+            UIMapNetworkAddresses.ClickRemoveAllButton();
+
             // Offline endpoint
             IPAddress offlineIp = SysHelper.FindOfflineIp();
             Computer offlineComputer = new Computer(offlineIp);
 
             StartEndpointScan(offlineComputer, ScanType.Quick, TestContext);
-            //UIHelper.WaitForControlIsClickable(ResolvingComputersTextBlock(), waitTime, false);
-            //UIHelper.WaitForControlIsEnabled(ScanResultsTab(), waitTime);
-            RefreshResultsScreen();
+            UIHelper.WaitForControlIsEnabled(SearchField(), 30000);
             UIHelper.WaitForScanStatus(offlineComputer, ScanStatus.NotAccessible, TestContext);
 
             // Failed scan
@@ -742,10 +748,8 @@ namespace CodedUITestFAT
             Computer endpoint = DataHelper.GetEndpoint();
             SysHelper.DisinfectForQuickScan(endpoint, TestContext);
 
-            UIMapMain.ClickStartScanButton();
-            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            UIMapStartScanWizard.ClickNetworkAddressButton();
-            UIHelper.WaitForControlIsEnabled(NextButton());
+            UIHelper.WaitForControlIsClickable(RemoveAllButton());
+            UIMapNetworkAddresses.ClickRemoveAllButton();
 
             // Network Addresses step
             UIMapNetworkAddresses.InputNetworkAddressParams.UINetworkAddressTextBoEditText = endpoint.Name;
@@ -755,20 +759,8 @@ namespace CodedUITestFAT
             TestContext.WriteLine("Back to Start Scan Wizard...");
             UIMapStartScanWizard.ClickNetworkAddressButton();
             TestContext.WriteLine("Returned to Network Addresses step...");
-            var networkAddresses = NetworkAddressesList().Items;
-            bool thereIsNoEndpointName = true;
-            foreach (var networkAddress in networkAddresses)
-            {
-                if (networkAddress.Name == endpoint.Name)
-                {
-                    TestContext.WriteLine(String.Format("Endpoint name '{0}' is still present in Network Addresses list.", endpoint.Name));
-                    thereIsNoEndpointName = false;
-                    break;
-                }
-            }
-            if (thereIsNoEndpointName) Assert.Fail(String.Format("Endpoint name '{0}' is no longer present in Network Addresses list!", endpoint.Name));
+            VerifyAdressListContainsHost(endpoint.Name);           
             UIMapStartScanWizard.ClickNextButton();
-
             // Scan Credentials step
             UIHelper.WaitForControl(QuickScanButton());
             InputScanLogin(DataHelper.Username);
@@ -784,29 +776,14 @@ namespace CodedUITestFAT
             TestContext.WriteLine(String.Format("Login '{0}' is stored in the respective text box.", DataHelper.Username));
             UIMapStartScanWizard.ClickQuickScanButton();
             TestContext.WriteLine("Quick Scan button clicked...");
-            WaitForScanCompleted(ScanType.Quick);
-            //UIMapScanCompletedWindow.ClickCloseCrossButton();
-
-            UIMapMain.ClickStartScanButton();
+            WaitForScanCompleted(ScanType.Quick);            
+            UIMapResultsWindow.ClickNewCustomScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanWizard.ClickNetworkAddressButton();
-
             // Network Addresses step after scan
             TestContext.WriteLine("Returned to Network Addresses step after scan...");
-            networkAddresses = NetworkAddressesList().Items;
-            thereIsNoEndpointName = true;
-            foreach (var networkAddress in networkAddresses)
-            {
-                if (networkAddress.Name == endpoint.Name)
-                {
-                    TestContext.WriteLine(String.Format("Endpoint name '{0}' is still present in Network Addresses list.", endpoint.Name));
-                    thereIsNoEndpointName = false;
-                    break;
-                }
-            }
-            if (thereIsNoEndpointName) Assert.Fail(String.Format("Endpoint name '{0}' is no longer present in Network Addresses list!", endpoint.Name));
+            VerifyAdressListContainsHost(endpoint.Name);
             UIMapStartScanWizard.ClickNextButton();
-
             // Scan Credentials step after scan
             TestContext.WriteLine("Returned to Scan Credentials step after scan...");
             UIHelper.WaitForControl(QuickScanButton());
@@ -815,57 +792,35 @@ namespace CodedUITestFAT
             TestContext.WriteLine(String.Format("Login '{0}' is stored in the respective text box.", DataHelper.Username));
             UIMapStartScanWizard.ClickQuickScanButton();
             TestContext.WriteLine("Quick Scan button clicked...");
-            //AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
+            AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
         }
-
+        
         [TestMethod]
         public void InvalidInputHandlingInNetworkAddressesTest()
         {
             Computer endpoint = DataHelper.GetEndpoint();
-
-            //UIMapMain.ClickScanNowButton();            
-            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            UIMapStartScanWizard.ClickNetworkAddressButton();
-            UIHelper.WaitForControlIsClickable(NextButton());
-
-            // Network address
+            // Network address            
+            UIHelper.WaitForControlIsClickable(RemoveAllButton());
+            UIMapNetworkAddresses.ClickRemoveAllButton();
             UIMapStartScanWizard.ClickNextButton();
-            //AssertErrorText(Settings.Errors.Default.SpecifyNetworkAddress, TestContext);
+            AssertErrorText(Settings.Errors.Default.SpecifyNetworkAddress, TestContext);
             UIMapNetworkAddresses.InputNetworkAddressParams.UINetworkAddressTextBoEditText = endpoint.Name;
             UIMapNetworkAddresses.InputNetworkAddress();
             UIMapStartScanWizard.ClickNextButton();
-            //AssertErrorText(Settings.Errors.Default.SpecifyNetworkAddress, TestContext);
+            AssertErrorText(Settings.Errors.Default.SpecifyNetworkAddress, TestContext);
             UIMapNetworkAddresses.ClickAddButton();
-            UIMapStartScanWizard.ClickNextButton();
+            UIMapStartScanWizard.ClickNextButton();           
 
             // Login
             UIMapStartScanWizard.ClickQuickScanButton();
-            //AssertErrorText(Settings.Errors.Default.SpecifyLogin, TestContext);
+            AssertErrorText(Settings.Errors.Default.SpecifyLogin, TestContext);
             UIMapNetworkAddresses.InputLoginParams.UILoginWatermarkTextBoEditSendKeys = DataHelper.Username;
             UIMapNetworkAddresses.InputLogin();
 
             // Password
             UIMapStartScanWizard.ClickQuickScanButton();
-            //AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
+            AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
         }
-
-        #endregion
-
-        #region Test Context property
-
-        public TestContext TestContext
-        {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
-            }
-        }
-        private TestContext testContextInstance;
-
         #endregion
     }
 }

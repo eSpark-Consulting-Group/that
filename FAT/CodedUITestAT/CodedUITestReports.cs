@@ -244,24 +244,6 @@ namespace CodedUITestFAT
 
             //UIHelper.WaitForControlIsClickable(useMain.StartScanButton());
         }
-
-        #endregion
-
-        #region Test Context property
-
-        public TestContext TestContext
-        {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
-            }
-        }
-        private TestContext testContextInstance;
-
         #endregion
     }
 }

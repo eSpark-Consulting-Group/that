@@ -37,23 +37,6 @@
   </Configuration>
   <InitializeActions />
   <ExecuteActions>
-    <AssertAction UIObjectName="UIMapNetworkAddresses.UIUnknownFileHunterWindow1.UIThisCustom.UILoginWatermarkTextBoEdit">
-      <ParameterName />
-      <PropertyName>Text</PropertyName>
-      <ExpectedValue>administrator</ExpectedValue>
-      <MessageOnValidationFailure />
-      <Type>String</Type>
-      <PropertyCondition>AreEqual</PropertyCondition>
-    </AssertAction>
-    <TestStepMarkerAction Comment="" MarkerInformation="AssertLoginTextBoxText">
-      <ParameterName />
-      <StepId>-1</StepId>
-      <Direction>Start</Direction>
-      <Outcome />
-      <Disabled>false</Disabled>
-      <WorkItemId>0</WorkItemId>
-      <MarkerRegionType>Assertion</MarkerRegionType>
-    </TestStepMarkerAction>
     <MouseAction UIObjectName="UIMapNetworkAddresses.UIForensicAnalysisToolWindow.UINetworkAddressesViewCustom.UITextEntryListViewCustom.UIAddButton">
       <ParameterName />
       <ModifierKeys>None</ModifierKeys>
@@ -167,6 +150,23 @@
       <PropertyCondition>AreEqual</PropertyCondition>
     </AssertAction>
     <TestStepMarkerAction Comment="" MarkerInformation="AssertNetworkAddressesListEnabled">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Assertion</MarkerRegionType>
+    </TestStepMarkerAction>
+    <AssertAction UIObjectName="UIMapNetworkAddresses.UIForensicAnalysisToolWindow.UIThisCustom.UILoginWatermarkTextBoEdit">
+      <ParameterName />
+      <PropertyName>Text</PropertyName>
+      <ExpectedValue>Administrator</ExpectedValue>
+      <MessageOnValidationFailure />
+      <Type>String</Type>
+      <PropertyCondition>AreEqual</PropertyCondition>
+    </AssertAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="AssertLoginTextBoxText">
       <ParameterName />
       <StepId>-1</StepId>
       <Direction>Start</Direction>

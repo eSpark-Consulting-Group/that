@@ -276,7 +276,8 @@ namespace CodedUITestFAT
             if (rowStatus.Contains(Settings.Results.Default.ScanStatusIndicatorCompleted)) return ScanStatus.Completed;
             else if (rowStatus.Contains(Settings.Results.Default.ScanStatusIndicatorCanceled)) return ScanStatus.Canceled;
             else if (rowStatus.Contains(Settings.Results.Default.ScanStatusIndicatorFailed)) return ScanStatus.Failed;
-            else if (rowStatus.Contains(Settings.Results.Default.ScanStatusIndicatorNotAccessible)) return ScanStatus.NotAccessible;
+            //else if (rowStatus.Contains(Settings.Results.Default.ScanStatusIndicatorNotAccessible)) return ScanStatus.NotAccessible;
+            else if (rowStatus.Contains(Settings.Results.Default.ScanStatusIndicatorOffline)) return ScanStatus.Offline;
             else if (rowStatus.Contains(Settings.Results.Default.ScanStatusIndicatorConnecting)) return ScanStatus.Connecting;
             else throw new Exception(String.Format("No known scan status indicators found in the given row status '{0}'!", rowStatus));
         }

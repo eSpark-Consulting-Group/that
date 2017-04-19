@@ -36,7 +36,7 @@ namespace CodedUITestFAT
 
         [TestInitialize]
         public void ATTestInitialize()
-        {
+        {            
             SysHelper.StartProduct(DataHelper.GetEndpoint());
         }
 
@@ -97,23 +97,6 @@ namespace CodedUITestFAT
             if (useHelp.HelpButton().IsClickable()) TestContext.WriteLine("The main application window is available after clicking I Accept button.");
             else Assert.Fail("The main application window is not available after clicking I Accept button!");
         }
-
-        #endregion
-
-        #region Test Context property
-
-        public TestContext TestContext
-        {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
-            }
-        }
-        private TestContext testContextInstance;
 
         #endregion
     }

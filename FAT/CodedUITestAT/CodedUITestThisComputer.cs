@@ -362,24 +362,6 @@ namespace CodedUITestFAT
             File.Delete(malware.Location);
             File.Delete(unknownFile.Location);
         }
-
-        #endregion
-
-        #region Test Context property
-
-        public TestContext TestContext
-        {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
-            }
-        }
-        private TestContext testContextInstance;
-
         #endregion
     }
 }

@@ -43,6 +43,58 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
         }
         
         /// <summary>
+        /// AssertAdTreeItem - Use 'AssertAdTreeItemExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertAdTreeItem()
+        {
+            #region Variable Declarations
+            WpfTreeItem uIDevTreeItem = this.UIForensicAnalysisToolWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDevTreeItem;
+            #endregion
+
+            // Verify that the 'Name' property of 'dev' tree item equals 'dev'
+            Assert.AreEqual(this.AssertAdTreeItemExpectedValues.UIDevTreeItemName, uIDevTreeItem.Name);
+        }
+        
+        /// <summary>
+        /// AssertDomainAdministratorTextBoxText - Use 'AssertDomainAdministratorTextBoxTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertDomainAdministratorTextBoxText()
+        {
+            #region Variable Declarations
+            WpfEdit uIDomainAdministratorWEdit = this.UIForensicAnalysisToolWindow.UIThisCustom.UIDomainAdministratorWEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'DomainAdministratorWatermarkTextBox' text box equals 'Administrator'
+            Assert.AreEqual(this.AssertDomainAdministratorTextBoxTextExpectedValues.UIDomainAdministratorWEditText, uIDomainAdministratorWEdit.Text);
+        }
+        
+        /// <summary>
+        /// AssertDomainNameTextBoxText - Use 'AssertDomainNameTextBoxTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertDomainNameTextBoxText()
+        {
+            #region Variable Declarations
+            WpfEdit uIDomainNameWatermarkTEdit = this.UIForensicAnalysisToolWindow.UIThisCustom.UIDomainNameWatermarkTEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'DomainNameWatermarkTextBox' text box equals 'domain'
+            Assert.AreEqual(this.AssertDomainNameTextBoxTextExpectedValues.UIDomainNameWatermarkTEditText, uIDomainNameWatermarkTEdit.Text);
+        }
+        
+        /// <summary>
+        /// AssertLoginTextBoxText - Use 'AssertLoginTextBoxTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertLoginTextBoxText()
+        {
+            #region Variable Declarations
+            WpfEdit uILoginWatermarkTextBoEdit = this.UIForensicAnalysisToolWindow.UIActiveDirectoryViewCustom.UIThisCustom1.UILoginWatermarkTextBoEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'LoginWatermarkTextBox' text box equals 'alexey.chernyavskiy'
+            Assert.AreEqual(this.AssertLoginTextBoxTextExpectedValues.UILoginWatermarkTextBoEditText, uILoginWatermarkTextBoEdit.Text);
+        }
+        
+        /// <summary>
         /// CheckAdRow - Use 'CheckAdRowParams' to pass parameters into this method.
         /// </summary>
         public void CheckAdRow()
@@ -94,71 +146,6 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
             Keyboard.SendKeys(uIDomainNameWatermarkTEdit, this.InputDomainNameParams.UIDomainNameWatermarkTEditSendKeys, ModifierKeys.None);
         }
         
-        /// <summary>
-        /// SelectUseCustomCredentialsRadioButton - Use 'SelectUseCustomCredentialsRadioButtonParams' to pass parameters into this method.
-        /// </summary>
-        public void SelectUseCustomCredentialsRadioButton()
-        {
-            #region Variable Declarations
-            WpfRadioButton uIUseCustomCredentialsRadioButton = this.UIForensicAnalysisToolWindow.UIActiveDirectoryViewCustom.UIThisCustom.UIUseCustomCredentialsRadioButton;
-            #endregion
-
-            // Select 'Use Custom Credentials' radio button
-            uIUseCustomCredentialsRadioButton.Selected = this.SelectUseCustomCredentialsRadioButtonParams.UIUseCustomCredentialsRadioButtonSelected;
-        }
-        
-        /// <summary>
-        /// AssertAdTreeItem - Use 'AssertAdTreeItemExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertAdTreeItem()
-        {
-            #region Variable Declarations
-            WpfTreeItem uIDevTreeItem = this.UIForensicAnalysisToolWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDevTreeItem;
-            #endregion
-
-            // Verify that the 'Name' property of 'dev' tree item equals 'dev'
-            Assert.AreEqual(this.AssertAdTreeItemExpectedValues.UIDevTreeItemName, uIDevTreeItem.Name);
-        }
-        
-        /// <summary>
-        /// AssertDomainNameTextBoxText - Use 'AssertDomainNameTextBoxTextExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertDomainNameTextBoxText()
-        {
-            #region Variable Declarations
-            WpfEdit uIDomainNameWatermarkTEdit = this.UIForensicAnalysisToolWindow.UIThisCustom.UIDomainNameWatermarkTEdit;
-            #endregion
-
-            // Verify that the 'Text' property of 'DomainNameWatermarkTextBox' text box equals 'domain'
-            Assert.AreEqual(this.AssertDomainNameTextBoxTextExpectedValues.UIDomainNameWatermarkTEditText, uIDomainNameWatermarkTEdit.Text);
-        }
-        
-        /// <summary>
-        /// AssertDomainAdministratorTextBoxText - Use 'AssertDomainAdministratorTextBoxTextExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertDomainAdministratorTextBoxText()
-        {
-            #region Variable Declarations
-            WpfEdit uIDomainAdministratorWEdit = this.UIForensicAnalysisToolWindow.UIThisCustom.UIDomainAdministratorWEdit;
-            #endregion
-
-            // Verify that the 'Text' property of 'DomainAdministratorWatermarkTextBox' text box equals 'Administrator'
-            Assert.AreEqual(this.AssertDomainAdministratorTextBoxTextExpectedValues.UIDomainAdministratorWEditText, uIDomainAdministratorWEdit.Text);
-        }
-        
-        /// <summary>
-        /// AssertLoginTextBoxText - Use 'AssertLoginTextBoxTextExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertLoginTextBoxText()
-        {
-            #region Variable Declarations
-            WpfEdit uILoginWatermarkTextBoEdit = this.UIForensicAnalysisToolWindow.UIActiveDirectoryViewCustom.UIThisCustom1.UILoginWatermarkTextBoEdit;
-            #endregion
-
-            // Verify that the 'Text' property of 'LoginWatermarkTextBox' text box equals 'alexey.chernyavskiy'
-            Assert.AreEqual(this.AssertLoginTextBoxTextExpectedValues.UILoginWatermarkTextBoEditText, uILoginWatermarkTextBoEdit.Text);
-        }
-        
         #region Properties
         public virtual AssertAdTreeExpectedValues AssertAdTreeExpectedValues
         {
@@ -169,6 +156,54 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
                     this.mAssertAdTreeExpectedValues = new AssertAdTreeExpectedValues();
                 }
                 return this.mAssertAdTreeExpectedValues;
+            }
+        }
+        
+        public virtual AssertAdTreeItemExpectedValues AssertAdTreeItemExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertAdTreeItemExpectedValues == null))
+                {
+                    this.mAssertAdTreeItemExpectedValues = new AssertAdTreeItemExpectedValues();
+                }
+                return this.mAssertAdTreeItemExpectedValues;
+            }
+        }
+        
+        public virtual AssertDomainAdministratorTextBoxTextExpectedValues AssertDomainAdministratorTextBoxTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertDomainAdministratorTextBoxTextExpectedValues == null))
+                {
+                    this.mAssertDomainAdministratorTextBoxTextExpectedValues = new AssertDomainAdministratorTextBoxTextExpectedValues();
+                }
+                return this.mAssertDomainAdministratorTextBoxTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertDomainNameTextBoxTextExpectedValues AssertDomainNameTextBoxTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertDomainNameTextBoxTextExpectedValues == null))
+                {
+                    this.mAssertDomainNameTextBoxTextExpectedValues = new AssertDomainNameTextBoxTextExpectedValues();
+                }
+                return this.mAssertDomainNameTextBoxTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertLoginTextBoxTextExpectedValues AssertLoginTextBoxTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertLoginTextBoxTextExpectedValues == null))
+                {
+                    this.mAssertLoginTextBoxTextExpectedValues = new AssertLoginTextBoxTextExpectedValues();
+                }
+                return this.mAssertLoginTextBoxTextExpectedValues;
             }
         }
         
@@ -205,66 +240,6 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
                     this.mInputDomainNameParams = new InputDomainNameParams();
                 }
                 return this.mInputDomainNameParams;
-            }
-        }
-        
-        public virtual SelectUseCustomCredentialsRadioButtonParams SelectUseCustomCredentialsRadioButtonParams
-        {
-            get
-            {
-                if ((this.mSelectUseCustomCredentialsRadioButtonParams == null))
-                {
-                    this.mSelectUseCustomCredentialsRadioButtonParams = new SelectUseCustomCredentialsRadioButtonParams();
-                }
-                return this.mSelectUseCustomCredentialsRadioButtonParams;
-            }
-        }
-        
-        public virtual AssertAdTreeItemExpectedValues AssertAdTreeItemExpectedValues
-        {
-            get
-            {
-                if ((this.mAssertAdTreeItemExpectedValues == null))
-                {
-                    this.mAssertAdTreeItemExpectedValues = new AssertAdTreeItemExpectedValues();
-                }
-                return this.mAssertAdTreeItemExpectedValues;
-            }
-        }
-        
-        public virtual AssertDomainNameTextBoxTextExpectedValues AssertDomainNameTextBoxTextExpectedValues
-        {
-            get
-            {
-                if ((this.mAssertDomainNameTextBoxTextExpectedValues == null))
-                {
-                    this.mAssertDomainNameTextBoxTextExpectedValues = new AssertDomainNameTextBoxTextExpectedValues();
-                }
-                return this.mAssertDomainNameTextBoxTextExpectedValues;
-            }
-        }
-        
-        public virtual AssertDomainAdministratorTextBoxTextExpectedValues AssertDomainAdministratorTextBoxTextExpectedValues
-        {
-            get
-            {
-                if ((this.mAssertDomainAdministratorTextBoxTextExpectedValues == null))
-                {
-                    this.mAssertDomainAdministratorTextBoxTextExpectedValues = new AssertDomainAdministratorTextBoxTextExpectedValues();
-                }
-                return this.mAssertDomainAdministratorTextBoxTextExpectedValues;
-            }
-        }
-        
-        public virtual AssertLoginTextBoxTextExpectedValues AssertLoginTextBoxTextExpectedValues
-        {
-            get
-            {
-                if ((this.mAssertLoginTextBoxTextExpectedValues == null))
-                {
-                    this.mAssertLoginTextBoxTextExpectedValues = new AssertLoginTextBoxTextExpectedValues();
-                }
-                return this.mAssertLoginTextBoxTextExpectedValues;
             }
         }
         
@@ -308,21 +283,19 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
         #region Fields
         private AssertAdTreeExpectedValues mAssertAdTreeExpectedValues;
         
+        private AssertAdTreeItemExpectedValues mAssertAdTreeItemExpectedValues;
+        
+        private AssertDomainAdministratorTextBoxTextExpectedValues mAssertDomainAdministratorTextBoxTextExpectedValues;
+        
+        private AssertDomainNameTextBoxTextExpectedValues mAssertDomainNameTextBoxTextExpectedValues;
+        
+        private AssertLoginTextBoxTextExpectedValues mAssertLoginTextBoxTextExpectedValues;
+        
         private CheckAdRowParams mCheckAdRowParams;
         
         private InputDomainAdministratorParams mInputDomainAdministratorParams;
         
         private InputDomainNameParams mInputDomainNameParams;
-        
-        private SelectUseCustomCredentialsRadioButtonParams mSelectUseCustomCredentialsRadioButtonParams;
-        
-        private AssertAdTreeItemExpectedValues mAssertAdTreeItemExpectedValues;
-        
-        private AssertDomainNameTextBoxTextExpectedValues mAssertDomainNameTextBoxTextExpectedValues;
-        
-        private AssertDomainAdministratorTextBoxTextExpectedValues mAssertDomainAdministratorTextBoxTextExpectedValues;
-        
-        private AssertLoginTextBoxTextExpectedValues mAssertLoginTextBoxTextExpectedValues;
         
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
         
@@ -344,6 +317,66 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
         /// Verify that the 'Exists' property of 'AdTree' tree equals 'True'
         /// </summary>
         public bool UIAdTreeTreeExists = true;
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertAdTreeItem'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AssertAdTreeItemExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Name' property of 'dev' tree item equals 'dev'
+        /// </summary>
+        public string UIDevTreeItemName = "dev";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertDomainAdministratorTextBoxText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AssertDomainAdministratorTextBoxTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'DomainAdministratorWatermarkTextBox' text box equals 'Administrator'
+        /// </summary>
+        public string UIDomainAdministratorWEditText = "Administrator";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertDomainNameTextBoxText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AssertDomainNameTextBoxTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'DomainNameWatermarkTextBox' text box equals 'domain'
+        /// </summary>
+        public string UIDomainNameWatermarkTEditText = "domain";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertLoginTextBoxText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AssertLoginTextBoxTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'LoginWatermarkTextBox' text box equals 'alexey.chernyavskiy'
+        /// </summary>
+        public string UILoginWatermarkTextBoEditText = "alexey.chernyavskiy";
         #endregion
     }
     
@@ -389,81 +422,6 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
         /// Type 'domain' in 'DomainNameWatermarkTextBox' text box
         /// </summary>
         public string UIDomainNameWatermarkTEditSendKeys = "domain";
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'SelectUseCustomCredentialsRadioButton'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class SelectUseCustomCredentialsRadioButtonParams
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Select 'Use Custom Credentials' radio button
-        /// </summary>
-        public bool UIUseCustomCredentialsRadioButtonSelected = true;
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'AssertAdTreeItem'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class AssertAdTreeItemExpectedValues
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Verify that the 'Name' property of 'dev' tree item equals 'dev'
-        /// </summary>
-        public string UIDevTreeItemName = "dev";
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'AssertDomainNameTextBoxText'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class AssertDomainNameTextBoxTextExpectedValues
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Verify that the 'Text' property of 'DomainNameWatermarkTextBox' text box equals 'domain'
-        /// </summary>
-        public string UIDomainNameWatermarkTEditText = "domain";
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'AssertDomainAdministratorTextBoxText'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class AssertDomainAdministratorTextBoxTextExpectedValues
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Verify that the 'Text' property of 'DomainAdministratorWatermarkTextBox' text box equals 'Administrator'
-        /// </summary>
-        public string UIDomainAdministratorWEditText = "Administrator";
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'AssertLoginTextBoxText'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class AssertLoginTextBoxTextExpectedValues
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Verify that the 'Text' property of 'LoginWatermarkTextBox' text box equals 'alexey.chernyavskiy'
-        /// </summary>
-        public string UILoginWatermarkTextBoEditText = "alexey.chernyavskiy";
         #endregion
     }
     

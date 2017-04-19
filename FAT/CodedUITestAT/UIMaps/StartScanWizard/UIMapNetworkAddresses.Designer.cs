@@ -30,19 +30,6 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
     {
         
         /// <summary>
-        /// AssertLoginTextBoxText - Use 'AssertLoginTextBoxTextExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertLoginTextBoxText()
-        {
-            #region Variable Declarations
-            WpfEdit uILoginWatermarkTextBoEdit = this.UIUnknownFileHunterWindow1.UIThisCustom.UILoginWatermarkTextBoEdit;
-            #endregion
-
-            // Verify that the 'Text' property of 'LoginWatermarkTextBox' text box equals 'administrator'
-            Assert.AreEqual(this.AssertLoginTextBoxTextExpectedValues.UILoginWatermarkTextBoEditText, uILoginWatermarkTextBoEdit.Text);
-        }
-        
-        /// <summary>
         /// ClickAddButton
         /// </summary>
         public void ClickAddButton()
@@ -137,19 +124,20 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
             Assert.AreEqual(this.AssertNetworkAddressesListEnabledExpectedValues.UINetworkAddressItemsLListEnabled, uINetworkAddressItemsLList.Enabled);
         }
         
-        #region Properties
-        public virtual AssertLoginTextBoxTextExpectedValues AssertLoginTextBoxTextExpectedValues
+        /// <summary>
+        /// AssertLoginTextBoxText - Use 'AssertLoginTextBoxTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertLoginTextBoxText()
         {
-            get
-            {
-                if ((this.mAssertLoginTextBoxTextExpectedValues == null))
-                {
-                    this.mAssertLoginTextBoxTextExpectedValues = new AssertLoginTextBoxTextExpectedValues();
-                }
-                return this.mAssertLoginTextBoxTextExpectedValues;
-            }
+            #region Variable Declarations
+            WpfEdit uILoginWatermarkTextBoEdit = this.UIForensicAnalysisToolWindow.UIThisCustom.UILoginWatermarkTextBoEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'LoginWatermarkTextBox' text box equals 'Administrator'
+            Assert.AreEqual(this.AssertLoginTextBoxTextExpectedValues.UILoginWatermarkTextBoEditText, uILoginWatermarkTextBoEdit.Text);
         }
         
+        #region Properties
         public virtual InputLoginParams InputLoginParams
         {
             get
@@ -198,6 +186,18 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
             }
         }
         
+        public virtual AssertLoginTextBoxTextExpectedValues AssertLoginTextBoxTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertLoginTextBoxTextExpectedValues == null))
+                {
+                    this.mAssertLoginTextBoxTextExpectedValues = new AssertLoginTextBoxTextExpectedValues();
+                }
+                return this.mAssertLoginTextBoxTextExpectedValues;
+            }
+        }
+        
         public UIUnknownFileHunterWindow UIUnknownFileHunterWindow
         {
             get
@@ -236,8 +236,6 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
         #endregion
         
         #region Fields
-        private AssertLoginTextBoxTextExpectedValues mAssertLoginTextBoxTextExpectedValues;
-        
         private InputLoginParams mInputLoginParams;
         
         private InputNetworkAddressParams mInputNetworkAddressParams;
@@ -246,26 +244,13 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
         
         private AssertNetworkAddressesListEnabledExpectedValues mAssertNetworkAddressesListEnabledExpectedValues;
         
+        private AssertLoginTextBoxTextExpectedValues mAssertLoginTextBoxTextExpectedValues;
+        
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
         
         private UIUnknownFileHunterWindow1 mUIUnknownFileHunterWindow1;
         
         private UIForensicAnalysisToolWindow mUIForensicAnalysisToolWindow;
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'AssertLoginTextBoxText'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class AssertLoginTextBoxTextExpectedValues
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Verify that the 'Text' property of 'LoginWatermarkTextBox' text box equals 'administrator'
-        /// </summary>
-        public string UILoginWatermarkTextBoEditText = "administrator";
         #endregion
     }
     
@@ -331,6 +316,21 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
         /// Verify that the 'Enabled' property of 'NetworkAddressItemsList' list box equals 'True'
         /// </summary>
         public bool UINetworkAddressItemsLListEnabled = true;
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertLoginTextBoxText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AssertLoginTextBoxTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'LoginWatermarkTextBox' text box equals 'Administrator'
+        /// </summary>
+        public string UILoginWatermarkTextBoEditText = "Administrator";
         #endregion
     }
     

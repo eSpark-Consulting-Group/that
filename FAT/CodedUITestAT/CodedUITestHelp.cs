@@ -8,7 +8,7 @@ namespace CodedUITestFAT
 {
     /// <summary> Tests for Help and About screens. </summary>
     [CodedUITest]
-    public sealed class CodedUITestHelp
+    public sealed class CodedUITestHelp : CodedUITestCommon
     {
         public CodedUITestHelp()
         {
@@ -173,23 +173,6 @@ namespace CodedUITestFAT
             TestContext.WriteLine("'Agent Requirements' window can be opened again.");
         }
 
-        #endregion
-
-        #region Test Context property
-
-        public TestContext TestContext
-        {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
-            }
-        }
-        private TestContext testContextInstance;
-
-        #endregion
+        #endregion        
     }
 }

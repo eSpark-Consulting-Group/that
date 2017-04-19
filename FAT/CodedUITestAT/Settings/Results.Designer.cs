@@ -83,5 +83,14 @@ namespace CodedUITestFAT.Settings {
                 return ((string)(this["ScanStatusIndicatorConnecting"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Offline")]
+        public string ScanStatusIndicatorOffline {
+            get {
+                return ((string)(this["ScanStatusIndicatorOffline"]));
+            }
+        }
     }
 }

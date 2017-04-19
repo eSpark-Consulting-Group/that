@@ -34,23 +34,7 @@ namespace CodedUITestFAT
                 return this.mapWorkgroup;
             }
         }
-        private UIMapWorkgroup mapWorkgroup;
-
-        /// <summary> UIMap for Active Directory Scanning Wizard screen branch, UIMapActiveDirectory.uitest. </summary>
-        public UIMapActiveDirectory UIMapActiveDirectory
-        {
-            get
-            {
-                if ((this.mapActiveDirectory == null))
-                {
-                    this.mapActiveDirectory = new UIMapActiveDirectory();
-                }
-
-                return this.mapActiveDirectory;
-            }
-        }
-        private UIMapActiveDirectory mapActiveDirectory;
-
+        private UIMapWorkgroup mapWorkgroup;        
         #endregion
 
         #region Initialize and cleanup
@@ -171,13 +155,8 @@ namespace CodedUITestFAT
 
         #endregion
 
-        #region Network Addresses
-        
-        private WpfText ErrorTextBlock()
-        {
-            return UIMapStartScanWizard.UIForensicAnalysisToolWindow.UIScanningWizardWindowCustom.UIPleaseWaitProgressBar.UIPleasespecifyPassworText;
-        }
-
+        #region Network Addresses        
+      
         #endregion
 
         #region Workgroup
@@ -489,18 +468,7 @@ namespace CodedUITestFAT
             WpfCheckBox workgroupCheckBox = workgroupItem.GetChildren().FirstOrDefault(e => e is WpfCheckBox) as WpfCheckBox; // Gets the workgroup tree item checkbox
             return workgroupCheckBox.Checked;
         }
-
-        /// <summary> Asserts a text of regular error message. </summary>
-        /// <param name="expectedErrorText">Set expected error text.</param>
-        /// <param name="testContext">Set a current TestContext.</param>
-        private void AssertErrorText(string expectedErrorText, TestContext testContext)
-        {
-            UIHelper.WaitForControlIsClickable(ErrorTextBlock());
-            UIMapStartScanWizard.AssertErrorTextBlockTextExpectedValues.UIPleasespecifyPassworTextDisplayText = expectedErrorText;
-            UIMapStartScanWizard.AssertErrorTextBlockText();
-            testContext.WriteLine(String.Format("Expected regular error message '{0}' appeared.", expectedErrorText));
-        }
-
+       
         /// <summary> Sets a given scan status to the results screen filter. </summary>
         /// <param name="scanStatus">Set scan status.</param>
         private void SetStatusFilter(ScanStatus scanStatus, TestContext testContext)
@@ -1034,25 +1002,7 @@ namespace CodedUITestFAT
             UIMapStartScanWizard.ClickNextButton();
             UIHelper.WaitForControlIsClickable(ErrorTextBlock(), Settings.WaitingTime.Default.DomainDiscoveryWaitTime);
             AssertErrorText(String.Format(Settings.Errors.Default.DomainNotFound, nonExistentDomainName), TestContext);
-        }       
-        
-        #endregion
-
-        #region Test Context property
-
-        public TestContext TestContext
-        {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
-            }
         }
-        private TestContext testContextInstance;
-
-        #endregion
+        #endregion      
     }
 }

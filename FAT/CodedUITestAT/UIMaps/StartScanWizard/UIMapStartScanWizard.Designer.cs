@@ -172,6 +172,19 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
             Mouse.Click(uICloseScanWizardButtoButton, new Point(6, 6));
         }
         
+        /// <summary>
+        /// SelectUseCustomCredentialsRadioButton - Use 'SelectUseCustomCredentialsRadioButtonParams' to pass parameters into this method.
+        /// </summary>
+        public void SelectUseCustomCredentialsRadioButton()
+        {
+            #region Variable Declarations
+            WpfRadioButton uIUseCustomCredentialsRadioButton = this.UIForensicAnalysisToolWindow.UINetworkAddressesViewCustom.UIThisCustom.UIUseCustomCredentialsRadioButton;
+            #endregion
+
+            // Select 'Use Custom Credentials' radio button
+            uIUseCustomCredentialsRadioButton.Selected = this.SelectUseCustomCredentialsRadioButtonParams.UIUseCustomCredentialsRadioButtonSelected;
+        }
+        
         #region Properties
         public virtual AssertErrorTextBlockTextExpectedValues AssertErrorTextBlockTextExpectedValues
         {
@@ -182,6 +195,18 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
                     this.mAssertErrorTextBlockTextExpectedValues = new AssertErrorTextBlockTextExpectedValues();
                 }
                 return this.mAssertErrorTextBlockTextExpectedValues;
+            }
+        }
+        
+        public virtual SelectUseCustomCredentialsRadioButtonParams SelectUseCustomCredentialsRadioButtonParams
+        {
+            get
+            {
+                if ((this.mSelectUseCustomCredentialsRadioButtonParams == null))
+                {
+                    this.mSelectUseCustomCredentialsRadioButtonParams = new SelectUseCustomCredentialsRadioButtonParams();
+                }
+                return this.mSelectUseCustomCredentialsRadioButtonParams;
             }
         }
         
@@ -225,6 +250,8 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
         #region Fields
         private AssertErrorTextBlockTextExpectedValues mAssertErrorTextBlockTextExpectedValues;
         
+        private SelectUseCustomCredentialsRadioButtonParams mSelectUseCustomCredentialsRadioButtonParams;
+        
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
         
         private UIUnknownFileHunterWindow1 mUIUnknownFileHunterWindow1;
@@ -245,6 +272,21 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
         /// Verify that the 'DisplayText' property of 'Please specify Password' label equals 'Please specify Password'
         /// </summary>
         public string UIPleasespecifyPassworTextDisplayText = "Please specify Password";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'SelectUseCustomCredentialsRadioButton'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class SelectUseCustomCredentialsRadioButtonParams
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Select 'Use Custom Credentials' radio button
+        /// </summary>
+        public bool UIUseCustomCredentialsRadioButtonSelected = true;
         #endregion
     }
     
@@ -689,12 +731,26 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
                 return this.mUICloseScanWizardButtoButton;
             }
         }
+        
+        public UINetworkAddressesViewCustom UINetworkAddressesViewCustom
+        {
+            get
+            {
+                if ((this.mUINetworkAddressesViewCustom == null))
+                {
+                    this.mUINetworkAddressesViewCustom = new UINetworkAddressesViewCustom(this);
+                }
+                return this.mUINetworkAddressesViewCustom;
+            }
+        }
         #endregion
         
         #region Fields
         private UIScanningWizardWindowCustom2 mUIScanningWizardWindowCustom;
         
         private WpfButton mUICloseScanWizardButtoButton;
+        
+        private UINetworkAddressesViewCustom mUINetworkAddressesViewCustom;
         #endregion
     }
     
@@ -940,6 +996,76 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
         private WpfButton mUIBackButton;
         
         private WpfText mUIPleasespecifyPassworText;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UINetworkAddressesViewCustom : WpfCustom
+    {
+        
+        public UINetworkAddressesViewCustom(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfControl.PropertyNames.ClassName] = "Uia.StartScanByIpView";
+            this.SearchProperties[WpfControl.PropertyNames.AutomationId] = "NetworkAddressesView";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public UIThisCustom UIThisCustom
+        {
+            get
+            {
+                if ((this.mUIThisCustom == null))
+                {
+                    this.mUIThisCustom = new UIThisCustom(this);
+                }
+                return this.mUIThisCustom;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIThisCustom mUIThisCustom;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIThisCustom : WpfCustom
+    {
+        
+        public UIThisCustom(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfControl.PropertyNames.ClassName] = "Uia.LoginPasswordUserControl";
+            this.SearchProperties[WpfControl.PropertyNames.AutomationId] = "this";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfRadioButton UIUseCustomCredentialsRadioButton
+        {
+            get
+            {
+                if ((this.mUIUseCustomCredentialsRadioButton == null))
+                {
+                    this.mUIUseCustomCredentialsRadioButton = new WpfRadioButton(this);
+                    #region Search Criteria
+                    this.mUIUseCustomCredentialsRadioButton.SearchProperties[WpfRadioButton.PropertyNames.AutomationId] = "UseCustomCredentialsRadioButton";
+                    this.mUIUseCustomCredentialsRadioButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIUseCustomCredentialsRadioButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfRadioButton mUIUseCustomCredentialsRadioButton;
         #endregion
     }
 }

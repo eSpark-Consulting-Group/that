@@ -334,11 +334,11 @@ namespace CodedUITestFAT.UIMaps.UIMapMainClasses
         public void ClickStopScanButton()
         {
             #region Variable Declarations
-            WpfButton uIStopScanningButtonButton = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIStopScanningButtonButton;
+            WpfButton uIStopScanButtonButton = this.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIPleaseWaitProgressBar.UIStopScanButtonButton;
             #endregion
 
-            // Click 'StopScanningButton' button
-            Mouse.Click(uIStopScanningButtonButton, new Point(58, 36));
+            // Click 'StopScanButton' button
+            Mouse.Click(uIStopScanButtonButton, new Point(58, 21));
         }
         
         /// <summary>
@@ -2087,6 +2087,22 @@ namespace CodedUITestFAT.UIMaps.UIMapMainClasses
                 return this.mUIStartAutoDiscoveryBuButton;
             }
         }
+        
+        public WpfButton UIStopScanButtonButton
+        {
+            get
+            {
+                if ((this.mUIStopScanButtonButton == null))
+                {
+                    this.mUIStopScanButtonButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIStopScanButtonButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "StopScanButton";
+                    this.mUIStopScanButtonButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIStopScanButtonButton;
+            }
+        }
         #endregion
         
         #region Fields
@@ -2101,6 +2117,8 @@ namespace CodedUITestFAT.UIMaps.UIMapMainClasses
         private WpfButton mUIScanNowButtonButton;
         
         private WpfButton mUIStartAutoDiscoveryBuButton;
+        
+        private WpfButton mUIStopScanButtonButton;
         #endregion
     }
     

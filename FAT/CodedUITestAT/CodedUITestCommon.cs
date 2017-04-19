@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UITesting;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
 using CodedUITestFAT.UIMaps.UIMapMainClasses;
-using CodedUITestFAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses;
-using CodedUITestAT.UIMaps.UIMapStopScanWindowClasses;
 using CodedUITestFAT.UIMaps.UIMapDiscoveryClasses;
+using CodedUITestAT.UIMaps.UIMapStopScanWindowClasses;
 using CodedUITestFAT.UIMaps.UIMapResultsWindowClasses;
-using CodedUITestAT.UIMaps.Details.UIMapValkyrieDetailsWindowClasses;
-using CodedUITestFAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses;
 using CodedUITestFAT.UIMaps.UIMapAggregatedPanelClasses;
 using CodedUITestFAT.UIMaps.Details.UIMapDetailsWindowClasses;
-
+using CodedUITestAT.UIMaps.Details.UIMapValkyrieDetailsWindowClasses;
+using CodedUITestFAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses;
+using CodedUITestFAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses;
+using CodedUITestFAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses;
 namespace CodedUITestFAT
 {
     /// <summary> A common part for scan-related CodedUI classes. </summary>
@@ -53,6 +54,21 @@ namespace CodedUITestFAT
             }
         }
         private UIMapNetworkAddresses mapNetworkAddresses;
+
+        /// <summary> UIMap for Active Directory Scanning Wizard screen branch, UIMapActiveDirectory.uitest. </summary>
+        public UIMapActiveDirectory UIMapActiveDirectory
+        {
+            get
+            {
+                if ((this.mapActiveDirectory == null))
+                {
+                    this.mapActiveDirectory = new UIMapActiveDirectory();
+                }
+
+                return this.mapActiveDirectory;
+            }
+        }
+        private UIMapActiveDirectory mapActiveDirectory;
 
         /// <summary> UIMap for Start Scanning Wizard screen, UIMapStartScanWizard.uitest. </summary>
         public UIMapStartScanWizard UIMapStartScanWizard
@@ -249,8 +265,12 @@ namespace CodedUITestFAT
         {
             return UIMapStartScanWizard.UIForensicAnalysisToolWindow.UIScanningWizardWindowCustom.UILoadingProgressBar.UINextButton;
         }
-        
+
         #endregion
+        internal WpfText ErrorTextBlock()
+        {
+            return UIMapStartScanWizard.UIForensicAnalysisToolWindow.UIScanningWizardWindowCustom.UIPleaseWaitProgressBar.UIPleasespecifyPassworText;
+        }
 
         #endregion
 
@@ -325,6 +345,33 @@ namespace CodedUITestFAT
             if (loginEdit.Text == Settings.General.Default.EmptyWatermarkTextBoxText || loginEdit.Text != login) loginEdit.Text = login;
         }
 
-        #endregion       
+        /// <summary> Asserts a text of regular error message. </summary>
+        /// <param name="expectedErrorText">Set expected error text.</param>
+        /// <param name="testContext">Set a current TestContext.</param>
+        internal void AssertErrorText(string expectedErrorText, TestContext testContext)
+        {
+            UIHelper.WaitForControlIsClickable(ErrorTextBlock());
+            UIMapStartScanWizard.AssertErrorTextBlockTextExpectedValues.UIPleasespecifyPassworTextDisplayText = expectedErrorText;
+            UIMapStartScanWizard.AssertErrorTextBlockText();
+            testContext.WriteLine(String.Format("Expected regular error message '{0}' appeared.", expectedErrorText));
+        }
+        #endregion
+
+        #region Test Context property
+
+        public TestContext TestContext
+        {
+            get
+            {
+                return testContextInstance;
+            }
+            set
+            {
+                testContextInstance = value;
+            }
+        }
+        private TestContext testContextInstance;
+
+        #endregion    
     }
 }
