@@ -8,7 +8,7 @@ using Xunit;
 
 namespace FAT.Application.Tests
 {
-    public class MainViewViewModelTests
+    public class MainViewModelTests
     {
         [Fact]
         public void ConstructorTest()

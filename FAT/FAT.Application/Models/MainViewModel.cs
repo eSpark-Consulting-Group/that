@@ -325,8 +325,8 @@ namespace FAT.Application.Models
                     return "Searching for Available Devices...";
                 if (IsAutoDiscoveryInProgress)
                 {
-                    if (Percentage > 0)
-                        header = String.Format("{0}% Searching for Available Devices...", Math.Round(Percentage));
+                    var percentage = Math.Min(Math.Max(Math.Round(Percentage), 1), 100);
+                    header = String.Format("{0}% Searching for Available Devices...", percentage);
                     return header;
                 }
                 if (IsScanInProgress == true)
@@ -336,7 +336,10 @@ namespace FAT.Application.Models
                     else if (Percentage == 100)
                         header = "Finishing Scan...";
                     else
-                        header = String.Format("{0:0.00}% Scan In Progress...", Percentage).Replace(".00", string.Empty);
+                    {
+                        var percentage = Math.Min(Math.Max(Math.Round(Percentage), 1), 100);
+                        header = String.Format("{0}% Scan In Progress...", percentage);
+                    }
                     return header;
                 }
                 else

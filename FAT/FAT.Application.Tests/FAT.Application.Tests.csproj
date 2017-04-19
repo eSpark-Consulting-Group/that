@@ -82,7 +82,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MainViewViewModelTests.cs" />
+    <Compile Include="MainViewModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScanCounterManagerTests.cs" />
     <Compile Include="ThreatInfoItemTests.cs" />
