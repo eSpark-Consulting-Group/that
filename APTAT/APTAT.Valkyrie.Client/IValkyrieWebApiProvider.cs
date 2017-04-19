@@ -11,7 +11,7 @@ namespace Valkyrie.WebApiProvider
         StartAndFinalizeScanResponse EndScanWithErrorHandling(EndScanRequest request);
         StartAndFinalizeScanResponse EndScan(EndScanRequest request);
         Uri GetBaseUri();
-        BasicInfoResponse GetBasicInfo(InfoRequest request);
+        IBasicInfoResponse GetBasicInfo(InfoRequest request);
         FullInfoResponse GetFullInfo(InfoRequest request);
         ManualStatusResponse ManualStatus(ManualStatusRequest request);
         RegisterWithResponse RegisterWithCamCredentials(RegisterWithCamCredentials request);
@@ -24,6 +24,6 @@ namespace Valkyrie.WebApiProvider
         SubmitToManualResponse SubmitToManualAnalysisWithoutUpload(SubmitToManualRequestSHA1 request);
         ValkyrieResponse FatSubmitFiles(FatSubmitFilePathsRequest request);
         ValkyrieResponse SubmitEmail(SubscribeEmailRequest request);
-        BasicInfoResponse GetBasicInfoEmpty();
+        IBasicInfoResponse GetBasicInfoEmpty();
     }
 }

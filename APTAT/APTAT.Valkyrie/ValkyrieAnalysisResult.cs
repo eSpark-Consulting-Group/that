@@ -7,7 +7,7 @@ namespace APTAT.Valkyrie
 {
     public class ValkyrieAnalysisResult : IValkyrieAnalysisResult
     {
-        public static ValkyrieAnalysisResult Create(BasicInfoResponse basicInfo)
+        public static ValkyrieAnalysisResult Create(IBasicInfoResponse basicInfo)
         {
             var result = new ValkyrieAnalysisResult(basicInfo.SHA1, basicInfo.Verdict.ToBusiness())
             {
@@ -23,7 +23,7 @@ namespace APTAT.Valkyrie
             return result;
         }
 
-        public static ValkyrieAnalysisResult Create(BasicInfoResponse basicInfo, string analyseId, bool submitted)
+        public static ValkyrieAnalysisResult Create(IBasicInfoResponse basicInfo, string analyseId, bool submitted)
         {
             var result = new ValkyrieAnalysisResult(basicInfo.SHA1, ValkyrieVerdict.Pending)
             {

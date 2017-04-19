@@ -42,7 +42,7 @@ namespace Valkyrie.WebApiProvider
         /// <summary>
         /// This request will be used to get Basic Info of a file that FVS have already analyzed before. 
         /// </summary>             
-        public BasicInfoResponse GetBasicInfo(InfoRequest request)
+        public IBasicInfoResponse GetBasicInfo(InfoRequest request)
         {
             var response = CallValkyrie<BasicInfoResponse>(BasicInfoUri, request);
             return response;
@@ -289,7 +289,7 @@ namespace Valkyrie.WebApiProvider
             _valkyrieBaseUri = uri;
         }
 
-        public BasicInfoResponse GetBasicInfoEmpty()
+        public IBasicInfoResponse GetBasicInfoEmpty()
         {
             var response = CallValkyrie<BasicInfoResponse>(BasicInfoUri);
             return response;

@@ -5,7 +5,7 @@ using Valkyrie.WebApiProvider.Enums;
 
 namespace Valkyrie.WebApiProvider.Contracts
 {
-    public class BasicInfoResponse
+    public class BasicInfoResponse : IBasicInfoResponse
     {
         [JsonProperty("first_analysis_date")]
         public DateTime? FirstAnalysisDate { get; set; }
