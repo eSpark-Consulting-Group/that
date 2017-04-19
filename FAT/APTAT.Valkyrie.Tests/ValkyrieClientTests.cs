@@ -568,12 +568,12 @@ namespace APTAT.Valkyrie.Tests
             };
 
             client.StartAnalyze(camRegistration, "user", "test", 1, new System.Net.NetworkCredential(), "FAT");
-            Assert.True(ev.Wait(TimeSpan.FromMilliseconds(150)));
+            Assert.True(ev.Wait(TimeSpan.FromMilliseconds(250)));
             
             ev.Reset();
 
             client.AddFilesToAnalyze(files.ToList(), true);
-            Assert.True(cev.Wait(TimeSpan.FromMilliseconds(150)));
+            Assert.True(cev.Wait(TimeSpan.FromMilliseconds(250)));
             
             Mock.Raise(() => progressNotify.TimeoutCallback += null, args: new object[] { EventArgs.Empty });
 
