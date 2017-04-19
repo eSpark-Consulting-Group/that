@@ -46,8 +46,11 @@ namespace CodedUITestFAT
         /// <summary> The product executable name. </summary>
         internal static readonly string ProductExeName = Environment.GetEnvironmentVariable("_ProductExeName", EnvironmentVariableTarget.Machine);
 
-        /// <summary> A path to the extracted product archive. </summary>        
-        internal static readonly string ExtractedProductPath = Path.Combine(GetWorkingFolder(), ProductExeName.WithoutExtension());
+        /// <summary> A path to the extracted product archive. </summary>                
+        internal static readonly string ExtractedProductPath = Path.Combine(WorkingFolder, ProductExeName.WithoutExtension());
+
+        /// <summary> Working folder. </summary>
+        internal static readonly string WorkingFolder = Environment.GetEnvironmentVariable("_TargetDir", EnvironmentVariableTarget.Machine);
 
         /// <summary> Determines whether the autotests will run using FLS staging server. Gets the data from a local environment variable. </summary>
         internal static bool IsFlsStaging()
@@ -75,13 +78,7 @@ namespace CodedUITestFAT
            string computerName = Environment.GetEnvironmentVariable("_EndpointName", EnvironmentVariableTarget.Machine);
            return new Computer(computerName);
         }
-
-        /// <summary> Gets working folder from a local environment variable. </summary>
-        internal static string GetWorkingFolder()
-        {
-            return Environment.GetEnvironmentVariable("_TargetDir", EnvironmentVariableTarget.Machine);
-            //return @"C:\FAT";
-        }
+       
 
         /// <summary> Gets a root directory of endpoint machine in the environment from a local environment variable. </summary>
         /// <param name="IsAdminShare">Determines whether the root should be returned in a form of admin share. </param>        
