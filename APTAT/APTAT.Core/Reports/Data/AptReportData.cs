@@ -60,6 +60,9 @@ namespace APTAT.Core.Reports
                         return $"Workgroup ({DevicesSourceDescription.Description})";
                     case ETargetsDiscovererType.LocalComputer:
                         return $"Local Computer ({DevicesSourceDescription.Description})";
+                    case ETargetsDiscovererType.AutoDiscovery:
+                        return $"Auto Discovery ({DevicesSourceDescription.Description})";
+
                     default:
                         return string.Empty;
                 }
