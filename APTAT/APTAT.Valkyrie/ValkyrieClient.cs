@@ -20,6 +20,7 @@ namespace APTAT.Valkyrie
     public sealed class ValkyrieClient : IValkyrieClient
     {
         private readonly int _changeTrakingIntervalInMs = (int)TimeSpan.FromMinutes(3).TotalMilliseconds;
+        private readonly int _delayAfterStartScanInSeconds = TimeSpan.FromSeconds(2).Seconds;
         private const Int32 MaxFileLenght = 26214400;
         private string _apiKey;
         private int _fileScanned;
@@ -43,6 +44,7 @@ namespace APTAT.Valkyrie
 
         private readonly IScheduler _progressNotifyTimer;
         private readonly IScheduler _checkStatusesTimer;
+        private readonly IScheduler _delayTimer;
         private int _machineCount;
         private string _login;
         private string _password;
@@ -57,15 +59,19 @@ namespace APTAT.Valkyrie
         private readonly IValkyrieWebApiProvider _provider;
         private Dictionary<string, IValkyrieFileInfo> _filesToSubmit;
 
-        public ValkyrieClient(IMachineKeyProvider machineKeyProvider, IValkyrieWebApiProvider provider, IScheduler progressNotifyTimer, IScheduler checkStatusTimer)
+        public ValkyrieClient(IMachineKeyProvider machineKeyProvider, IValkyrieWebApiProvider provider, IScheduler progressNotifyTimer, IScheduler checkStatusTimer,
+            IScheduler delayTimer)
         {
             _provider = provider;
             _endpointId = machineKeyProvider.GlobalMachineKey;
             _progressNotifyTimer = progressNotifyTimer;
             _checkStatusesTimer = checkStatusTimer;
             _progressNotifyTimer.SetInterval(TimeSpan.FromSeconds(1));
+            _checkStatusesTimer.SetInterval(TimeSpan.FromMilliseconds(_changeTrakingIntervalInMs));
             _progressNotifyTimer.TimeoutCallback += ProgressNotifyTimerCallback;
             _checkStatusesTimer.TimeoutCallback += CheckStatusesTimerCallback;
+            _delayTimer = delayTimer;
+            _delayTimer.SetInterval(TimeSpan.FromSeconds(_delayAfterStartScanInSeconds));
         }
 
         public void AllowSubmit(Dictionary<string, IValkyrieFileInfo> updatedData)
@@ -138,13 +144,11 @@ namespace APTAT.Valkyrie
 
         private void ProgressNotifyTimerCallback(object state, EventArgs elapsedEventArgs)
         {
-            if (!_progressNotifyTimer.IsEnabled) return;
-            _progressNotifyTimer.Stop();
             if (_isMainScanFinished)
             {
                 OnAnalyzeProgressChanged(_pendingItemsResolved);
             }
-            _progressNotifyTimer.Start();
+            _progressNotifyTimer.Start(false);
         }
 
 
@@ -168,11 +172,11 @@ namespace APTAT.Valkyrie
                 waitNextInterval = true;
             else if (_aptScanId == null )
             {
-                    lock (_aptScanIdLock)
-                    {
-                        if (_aptScanId == null)
-                            waitNextInterval = true;
-                    }
+                lock (_aptScanIdLock)
+                {
+                    if (_aptScanId == null)
+                        waitNextInterval = true;
+                }
             }
             CancellationToken? cancellationToken = null;
             if (_cancellationTokenSource == null)
@@ -245,7 +249,7 @@ namespace APTAT.Valkyrie
             }
         }
 
-        private void MergeResult(IValkyrieAnalysisResult result, IValkyrieFileInfo fileInfo, CancellationToken cancellationToken)
+        private void MergeResult(IValkyrieAnalysisResult result, IValkyrieFileInfo fileInfo)
         {
             if (!result.IsSubmitted && (result.Verdict == ValkyrieVerdict.FirstSeen ||
                     result.Verdict == ValkyrieVerdict.Undetected || result.Verdict == ValkyrieVerdict.Pending))
@@ -317,7 +321,7 @@ namespace APTAT.Valkyrie
             {
                 var result = UploadFile(f, endpointId, cancellationToken);
                 if (result == null) throw new ArgumentException("ValkyrieAnalysisResult can not be null");
-                MergeResult(result, f, cancellationToken);
+                MergeResult(result, f);
             }
             catch (Exception e)
             {
@@ -340,7 +344,7 @@ namespace APTAT.Valkyrie
                         s = SkippReasonEnum.WebException;
                     result = ValkyrieAnalysisResult.CreateSkipInfo(f.Sha1, m, s);
                 }
-                MergeResult(result, f, cancellationToken);
+                MergeResult(result, f);
 
                 Trace.WriteLine(
                     $"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : Submit Failed SHA1 = {f.Sha1} Reason : {e.Message}" +
@@ -440,7 +444,7 @@ namespace APTAT.Valkyrie
                 }
                 var infoRequeast = new InfoRequest(sha1: sha1, apiKey: _apiKey, endpointId: endpointId,
                     aptScanId: _aptScanId, path: fileInfo.Path);
-                BasicInfoResponse basicInfo = _provider.GetBasicInfo(infoRequeast);
+                IBasicInfoResponse basicInfo = _provider.GetBasicInfo(infoRequeast);
                 if (basicInfo.ReturnCode != ErrorCodesEnum.Success)
                     throw new InvalidOperationException(basicInfo.ReturnCode.GetEnumDescription());
                 Trace.WriteLine(
@@ -679,14 +683,17 @@ namespace APTAT.Valkyrie
                     var ex = new ValkyrieRegistrationFailedException(resp);
                     throw ex;
                 }
-
-                _progressNotifyTimer.Start();
-
-
-                Thread.Sleep(2000);
-
+                using (ManualResetEventSlim manualResetEvent = new ManualResetEventSlim(false))
+                {
+                    EventHandler callback = (o, ea) => manualResetEvent?.Set();
+                    _delayTimer.TimeoutCallback += callback;
+                    _delayTimer.Start(false);
+                    manualResetEvent.Wait(TimeSpan.FromSeconds(_delayAfterStartScanInSeconds));
+                    _delayTimer.TimeoutCallback -= callback;
+                }
                 _apiKey = apiKeyInternal;
                 _aptScanId = scanIdInternal;
+                _progressNotifyTimer.Start(false);
                 OnAnalyzeStarted(_apiKey, _aptScanId);
 
 
@@ -702,9 +709,8 @@ namespace APTAT.Valkyrie
             _progressNotifyTimer.TimeoutCallback -= ProgressNotifyTimerCallback;
             _checkStatusesTimer.TimeoutCallback -= CheckStatusesTimerCallback;
             _progressNotifyTimer?.Dispose();
-
             _checkStatusesTimer?.Dispose();
-
+            _delayTimer?.Dispose();
             _cancellationTokenSource?.Dispose();
         }
 
@@ -715,6 +721,8 @@ namespace APTAT.Valkyrie
 
         public ValkyrieResponse SubmitEmail(string[] addresses)
         {
+            if (_apiKey == null || _aptScanId == null)
+                throw new InvalidOperationException("Analyze isn't started");
             var result = _provider.SubmitEmail(new SubscribeEmailRequest { ApiKey = _apiKey, ScanId = _aptScanId, CustomerEmails = addresses });
             if (result.ReturnCode == ErrorCodesEnum.Success)
                 _emails = addresses;

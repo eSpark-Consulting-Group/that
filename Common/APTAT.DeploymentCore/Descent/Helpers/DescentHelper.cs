@@ -79,9 +79,9 @@ namespace APTAT.DeploymentCore.Descent.Helpers
 
 			protected virtual void InitPaths()
 			{
-                RemoteHost = string.Format(@"\\{0}", RemoteHostInfo.HostName);
-                RemoteAdminPath = string.Format(@"\\{0}\ADMIN$", RemoteHostInfo.HostName);
-                RemoteWorkingDirectory = RemoteAdminPath + @"\" + TempFolderName;
+                RemoteHost = $@"\\{RemoteHostInfo.HostName}";
+                RemoteAdminPath = $@"\\{RemoteHostInfo.HostName}\ADMIN$";
+                RemoteWorkingDirectory =  $@"{RemoteAdminPath}\{TempFolderName}";
             }
 
 			private static bool ExtractUserNameAndDomain( string login, out string userName, out string domain )
@@ -152,14 +152,14 @@ namespace APTAT.DeploymentCore.Descent.Helpers
                     if (CancellationToken.IsCancellationRequested)
                         throw new OperationCanceledException();
 
-                    login = string.Format("{0}\\{1}", domain, userName);
+                    login = $"{domain}\\{userName}";
 					if (TryLogin(impersonateAsNetworkService, login))
 						return;
 
                     if (CancellationToken.IsCancellationRequested)
                         throw new OperationCanceledException();
 
-                    login = string.Format("{0}@{1}", userName, domain);
+                    login = $"{userName}@{domain}";
 					if (TryLogin(impersonateAsNetworkService, login))
 						return;
 
@@ -189,6 +189,8 @@ namespace APTAT.DeploymentCore.Descent.Helpers
                             return;
                         attemptsCount--;
                         Thread.Sleep(1000);
+                        if (CancellationToken.IsCancellationRequested)
+                            throw new OperationCanceledException();
                     }
 				}
 
@@ -256,28 +258,21 @@ namespace APTAT.DeploymentCore.Descent.Helpers
 
             private void InvokeRemotelyConnected(DescentHelperEventArgs e )
 			{
-                EventHandler<DescentHelperEventArgs> handler = RemotelyConnected;
-				if( handler != null )
-					handler( this, e );
+			    RemotelyConnected?.Invoke( this, e );
 			}
 
 			private void InvokeDescentHelperCopied(DescentHelperEventArgs e )
 			{
-                EventHandler<DescentHelperEventArgs> handler = DescentHelperCopied;
-				if( handler != null )
-					handler( this, e );
-			}
+                DescentHelperCopied?.Invoke(this, e);
+            }
 
 			private void InvokeDescentHelperParametersCopied(DescentHelperEventArgs e )
 			{
-                EventHandler<DescentHelperEventArgs> handler = DescentHelperParametersCopied;
-				if( handler != null )
-					handler( this, e );
-			}
+                DescentHelperParametersCopied?.Invoke(this, e);
+            }
             private void InvokeDescentHelperStarted(DescentHelperEventArgs e)
             {
-                var handler = DescentHelperStarted;
-                if (handler != null) handler(this, e);
+                DescentHelperStarted?.Invoke(this, e);
             }
 
             private void Init( bool impersonateAsNetworkService )
@@ -374,8 +369,9 @@ namespace APTAT.DeploymentCore.Descent.Helpers
                     //        File.Delete( targetPath );
                     //}
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Descent, $"Cannot clean up remote content: {ex.Message}");
                 }
 
                 _networkHelper.Release();
@@ -389,7 +385,7 @@ namespace APTAT.DeploymentCore.Descent.Helpers
 				try
 				{
                     bool isx64 = System.IO.Directory.Exists(Path.Combine(RemoteAdminPath, "SysWOW64"));
-                    CleanUpRemoteContent();
+				    CleanUpRemoteContentSafe();
                     CopyFile( descentAgentPath, true ); // "true" means remove after operation is completed
 				    foreach (var filePath in GetAdditionalFilesToCopy(isx64))
 				    {
@@ -418,22 +414,25 @@ namespace APTAT.DeploymentCore.Descent.Helpers
 
             protected virtual string[] GetServiceParams()
             {
-                List<string> serviceParams = new List<string>();
-
-                return serviceParams.ToArray();
+                return new string[0];
             }
 
 		    protected abstract string GetPackageFileName(bool is64);
 
-            private void CleanUpRemoteContent()
+		    private void CleanUpRemoteContent()
+		    {
+		        if (System.IO.Directory.Exists(RemoteWorkingDirectory))
+		            System.IO.Directory.Delete(RemoteWorkingDirectory, true);
+            }
+            private void CleanUpRemoteContentSafe()
             {
                 try
                 {
-                    if (System.IO.Directory.Exists(RemoteWorkingDirectory))
-                        System.IO.Directory.Delete(RemoteWorkingDirectory, true);
+                    CleanUpRemoteContent();
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Descent ,$"Cannot clean up remote content: {ex.Message}");
                 }
             }
 

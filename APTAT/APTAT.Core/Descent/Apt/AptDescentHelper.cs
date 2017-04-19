@@ -281,6 +281,8 @@ namespace APTAT.Core.Descent.Apt
 
 		    public override void ExecuteAction( string actionName, string[] args, int timeoutInMs )
 			{
+			    if (CancellationToken.IsCancellationRequested || RemoteHostInfo.IsCancelled)
+			        throw new OperationCanceledException();
                 base.ExecuteAction(actionName, args, timeoutInMs);
 
                 int findFileAttemptsCount = 20;
