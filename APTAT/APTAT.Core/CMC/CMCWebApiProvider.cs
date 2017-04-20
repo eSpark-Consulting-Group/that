@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Text;
+using APTAT.Common;
 using Newtonsoft.Json;
 using Valkyrie.WebApiProvider;
 
@@ -38,6 +40,7 @@ namespace APTAT.Core.CMC
                 {
                     StreamReader reader = new StreamReader(responseStream, Encoding.GetEncoding("utf-8"));
                     String errorText = reader.ReadToEnd();
+                    LogHelper.Trace(TraceEventType.Error, TraceCategory.Network, errorText);
                 }
                 throw;
             }
@@ -61,12 +64,16 @@ namespace APTAT.Core.CMC
 
             try
             {
-                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                using (HttpWebResponse response = (HttpWebResponse) request.GetResponse())
                 {
                     length = response.ContentLength;
                 }
             }
-            catch (WebException ex) { }
+            catch (WebException ex)
+           {
+    
+
+            }
         }
 
         public void SendData(IGeneralInfo request)

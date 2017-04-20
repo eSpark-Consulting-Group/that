@@ -6,17 +6,12 @@ using APTAT.Common;
 using APTAT.Core.CMC;
 using APTAT.Core.CMC.Request;
 using Telerik.JustMock;
-using Telerik.JustMock.Expectations.Abstraction;
-using Telerik.JustMock.Helpers;
 using Xunit;
 
 namespace APTAT.Core.UnitTests.CMC
 {
-
     public class CmcClientTest
     {
-      //private readonly string[] _productIds = { "enp.c1.fat", "enp.c1.ufh" };
-
         private readonly IMachineKeyProvider _keyProviderMock;
         private readonly ISystemInfoProvider _systemInfoProvider;
         private readonly ICultureInfoProvider _cultureInfoProvider;
@@ -25,7 +20,7 @@ namespace APTAT.Core.UnitTests.CMC
         private IAutoDiscoveryFinishedRequest _autoDiscoveryFinishedRequest;
         private IScanStartedRequest _scanStartedRequest;
         private IScanFinishedRequest _scanFinishedRequest;
-        private ScanUpdatedRequest _scanUpdatedRequest;
+        private IScanUpdatedRequest _scanUpdatedRequest;
         private IReportGeneratedRequest _reportGeneratedRequest;
         private IReportPrintedOrSavedRequest _reportPrintedOrSavedRequest;
         private IApplicationClosedRequest _applicationClosedRequest;
@@ -54,7 +49,6 @@ namespace APTAT.Core.UnitTests.CMC
             _autoDiscoveryFinishedRequest = Mock.Create<IAutoDiscoveryFinishedRequest>();
             Mock.Arrange(() => _autoDiscoveryFinishedRequest.CountOfPotentiallyScanableDiscoveredComputers).Returns(27);
             Mock.Arrange(() => _autoDiscoveryFinishedRequest.DiscoveryStatus).Returns(DiscoveryStatus.Success);
-            Mock.Arrange(() => _autoDiscoveryFinishedRequest.DiscoveryStatus).Returns(0);
 
             _scanStartedRequest = Mock.Create<IScanStartedRequest>();
             Mock.Arrange(() => _scanStartedRequest.CountOfScannedComputers).Returns(12);
@@ -62,16 +56,16 @@ namespace APTAT.Core.UnitTests.CMC
             Mock.Arrange(() => _scanStartedRequest.ScanTriggerType).Returns(ScanTriggerType.ScanNow);
             Mock.Arrange(() => _scanStartedRequest.ScanType).Returns(ScanType.LocalScan);
 
+            _scanUpdatedRequest = Mock.Create<IScanUpdatedRequest>();
+            Mock.Arrange(() => _scanUpdatedRequest.CountOfNewMaliciousFilesWhichWasFoundAfterTheScanWasFinished).Returns(12);
+            Mock.Arrange(() => _scanUpdatedRequest.CountOfNewUnknownFilesWhichWasFoundAfterTheScanWasFinished).Returns(21);
+
             _scanFinishedRequest = Mock.Create<IScanFinishedRequest>();
             Mock.Arrange(() => _scanFinishedRequest.CountOfFailedScans).Returns(4);
             Mock.Arrange(() => _scanFinishedRequest.CountOfMaliciousFiles).Returns(2);
             Mock.Arrange(() => _scanFinishedRequest.CountOfSuccessScans).Returns(23);
             Mock.Arrange(() => _scanFinishedRequest.CountOfUnknownFiles).Returns(24);
             Mock.Arrange(() => _scanFinishedRequest.ScanStatus).Returns(ScanStatus.Success);
-
-            _scanUpdatedRequest = Mock.Create<ScanUpdatedRequest>();
-            Mock.Arrange(() => _scanUpdatedRequest.CountOfNewMaliciousFilesWhichWasFoundAfterTheScanWasFinished).Returns(12);
-            Mock.Arrange(() => _scanUpdatedRequest.CountOfNewUnknownFilesWhichWasFoundAfterTheScanWasFinished).Returns(21);
 
             _reportGeneratedRequest = Mock.Create<IReportGeneratedRequest>();
             Mock.Arrange(() => _reportGeneratedRequest.ReportKind).Returns(ReportKind.PerDevice);
@@ -82,6 +76,13 @@ namespace APTAT.Core.UnitTests.CMC
 
             _applicationClosedRequest = Mock.Create<IApplicationClosedRequest>();
             Mock.Arrange(() => _applicationClosedRequest.SId).Returns(Guid.NewGuid().ToString());
+        }
+
+        private string GetLinuxFormatTime(DateTime localTime)
+        {
+            DateTime unixEpoch = new DateTime(1970, 1, 1);
+            TimeSpan timeSpan = localTime - unixEpoch;
+            return ((int)timeSpan.TotalSeconds).ToString(CultureInfo.InvariantCulture);
         }
 
         [Fact(DisplayName = "CmcClient constructor test.")]
@@ -99,16 +100,16 @@ namespace APTAT.Core.UnitTests.CMC
         [Fact(DisplayName = "Launch method test.")]
         public void LaunchMethodTest()
         {
-          //Arrange
+            //Arrange
             MocksCreate();
-         
+
             var provider = Mock.Create<ICmcWebApiProvider>(Behavior.Strict);
             Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>())).OccursOnce();
             var client = new CmcClient(provider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
             //Act
             client.Launched(_launchedRequest);
             //Assert
-         
+
             Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>()), Occurs.Once());
         }
 
@@ -230,69 +231,564 @@ namespace APTAT.Core.UnitTests.CMC
             client.ReportPrintedOrSaved(_reportPrintedOrSavedRequest);
             client.AppicationClosed(_applicationClosedRequest);
             //Assert
-            Assert.Equal(8,cnt);
+            Assert.Equal(8, cnt);
         }
+
+
 
         [Fact(DisplayName = "Launched SendData Request test.")]
         public void LaunchedSendDataRequestTest()
         {
-            _launchedRequest = Mock.Create<ILaunchedRequest>();
-            Mock.Arrange(() => _launchedRequest.AcId).Returns(Guid.NewGuid().ToString());
-            Mock.Arrange(() => _launchedRequest.ProductVersion).Returns("1.5.20801.85");
-            Mock.Arrange(() => _launchedRequest.ProductIdentifier).Returns("enp.c1.fat");
-
-            IGeneralInfo generalInfo = null;
-
-            var webApiProvider = Mock.Create<ICmcWebApiProvider>();
-            Mock.Arrange(() => webApiProvider.SetBaseUri(Arg.AnyUri));
-            Mock.Arrange(() => webApiProvider.SendData(Arg.IsAny<IGeneralInfo>())).DoInstead((IGeneralInfo gi) =>
-                {
-                    generalInfo = gi;
-                }
-            );
-            IGeneralInfo actualGerGeneralInfo = getGeneralInfo();
-            var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
-            //Act
-           
-
-            client.Launched(_launchedRequest);
-
-            Assert.Equal(generalInfo, actualGerGeneralInfo);
-        }
-
-        private IGeneralInfo getGeneralInfo()
-        {
+            //Assert
+            var acId = Guid.NewGuid().ToString();
+            var productVersion = "1.5.20801.85";
+            var productId = "enp.c1.fat";
             var sessionId = Guid.NewGuid().ToString();
-            var accountId = Guid.Parse("507c8028-4d21-4a1f-b763-8ac8ef41baf3").ToString();
             string eventParamValue = "eh_pu";
             string eventId = "ei_da";
             string eventGroupId = "eg_da";
 
-            GeneralInfo generalInfoReal = new GeneralInfo(
-                applicationIdentifier: "enp", machineCode: "TBD",
-                globalMachineCode: "TBD", productIdentifier: "enp.c1.fat");
-            generalInfoReal.EventsInfo = new List<EventInfo>{
-                new EventInfo(){
-                    EventGroupIdentifier = eventGroupId,
-                    EventIdentifier = eventId,
-                    EventValues = new List<Parameter>(){
-                        new Parameter() {IsApplication = false, Name = "ev_for_hashing", Value = eventParamValue},
-                        new Parameter() {IsApplication = false, Name = "acid", Value = accountId},
-                        new Parameter() {IsApplication = false, Name = "app_pr_ve", Value = "1.5.20801.85"},
-                        new Parameter() {IsApplication = false, Name = "sid", Value = sessionId},
-                        new Parameter() {IsApplication = false, Name = "iu_tz", Value = "04/18/2017 16:43:42"},
-                        new Parameter() {IsApplication = false, Name = "iu_ts", Value = "1492533822"}
+            var systemInfo = _systemInfoProvider.GetSystemInfo();
+            var culture = _cultureInfoProvider.GetCulture();
+            var localTimeZone = TimeZone.CurrentTimeZone.ToLocalTime(DateTime.Now);
+            IGeneralInfo generalInfo = null;
+
+            _launchedRequest = Mock.Create<ILaunchedRequest>();
+            Mock.Arrange(() => _launchedRequest.AcId).Returns(acId);
+            Mock.Arrange(() => _launchedRequest.ProductVersion).Returns(productVersion);
+            Mock.Arrange(() => _launchedRequest.ProductIdentifier).Returns(productId);
+
+            var webApiProvider = Mock.Create<ICmcWebApiProvider>();
+            Mock.Arrange(() => webApiProvider.SetBaseUri(Arg.AnyUri));
+
+            Mock.Arrange(() => webApiProvider.SendData(Arg.IsAny<IGeneralInfo>()))
+                .DoInstead((IGeneralInfo gi) => { generalInfo = gi; });
+
+            GeneralInfo actualGeneralInfo = new GeneralInfo("enp", "TBD", "TBD", productId)
+            {
+                EventsInfo = new List<EventInfo>{
+                    new EventInfo{
+                        EventGroupIdentifier = eventGroupId,
+                        EventIdentifier = eventId,
+                        EventValues = new List<Parameter>{
+                            new Parameter { Name = "ev_for_hashing",  Value = eventParamValue,IsApplication = false},
+                            new Parameter { Name = "acid",Value = acId,IsApplication = false},
+                            new Parameter { Name = "pr_ve", Value = productVersion ,IsApplication = false},
+                            new Parameter { Name = "sid", Value = sessionId,IsApplication = false},
+                            new Parameter { Name = "iu_tz",Value = localTimeZone.ToString(CultureInfo.InvariantCulture),IsApplication = false},
+                            new Parameter{Name = "iu_ts",Value = GetLinuxFormatTime(localTimeZone),IsApplication = false}
+                        }
                     }
+                },
+                Values = new List<Parameter>{
+                    new Parameter {IsApplication = true, Name = "op_sy", Value = systemInfo.FamilyName},
+                    new Parameter {IsApplication = true, Name = "op_ve", Value = systemInfo.Version},
+                    new Parameter {IsApplication = true, Name = "op_pl", Value = systemInfo.Platform},
+                    new Parameter {IsApplication = true, Name = "cul", Value = culture},
+                    new Parameter {IsApplication = true, Name = "pr_ve", Value = productVersion}
                 }
             };
-            generalInfoReal.Values = new List<Parameter>{
-                new Parameter() {IsApplication = true, Name = "op_sy", Value = "Windows"},
-                new Parameter() {IsApplication = true, Name = "op_ve", Value = "6.4"},
-                new Parameter() {IsApplication = true, Name = "op_pl", Value = "x86"},
-                new Parameter() {IsApplication = true, Name = "cul", Value = "uk-UA"},
-                new Parameter() {IsApplication = true, Name = "pr_ve", Value = "1.5.20801.85"}
+            var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
+
+            //Act
+            client.Launched(_launchedRequest);
+
+            //Assert
+            Assert.Equal(generalInfo.ApplicationIdentifier, actualGeneralInfo.ApplicationIdentifier);
+            Assert.Equal(generalInfo.GlobalMachineCode, actualGeneralInfo.GlobalMachineCode);
+            Assert.Equal(generalInfo.MachineCode, actualGeneralInfo.MachineCode);
+            Assert.Equal(generalInfo.ProductIdentifier, actualGeneralInfo.ProductIdentifier);
+            Assert.Equal(generalInfo.Values.Count, actualGeneralInfo.Values.Count);
+
+            for (int i = 0; i < generalInfo.Values.Count; i++)
+            {
+                Assert.Equal(generalInfo.Values[i].Name, actualGeneralInfo.Values[i].Name);
+                Assert.Equal(generalInfo.Values[i].Value, actualGeneralInfo.Values[i].Value);
+            }
+            for (int j = 0; j < generalInfo.EventsInfo.Count; j++)
+            {
+                for (int i = 0; i < generalInfo.EventsInfo[j].EventValues.Count; i++)
+                {
+                    Assert.Equal(generalInfo.EventsInfo[j].EventValues[i].Name,
+                        actualGeneralInfo.EventsInfo[j].EventValues[i].Name);
+                    if (generalInfo.EventsInfo[j].EventValues[i].Name != "sid")
+                        Assert.Equal(generalInfo.EventsInfo[j].EventValues[i].Value,
+                            actualGeneralInfo.EventsInfo[j].EventValues[i].Value);
+                }
+            }
+        }
+
+        [Fact(DisplayName = "AutoDiscovery SendData Request test.")]
+        public void AutoDiscoverySendDataRequestTest()
+        {
+            //Assert
+            var sId = Guid.NewGuid().ToString();
+            var acId = Guid.NewGuid().ToString();
+            var productVersion = "1.5.20801.85";
+            var productId = "enp.c1.fat";
+
+            string eventParamValue = "eh_ad_adf";
+            string eventId = "ei_rp_ad";
+            string eventGroupId = "eg_da";
+
+            _launchedRequest = Mock.Create<ILaunchedRequest>();
+            Mock.Arrange(() => _launchedRequest.AcId).Returns(acId);
+            Mock.Arrange(() => _launchedRequest.ProductVersion).Returns(productVersion);
+            Mock.Arrange(() => _launchedRequest.ProductIdentifier).Returns(productId);
+
+            _autoDiscoveryFinishedRequest = Mock.Create<IAutoDiscoveryFinishedRequest>();
+            Mock.Arrange(() => _autoDiscoveryFinishedRequest.CountOfPotentiallyScanableDiscoveredComputers).Returns(27);
+            Mock.Arrange(() => _autoDiscoveryFinishedRequest.DiscoveryStatus).Returns(DiscoveryStatus.Success);
+
+            IGeneralInfo generalInfo = null;
+
+            IGeneralInfo actualGeneralInfo = new GeneralInfo("enp", "TBD", "TBD", productId)
+            {
+                EventsInfo = new List<EventInfo>{
+                    new EventInfo{
+                        EventGroupIdentifier = eventGroupId,
+                        EventIdentifier = eventId,
+                        EventValues = new List<Parameter>{
+                            new Parameter() {Name = "ev_for_hashing",  Value = eventParamValue,IsApplication = false},
+                            new Parameter() { Name = "ds", Value = "0" ,IsApplication = false},
+                            new Parameter() { Name = "pc_cc", Value = "27" ,IsApplication = false},
+                            new Parameter() {Name = "acid",Value = acId,IsApplication = false},
+                            new Parameter() { Name = "sid", Value = sId,IsApplication = false},
+                        }
+                    }
+                },
+                Values = new List<Parameter>()
             };
-            return generalInfoReal;
+
+            var webApiProvider = Mock.Create<ICmcWebApiProvider>();
+            Mock.Arrange(() => webApiProvider.SetBaseUri(Arg.AnyUri));
+
+            Mock.Arrange(() => webApiProvider.SendData(Arg.IsAny<IGeneralInfo>()))
+                .DoInstead((IGeneralInfo gi) => { generalInfo = gi; });
+
+            var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
+            client.Launched(_launchedRequest);
+
+            //Act
+            client.AutoDiscoveryFinished(_autoDiscoveryFinishedRequest);
+
+            for (int j = 0; j < generalInfo.EventsInfo.Count; j++)
+            {
+                for (int i = 0; i < generalInfo.EventsInfo[j].EventValues.Count; i++)
+                {
+                    Assert.Equal(generalInfo.EventsInfo[j].EventValues[i].Name,
+                        actualGeneralInfo.EventsInfo[j].EventValues[i].Name);
+
+                    if (generalInfo.EventsInfo[j].EventValues[i].Name != "sid" &&
+                        generalInfo.EventsInfo[j].EventValues[i].Name != "acid")
+
+                        Assert.Equal(generalInfo.EventsInfo[j].EventValues[i].Value,
+                            actualGeneralInfo.EventsInfo[j].EventValues[i].Value);
+                }
+            }
+        }
+
+        [Fact(DisplayName = "ScanStarted SendData Request test.")]
+        public void ScanStartedSendDataRequestTest()
+        {
+            //Assert
+            var sId = Guid.NewGuid().ToString();
+            var acId = Guid.NewGuid().ToString();
+            var productVersion = "1.5.20801.85";
+            var productId = "enp.c1.fat";
+
+            string eventParamValue = "eh_sc_ss";
+            string eventId = "ei_rp_sc";
+            string eventGroupId = "eg_da";
+
+            _launchedRequest = Mock.Create<ILaunchedRequest>();
+            Mock.Arrange(() => _launchedRequest.AcId).Returns(acId);
+            Mock.Arrange(() => _launchedRequest.ProductVersion).Returns(productVersion);
+            Mock.Arrange(() => _launchedRequest.ProductIdentifier).Returns(productId);
+
+            _scanStartedRequest = Mock.Create<IScanStartedRequest>();
+            Mock.Arrange(() => _scanStartedRequest.ScanTriggerType).Returns(ScanTriggerType.ScanNow);
+            Mock.Arrange(() => _scanStartedRequest.ScanTarget).Returns(ScanTarget.DiscoveredByWorkGroup);
+            Mock.Arrange(() => _scanStartedRequest.ScanType).Returns(ScanType.LocalScan);
+            Mock.Arrange(() => _scanStartedRequest.TotalCountOfDiscoveredComputers).Returns(50);
+            Mock.Arrange(() => _scanStartedRequest.CountOfScannedComputers).Returns(15);
+
+            IGeneralInfo generalInfo = null;
+            IGeneralInfo actualGeneralInfo = new GeneralInfo("enp", "TBD", "TBD", productId)
+            {
+                EventsInfo = new List<EventInfo>{
+                    new EventInfo{
+                        EventGroupIdentifier = eventGroupId,
+                        EventIdentifier = eventId,
+                        EventValues = new List<Parameter>{
+                            new Parameter() {Name = "ev_for_hashing",  Value = eventParamValue,IsApplication = false},
+                            new Parameter() { Name = "sc_trg_tp", Value = "0" ,IsApplication = false},
+                            new Parameter() { Name = "sc_tg", Value = "1" ,IsApplication = false},
+                            new Parameter() {Name = "sc_tp",Value = "3",IsApplication = false},
+                            new Parameter() { Name = "pc_cc", Value = "50",IsApplication = false},
+                            new Parameter() { Name = "pc_sc", Value = "15",IsApplication = false},
+                            new Parameter() {Name = "acid",Value = acId,IsApplication = false},
+                            new Parameter() { Name = "sid", Value = sId,IsApplication = false},
+                            new Parameter() { Name = "aid", Value = sId,IsApplication = false}
+                        }
+                    }
+                },
+                Values = new List<Parameter>()
+            };
+
+            var webApiProvider = Mock.Create<ICmcWebApiProvider>();
+            Mock.Arrange(() => webApiProvider.SetBaseUri(Arg.AnyUri));
+
+            Mock.Arrange(() => webApiProvider.SendData(Arg.IsAny<IGeneralInfo>()))
+                .DoInstead((IGeneralInfo gi) => { generalInfo = gi; });
+
+            var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
+            client.Launched(_launchedRequest);
+
+            //Act
+            client.ScanStarted(_scanStartedRequest);
+
+            for (int j = 0; j < generalInfo.EventsInfo.Count; j++)
+            {
+                for (int i = 0; i < generalInfo.EventsInfo[j].EventValues.Count; i++)
+                {
+                    Assert.Equal(generalInfo.EventsInfo[j].EventValues[i].Name,
+                        actualGeneralInfo.EventsInfo[j].EventValues[i].Name);
+
+                    if (generalInfo.EventsInfo[j].EventValues[i].Name != "sid" &&
+                        generalInfo.EventsInfo[j].EventValues[i].Name != "acid" &&
+                        generalInfo.EventsInfo[j].EventValues[i].Name != "aid")
+                        Assert.Equal(generalInfo.EventsInfo[j].EventValues[i].Value,
+                            actualGeneralInfo.EventsInfo[j].EventValues[i].Value);
+                }
+            }
+        }
+
+        [Fact(DisplayName = "ScanUpdated SendData Request test.")]
+        public void ScanUpdatedSendDataRequestTest()
+        {
+            //Assert
+            var sId = Guid.NewGuid().ToString();
+            var acId = Guid.NewGuid().ToString();
+            var aId = Guid.NewGuid().ToString();
+            var productVersion = "1.5.20801.85";
+            var productId = "enp.c1.fat";
+
+            string eventParamValue = "eh_sc_su";
+            string eventId = "ei_rp_sc";
+            string eventGroupId = "eg_da";
+
+            _launchedRequest = Mock.Create<ILaunchedRequest>();
+            Mock.Arrange(() => _launchedRequest.AcId).Returns(acId);
+            Mock.Arrange(() => _launchedRequest.ProductVersion).Returns(productVersion);
+            Mock.Arrange(() => _launchedRequest.ProductIdentifier).Returns(productId);
+
+            _scanUpdatedRequest = Mock.Create<IScanUpdatedRequest>();
+            Mock.Arrange(() => _scanUpdatedRequest.CountOfNewUnknownFilesWhichWasFoundAfterTheScanWasFinished).Returns(21);
+            Mock.Arrange(() => _scanUpdatedRequest.CountOfNewMaliciousFilesWhichWasFoundAfterTheScanWasFinished).Returns(12);
+
+            IGeneralInfo generalInfo = null;
+            IGeneralInfo actualGeneralInfo = new GeneralInfo("enp", "TBD", "TBD", productId)
+            {
+                EventsInfo = new List<EventInfo>{
+                    new EventInfo{
+                        EventGroupIdentifier = eventGroupId,
+                        EventIdentifier = eventId,
+                        EventValues = new List<Parameter>{
+                            new Parameter() {Name = "ev_for_hashing",  Value = eventParamValue,IsApplication = false},
+                            new Parameter() { Name = "u_fc", Value = "21" ,IsApplication = false},
+                            new Parameter() { Name = "mlc_fc", Value = "12" ,IsApplication = false},
+                            new Parameter() {Name = "acid",Value = acId,IsApplication = false},
+                            new Parameter() { Name = "sid", Value = sId,IsApplication = false},
+                            new Parameter() { Name = "aid", Value = aId,IsApplication = false}
+                        }
+                    }
+                },
+                Values = new List<Parameter>()
+            };
+            var webApiProvider = Mock.Create<ICmcWebApiProvider>();
+            Mock.Arrange(() => webApiProvider.SetBaseUri(Arg.AnyUri));
+
+            Mock.Arrange(() => webApiProvider.SendData(Arg.IsAny<IGeneralInfo>()))
+                .DoInstead((IGeneralInfo gi) => { generalInfo = gi; });
+
+            var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
+            client.Launched(_launchedRequest);
+
+            //Act
+            client.ScanUpdated(_scanUpdatedRequest);
+
+            for (int j = 0; j < generalInfo.EventsInfo.Count; j++)
+            {
+                for (int i = 0; i < generalInfo.EventsInfo[j].EventValues.Count; i++)
+                {
+                    Assert.Equal(generalInfo.EventsInfo[j].EventValues[i].Name,
+                        actualGeneralInfo.EventsInfo[j].EventValues[i].Name);
+
+                    if (generalInfo.EventsInfo[j].EventValues[i].Name != "sid" &&
+                        generalInfo.EventsInfo[j].EventValues[i].Name != "acid" &&
+                        generalInfo.EventsInfo[j].EventValues[i].Name != "aid")
+                        Assert.Equal(generalInfo.EventsInfo[j].EventValues[i].Value,
+                            actualGeneralInfo.EventsInfo[j].EventValues[i].Value);
+                }
+            }
+        }
+
+        [Fact(DisplayName = "ScanFinished SendData Request test.")]
+        public void ScanFinishedSendDataRequestTest()
+        {
+            //Assert
+            var sId = Guid.NewGuid().ToString();
+            var acId = Guid.NewGuid().ToString();
+            var productVersion = "1.5.20801.85";
+            var productId = "enp.c1.fat";
+
+            string eventParamValue = "eh_fat_sf";
+            string eventId = "ei_rp_sc";
+            string eventGroupId = "eg_da";
+
+            _launchedRequest = Mock.Create<ILaunchedRequest>();
+            Mock.Arrange(() => _launchedRequest.AcId).Returns(acId);
+            Mock.Arrange(() => _launchedRequest.ProductVersion).Returns(productVersion);
+            Mock.Arrange(() => _launchedRequest.ProductIdentifier).Returns(productId);
+
+            _scanFinishedRequest = Mock.Create<IScanFinishedRequest>();
+            Mock.Arrange(() => _scanFinishedRequest.ScanStatus).Returns(ScanStatus.Success);
+            Mock.Arrange(() => _scanFinishedRequest.CountOfSuccessScans).Returns(25);
+            Mock.Arrange(() => _scanFinishedRequest.CountOfFailedScans).Returns(10);
+            Mock.Arrange(() => _scanFinishedRequest.CountOfUnknownFiles).Returns(50);
+            Mock.Arrange(() => _scanFinishedRequest.CountOfMaliciousFiles).Returns(20);
+
+
+            IGeneralInfo generalInfo = null;
+            IGeneralInfo actualGeneralInfo = new GeneralInfo("enp", "TBD", "TBD", productId)
+            {
+                EventsInfo = new List<EventInfo>{
+                    new EventInfo{
+                        EventGroupIdentifier = eventGroupId,
+                        EventIdentifier = eventId,
+                        EventValues = new List<Parameter>{
+                            new Parameter() {Name = "ev_for_hashing",  Value = eventParamValue,IsApplication = false},
+
+                            new Parameter() { Name = "sc_st", Value = "0" ,IsApplication = false},
+                            new Parameter() { Name = "ps_sc_s", Value = "25" ,IsApplication = false},
+                            new Parameter() { Name = "ps_sc_f",Value = "10",IsApplication = false},
+                            new Parameter() { Name = "u_fc", Value = "50",IsApplication = false},
+                            new Parameter() { Name = "mlc_fc", Value = "20",IsApplication = false},
+
+                            new Parameter() {Name = "acid",Value = acId,IsApplication = false},
+                            new Parameter() { Name = "sid", Value = sId,IsApplication = false}
+                        }
+                    }
+                },
+                Values = new List<Parameter>()
+            };
+
+            var webApiProvider = Mock.Create<ICmcWebApiProvider>();
+            Mock.Arrange(() => webApiProvider.SetBaseUri(Arg.AnyUri));
+
+            Mock.Arrange(() => webApiProvider.SendData(Arg.IsAny<IGeneralInfo>()))
+                .DoInstead((IGeneralInfo gi) => { generalInfo = gi; });
+
+            var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
+            client.Launched(_launchedRequest);
+
+            //Act
+            client.ScanFinished(_scanFinishedRequest);
+
+            for (int j = 0; j < generalInfo.EventsInfo.Count; j++)
+            {
+                for (int i = 0; i < generalInfo.EventsInfo[j].EventValues.Count; i++)
+                {
+                    Assert.Equal(generalInfo.EventsInfo[j].EventValues[i].Name,
+                        actualGeneralInfo.EventsInfo[j].EventValues[i].Name);
+
+                    if (generalInfo.EventsInfo[j].EventValues[i].Name != "sid" &&
+                        generalInfo.EventsInfo[j].EventValues[i].Name != "acid" )
+                        Assert.Equal(generalInfo.EventsInfo[j].EventValues[i].Value,
+                            actualGeneralInfo.EventsInfo[j].EventValues[i].Value);
+                }
+            }
+        }
+
+        [Fact(DisplayName = "ReportGenerated SendData Request test.")]
+        public void ReportGeneratedSendDataRequestTest()
+        {
+            //Assert
+            var sId = Guid.NewGuid().ToString();
+            var acId = Guid.NewGuid().ToString();
+            var productVersion = "1.5.20801.85";
+            var productId = "enp.c1.fat";
+
+            string eventParamValue = "eh_rp_gen";
+            string eventId = "ei_rp_info";
+            string eventGroupId = "eg_da";
+
+            _launchedRequest = Mock.Create<ILaunchedRequest>();
+            Mock.Arrange(() => _launchedRequest.AcId).Returns(acId);
+            Mock.Arrange(() => _launchedRequest.ProductVersion).Returns(productVersion);
+            Mock.Arrange(() => _launchedRequest.ProductIdentifier).Returns(productId);
+
+            _reportGeneratedRequest = Mock.Create<IReportGeneratedRequest>();
+            Mock.Arrange(() => _reportGeneratedRequest.ReportKind).Returns(ReportKind.PerDevice);
+            
+            IGeneralInfo generalInfo = null;
+            IGeneralInfo actualGeneralInfo = new GeneralInfo("enp", "TBD", "TBD", productId)
+            {
+                EventsInfo = new List<EventInfo>{
+                    new EventInfo{
+                        EventGroupIdentifier = eventGroupId,
+                        EventIdentifier = eventId,
+                        EventValues = new List<Parameter>{
+                            new Parameter() {Name = "ev_for_hashing",  Value = eventParamValue,IsApplication = false},
+
+                            new Parameter() { Name = "rp_kd", Value = "1" ,IsApplication = false},
+
+                            new Parameter() {Name = "acid",Value = acId,IsApplication = false},
+                            new Parameter() { Name = "sid", Value = sId,IsApplication = false}
+                        }
+                    }
+                },
+                Values = new List<Parameter>()
+            };
+
+            var webApiProvider = Mock.Create<ICmcWebApiProvider>();
+            Mock.Arrange(() => webApiProvider.SetBaseUri(Arg.AnyUri));
+            Mock.Arrange(() => webApiProvider.SendData(Arg.IsAny<IGeneralInfo>()))
+                .DoInstead((IGeneralInfo gi) => { generalInfo = gi; });
+            var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
+            client.Launched(_launchedRequest);
+            //Act
+            client.ReportGenerated(_reportGeneratedRequest);
+
+            for (int j = 0; j < generalInfo.EventsInfo.Count; j++){
+                for (int i = 0; i < generalInfo.EventsInfo[j].EventValues.Count; i++){
+                    Assert.Equal(generalInfo.EventsInfo[j].EventValues[i].Name,
+                        actualGeneralInfo.EventsInfo[j].EventValues[i].Name);
+
+                    if (generalInfo.EventsInfo[j].EventValues[i].Name != "sid" &&
+                        generalInfo.EventsInfo[j].EventValues[i].Name != "acid")
+                        Assert.Equal(generalInfo.EventsInfo[j].EventValues[i].Value,
+                            actualGeneralInfo.EventsInfo[j].EventValues[i].Value);
+                }
+            }
+        }
+
+        [Fact(DisplayName = "ReportPrintedOrSaved SendData Request test.")]
+        public void ReportPrintedOrSavedSendDataRequestTest()
+        {
+            //Assert
+            var sId = Guid.NewGuid().ToString();
+            var acId = Guid.NewGuid().ToString();
+            var productVersion = "1.5.20801.85";
+            var productId = "enp.c1.fat";
+
+            string eventParamValue = "eh_rp_svd";
+            string eventId = "ei_rp_info";
+            string eventGroupId = "eg_da";
+
+            _launchedRequest = Mock.Create<ILaunchedRequest>();
+            Mock.Arrange(() => _launchedRequest.AcId).Returns(acId);
+            Mock.Arrange(() => _launchedRequest.ProductVersion).Returns(productVersion);
+            Mock.Arrange(() => _launchedRequest.ProductIdentifier).Returns(productId);
+
+            _reportPrintedOrSavedRequest = Mock.Create<IReportPrintedOrSavedRequest>();
+            Mock.Arrange(() => _reportPrintedOrSavedRequest.ReportKind).Returns(ReportKind.PerDevice);
+            Mock.Arrange(() => _reportPrintedOrSavedRequest.ReportAction).Returns(ReportAction.Saved);
+
+            IGeneralInfo generalInfo = null;
+            IGeneralInfo actualGeneralInfo = new GeneralInfo("enp", "TBD", "TBD", productId)
+            {
+                EventsInfo = new List<EventInfo>{
+                    new EventInfo{
+                        EventGroupIdentifier = eventGroupId,
+                        EventIdentifier = eventId,
+                        EventValues = new List<Parameter>{
+                            new Parameter() {Name = "ev_for_hashing",  Value = eventParamValue,IsApplication = false},
+
+                            new Parameter() { Name = "rp_kd", Value = "1" ,IsApplication = false},
+                            new Parameter() { Name = "act", Value = "0" ,IsApplication = false},
+
+                            new Parameter() {Name = "acid",Value = acId,IsApplication = false},
+                            new Parameter() { Name = "sid", Value = sId,IsApplication = false}
+                        }
+                    }
+                },
+                Values = new List<Parameter>()
+            };
+
+            var webApiProvider = Mock.Create<ICmcWebApiProvider>();
+            Mock.Arrange(() => webApiProvider.SetBaseUri(Arg.AnyUri));
+
+            Mock.Arrange(() => webApiProvider.SendData(Arg.IsAny<IGeneralInfo>()))
+                .DoInstead((IGeneralInfo gi) => { generalInfo = gi; });
+
+            var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
+            client.Launched(_launchedRequest);
+
+            //Act
+            client.ReportPrintedOrSaved(_reportPrintedOrSavedRequest);
+
+            for (int j = 0; j < generalInfo.EventsInfo.Count; j++)
+            {
+                for (int i = 0; i < generalInfo.EventsInfo[j].EventValues.Count; i++)
+                {
+                    Assert.Equal(generalInfo.EventsInfo[j].EventValues[i].Name,
+                        actualGeneralInfo.EventsInfo[j].EventValues[i].Name);
+
+                    if (generalInfo.EventsInfo[j].EventValues[i].Name != "sid" &&
+                        generalInfo.EventsInfo[j].EventValues[i].Name != "acid")
+                        Assert.Equal(generalInfo.EventsInfo[j].EventValues[i].Value,
+                            actualGeneralInfo.EventsInfo[j].EventValues[i].Value);
+                }
+            }
+        }
+
+
+        [Fact(DisplayName = "AppicationClosed SendData Request test.")]
+        public void AppicationClosedSendDataRequestTest()
+        {
+            //Assert
+            var sId = Guid.NewGuid().ToString();
+            var acId = Guid.NewGuid().ToString();
+            var productVersion = "1.5.20801.85";
+            var productId = "enp.c1.fat";
+
+            string eventParamValue = "eh_pc";
+            string eventId = "ei_da";
+            string eventGroupId = "eg_da";
+
+            _launchedRequest = Mock.Create<ILaunchedRequest>();
+            Mock.Arrange(() => _launchedRequest.AcId).Returns(acId);
+            Mock.Arrange(() => _launchedRequest.ProductVersion).Returns(productVersion);
+            Mock.Arrange(() => _launchedRequest.ProductIdentifier).Returns(productId);
+
+            _applicationClosedRequest = Mock.Create<IApplicationClosedRequest>();
+            Mock.Arrange(() => _applicationClosedRequest.SId).Returns(Guid.NewGuid().ToString());
+
+            IGeneralInfo generalInfo = null;
+            IGeneralInfo actualGeneralInfo = new GeneralInfo("enp", "TBD", "TBD", productId){
+                EventsInfo = new List<EventInfo>{
+                    new EventInfo{
+                        EventGroupIdentifier = eventGroupId,
+                        EventIdentifier = eventId,
+                        EventValues = new List<Parameter>{
+                            new Parameter() {Name = "ev_for_hashing",  Value = eventParamValue,IsApplication = false},
+                            new Parameter() { Name = "sid", Value = sId,IsApplication = false}
+                        }
+                    }
+                },
+                Values = new List<Parameter>()
+            };
+            var webApiProvider = Mock.Create<ICmcWebApiProvider>();
+            Mock.Arrange(() => webApiProvider.SetBaseUri(Arg.AnyUri));
+            Mock.Arrange(() => webApiProvider.SendData(Arg.IsAny<IGeneralInfo>())).DoInstead((IGeneralInfo gi) => { generalInfo = gi; });
+            var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
+            client.Launched(_launchedRequest);
+
+            //Act
+            client.AppicationClosed(_applicationClosedRequest);
+
         }
 
     }

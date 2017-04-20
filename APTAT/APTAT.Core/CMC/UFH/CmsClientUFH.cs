@@ -78,7 +78,7 @@ namespace APTAT.Core.CMC.UFH
                 EventGroupId = eventGroupId
             };
 
-            SendData(requestParameters, additionalParameters, request);
+         //   SendData(requestParameters, additionalParameters, request);
         }
 
         public void ValkyrieUnkownFileUpload(IValkyrieUnkownFileUpload request)
@@ -113,7 +113,7 @@ namespace APTAT.Core.CMC.UFH
                 EventGroupId = eventGroupId
             };
 
-            SendData(requestParameters, additionalParameters, request);
+           // SendData(requestParameters, additionalParameters, request);
         }
 
     }
