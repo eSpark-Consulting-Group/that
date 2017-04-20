@@ -84,11 +84,14 @@
     <Compile Include="CMC\CmcWebApiProvider.cs" />
     <Compile Include="CMC\CultureInfoProvider.cs" />
     <Compile Include="CMC\EventInfo.cs" />
+    <Compile Include="CMC\GeneralInfoParameters.cs" />
     <Compile Include="CMC\ICmcClient.cs" />
     <Compile Include="CMC\ICultureInfoProvider.cs" />
     <Compile Include="CMC\IGeneralInfo.cs" />
+    <Compile Include="CMC\IGeneralInfoParameters.cs" />
     <Compile Include="CMC\IRequest.cs" />
     <Compile Include="CMC\ISystemInfoProvider.cs" />
+    <Compile Include="CMC\RequestBuilder.cs" />
     <Compile Include="CMC\RequestParameters.cs" />
     <Compile Include="CMC\Request\ApplicationClosedRequest.cs" />
     <Compile Include="CMC\ICmcWebApiProvider.cs" />
