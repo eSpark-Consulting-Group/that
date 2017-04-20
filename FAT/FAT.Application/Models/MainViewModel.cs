@@ -325,7 +325,7 @@ namespace FAT.Application.Models
                     return "Searching for Available Devices...";
                 if (IsAutoDiscoveryInProgress)
                 {
-                    var percentage = Math.Min(Math.Max(Math.Round(Percentage), 1), 100);
+                    var percentage = Math.Min(Math.Max(Math.Round(Percentage), 1), 99);
                     header = String.Format("{0}% Searching for Available Devices...", percentage);
                     return header;
                 }
@@ -337,7 +337,7 @@ namespace FAT.Application.Models
                         header = "Finishing Scan...";
                     else
                     {
-                        var percentage = Math.Min(Math.Max(Math.Round(Percentage), 1), 100);
+                        var percentage = Math.Min(Math.Max(Math.Round(Percentage), 1), 99);
                         header = String.Format("{0}% Scan In Progress...", percentage);
                     }
                     return header;
