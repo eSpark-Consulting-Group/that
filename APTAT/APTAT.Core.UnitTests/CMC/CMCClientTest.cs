@@ -1,21 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using APTAT.Common;
 using APTAT.Core.CMC;
 using APTAT.Core.CMC.Request;
 using Telerik.JustMock;
+using Telerik.JustMock.Expectations.Abstraction;
 using Telerik.JustMock.Helpers;
 using Xunit;
 
 namespace APTAT.Core.UnitTests.CMC
 {
+
     public class CmcClientTest
     {
       //private readonly string[] _productIds = { "enp.c1.fat", "enp.c1.ufh" };
-        private ICmcWebApiProvider _provider;
-        private IMachineKeyProvider _keyProviderMock;
-        private ISystemInfoProvider _systemInfoProvider;
-        private ICultureInfoProvider _cultureInfoProvider;
+
+        private readonly IMachineKeyProvider _keyProviderMock;
+        private readonly ISystemInfoProvider _systemInfoProvider;
+        private readonly ICultureInfoProvider _cultureInfoProvider;
 
         private ILaunchedRequest _launchedRequest;
         private IAutoDiscoveryFinishedRequest _autoDiscoveryFinishedRequest;
@@ -26,34 +30,24 @@ namespace APTAT.Core.UnitTests.CMC
         private IReportPrintedOrSavedRequest _reportPrintedOrSavedRequest;
         private IApplicationClosedRequest _applicationClosedRequest;
 
-        private CmcClient _client;
-
-        private void MocksCreate()
+        public CmcClientTest()
         {
             _keyProviderMock = Mock.Create<IMachineKeyProvider>(Behavior.Strict);
             Mock.Arrange(() => _keyProviderMock.GlobalMachineKey).Returns("TBD");
 
-            //ISystemInfo systemInfo = Mock.Create<ISystemInfo>(Behavior.Strict);
-            //Mock.Arrange(() => systemInfo.FamilyName).Returns("Windows");
-            //Mock.Arrange(() => systemInfo.Platform).Returns("x86");
-            //Mock.Arrange(() => systemInfo.Version).Returns("6.4");
-            //_systemInfoProvider = Mock.Create<ISystemInfoProvider>(Behavior.Strict);
-            //Mock.Arrange(() => _systemInfoProvider.GetSystemInfo()).Returns(systemInfo);
+            _systemInfoProvider = Mock.Create<ISystemInfoProvider>(Behavior.Strict);
+            SystemInfo systemInfo = (new SystemInfoProvider()).GetSystemInfo();
+            Mock.Arrange(() => _systemInfoProvider.GetSystemInfo()).Returns(systemInfo);
 
-            //string cultureName = CultureInfo.CurrentCulture.Name;
-            //_cultureInfoProvider = Mock.Create<ICultureInfoProvider>(Behavior.Strict);
-            //Mock.Arrange(() => _cultureInfoProvider.GetCulture()).Returns(cultureName);
-
-            _launchedRequest = Mock.Create<ILaunchedRequest>(Behavior.Strict);
-            Mock.Arrange(() => _launchedRequest.Acid).Returns(Guid.NewGuid().ToString());
-            Mock.Arrange(() => _launchedRequest.ProductVersion).Returns("1.5.20801.85");
-            Mock.Arrange(() => _launchedRequest.ProductIdentifier).Returns("enp.c1.fat");
+            string cultureName = CultureInfo.CurrentCulture.Name;
+            _cultureInfoProvider = Mock.Create<ICultureInfoProvider>(Behavior.Strict);
+            Mock.Arrange(() => _cultureInfoProvider.GetCulture()).Returns(cultureName);
         }
 
-        private void MocksRequest()
+        private void MocksCreate()
         {
             _launchedRequest = Mock.Create<ILaunchedRequest>();
-            Mock.Arrange(() => _launchedRequest.Acid).Returns(Guid.NewGuid().ToString());
+            Mock.Arrange(() => _launchedRequest.AcId).Returns(Guid.NewGuid().ToString());
             Mock.Arrange(() => _launchedRequest.ProductVersion).Returns("1.5.20801.85");
             Mock.Arrange(() => _launchedRequest.ProductIdentifier).Returns("enp.c1.fat");
 
@@ -87,191 +81,218 @@ namespace APTAT.Core.UnitTests.CMC
             Mock.Arrange(() => _reportPrintedOrSavedRequest.ReportAction).Returns(ReportAction.Saved);
 
             _applicationClosedRequest = Mock.Create<IApplicationClosedRequest>();
-            Mock.Arrange(() => _applicationClosedRequest.Sid).Returns(Guid.NewGuid().ToString());
-        }
-
-        private void Mocks()
-        {
-            MocksCreate();
-            MocksRequest();
-            _provider = Mock.Create<ICmcWebApiProvider>(Behavior.Strict);
-
-            SystemInfo sinfo=new SystemInfo()
-            {
-                FamilyName = "Windows",
-                Platform = "x86",
-                Version = "6.4"
-            };
-            _systemInfoProvider =new SystemInfoProvider(sinfo);
-            _cultureInfoProvider=new CultureInfoProvider();
-
-            _client = new CmcClient(_provider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
+            Mock.Arrange(() => _applicationClosedRequest.SId).Returns(Guid.NewGuid().ToString());
         }
 
         [Fact(DisplayName = "CmcClient constructor test.")]
         public void CmcClientConstructorTest()
         {
             //Arrange
-            Mocks();
+            MocksCreate();
+            var provider = Mock.Create<ICmcWebApiProvider>(Behavior.Strict);
+            var client = new CmcClient(provider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
             //Act
             //Assert
-           Mock.Assert(_client);
+            Mock.Assert(client);
         }
 
         [Fact(DisplayName = "Launch method test.")]
         public void LaunchMethodTest()
         {
           //Arrange
-            bool called = false;
-            Mocks();
-            Mock.Arrange(() => _provider.SetBaseUri(Arg.AnyUri));
-            Mock.Arrange(() => _provider.SendData(Arg.IsAny<IGeneralInfo>())).DoInstead(() => { called = true; });
+            MocksCreate();
+         
+            var provider = Mock.Create<ICmcWebApiProvider>(Behavior.Strict);
+            Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>())).OccursOnce();
+            var client = new CmcClient(provider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
             //Act
-            _client.Launched(_launchedRequest);
+            client.Launched(_launchedRequest);
             //Assert
-            Assert.True(called);
+         
+            Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>()), Occurs.Once());
         }
 
         [Fact(DisplayName = "AutoDiscovery Finished method test.")]
         public void AutoDiscoveryFinishedMethodTest()
         {
             //Arrange
-            bool called = false;
-            Mocks();
-            Mock.Arrange(() => _provider.SetBaseUri(Arg.AnyUri));
-            Mock.Arrange(() => _provider.SendData(Arg.IsAny<IGeneralInfo>())).DoInstead(() => { called = true; });
+            MocksCreate();
+            var provider = Mock.Create<ICmcWebApiProvider>(Behavior.Strict);
+            Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>())).OccursOnce();
+            var client = new CmcClient(provider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
             //Act
-            _client.AutoDiscoveryFinished(_autoDiscoveryFinishedRequest);
+            client.AutoDiscoveryFinished(_autoDiscoveryFinishedRequest);
             //Assert
-            Assert.True(called);
+            Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>()), Occurs.Once());
         }
 
         [Fact(DisplayName = "ScanStarted method test.")]
         public void ScanStartedMethodTest()
         {
             //Arrange
-            bool called = false;
-            Mocks();
-            Mock.Arrange(() => _provider.SetBaseUri(Arg.AnyUri));
-            Mock.Arrange(() => _provider.SendData(Arg.IsAny<IGeneralInfo>())).DoInstead(() => { called = true; });
+            MocksCreate();
+            var provider = Mock.Create<ICmcWebApiProvider>(Behavior.Strict);
+            Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>())).OccursOnce();
+            var client = new CmcClient(provider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
             //Act
-            _client.ScanStarted(_scanStartedRequest);
+            client.ScanStarted(_scanStartedRequest);
             //Assert
-            Assert.True(called);
+            Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>()), Occurs.Once());
         }
 
         [Fact(DisplayName = "ScanFinished method test.")]
         public void ScanFinishedMethodTest()
         {
             //Arrange
-            bool called = false;
-            Mocks();
-            Mock.Arrange(() => _provider.SetBaseUri(Arg.AnyUri));
-            Mock.Arrange(() => _provider.SendData(Arg.IsAny<IGeneralInfo>())).DoInstead(() => { called = true; });
+            MocksCreate();
+            var provider = Mock.Create<ICmcWebApiProvider>(Behavior.Strict);
+            Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>())).OccursOnce();
+            var client = new CmcClient(provider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
             //Act
-            _client.ScanFinished(_scanFinishedRequest);
+            client.ScanFinished(_scanFinishedRequest);
             //Assert
-            Assert.True(called);
+            Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>()), Occurs.Once());
         }
 
         [Fact(DisplayName = "ScanUpdated method test.")]
         public void ScanUpdatedMethodTest()
         {
             //Arrange
-            bool called = false;
-            Mocks();
-            Mock.Arrange(() => _provider.SetBaseUri(Arg.AnyUri));
-            Mock.Arrange(() => _provider.SendData(Arg.IsAny<IGeneralInfo>())).DoInstead(() => { called = true; });
+            MocksCreate();
+            var provider = Mock.Create<ICmcWebApiProvider>(Behavior.Strict);
+            Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>())).OccursOnce();
+            var client = new CmcClient(provider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
             //Act
-            _client.ScanUpdated(_scanUpdatedRequest);
+            client.ScanUpdated(_scanUpdatedRequest);
             //Assert
-            Assert.True(called);
+            Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>()), Occurs.Once());
         }
 
         [Fact(DisplayName = "ReportGenerated method test.")]
         public void ReportGeneratedMethodTest()
         {
             //Arrange
-            bool called = false;
-            Mocks();
-            Mock.Arrange(() => _provider.SetBaseUri(Arg.AnyUri));
-            Mock.Arrange(() => _provider.SendData(Arg.IsAny<IGeneralInfo>())).DoInstead(() => { called = true; });
+            MocksCreate();
+            var provider = Mock.Create<ICmcWebApiProvider>(Behavior.Strict);
+            Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>())).OccursOnce();
+            var client = new CmcClient(provider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
             //Act
-            _client.ReportGenerated(_reportGeneratedRequest);
+            client.ReportGenerated(_reportGeneratedRequest);
             //Assert
-            Assert.True(called);
+            Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>()), Occurs.Once());
         }
 
         [Fact(DisplayName = "ReportPrintedOrSaved method test.")]
         public void ReportPrintedOrSavedMethodTest()
         {
             //Arrange
-            bool called = false;
-            Mocks();
-            Mock.Arrange(() => _provider.SetBaseUri(Arg.AnyUri));
-            Mock.Arrange(() => _provider.SendData(Arg.IsAny<IGeneralInfo>())).DoInstead(() => { called = true; });
+            MocksCreate();
+            var provider = Mock.Create<ICmcWebApiProvider>(Behavior.Strict);
+            Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>())).OccursOnce();
+            var client = new CmcClient(provider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
             //Act
-            _client.ReportPrintedOrSaved(_reportPrintedOrSavedRequest);
+            client.ReportPrintedOrSaved(_reportPrintedOrSavedRequest);
             //Assert
-            Assert.True(called);
+            Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>()), Occurs.Once());
         }
 
         [Fact(DisplayName = "AppicationClosed method test.")]
         public void AppicationClosedMethodTest()
         {
             //Arrange
-            bool called = false;
-            Mocks();
-            Mock.Arrange(() => _provider.SetBaseUri(Arg.AnyUri));
-            Mock.Arrange(() => _provider.SendData(Arg.IsAny<IGeneralInfo>())).DoInstead(() => { called = true; });
+            MocksCreate();
+            var provider = Mock.Create<ICmcWebApiProvider>(Behavior.Strict);
+            Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>())).OccursOnce();
+            var client = new CmcClient(provider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
             //Act
-            _client.AppicationClosed(_applicationClosedRequest);
+            client.AppicationClosed(_applicationClosedRequest);
             //Assert
-            Assert.True(called);
+            Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>()), Occurs.Once());
         }
 
         [Fact(DisplayName = "Check full chain on Client calls test.")]
-        public void TestCmcClientCalls()
+        public void CmcClientCallsTest()
         {
             //Arrange
             int cnt = 0;
-            Mocks();
-            Mock.Arrange(() => _provider.SetBaseUri(Arg.AnyUri));
-            Mock.Arrange(() => _provider.SendData(Arg.IsAny<IGeneralInfo>())).DoInstead(() => { cnt++; });
+            MocksCreate();
+
+            var provider = Mock.Create<ICmcWebApiProvider>(Behavior.Strict);
+            Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>())).DoInstead(() => { cnt++; });
+            var client = new CmcClient(provider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
             //Act
-            _client.Launched(_launchedRequest);
-            _client.AutoDiscoveryFinished(_autoDiscoveryFinishedRequest);
-            _client.ScanStarted(_scanStartedRequest);
-            _client.ScanFinished(_scanFinishedRequest);
-            _client.ScanUpdated(_scanUpdatedRequest);
-            _client.ReportGenerated(_reportGeneratedRequest);
-            _client.ReportPrintedOrSaved(_reportPrintedOrSavedRequest);
-            _client.AppicationClosed(_applicationClosedRequest);
+            client.Launched(_launchedRequest);
+            client.AutoDiscoveryFinished(_autoDiscoveryFinishedRequest);
+            client.ScanStarted(_scanStartedRequest);
+            client.ScanFinished(_scanFinishedRequest);
+            client.ScanUpdated(_scanUpdatedRequest);
+            client.ReportGenerated(_reportGeneratedRequest);
+            client.ReportPrintedOrSaved(_reportPrintedOrSavedRequest);
+            client.AppicationClosed(_applicationClosedRequest);
             //Assert
             Assert.Equal(8,cnt);
         }
 
-
-
-        [Fact(DisplayName = "..... test.")]
-        public void TestCmcClient3Calls()
+        [Fact(DisplayName = "Launched SendData Request test.")]
+        public void LaunchedSendDataRequestTest()
         {
-            //Arrange
-            int cnt = 0;
-            Mocks();
-            Mock.Arrange(() => _provider.SetBaseUri(Arg.AnyUri));
-            Mock.Arrange(() => _provider.SendData(Arg.IsAny<IGeneralInfo>())).DoInstead(() => { cnt++; });
+            _launchedRequest = Mock.Create<ILaunchedRequest>();
+            Mock.Arrange(() => _launchedRequest.AcId).Returns(Guid.NewGuid().ToString());
+            Mock.Arrange(() => _launchedRequest.ProductVersion).Returns("1.5.20801.85");
+            Mock.Arrange(() => _launchedRequest.ProductIdentifier).Returns("enp.c1.fat");
+
+            IGeneralInfo generalInfo = null;
+
+            var webApiProvider = Mock.Create<ICmcWebApiProvider>();
+            Mock.Arrange(() => webApiProvider.SetBaseUri(Arg.AnyUri));
+            Mock.Arrange(() => webApiProvider.SendData(Arg.IsAny<IGeneralInfo>())).DoInstead((IGeneralInfo gi) =>
+                {
+                    generalInfo = gi;
+                }
+            );
+            IGeneralInfo actualGerGeneralInfo = getGeneralInfo();
+            var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
             //Act
-            _client.Launched(_launchedRequest);
-            _client.AutoDiscoveryFinished(_autoDiscoveryFinishedRequest);
-            _client.ScanStarted(_scanStartedRequest);
-            _client.ScanFinished(_scanFinishedRequest);
-            _client.ScanUpdated(_scanUpdatedRequest);
-            _client.ReportGenerated(_reportGeneratedRequest);
-            _client.ReportPrintedOrSaved(_reportPrintedOrSavedRequest);
-            _client.AppicationClosed(_applicationClosedRequest);
-            //Assert
-            Assert.Equal(8, cnt);
+           
+
+            client.Launched(_launchedRequest);
+
+            Assert.Equal(generalInfo, actualGerGeneralInfo);
+        }
+
+        private IGeneralInfo getGeneralInfo()
+        {
+            var sessionId = Guid.NewGuid().ToString();
+            var accountId = Guid.Parse("507c8028-4d21-4a1f-b763-8ac8ef41baf3").ToString();
+            string eventParamValue = "eh_pu";
+            string eventId = "ei_da";
+            string eventGroupId = "eg_da";
+
+            GeneralInfo generalInfoReal = new GeneralInfo(
+                applicationIdentifier: "enp", machineCode: "TBD",
+                globalMachineCode: "TBD", productIdentifier: "enp.c1.fat");
+            generalInfoReal.EventsInfo = new List<EventInfo>{
+                new EventInfo(){
+                    EventGroupIdentifier = eventGroupId,
+                    EventIdentifier = eventId,
+                    EventValues = new List<Parameter>(){
+                        new Parameter() {IsApplication = false, Name = "ev_for_hashing", Value = eventParamValue},
+                        new Parameter() {IsApplication = false, Name = "acid", Value = accountId},
+                        new Parameter() {IsApplication = false, Name = "app_pr_ve", Value = "1.5.20801.85"},
+                        new Parameter() {IsApplication = false, Name = "sid", Value = sessionId},
+                        new Parameter() {IsApplication = false, Name = "iu_tz", Value = "04/18/2017 16:43:42"},
+                        new Parameter() {IsApplication = false, Name = "iu_ts", Value = "1492533822"}
+                    }
+                }
+            };
+            generalInfoReal.Values = new List<Parameter>{
+                new Parameter() {IsApplication = true, Name = "op_sy", Value = "Windows"},
+                new Parameter() {IsApplication = true, Name = "op_ve", Value = "6.4"},
+                new Parameter() {IsApplication = true, Name = "op_pl", Value = "x86"},
+                new Parameter() {IsApplication = true, Name = "cul", Value = "uk-UA"},
+                new Parameter() {IsApplication = true, Name = "pr_ve", Value = "1.5.20801.85"}
+            };
+            return generalInfoReal;
         }
 
     }
