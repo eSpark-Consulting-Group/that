@@ -1,19 +1,21 @@
 ﻿using APTAT.Common;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using APTAT.Core.CMC.Request;
+using APTAT.Core.CMC.UFH;
 
 namespace APTAT.Core.CMC
 {
     public class CmcClient : ICmcClient
     {
         private readonly ICmcWebApiProvider _webApiProvider;
-        private string _accountIdentifier;
-        private string _sessionIdentifier;
-        private string _analyzeIdentifier;
+        protected string _accountIdentifier;
+        protected string _sessionIdentifier;
+        protected string _analyzeIdentifier;
         private readonly string _machineCode;
 
         private string _productIdentifier;
@@ -84,6 +86,12 @@ namespace APTAT.Core.CMC
                     requestFields.Add(fieldName, fieldValue?.ToString());
             }
             return requestFields;
+        }
+
+        protected void SendData(RequestParameters requestParameters, List<Parameter> additionalParameters, IRequest request)
+        {
+            var info = GenerateRequest(requestParameters, additionalParameters, request);
+            _webApiProvider.SendData(info);
         }
 
         private GeneralInfo GenerateRequest(RequestParameters requestParameters,List<Parameter> additionalParameters, IRequest request)
@@ -185,25 +193,42 @@ namespace APTAT.Core.CMC
 
         public void ScanStarted(IScanStartedRequest request)
         {
-            string eventParamValue = "eh_sc_ss";
-            string eventId = "ei_rp_sc";
-            string eventGroupId = "eg_da";
-
-            List<Parameter> additionalParameters = new List<Parameter>();
             _analyzeIdentifier = Guid.NewGuid().ToString();
+            EventParams eventParams = GetScanStartedParams();
+            SendData(request, eventParams);
+        }
 
+        protected virtual EventParams GetScanStartedParams()
+        {
+            return new EventParams()
+            {
+                EventParamValue = "eh_sc_ss",
+                EventId = "ei_rp_sc",
+                EventGroupId = "eg_da",
+                AdditionalParameters = new List<Parameter>()
+                {
+
+                }
+            };
+        }
+
+        private void SendData(IRequest request, EventParams eventParams )
+        {
+            
             RequestParameters requestParameters = new RequestParameters()
             {
                 SessionIdentifier = _sessionIdentifier,
                 AnalizeIdentifier = _analyzeIdentifier,
                 AccountIdentifier = _accountIdentifier,
-                EventParamValue = eventParamValue,
-                EventId = eventId,
-                EventGroupId = eventGroupId
+                EventParamValue = eventParams.EventParamValue,
+                EventId = eventParams.EventId,
+                EventGroupId = eventParams.EventGroupId
             };
-            GeneralInfo generatedrequest = GenerateRequest(requestParameters, additionalParameters, request);
-            _webApiProvider.SendData(generatedrequest);
+            var info = GenerateRequest(requestParameters, eventParams.AdditionalParameters, request);
+            _webApiProvider.SendData(info);
         }
+
+       
 
         public void ScanFinished(IScanFinishedRequest request)
         {
@@ -211,18 +236,13 @@ namespace APTAT.Core.CMC
             string eventId = "ei_rp_sc";
             string eventGroupId = "eg_da";
 
-            List<Parameter> additionalParameters = new List<Parameter>();
-            RequestParameters requestParameters = new RequestParameters()
-            {
-                SessionIdentifier = _sessionIdentifier,
-                AnalizeIdentifier = _analyzeIdentifier,
-                AccountIdentifier = _accountIdentifier,
-                EventParamValue = eventParamValue,
-                EventId = eventId,
-                EventGroupId = eventGroupId
-            };
-            GeneralInfo generatedrequest = GenerateRequest(requestParameters, additionalParameters, request);
-            _webApiProvider.SendData(generatedrequest);
+            EventParams eventParams = GetScanFinishedParams();
+            SendData(request, eventParams);
+        }
+
+        protected virtual EventParams GetScanFinishedParams()
+        {
+            throw new NotImplementedException();
         }
 
         public void ScanUpdated(IScanUpdatedRequest request)

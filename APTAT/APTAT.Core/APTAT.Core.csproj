@@ -113,6 +113,8 @@
     <Compile Include="Apt\IDescentScannerFactory.cs" />
     <Compile Include="CMC\SystemInfo.cs" />
     <Compile Include="CMC\SystemInfoProvider.cs" />
+    <Compile Include="CMC\UFH\CmsClientUFH.cs" />
+    <Compile Include="CMC\UFH\IValkyrieUnkownFileUpload.cs" />
     <Compile Include="Descent\Apt\AptComputerDescentResultFactory.cs" />
     <Compile Include="Descent\Apt\AptFactory.cs" />
     <Compile Include="Descent\Apt\ContextFactory.cs" />
