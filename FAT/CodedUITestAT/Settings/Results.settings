@@ -9,7 +9,7 @@
       <Value Profile="(Default)">problem:</Value>
     </Setting>
     <Setting Name="ScanStatusIndicatorNotAccessible" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">This computer is not accessible</Value>
+      <Value Profile="(Default)">This computer is not accessible.</Value>
     </Setting>
     <Setting Name="ScanStatusIndicatorCanceled" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Scan operation was canceled.</Value>

@@ -43,7 +43,7 @@ namespace CodedUITestFAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("This computer is not accessible")]
+        [global::System.Configuration.DefaultSettingValueAttribute("This computer is not accessible.")]
         public string ScanStatusIndicatorNotAccessible {
             get {
                 return ((string)(this["ScanStatusIndicatorNotAccessible"]));

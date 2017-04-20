@@ -38,14 +38,14 @@ namespace CodedUITestFAT
         {
             var timer = Stopwatch.StartNew();
             for (;;)
-            {
-                Playback.Wait(1000);
+            {                
                 if (IsClickable(control) == isClickable) break;
                 if ((int)timer.ElapsedMilliseconds > waitForMilliseconds)
                     throw new Exception(String.Format("The given control '{0}' 'IsClickable' property is not '{1}' after {2} seconds!", control.FriendlyName, isClickable, waitForMilliseconds / 1000));
+                Playback.Wait(500);
             }
             timer.Stop();
-        }
+        }        
 
         /// <summary>Waits for a specified row at a given results screen.</summary>
         /// <param name="rowName">Set a row name.</param>
@@ -170,9 +170,9 @@ namespace CodedUITestFAT
         /// <summary> Gets a given row status. </summary>
         /// <param name="row">Set a row.</param>
         internal static string GetRowStatus(this UITestControl row)
-        {
+        {            
             int statusShift = 1;
-            if (!IsGroupedByFiles()) statusShift++;
+            if (IsGroupedByFiles()) statusShift = 0;
 
             var cell = row.GetChildren()[1];
             var cellElement = cell.GetChildren()[0];
@@ -276,7 +276,7 @@ namespace CodedUITestFAT
             if (rowStatus.Contains(Settings.Results.Default.ScanStatusIndicatorCompleted)) return ScanStatus.Completed;
             else if (rowStatus.Contains(Settings.Results.Default.ScanStatusIndicatorCanceled)) return ScanStatus.Canceled;
             else if (rowStatus.Contains(Settings.Results.Default.ScanStatusIndicatorFailed)) return ScanStatus.Failed;
-            //else if (rowStatus.Contains(Settings.Results.Default.ScanStatusIndicatorNotAccessible)) return ScanStatus.NotAccessible;
+            else if (rowStatus.Contains(Settings.Results.Default.ScanStatusIndicatorNotAccessible)) return ScanStatus.NotAccessible;
             else if (rowStatus.Contains(Settings.Results.Default.ScanStatusIndicatorOffline)) return ScanStatus.Offline;
             else if (rowStatus.Contains(Settings.Results.Default.ScanStatusIndicatorConnecting)) return ScanStatus.Connecting;
             else throw new Exception(String.Format("No known scan status indicators found in the given row status '{0}'!", rowStatus));
@@ -287,10 +287,17 @@ namespace CodedUITestFAT
         internal static ScanStatus GetScanStatus(this Computer endpoint)
         {
             UITestControl row;
-            CodedUITestMain useMain = new CodedUITestMain();
-            if (useMain.ScanResultsTab().Exists) row = useMain.ScanResultsTab().GetRow(endpoint.RowName);
-            else row = useMain.ScanResultsByComputersTable().GetRow(endpoint.RowName);
+            CodedUITestMain useMain = new CodedUITestMain();            
 
+            int defaultTimeOut = Playback.PlaybackSettings.SearchTimeout;
+            Playback.PlaybackSettings.SearchTimeout = 1000;
+
+            if (useMain.ScanResultsTab().Exists)
+                row = useMain.ScanResultsTab().GetRow(endpoint.RowName);
+            else
+                row = useMain.ScanResultsByComputersTable().GetRow(endpoint.RowName);
+
+            Playback.PlaybackSettings.SearchTimeout = defaultTimeOut;
             return row.GetScanStatus();
         }
 
@@ -314,18 +321,17 @@ namespace CodedUITestFAT
         internal static void WaitForScanStatus(Computer endpoint, ScanStatus expectedScanStatus, TestContext testContext, int waitTime = DataHelper.DefaultWaitTime)
         {
             var timer = Stopwatch.StartNew();
-            for (;;)
-            {
-                Playback.Wait(2000);
+            while ((int)timer.ElapsedMilliseconds < waitTime)
+            {                
                 if (endpoint.GetScanStatus() == expectedScanStatus)
                 {
                     testContext.WriteLine(String.Format("The expected status '{0}' appeared for computer '{1}'.", expectedScanStatus, endpoint.Name));
-                    break;
+                    return;
                 }
-                if ((int)timer.ElapsedMilliseconds > waitTime)
-                    throw new Exception(String.Format("The expected status '{0}' did not appear for computer '{1}' after {2} seconds!", expectedScanStatus, endpoint.Name, waitTime / 1000));
+                Playback.Wait(500);
             }
             timer.Stop();
+            throw new Exception(String.Format("The expected status '{0}' did not appear for computer '{1}' after {2} seconds!", expectedScanStatus, endpoint.Name, waitTime / 1000));            
         }
 
         /// <summary> Gets a row with a given name from the indicated tab page. Returns null, if a row with the given name was not found on the tab page. </summary>
@@ -504,10 +510,12 @@ namespace CodedUITestFAT
             webPage.SearchProperties.Add(new PropertyExpression(BrowserWindow.PropertyNames.Name, expectedUri, PropertyExpressionOperator.Contains));
             WaitForControl(webPage);
             string actualUri = webPage.Uri.ToString();
-            if (actualUri.Contains(expectedUri)) testContext.WriteLine(String.Format("Browser window opened with a correct address: '{0}'.", actualUri));
-            else error = String.Format("Browser window opened with an incorrect address: '{0}'!", actualUri);
-            webPage.Close();
 
+            if (actualUri.Contains(expectedUri))
+                testContext.WriteLine("Browser link as expected.");
+            else
+                error = String.Format("Browser link are incorrect! Actual: '{0}'; Expected: {1}", actualUri, Settings.General.Default.ComodoOneReferralUri);
+            webPage.Close();
             if (!String.IsNullOrEmpty(error)) Assert.Fail(error);
         }
     }

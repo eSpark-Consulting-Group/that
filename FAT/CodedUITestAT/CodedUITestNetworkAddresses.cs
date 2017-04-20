@@ -8,7 +8,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UITest.Extension;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
 using CodedUITestFAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses;
-using CodedUITestFAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses;
 
 namespace CodedUITestFAT
 {
@@ -32,9 +31,10 @@ namespace CodedUITestFAT
             UIHelper.WaitForControlIsEnabled(SkipDiscoveryButton());
             UIMapDiscovery.ClickSkipDiscoveryButton();
             UIMapDiscovery.ClickCustomScanButton();
-            UIHelper.WaitForControl(NetworkAddressButton());
+            //UIHelper.WaitForControl(NetworkAddressButton());
             UIMapStartScanWizard.ClickNetworkAddressButton();
-            UIHelper.WaitForControlIsEnabled(NextButton());
+            //UIHelper.WaitForControl(NextButton());
+            //UIHelper.WaitForControlIsEnabled(NextButton());            
         }
 
         [TestCleanup]
@@ -91,7 +91,7 @@ namespace CodedUITestFAT
         /// <param name="endpoints">Set endpoints.</param>
         private void StartEndpointScan(ScanType scanType, string username, string password, TestContext testContext, params Computer[] endpoints)
         {
-            CleanNetworkAddressesList();
+            CleanNetworkAddressesList();            
 
             foreach (var endpoint in endpoints)
             {
@@ -158,6 +158,7 @@ namespace CodedUITestFAT
 
         #region Test methods
 
+        //TODO need to repair
         [TestMethod, Timeout(DataHelper.LongTestTimeout)]
         public void EndpointQuickScanAndValkyrieUriCheckTest()
         {
@@ -179,6 +180,7 @@ namespace CodedUITestFAT
             UIHelper.AssertBrowserUri(expectedValkyrieUri, TestContext);
         }
 
+        //TODO need to repair
         [TestMethod, Timeout(DataHelper.LongTestTimeout)]
         public void QuickScanOfIpRangeTest()
         {
@@ -215,6 +217,7 @@ namespace CodedUITestFAT
             UIHelper.FindThreat(unknownFile, TestContext);
         }
 
+        //TODO need to repair
         [TestMethod, Timeout(DataHelper.LongTestTimeout)]
         public void QuickScanOfSubnetTest()
         {
@@ -251,6 +254,7 @@ namespace CodedUITestFAT
             UIHelper.FindThreat(unknownFile, TestContext);
         }
 
+        //TODO need to repair
         [TestMethod]
         public void StopFullScanTest()
         {
@@ -307,6 +311,7 @@ namespace CodedUITestFAT
             UIHelper.WaitForScanStatus(endpoint, ScanStatus.Canceled, TestContext);
         }
 
+        //TODO need to repair
         [TestMethod]
         public void CheckScannerAgentTest()
         {
@@ -353,6 +358,7 @@ namespace CodedUITestFAT
             else Assert.Fail(String.Format("Directory '{0}' still exists at endpoint '{1}' after the scan has been completed!", scannerDir, endpoint.Name));
         }
 
+        //TODO need to repair
         [TestMethod]
         public void ScanWithInvalidCredentialsTest()
         {
@@ -388,6 +394,7 @@ namespace CodedUITestFAT
             else TestContext.WriteLine(String.Format("Scan with an invalid Username and invalid Password has '{0}' status.", actualScanStatus));
         }
 
+        //TODO need to repair
         [TestMethod]
         public void SearchAtResultsScreenTest()
         {
@@ -455,6 +462,7 @@ namespace CodedUITestFAT
             UIHelper.WaitForResultsRow(endpoint, TestContext); // The endpoint should appear again
         }
 
+        //TODO need to repair
         [TestMethod]
         public void VerifyThreatDetailsTest()
         {
@@ -531,6 +539,7 @@ namespace CodedUITestFAT
             //UIHelper.WaitForControlIsClickable(StartScanButton());
         }
 
+        //TODO need to repair
         [TestMethod]
         public void CheckScanResultPanelTest()
         {
@@ -571,6 +580,7 @@ namespace CodedUITestFAT
             useMain.AssertPanelCountersData(0, 0, 0, TestContext);
         }
 
+        //TODO need to repair
         [TestMethod, Timeout(DataHelper.LongestTestTimeout)]
         public void EndpointFullScanTest()
         {
@@ -588,6 +598,7 @@ namespace CodedUITestFAT
             UIHelper.FindThreat(unknownFile, TestContext);
         }
 
+        //TODO need to repair
         [TestMethod, Timeout(DataHelper.LongTestTimeout)]
         public void VerifyThreatValkyrieDetailsTest()
         {
@@ -673,6 +684,7 @@ namespace CodedUITestFAT
             //UIHelper.WaitForControlIsClickable(StartScanButton());
         }
 
+        //TODO need to repair
         [TestMethod, Timeout(DataHelper.LongTestTimeout)]
         public void CheckValkyrieAnalysisResultsPanelTest()
         {
@@ -711,34 +723,37 @@ namespace CodedUITestFAT
                                                                                                                 TestContext, Settings.WaitingTime.Default.NoThreatFoundVerdictWaitTime);
             useMain.AssertPanelCountersData(1, 1, 0, TestContext);
         }
-
+       
         [TestMethod, Timeout(DataHelper.LongTestTimeout)]
         public void CheckAllScanResultsTest()
         {
             Computer endpoint = DataHelper.GetEndpoint();
             SysHelper.DisinfectForQuickScan(endpoint, TestContext);
-            int waitTime = Settings.WaitingTime.Default.EndpointResolvingWaitTime;
-
-            UIHelper.WaitForControlIsClickable(RemoveAllButton());
-            UIMapNetworkAddresses.ClickRemoveAllButton();
+            int ResolveEndpointTime = Settings.WaitingTime.Default.EndpointResolvingWaitTime;            
 
             // Offline endpoint
-            IPAddress offlineIp = SysHelper.FindOfflineIp();
+            IPAddress offlineIp = SysHelper.FindOfflineIp();            
             Computer offlineComputer = new Computer(offlineIp);
 
-            StartEndpointScan(offlineComputer, ScanType.Quick, TestContext);
-            UIHelper.WaitForControlIsEnabled(SearchField(), 30000);
+            StartEndpointScan(offlineComputer, ScanType.Quick, TestContext);            
+            UIHelper.WaitForControlIsEnabled(SearchField(), ResolveEndpointTime);
             UIHelper.WaitForScanStatus(offlineComputer, ScanStatus.NotAccessible, TestContext);
+
+            UIMapResultsWindow.ClickNewCustomScanButton();            
+            UIMapStartScanWizard.ClickNetworkAddressButton();            
 
             // Failed scan
             StartEndpointScan(ScanType.Quick, DataHelper.Username + "error", DataHelper.Password, TestContext, endpoint);
-            UIHelper.WaitForScanStatus(endpoint, ScanStatus.Failed, TestContext, waitTime);
+            UIHelper.WaitForControlIsEnabled(SearchField(), ResolveEndpointTime);
+            UIHelper.WaitForScanStatus(endpoint, ScanStatus.Failed, TestContext, ResolveEndpointTime);
+
+            UIMapResultsWindow.ClickNewCustomScanButton();
+            UIMapStartScanWizard.ClickNetworkAddressButton();            
 
             // Completed scan
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
-            UIHelper.WaitForScanStatus(endpoint, ScanStatus.InProgress, TestContext, waitTime);
             WaitForScanCompleted(ScanType.Quick);
-            //UIMapScanCompletedWindow.ClickCloseCrossButton();
+            UIHelper.WaitForControlIsEnabled(SearchField(), Settings.WaitingTime.Default.QuickScanWaitTime);            
             UIHelper.WaitForScanStatus(endpoint, ScanStatus.Completed, TestContext);
         }
 
