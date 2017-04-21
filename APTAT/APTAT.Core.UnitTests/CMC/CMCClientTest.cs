@@ -234,8 +234,6 @@ namespace APTAT.Core.UnitTests.CMC
             Assert.Equal(8, cnt);
         }
 
-
-
         [Fact(DisplayName = "Launched SendData Request test.")]
         public void LaunchedSendDataRequestTest()
         {
@@ -266,21 +264,21 @@ namespace APTAT.Core.UnitTests.CMC
 
             GeneralInfo actualGeneralInfo = new GeneralInfo("enp", "TBD", "TBD", productId)
             {
-                EventsInfo = new List<EventInfo>{
+                EventsInfo = new List<IEventInfo>{
                     new EventInfo{
                         EventGroupIdentifier = eventGroupId,
                         EventIdentifier = eventId,
-                        EventValues = new List<Parameter>{
+                        EventValues = new List<IParameter>{
                             new Parameter { Name = "ev_for_hashing",  Value = eventParamValue,IsApplication = false},
                             new Parameter { Name = "acid",Value = acId,IsApplication = false},
                             new Parameter { Name = "pr_ve", Value = productVersion ,IsApplication = false},
                             new Parameter { Name = "sid", Value = sessionId,IsApplication = false},
                             new Parameter { Name = "iu_tz",Value = localTimeZone.ToString(CultureInfo.InvariantCulture),IsApplication = false},
-                            new Parameter{Name = "iu_ts",Value = GetLinuxFormatTime(localTimeZone),IsApplication = false}
+                            new Parameter {Name = "iu_ts",Value = GetLinuxFormatTime(localTimeZone),IsApplication = false}
                         }
                     }
                 },
-                Values = new List<Parameter>{
+                Values = new List<IParameter>{
                     new Parameter {IsApplication = true, Name = "op_sy", Value = systemInfo.FamilyName},
                     new Parameter {IsApplication = true, Name = "op_ve", Value = systemInfo.Version},
                     new Parameter {IsApplication = true, Name = "op_pl", Value = systemInfo.Platform},
@@ -344,11 +342,11 @@ namespace APTAT.Core.UnitTests.CMC
 
             IGeneralInfo actualGeneralInfo = new GeneralInfo("enp", "TBD", "TBD", productId)
             {
-                EventsInfo = new List<EventInfo>{
+                EventsInfo = new List<IEventInfo>{
                     new EventInfo{
                         EventGroupIdentifier = eventGroupId,
                         EventIdentifier = eventId,
-                        EventValues = new List<Parameter>{
+                        EventValues = new List<IParameter>{
                             new Parameter() {Name = "ev_for_hashing",  Value = eventParamValue,IsApplication = false},
                             new Parameter() { Name = "ds", Value = "0" ,IsApplication = false},
                             new Parameter() { Name = "pc_cc", Value = "27" ,IsApplication = false},
@@ -357,7 +355,7 @@ namespace APTAT.Core.UnitTests.CMC
                         }
                     }
                 },
-                Values = new List<Parameter>()
+                Values = new List<IParameter>()
             };
 
             var webApiProvider = Mock.Create<ICmcWebApiProvider>();
@@ -416,11 +414,11 @@ namespace APTAT.Core.UnitTests.CMC
             IGeneralInfo generalInfo = null;
             IGeneralInfo actualGeneralInfo = new GeneralInfo("enp", "TBD", "TBD", productId)
             {
-                EventsInfo = new List<EventInfo>{
+                EventsInfo = new List<IEventInfo>{
                     new EventInfo{
                         EventGroupIdentifier = eventGroupId,
                         EventIdentifier = eventId,
-                        EventValues = new List<Parameter>{
+                        EventValues = new List<IParameter>{
                             new Parameter() {Name = "ev_for_hashing",  Value = eventParamValue,IsApplication = false},
                             new Parameter() { Name = "sc_trg_tp", Value = "0" ,IsApplication = false},
                             new Parameter() { Name = "sc_tg", Value = "1" ,IsApplication = false},
@@ -433,7 +431,7 @@ namespace APTAT.Core.UnitTests.CMC
                         }
                     }
                 },
-                Values = new List<Parameter>()
+                Values = new List<IParameter>()
             };
 
             var webApiProvider = Mock.Create<ICmcWebApiProvider>();
@@ -490,11 +488,11 @@ namespace APTAT.Core.UnitTests.CMC
             IGeneralInfo generalInfo = null;
             IGeneralInfo actualGeneralInfo = new GeneralInfo("enp", "TBD", "TBD", productId)
             {
-                EventsInfo = new List<EventInfo>{
+                EventsInfo = new List<IEventInfo>{
                     new EventInfo{
                         EventGroupIdentifier = eventGroupId,
                         EventIdentifier = eventId,
-                        EventValues = new List<Parameter>{
+                        EventValues = new List<IParameter>{
                             new Parameter() {Name = "ev_for_hashing",  Value = eventParamValue,IsApplication = false},
                             new Parameter() { Name = "u_fc", Value = "21" ,IsApplication = false},
                             new Parameter() { Name = "mlc_fc", Value = "12" ,IsApplication = false},
@@ -504,7 +502,7 @@ namespace APTAT.Core.UnitTests.CMC
                         }
                     }
                 },
-                Values = new List<Parameter>()
+                Values = new List<IParameter>()
             };
             var webApiProvider = Mock.Create<ICmcWebApiProvider>();
             Mock.Arrange(() => webApiProvider.SetBaseUri(Arg.AnyUri));
@@ -563,11 +561,11 @@ namespace APTAT.Core.UnitTests.CMC
             IGeneralInfo generalInfo = null;
             IGeneralInfo actualGeneralInfo = new GeneralInfo("enp", "TBD", "TBD", productId)
             {
-                EventsInfo = new List<EventInfo>{
+                EventsInfo = new List<IEventInfo>{
                     new EventInfo{
                         EventGroupIdentifier = eventGroupId,
                         EventIdentifier = eventId,
-                        EventValues = new List<Parameter>{
+                        EventValues = new List<IParameter>{
                             new Parameter() {Name = "ev_for_hashing",  Value = eventParamValue,IsApplication = false},
 
                             new Parameter() { Name = "sc_st", Value = "0" ,IsApplication = false},
@@ -581,7 +579,7 @@ namespace APTAT.Core.UnitTests.CMC
                         }
                     }
                 },
-                Values = new List<Parameter>()
+                Values = new List<IParameter>()
             };
 
             var webApiProvider = Mock.Create<ICmcWebApiProvider>();
@@ -604,7 +602,7 @@ namespace APTAT.Core.UnitTests.CMC
                         actualGeneralInfo.EventsInfo[j].EventValues[i].Name);
 
                     if (generalInfo.EventsInfo[j].EventValues[i].Name != "sid" &&
-                        generalInfo.EventsInfo[j].EventValues[i].Name != "acid" )
+                        generalInfo.EventsInfo[j].EventValues[i].Name != "acid")
                         Assert.Equal(generalInfo.EventsInfo[j].EventValues[i].Value,
                             actualGeneralInfo.EventsInfo[j].EventValues[i].Value);
                 }
@@ -631,15 +629,15 @@ namespace APTAT.Core.UnitTests.CMC
 
             _reportGeneratedRequest = Mock.Create<IReportGeneratedRequest>();
             Mock.Arrange(() => _reportGeneratedRequest.ReportKind).Returns(ReportKind.PerDevice);
-            
+
             IGeneralInfo generalInfo = null;
             IGeneralInfo actualGeneralInfo = new GeneralInfo("enp", "TBD", "TBD", productId)
             {
-                EventsInfo = new List<EventInfo>{
+                EventsInfo = new List<IEventInfo>{
                     new EventInfo{
                         EventGroupIdentifier = eventGroupId,
                         EventIdentifier = eventId,
-                        EventValues = new List<Parameter>{
+                        EventValues = new List<IParameter>{
                             new Parameter() {Name = "ev_for_hashing",  Value = eventParamValue,IsApplication = false},
 
                             new Parameter() { Name = "rp_kd", Value = "1" ,IsApplication = false},
@@ -649,7 +647,7 @@ namespace APTAT.Core.UnitTests.CMC
                         }
                     }
                 },
-                Values = new List<Parameter>()
+                Values = new List<IParameter>()
             };
 
             var webApiProvider = Mock.Create<ICmcWebApiProvider>();
@@ -661,8 +659,10 @@ namespace APTAT.Core.UnitTests.CMC
             //Act
             client.ReportGenerated(_reportGeneratedRequest);
 
-            for (int j = 0; j < generalInfo.EventsInfo.Count; j++){
-                for (int i = 0; i < generalInfo.EventsInfo[j].EventValues.Count; i++){
+            for (int j = 0; j < generalInfo.EventsInfo.Count; j++)
+            {
+                for (int i = 0; i < generalInfo.EventsInfo[j].EventValues.Count; i++)
+                {
                     Assert.Equal(generalInfo.EventsInfo[j].EventValues[i].Name,
                         actualGeneralInfo.EventsInfo[j].EventValues[i].Name);
 
@@ -699,11 +699,11 @@ namespace APTAT.Core.UnitTests.CMC
             IGeneralInfo generalInfo = null;
             IGeneralInfo actualGeneralInfo = new GeneralInfo("enp", "TBD", "TBD", productId)
             {
-                EventsInfo = new List<EventInfo>{
+                EventsInfo = new List<IEventInfo>{
                     new EventInfo{
                         EventGroupIdentifier = eventGroupId,
                         EventIdentifier = eventId,
-                        EventValues = new List<Parameter>{
+                        EventValues = new List<IParameter>{
                             new Parameter() {Name = "ev_for_hashing",  Value = eventParamValue,IsApplication = false},
 
                             new Parameter() { Name = "rp_kd", Value = "1" ,IsApplication = false},
@@ -714,7 +714,7 @@ namespace APTAT.Core.UnitTests.CMC
                         }
                     }
                 },
-                Values = new List<Parameter>()
+                Values = new List<IParameter>()
             };
 
             var webApiProvider = Mock.Create<ICmcWebApiProvider>();
@@ -744,7 +744,6 @@ namespace APTAT.Core.UnitTests.CMC
             }
         }
 
-
         [Fact(DisplayName = "AppicationClosed SendData Request test.")]
         public void AppicationClosedSendDataRequestTest()
         {
@@ -767,18 +766,20 @@ namespace APTAT.Core.UnitTests.CMC
             Mock.Arrange(() => _applicationClosedRequest.SId).Returns(Guid.NewGuid().ToString());
 
             IGeneralInfo generalInfo = null;
-            IGeneralInfo actualGeneralInfo = new GeneralInfo("enp", "TBD", "TBD", productId){
-                EventsInfo = new List<EventInfo>{
+            IGeneralInfo actualGeneralInfo = new GeneralInfo("enp", "TBD", "TBD", productId)
+            {
+                EventsInfo = new List<IEventInfo>{
                     new EventInfo{
                         EventGroupIdentifier = eventGroupId,
                         EventIdentifier = eventId,
-                        EventValues = new List<Parameter>{
+                        EventValues = new List<IParameter>{
                             new Parameter() {Name = "ev_for_hashing",  Value = eventParamValue,IsApplication = false},
                             new Parameter() { Name = "sid", Value = sId,IsApplication = false}
                         }
                     }
                 },
-                Values = new List<Parameter>()
+                Values = new List<IParameter>()
+
             };
             var webApiProvider = Mock.Create<ICmcWebApiProvider>();
             Mock.Arrange(() => webApiProvider.SetBaseUri(Arg.AnyUri));

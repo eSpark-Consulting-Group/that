@@ -18,7 +18,7 @@ namespace APTAT.Core.CMC
         private readonly ICultureInfoProvider _cultureInfoProvider;
         private readonly ISystemInfoProvider _systemInfoProvider;
 
-        private GeneralInfoParameters _generalInfoParameters;
+        private readonly GeneralInfoParameters _generalInfoParameters;
 
         public CmcClient(ICmcWebApiProvider icmcWebApiProvider, IMachineKeyProvider machineKeyProvider,
             ISystemInfoProvider systemInfoProvider, ICultureInfoProvider cultureInfoProvider)
@@ -49,6 +49,7 @@ namespace APTAT.Core.CMC
                 SessionIdentifier = _sessionIdentifier,
                 AnalizeIdentifier = _analyzeIdentifier,
                 AccountIdentifier = _accountIdentifier,
+
                 EventParamValue = eventParams.EventParamValue,
                 EventId = eventParams.EventId,
                 EventGroupId = eventParams.EventGroupId
@@ -68,7 +69,7 @@ namespace APTAT.Core.CMC
             var culture = _cultureInfoProvider.GetCulture();
             var localTimeZone = TimeZone.CurrentTimeZone.ToLocalTime(DateTime.Now);
 
-            List<Parameter> additionalParameters = new List<Parameter>()
+            List<IParameter> additionalParameters = new List<IParameter>()
             {
                new Parameter() { Name = "op_sy", Value = systemInfo.FamilyName,IsApplication = true},
                new Parameter() { Name = "op_ve", Value = systemInfo.Version,IsApplication = true },
@@ -101,7 +102,7 @@ namespace APTAT.Core.CMC
                 EventParamValue = "eh_ad_adf",
                 EventId = "ei_rp_ad",
                 EventGroupId = "eg_da",
-                AdditionalParameters = new List<Parameter>() { }
+                AdditionalParameters = new List<IParameter>() { }
             };
         }
 
@@ -119,7 +120,7 @@ namespace APTAT.Core.CMC
                 EventParamValue = "eh_sc_ss",
                 EventId = "ei_rp_sc",
                 EventGroupId = "eg_da",
-                AdditionalParameters = new List<Parameter>() { }
+                AdditionalParameters = new List<IParameter>() { }
             };
         }
 
@@ -135,7 +136,7 @@ namespace APTAT.Core.CMC
                 EventParamValue = "eh_sc_su",
                 EventId = "ei_rp_sc",
                 EventGroupId = "eg_da",
-                AdditionalParameters = new List<Parameter>() { }
+                AdditionalParameters = new List<IParameter>() { }
             };
         }
 
@@ -151,7 +152,7 @@ namespace APTAT.Core.CMC
                 EventParamValue = "eh_fat_sf",
                 EventId = "ei_rp_sc",
                 EventGroupId = "eg_da",
-                AdditionalParameters = new List<Parameter>() { }
+                AdditionalParameters = new List<IParameter>() { }
             };
         }
 
@@ -167,7 +168,7 @@ namespace APTAT.Core.CMC
                 EventParamValue = "eh_rp_gen",
                 EventId = "ei_rp_info",
                 EventGroupId = "eg_da",
-                AdditionalParameters = new List<Parameter>() { }
+                AdditionalParameters = new List<IParameter>() { }
             };
         }
 
@@ -183,7 +184,7 @@ namespace APTAT.Core.CMC
                 EventParamValue = "eh_rp_svd",
                 EventId = "ei_rp_info",
                 EventGroupId = "eg_da",
-                AdditionalParameters = new List<Parameter>() { }
+                AdditionalParameters = new List<IParameter>() { }
             };
         }
 
@@ -199,7 +200,7 @@ namespace APTAT.Core.CMC
                 EventParamValue = "eh_pc",
                 EventId = "ei_da",
                 EventGroupId = "eg_da",
-                AdditionalParameters = new List<Parameter>() { }
+                AdditionalParameters = new List<IParameter>() { }
             };
         }
 

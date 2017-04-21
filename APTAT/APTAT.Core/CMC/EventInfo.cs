@@ -3,11 +3,18 @@ using Newtonsoft.Json;
 
 namespace APTAT.Core.CMC
 {
-    public class EventInfo
+    public interface IEventInfo
+    {
+        string EventGroupIdentifier { get; set; }
+        string EventIdentifier { get; set; }
+        List<IParameter> EventValues { get; set; }
+    }
+
+    public class EventInfo : IEventInfo
     {
         public EventInfo()
         {
-            EventValues = new List<Parameter>();
+            EventValues = new List<IParameter>();
         }
 
         [JsonProperty("event_group_identifier")]
@@ -17,6 +24,6 @@ namespace APTAT.Core.CMC
         public string EventIdentifier { get; set; }
 
         [JsonProperty("values_array")]
-        public List<Parameter> EventValues { get; set; }
+        public List<IParameter> EventValues { get; set; }
     }
 }

@@ -13,7 +13,7 @@ namespace APTAT.Core.CMC.UFH
         public string EventParamValue { get; set; }
         public string EventId { get; set; }
         public string EventGroupId { get; set; }
-        public List<Parameter> AdditionalParameters { get; set; }
+        public List<IParameter> AdditionalParameters { get; set; }
 
     }
 
@@ -31,7 +31,7 @@ namespace APTAT.Core.CMC.UFH
                 EventParamValue = "eh_sc_ss",
                 EventId = "ei_rp_sc",
                 EventGroupId = "eg_da",
-                AdditionalParameters = new List<Parameter>()
+                AdditionalParameters = new List<IParameter>()
                 {
 
                 }

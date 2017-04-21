@@ -10,11 +10,12 @@ namespace APTAT.Core.CMC
     {
         private readonly IGeneralInfoParameters _generalInfoParameters;
 
-        public  RequestBuilder(IGeneralInfoParameters generalInfoParameters)
+        public RequestBuilder(IGeneralInfoParameters generalInfoParameters)
         {
             _generalInfoParameters = generalInfoParameters;
         }
-        private  string GetRequestFieldValue(string fieldName)
+
+        private string GetRequestFieldValue(string fieldName)
         {
             List<Parameter> requestFields = new List<Parameter>
             {
@@ -52,7 +53,7 @@ namespace APTAT.Core.CMC
             return findedfieldValue;
         }
 
-        private  Dictionary<string, string> GetCmcRequestFieldsAndValues(IRequest request)
+        private Dictionary<string, string> GetCmcRequestFieldsAndValues(IRequest request)
         {
             Dictionary<string, string> requestFields = new Dictionary<string, string>();
             var requestProperties = request.GetType().GetProperties();
@@ -67,7 +68,9 @@ namespace APTAT.Core.CMC
             }
             return requestFields;
         }
-        public GeneralInfo GenerateRequest(RequestParameters requestParameters, List<Parameter> additionalParameters, IRequest request)
+
+        public GeneralInfo GenerateRequest(IRequestParameters requestParameters, 
+            List<IParameter> additionalParameters, IRequest request)
         {
             if (request == null) return null;
             var requestFieldsAndValues = GetCmcRequestFieldsAndValues(request);
@@ -82,7 +85,7 @@ namespace APTAT.Core.CMC
                 _generalInfoParameters.GlobalMachineCode,
                 _generalInfoParameters.ProductIdentifier);
 
-            List<Parameter> applicationValues = new List<Parameter>();
+            List<IParameter> applicationValues = new List<IParameter>();
             var applicationParameters = additionalParameters.Where(c => c.IsApplication);
             applicationValues.AddRange(applicationParameters);
             generalInfo.Values = applicationValues;
@@ -93,7 +96,7 @@ namespace APTAT.Core.CMC
                 EventIdentifier = requestParameters.EventId
             };
 
-            List<Parameter> eventValues = new List<Parameter>();
+            List<IParameter> eventValues = new List<IParameter>();
             Parameter eventParam = new Parameter() { Name = "ev_for_hashing", Value = requestParameters.EventParamValue };
             eventValues.Add(eventParam);
             foreach (var evtField in requestFieldsAndValues)

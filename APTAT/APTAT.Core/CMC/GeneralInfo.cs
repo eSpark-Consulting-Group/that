@@ -18,10 +18,10 @@ namespace APTAT.Core.CMC
         public string ProductIdentifier { get; set; }
 
         [JsonProperty("application_values_array")]
-        public List<Parameter> Values { get; set; }
+        public List<IParameter> Values { get; set; }
 
         [JsonProperty("events")]
-        public List<EventInfo> EventsInfo { get; set; }
+        public List<IEventInfo> EventsInfo { get; set; }
 
         public GeneralInfo(string applicationIdentifier,string machineCode,
                            string globalMachineCode,string productIdentifier) 
@@ -31,8 +31,8 @@ namespace APTAT.Core.CMC
             GlobalMachineCode = globalMachineCode;
             ProductIdentifier = productIdentifier;
 
-            EventsInfo = new List<EventInfo>();
-            Values = new List<Parameter>();
+            EventsInfo = new List<IEventInfo>();
+            Values = new List<IParameter>();
         }
     }
 }

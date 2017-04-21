@@ -8,7 +8,7 @@ namespace APTAT.Core.CMC
         string MachineCode { get; set; }
         string GlobalMachineCode { get; set; }
         string ProductIdentifier { get; set; }
-        List<Parameter> Values { get; set; }
-        List<EventInfo> EventsInfo { get; set; }
+        List<IParameter> Values { get; set; }
+        List<IEventInfo> EventsInfo { get; set; }
     }
 }

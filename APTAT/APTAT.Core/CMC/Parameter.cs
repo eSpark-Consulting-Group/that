@@ -3,7 +3,14 @@ using System.Runtime.Serialization;
 
 namespace APTAT.Core.CMC
 {
-    public class Parameter
+    public interface IParameter
+    {
+        bool IsApplication { get; set; }
+        string Name { get; set; }
+        string Value { get; set; }
+    }
+
+    public class Parameter : IParameter
     {
         [IgnoreDataMember]
         public bool IsApplication { get; set; } = false;
