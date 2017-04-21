@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Interop;
 using System.Windows.Navigation;
+using System.Windows.Threading;
 
 namespace FAT.Application
 {
@@ -22,16 +23,30 @@ namespace FAT.Application
             Close();
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        protected async override void OnActivated(EventArgs e)
         {
+            if (App.Current.MainWindow.WindowState == WindowState.Minimized)
+            {
+                await Dispatcher.BeginInvoke((Action)delegate
+                {
+                    App.Current.MainWindow.WindowState = WindowState.Normal;
+                    App.Current.MainWindow.Activate();
+                    
+                }, DispatcherPriority.ContextIdle, null);          
+            }
+
             var visual = GetVisual?.Invoke();
             if (visual != null)
             {
+                ClosePopups();
+
                 var location = visual.PointToScreen(new Point(0, -6));
+
                 Left = (visual.ActualWidth - ActualWidth) / 2d + location.X;
                 Top = location.Y;
             }
-            ClosePopups();
+
+            base.OnActivated(e);
         }
 
         private void ClosePopups()
