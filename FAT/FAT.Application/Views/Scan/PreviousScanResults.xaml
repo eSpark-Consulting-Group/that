@@ -35,7 +35,7 @@
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
         </Grid.Resources>
-        <telerik:RadTreeListView AutomationProperties.AutomationId="UnknownFilesTree"
+        <telerik:RadTreeListView AutomationProperties.AutomationId="PreviousScansTree"
                                  PreviewMouseDown="treeList_MouseDown"
                                  MouseDoubleClick="treeList_MouseDoubleClick"
                                  SelectionMode="Single"
