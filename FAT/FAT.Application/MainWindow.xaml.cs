@@ -79,5 +79,12 @@ namespace FAT.Application
             if (WindowState == WindowState.Maximized) return;
             DragMove();
         }
+
+        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount > 1)
+                SwitchState(resize);
+
+        }
     }
 }

@@ -18,12 +18,12 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
 
-                            <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource StrongBrush}">
+                            <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource StrongBrush}" MouseLeftButtonDown="Border_MouseLeftButtonDown">
                                 <Grid>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 20 20 0">
                                         <Button AutomationProperties.AutomationId="MinimizeButton" 
                                                 Style="{StaticResource MinimizeButton}" Click="OnMinimizeClick" Width="18" Height="18" ToolTip="Minimize"/>
-                                        <Button AutomationProperties.AutomationId="ResizeButton" 
+                                        <Button AutomationProperties.AutomationId="ResizeButton" x:Name="resize"
                                                 Style="{StaticResource MaximizeButton}" Click="OnResizeClick" Width="18" Height="18" Margin="20 0 0 0" ToolTip="Maximize"/>
                                         <Button AutomationProperties.AutomationId="CloseButton"
                                                 Style="{StaticResource CloseButton}" Click="OnCloseClick" Width="18" Height="18" Margin="20 0 0 0" ToolTip="Close"/>
