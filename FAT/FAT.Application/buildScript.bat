@@ -9,6 +9,7 @@ mkdir "%CD%\data"
 copy *.dll bin\*.dll
 move ForensicAnalysisTool.exe bin\ForensicAnalysisTool.exe
 copy ForensicAnalysisTool.exe.config bin\ForensicAnalysisTool.exe.config
+move FAT.Extractor.exe bin\FAT.Extractor.exe
 copy cmdapt64.exe bin\cmdapt64.exe
 copy cmdapt86.exe bin\cmdapt86.exe
 mkdir "%CD%\bin\amd64"
@@ -17,7 +18,7 @@ xcopy /s amd64 bin\amd64
 xcopy /s x86 bin\x86
 copy *.txt bin\*.txt
 ren FAT.Bootstrapper.exe ForensicAnalysisTool.exe
-Y
+
 "%ZDIR%\7za.exe" a  "%CD%\ForensicAnalysisTool.7z" "%CD%\ForensicAnalysisTool.exe" "%CD%\bin" "%CD%\data" || goto :error
 
 copy /b "%ZDIR%\7zSD.sfx" + "%ZDIR%\config.txt" + "%CD%\ForensicAnalysisTool.7z" "%CD%\sfx\ForensicAnalysisTool.exe" || goto :error
