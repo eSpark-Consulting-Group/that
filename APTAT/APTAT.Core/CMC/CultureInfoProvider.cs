@@ -2,7 +2,7 @@ using System.Globalization;
 
 namespace APTAT.Core.CMC
 {
-    class CultureInfoProvider : ICultureInfoProvider
+    public class CultureInfoProvider : ICultureInfoProvider
     {
         public string GetCulture()
         {

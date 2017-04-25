@@ -12,13 +12,12 @@ using APTAT.DeploymentCore.Directory;
 using APTAT.Core.CamLicense;
 using APTAT.Application.Services.EventArgs;
 using APTAT.Application.Models.Apt;
-using APTAT.Application.Properties;
 using APTAT.DeploymentCore;
+using FAT.Application.Properties;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 
 namespace FAT.Application.Services
 {
-
     public class AptService : IAptService
     {
         private IAptAtManager _manager;
@@ -32,7 +31,10 @@ namespace FAT.Application.Services
         private bool _isValkyrieStarted = false;
         public Guid SessionId { get; } = new Guid("C78DA9FA-4DC3-4F26-B7C3-304D24220B15");
 
-        public AptService(IAptAtManager aptAtManager, ICamLicenseProvider camLicenseProvider, IProxySettingsViewModel settingsViewModel)
+        
+
+        public AptService(IAptAtManager aptAtManager, ICamLicenseProvider camLicenseProvider
+            , IProxySettingsViewModel settingsViewModel)
         {
             _camLicenseProvider = camLicenseProvider;
             _manager = aptAtManager;
@@ -331,14 +333,12 @@ namespace FAT.Application.Services
 
         public IOperationResult SubmitEmail(string[] addresses)
         {
-            lock (this)
-            {
+            lock (this){
                 if (_isValkyrieStarted == false)
                     StartValkyrieAnalysis();
             }
             var result = _manager.SubmitEmail(addresses);
             return result;
-
         }
 
         private ScanStage FromAptScanStage(AptScanStage stage)

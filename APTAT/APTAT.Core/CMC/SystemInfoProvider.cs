@@ -4,7 +4,7 @@ using System.Management;
 
 namespace APTAT.Core.CMC
 {
-    class SystemInfoProvider : ISystemInfoProvider
+    public class SystemInfoProvider : ISystemInfoProvider
     {
         private SystemInfo _systemInfo;
 

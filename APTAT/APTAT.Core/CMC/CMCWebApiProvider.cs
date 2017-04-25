@@ -3,24 +3,38 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Net.Configuration;
 using System.Text;
 using APTAT.Common;
 using Newtonsoft.Json;
 using Valkyrie.WebApiProvider;
+using APTAT.Core.Properties;
 
 namespace APTAT.Core.CMC
 {
     public class CmcWebApiProvider: ICmcWebApiProvider
     {
         private Uri _cmcBaseUri;
-        public Uri GetBaseUri()
-        {
-            return _cmcBaseUri;
+        public Uri GetBaseUri() { return _cmcBaseUri;}
+        public void SetBaseUri(Uri uri) { _cmcBaseUri = uri; }
+
+        public void SendData(IGeneralInfo request,NetworkCredential networkCredential) {
+            SetProxy(networkCredential);
+            Post(_cmcBaseUri.ToString(), request);
         }
-        public void SetBaseUri(Uri uri)
-        {
-            _cmcBaseUri = uri;
+
+        public CmcWebApiProvider() {
+            _cmcBaseUri = new Uri(Settings.Default.cmcWebApiProviderBaseUrl);
         }
+
+        private void SetProxy(NetworkCredential networkCredential)
+        {
+            var proxy = WebRequest.GetSystemWebProxy();
+            if (networkCredential != null)
+                proxy.Credentials = networkCredential;
+            ProxySettings.Proxy = proxy;
+        }
+
         static string Get(string url)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
@@ -45,6 +59,7 @@ namespace APTAT.Core.CMC
                 throw;
             }
         }
+
         static void Post(string url, Object obj)
         {
             System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
@@ -61,7 +76,6 @@ namespace APTAT.Core.CMC
             {
                 dataStream.Write(byteArray, 0, byteArray.Length);
             }
-
             try
             {
                 using (HttpWebResponse response = (HttpWebResponse) request.GetResponse())
@@ -70,15 +84,10 @@ namespace APTAT.Core.CMC
                 }
             }
             catch (WebException ex)
-           {
-    
-
+            {
+               LogHelper.Trace(TraceEventType.Error, 
+                   $"Cmc web api provider send data error: {ex.GetType()} {ex.Message}{Environment.NewLine}{ex.StackTrace}");
             }
-        }
-
-        public void SendData(IGeneralInfo request)
-        {
-            Post(_cmcBaseUri.ToString(), request);
         }
     }
 }

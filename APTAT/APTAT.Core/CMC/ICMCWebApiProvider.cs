@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 
 namespace APTAT.Core.CMC
 {
@@ -6,6 +7,6 @@ namespace APTAT.Core.CMC
     {
         Uri GetBaseUri();
         void SetBaseUri(Uri uri);
-        void SendData(IGeneralInfo request);
+        void SendData(IGeneralInfo request, NetworkCredential networkCredential);
     }
 }

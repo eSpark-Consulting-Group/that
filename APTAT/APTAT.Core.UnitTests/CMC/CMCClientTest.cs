@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using APTAT.Common;
 using APTAT.Core.CMC;
 using APTAT.Core.CMC.Request;
+using APTAT.DeploymentCore.Directory;
 using Telerik.JustMock;
 using Xunit;
 
@@ -24,7 +26,7 @@ namespace APTAT.Core.UnitTests.CMC
         private IReportGeneratedRequest _reportGeneratedRequest;
         private IReportPrintedOrSavedRequest _reportPrintedOrSavedRequest;
         private IApplicationClosedRequest _applicationClosedRequest;
-
+        private NetworkCredential _networkCredentionals = new NetworkCredential("user", "test");
         public CmcClientTest()
         {
             _keyProviderMock = Mock.Create<IMachineKeyProvider>(Behavior.Strict);
@@ -52,9 +54,9 @@ namespace APTAT.Core.UnitTests.CMC
 
             _scanStartedRequest = Mock.Create<IScanStartedRequest>();
             Mock.Arrange(() => _scanStartedRequest.CountOfScannedComputers).Returns(12);
-            Mock.Arrange(() => _scanStartedRequest.ScanTarget).Returns(ScanTarget.DiscoveredByWorkGroup);
+            Mock.Arrange(() => _scanStartedRequest.ScanTarget).Returns(ETargetsDiscovererType.Workgroup);
             Mock.Arrange(() => _scanStartedRequest.ScanTriggerType).Returns(ScanTriggerType.ScanNow);
-            Mock.Arrange(() => _scanStartedRequest.ScanType).Returns(ScanType.LocalScan);
+            Mock.Arrange(() => _scanStartedRequest.ScanType).Returns(ScanType.Custom);
 
             _scanUpdatedRequest = Mock.Create<IScanUpdatedRequest>();
             Mock.Arrange(() => _scanUpdatedRequest.CountOfNewMaliciousFilesWhichWasFoundAfterTheScanWasFinished).Returns(12);
@@ -104,13 +106,15 @@ namespace APTAT.Core.UnitTests.CMC
             MocksCreate();
 
             var provider = Mock.Create<ICmcWebApiProvider>(Behavior.Strict);
-            Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>())).OccursOnce();
+            Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>())).OccursOnce();
             var client = new CmcClient(provider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
+
+
             //Act
-            client.Launched(_launchedRequest);
+            client.Launched(_launchedRequest, _networkCredentionals);
             //Assert
 
-            Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>()), Occurs.Once());
+            Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>()), Occurs.Once());
         }
 
         [Fact(DisplayName = "AutoDiscovery Finished method test.")]
@@ -119,12 +123,12 @@ namespace APTAT.Core.UnitTests.CMC
             //Arrange
             MocksCreate();
             var provider = Mock.Create<ICmcWebApiProvider>(Behavior.Strict);
-            Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>())).OccursOnce();
+            Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>())).OccursOnce();
             var client = new CmcClient(provider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
             //Act
-            client.AutoDiscoveryFinished(_autoDiscoveryFinishedRequest);
+            client.AutoDiscoveryFinished(_autoDiscoveryFinishedRequest, _networkCredentionals);
             //Assert
-            Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>()), Occurs.Once());
+            Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>()), Occurs.Once());
         }
 
         [Fact(DisplayName = "ScanStarted method test.")]
@@ -133,12 +137,12 @@ namespace APTAT.Core.UnitTests.CMC
             //Arrange
             MocksCreate();
             var provider = Mock.Create<ICmcWebApiProvider>(Behavior.Strict);
-            Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>())).OccursOnce();
+            Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>())).OccursOnce();
             var client = new CmcClient(provider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
             //Act
-            client.ScanStarted(_scanStartedRequest);
+            client.ScanStarted(_scanStartedRequest, _networkCredentionals);
             //Assert
-            Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>()), Occurs.Once());
+            Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>()), Occurs.Once());
         }
 
         [Fact(DisplayName = "ScanFinished method test.")]
@@ -147,12 +151,12 @@ namespace APTAT.Core.UnitTests.CMC
             //Arrange
             MocksCreate();
             var provider = Mock.Create<ICmcWebApiProvider>(Behavior.Strict);
-            Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>())).OccursOnce();
+            Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>())).OccursOnce();
             var client = new CmcClient(provider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
             //Act
-            client.ScanFinished(_scanFinishedRequest);
+            client.ScanFinished(_scanFinishedRequest, _networkCredentionals);
             //Assert
-            Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>()), Occurs.Once());
+            Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>()), Occurs.Once());
         }
 
         [Fact(DisplayName = "ScanUpdated method test.")]
@@ -161,12 +165,12 @@ namespace APTAT.Core.UnitTests.CMC
             //Arrange
             MocksCreate();
             var provider = Mock.Create<ICmcWebApiProvider>(Behavior.Strict);
-            Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>())).OccursOnce();
+            Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>())).OccursOnce();
             var client = new CmcClient(provider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
             //Act
-            client.ScanUpdated(_scanUpdatedRequest);
+            client.ScanUpdated(_scanUpdatedRequest, _networkCredentionals);
             //Assert
-            Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>()), Occurs.Once());
+            Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>()), Occurs.Once());
         }
 
         [Fact(DisplayName = "ReportGenerated method test.")]
@@ -175,12 +179,12 @@ namespace APTAT.Core.UnitTests.CMC
             //Arrange
             MocksCreate();
             var provider = Mock.Create<ICmcWebApiProvider>(Behavior.Strict);
-            Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>())).OccursOnce();
+            Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>())).OccursOnce();
             var client = new CmcClient(provider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
             //Act
-            client.ReportGenerated(_reportGeneratedRequest);
+            client.ReportGenerated(_reportGeneratedRequest, _networkCredentionals);
             //Assert
-            Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>()), Occurs.Once());
+            Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>()), Occurs.Once());
         }
 
         [Fact(DisplayName = "ReportPrintedOrSaved method test.")]
@@ -189,12 +193,12 @@ namespace APTAT.Core.UnitTests.CMC
             //Arrange
             MocksCreate();
             var provider = Mock.Create<ICmcWebApiProvider>(Behavior.Strict);
-            Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>())).OccursOnce();
+            Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>())).OccursOnce();
             var client = new CmcClient(provider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
             //Act
-            client.ReportPrintedOrSaved(_reportPrintedOrSavedRequest);
+            client.ReportPrintedOrSaved(_reportPrintedOrSavedRequest, _networkCredentionals);
             //Assert
-            Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>()), Occurs.Once());
+            Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>()), Occurs.Once());
         }
 
         [Fact(DisplayName = "AppicationClosed method test.")]
@@ -203,12 +207,12 @@ namespace APTAT.Core.UnitTests.CMC
             //Arrange
             MocksCreate();
             var provider = Mock.Create<ICmcWebApiProvider>(Behavior.Strict);
-            Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>())).OccursOnce();
+            Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>())).OccursOnce();
             var client = new CmcClient(provider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
             //Act
-            client.AppicationClosed(_applicationClosedRequest);
+            client.AppicationClosed(_applicationClosedRequest, _networkCredentionals);
             //Assert
-            Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>()), Occurs.Once());
+            Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>()), Occurs.Once());
         }
 
         [Fact(DisplayName = "Check full chain on Client calls test.")]
@@ -219,17 +223,17 @@ namespace APTAT.Core.UnitTests.CMC
             MocksCreate();
 
             var provider = Mock.Create<ICmcWebApiProvider>(Behavior.Strict);
-            Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>())).DoInstead(() => { cnt++; });
+            Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>())).DoInstead(() => { cnt++; });
             var client = new CmcClient(provider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
             //Act
-            client.Launched(_launchedRequest);
-            client.AutoDiscoveryFinished(_autoDiscoveryFinishedRequest);
-            client.ScanStarted(_scanStartedRequest);
-            client.ScanFinished(_scanFinishedRequest);
-            client.ScanUpdated(_scanUpdatedRequest);
-            client.ReportGenerated(_reportGeneratedRequest);
-            client.ReportPrintedOrSaved(_reportPrintedOrSavedRequest);
-            client.AppicationClosed(_applicationClosedRequest);
+            client.Launched(_launchedRequest, _networkCredentionals);
+            client.AutoDiscoveryFinished(_autoDiscoveryFinishedRequest, _networkCredentionals);
+            client.ScanStarted(_scanStartedRequest, _networkCredentionals);
+            client.ScanFinished(_scanFinishedRequest, _networkCredentionals);
+            client.ScanUpdated(_scanUpdatedRequest, _networkCredentionals);
+            client.ReportGenerated(_reportGeneratedRequest, _networkCredentionals);
+            client.ReportPrintedOrSaved(_reportPrintedOrSavedRequest, _networkCredentionals);
+            client.AppicationClosed(_applicationClosedRequest, _networkCredentionals);
             //Assert
             Assert.Equal(8, cnt);
         }
@@ -259,7 +263,7 @@ namespace APTAT.Core.UnitTests.CMC
             var webApiProvider = Mock.Create<ICmcWebApiProvider>();
             Mock.Arrange(() => webApiProvider.SetBaseUri(Arg.AnyUri));
 
-            Mock.Arrange(() => webApiProvider.SendData(Arg.IsAny<IGeneralInfo>()))
+            Mock.Arrange(() => webApiProvider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>()))
                 .DoInstead((IGeneralInfo gi) => { generalInfo = gi; });
 
             GeneralInfo actualGeneralInfo = new GeneralInfo("enp", "TBD", "TBD", productId)
@@ -289,7 +293,7 @@ namespace APTAT.Core.UnitTests.CMC
             var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
 
             //Act
-            client.Launched(_launchedRequest);
+            client.Launched(_launchedRequest, _networkCredentionals);
 
             //Assert
             Assert.Equal(generalInfo.ApplicationIdentifier, actualGeneralInfo.ApplicationIdentifier);
@@ -361,14 +365,14 @@ namespace APTAT.Core.UnitTests.CMC
             var webApiProvider = Mock.Create<ICmcWebApiProvider>();
             Mock.Arrange(() => webApiProvider.SetBaseUri(Arg.AnyUri));
 
-            Mock.Arrange(() => webApiProvider.SendData(Arg.IsAny<IGeneralInfo>()))
+            Mock.Arrange(() => webApiProvider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>()))
                 .DoInstead((IGeneralInfo gi) => { generalInfo = gi; });
 
             var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
-            client.Launched(_launchedRequest);
+            client.Launched(_launchedRequest, _networkCredentionals);
 
             //Act
-            client.AutoDiscoveryFinished(_autoDiscoveryFinishedRequest);
+            client.AutoDiscoveryFinished(_autoDiscoveryFinishedRequest, _networkCredentionals);
 
             for (int j = 0; j < generalInfo.EventsInfo.Count; j++)
             {
@@ -406,8 +410,8 @@ namespace APTAT.Core.UnitTests.CMC
 
             _scanStartedRequest = Mock.Create<IScanStartedRequest>();
             Mock.Arrange(() => _scanStartedRequest.ScanTriggerType).Returns(ScanTriggerType.ScanNow);
-            Mock.Arrange(() => _scanStartedRequest.ScanTarget).Returns(ScanTarget.DiscoveredByWorkGroup);
-            Mock.Arrange(() => _scanStartedRequest.ScanType).Returns(ScanType.LocalScan);
+            Mock.Arrange(() => _scanStartedRequest.ScanTarget).Returns(ETargetsDiscovererType.Workgroup);
+            Mock.Arrange(() => _scanStartedRequest.ScanType).Returns(ScanType.Custom);
             Mock.Arrange(() => _scanStartedRequest.TotalCountOfDiscoveredComputers).Returns(50);
             Mock.Arrange(() => _scanStartedRequest.CountOfScannedComputers).Returns(15);
 
@@ -422,7 +426,7 @@ namespace APTAT.Core.UnitTests.CMC
                             new Parameter() {Name = "ev_for_hashing",  Value = eventParamValue,IsApplication = false},
                             new Parameter() { Name = "sc_trg_tp", Value = "0" ,IsApplication = false},
                             new Parameter() { Name = "sc_tg", Value = "1" ,IsApplication = false},
-                            new Parameter() {Name = "sc_tp",Value = "3",IsApplication = false},
+                            new Parameter() {Name = "sc_tp",Value = "2",IsApplication = false},
                             new Parameter() { Name = "pc_cc", Value = "50",IsApplication = false},
                             new Parameter() { Name = "pc_sc", Value = "15",IsApplication = false},
                             new Parameter() {Name = "acid",Value = acId,IsApplication = false},
@@ -437,14 +441,14 @@ namespace APTAT.Core.UnitTests.CMC
             var webApiProvider = Mock.Create<ICmcWebApiProvider>();
             Mock.Arrange(() => webApiProvider.SetBaseUri(Arg.AnyUri));
 
-            Mock.Arrange(() => webApiProvider.SendData(Arg.IsAny<IGeneralInfo>()))
+            Mock.Arrange(() => webApiProvider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>()))
                 .DoInstead((IGeneralInfo gi) => { generalInfo = gi; });
 
             var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
-            client.Launched(_launchedRequest);
+            client.Launched(_launchedRequest, _networkCredentionals);
 
             //Act
-            client.ScanStarted(_scanStartedRequest);
+            client.ScanStarted(_scanStartedRequest, _networkCredentionals);
 
             for (int j = 0; j < generalInfo.EventsInfo.Count; j++)
             {
@@ -507,14 +511,14 @@ namespace APTAT.Core.UnitTests.CMC
             var webApiProvider = Mock.Create<ICmcWebApiProvider>();
             Mock.Arrange(() => webApiProvider.SetBaseUri(Arg.AnyUri));
 
-            Mock.Arrange(() => webApiProvider.SendData(Arg.IsAny<IGeneralInfo>()))
+            Mock.Arrange(() => webApiProvider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>()))
                 .DoInstead((IGeneralInfo gi) => { generalInfo = gi; });
 
             var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
-            client.Launched(_launchedRequest);
+            client.Launched(_launchedRequest, _networkCredentionals);
 
             //Act
-            client.ScanUpdated(_scanUpdatedRequest);
+            client.ScanUpdated(_scanUpdatedRequest, _networkCredentionals);
 
             for (int j = 0; j < generalInfo.EventsInfo.Count; j++)
             {
@@ -585,14 +589,14 @@ namespace APTAT.Core.UnitTests.CMC
             var webApiProvider = Mock.Create<ICmcWebApiProvider>();
             Mock.Arrange(() => webApiProvider.SetBaseUri(Arg.AnyUri));
 
-            Mock.Arrange(() => webApiProvider.SendData(Arg.IsAny<IGeneralInfo>()))
+            Mock.Arrange(() => webApiProvider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>()))
                 .DoInstead((IGeneralInfo gi) => { generalInfo = gi; });
 
             var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
-            client.Launched(_launchedRequest);
+            client.Launched(_launchedRequest, _networkCredentionals);
 
             //Act
-            client.ScanFinished(_scanFinishedRequest);
+            client.ScanFinished(_scanFinishedRequest, _networkCredentionals);
 
             for (int j = 0; j < generalInfo.EventsInfo.Count; j++)
             {
@@ -652,12 +656,12 @@ namespace APTAT.Core.UnitTests.CMC
 
             var webApiProvider = Mock.Create<ICmcWebApiProvider>();
             Mock.Arrange(() => webApiProvider.SetBaseUri(Arg.AnyUri));
-            Mock.Arrange(() => webApiProvider.SendData(Arg.IsAny<IGeneralInfo>()))
+            Mock.Arrange(() => webApiProvider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>()))
                 .DoInstead((IGeneralInfo gi) => { generalInfo = gi; });
             var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
-            client.Launched(_launchedRequest);
+            client.Launched(_launchedRequest, _networkCredentionals);
             //Act
-            client.ReportGenerated(_reportGeneratedRequest);
+            client.ReportGenerated(_reportGeneratedRequest, _networkCredentionals);
 
             for (int j = 0; j < generalInfo.EventsInfo.Count; j++)
             {
@@ -720,14 +724,14 @@ namespace APTAT.Core.UnitTests.CMC
             var webApiProvider = Mock.Create<ICmcWebApiProvider>();
             Mock.Arrange(() => webApiProvider.SetBaseUri(Arg.AnyUri));
 
-            Mock.Arrange(() => webApiProvider.SendData(Arg.IsAny<IGeneralInfo>()))
+            Mock.Arrange(() => webApiProvider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>()))
                 .DoInstead((IGeneralInfo gi) => { generalInfo = gi; });
 
             var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
-            client.Launched(_launchedRequest);
+            client.Launched(_launchedRequest, _networkCredentionals);
 
             //Act
-            client.ReportPrintedOrSaved(_reportPrintedOrSavedRequest);
+            client.ReportPrintedOrSaved(_reportPrintedOrSavedRequest, _networkCredentionals);
 
             for (int j = 0; j < generalInfo.EventsInfo.Count; j++)
             {
@@ -783,12 +787,12 @@ namespace APTAT.Core.UnitTests.CMC
             };
             var webApiProvider = Mock.Create<ICmcWebApiProvider>();
             Mock.Arrange(() => webApiProvider.SetBaseUri(Arg.AnyUri));
-            Mock.Arrange(() => webApiProvider.SendData(Arg.IsAny<IGeneralInfo>())).DoInstead((IGeneralInfo gi) => { generalInfo = gi; });
+            Mock.Arrange(() => webApiProvider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>())).DoInstead((IGeneralInfo gi) => { generalInfo = gi; });
             var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
-            client.Launched(_launchedRequest);
+            client.Launched(_launchedRequest, _networkCredentionals);
 
             //Act
-            client.AppicationClosed(_applicationClosedRequest);
+            client.AppicationClosed(_applicationClosedRequest, _networkCredentionals);
 
         }
 

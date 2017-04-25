@@ -2,25 +2,23 @@
 {
     public enum ScanType
     {
-        IpScan,
-        WorkgroupScan,
-        ADScan,
-        LocalScan,
-        AutoDiscovery
+        Quick,
+        Full,
+        Custom
     }
     public enum ScanTriggerType
     {
         ScanNow,
         CustomScan
     }
-    public enum ScanTarget
-    {
-        TargetsWereDiscoveredByIPAddresses,
-        DiscoveredByWorkGroup,
-        DiscoveredByActiveDirectory,
-        DiscoveredByLocalComputer,
-        UsedAutoDiscoveredTargets
-    }
+    //public enum ScanTarget
+    //{
+    //    TargetsWereDiscoveredByIPAddresses,
+    //    DiscoveredByWorkGroup,
+    //    DiscoveredByActiveDirectory,
+    //    DiscoveredByLocalComputer,
+    //    UsedAutoDiscoveredTargets
+    //}
     public enum ScanStatus
     {
         Success,

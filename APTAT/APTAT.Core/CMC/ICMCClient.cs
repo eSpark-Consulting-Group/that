@@ -1,16 +1,20 @@
-﻿using APTAT.Core.CMC.Request;
+﻿using System.Net;
+using System.Threading.Tasks;
+using APTAT.Core.CMC.Request;
 
 namespace APTAT.Core.CMC
 {
     public interface ICmcClient
     {
-        void Launched(ILaunchedRequest request);
-        void AutoDiscoveryFinished(IAutoDiscoveryFinishedRequest request);
-        void ScanStarted(IScanStartedRequest request);
-        void ScanFinished(IScanFinishedRequest request);
-        void ScanUpdated(IScanUpdatedRequest request);
-        void ReportGenerated(IReportGeneratedRequest request);
-        void ReportPrintedOrSaved(IReportPrintedOrSavedRequest request);
-        void AppicationClosed(IApplicationClosedRequest request);
+        void Launched(ILaunchedRequest request, NetworkCredential credentials);
+        void AutoDiscoveryFinished(IAutoDiscoveryFinishedRequest request, NetworkCredential credentials);
+        void ScanStarted(IScanStartedRequest request,NetworkCredential credentials);
+        void ScanFinished(IScanFinishedRequest request, NetworkCredential credentials);
+        void ScanUpdated(IScanUpdatedRequest request, NetworkCredential credentials);
+        void ReportGenerated(IReportGeneratedRequest request, NetworkCredential credentials);
+        void ReportPrintedOrSaved(IReportPrintedOrSavedRequest request, NetworkCredential credentials);
+        void AppicationClosed(IApplicationClosedRequest request, NetworkCredential credentials);
     }
+
+    
 }

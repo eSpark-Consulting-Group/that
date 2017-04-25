@@ -3,6 +3,7 @@ using FAT.Application.Models;
 using FAT.Application.Services;
 using System;
 using System.Threading.Tasks;
+using APTAT.Core.CMC;
 using Telerik.JustMock;
 using Xunit;
 
@@ -19,6 +20,7 @@ namespace FAT.Application.Tests
             var service4 = Mock.Create<IScanCounterManager>(Behavior.Strict);
             var service5 = Mock.Create<IScanOperationsManager>(Behavior.Strict);
             var service6 = Mock.Create<IScanTimer>(Behavior.Strict);
+            var statisticsService = Mock.Create<IStatisticsService>(Behavior.Strict);
             var col = Mock.Create<IScanCounterCollection>(Behavior.Strict);
             var col2 = Mock.Create<IScanOperationCollection>(Behavior.Strict);
 
@@ -26,7 +28,7 @@ namespace FAT.Application.Tests
             Mock.Arrange(() => service5.OperationCollection).Returns(col2);
 
             //act
-            MainViewModel target = new MainViewModel(service1, service2, service3, service4, service5, service6);
+            MainViewModel target = new MainViewModel(service1, service2, service3, service4, service5, service6, statisticsService);
 
             Assert.NotNull(target.OnLoadedCommand);
             Assert.NotNull(target.StartScanCommand);
@@ -68,7 +70,7 @@ namespace FAT.Application.Tests
             var service4 = Mock.Create<IScanCounterManager>(Behavior.Strict);
             var service5 = Mock.Create<IScanOperationsManager>(Behavior.Strict);
             var service6 = Mock.Create<IScanTimer>(Behavior.Strict);
-
+            var statisticsService = Mock.Create<IStatisticsService>(Behavior.Strict);
             Func<GetDomainNameResponse> func = () => new GetDomainNameResponse(name, null);
 
             Mock.Arrange(() => service4.Clear()).MustBeCalled();
@@ -79,7 +81,7 @@ namespace FAT.Application.Tests
             Mock.Arrange(() => service5.GetEmail()).Returns(Arg.AnyString).OnAllThreads().MustBeCalled();
             Mock.Arrange(() => service6.ScanActive).Returns(false);
 
-            MainViewModel target = new MainViewModel(service1, service2, service3, service4, service5, service6);
+            MainViewModel target = new MainViewModel(service1, service2, service3, service4, service5, service6, statisticsService);
 
             //act
             Action a = () =>
@@ -110,6 +112,7 @@ namespace FAT.Application.Tests
             var service4 = Mock.Create<IScanCounterManager>(Behavior.Strict);
             var service5 = Mock.Create<IScanOperationsManager>(Behavior.Strict);
             var service6 = Mock.Create<IScanTimer>(Behavior.Strict);
+            var statisticsService = Mock.Create<IStatisticsService>(Behavior.Strict);
 
             Mock.ArrangeSet(() => service4.SelectedOrdersChanged = Arg.IsAny<Action<int[]>>()).MustBeCalled();
             Mock.Arrange(() => service4.Clear()).MustBeCalled();
@@ -117,7 +120,7 @@ namespace FAT.Application.Tests
             Mock.Arrange(() => service6.Start()).DoNothing().MustBeCalled();
             Mock.Arrange(() => service6.ScanActive).Returns(true);
 
-            MainViewModel target = new MainViewModel(service1, service2, service3, service4, service5, service6);
+            MainViewModel target = new MainViewModel(service1, service2, service3, service4, service5, service6, statisticsService);
 
             //act
             target.ViewLoadedCommand.Execute(null);
