@@ -104,9 +104,9 @@ namespace FAT.Application.Services
         {
             Action action = () =>
             {
-                if (File.Exists("filename"))
+                if (File.Exists("originalfile"))
                 {
-                    string input = File.ReadAllText("filename");
+                    string input = File.ReadAllText("originalfile");
                     string pattern = @"ForensicAnalysisTool_\w{32}$";
                     Regex rgx = new Regex(pattern, RegexOptions.IgnoreCase);
                     var matches = rgx.Matches(input);
