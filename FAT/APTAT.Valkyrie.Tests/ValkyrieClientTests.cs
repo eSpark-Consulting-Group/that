@@ -484,10 +484,10 @@ namespace APTAT.Valkyrie.Tests
             };
             
             client.StartAnalyze(camRegistration, "user", "test", 1, new System.Net.NetworkCredential(), "FAT");
-            Assert.True(ev.Wait(TimeSpan.FromMilliseconds(250)));
+            Assert.True(ev.Wait(TimeSpan.FromMilliseconds(300)));
             
             client.AddFilesToAnalyze(files.ToList(), true);       
-            Assert.True(cev.Wait(TimeSpan.FromMilliseconds(250)));
+            Assert.True(cev.Wait(TimeSpan.FromMilliseconds(300)));
 
             //Assert
             int numbersOfCallsShouldBe = files.Count;
@@ -573,11 +573,11 @@ namespace APTAT.Valkyrie.Tests
             ev.Reset();
 
             client.AddFilesToAnalyze(files.ToList(), true);
-            Assert.True(cev.Wait(TimeSpan.FromMilliseconds(250)));
+            Assert.True(cev.Wait(TimeSpan.FromMilliseconds(300)));
             
             Mock.Raise(() => progressNotify.TimeoutCallback += null, args: new object[] { EventArgs.Empty });
 
-            Assert.True(ev.Wait(TimeSpan.FromMilliseconds(250)));
+            Assert.True(ev.Wait(TimeSpan.FromMilliseconds(300)));
 
             //Assert
             Assert.Equal(files.Count, results.Length);

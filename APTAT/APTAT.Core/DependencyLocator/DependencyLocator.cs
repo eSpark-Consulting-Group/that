@@ -19,7 +19,7 @@ namespace APTAT.Core.DependencyLocator
             resolver.RegisterSingleton<IAptFactory, AptFactory>();
             resolver.RegisterSingleton<IAptAtManager , AptAtManager>();
 
-            resolver.Register<IRemoteFactory, RemoteFactory>();
+            resolver.RegisterSingleton<IRemoteFactory, RemoteFactory>();
 
             resolver.RegisterSingleton<IFlsManager, FlsManager>();
             resolver.RegisterSingleton<IFlsApiProvider, FlsApiProvider>();
