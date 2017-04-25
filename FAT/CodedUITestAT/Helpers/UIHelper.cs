@@ -38,14 +38,14 @@ namespace CodedUITestFAT
         {
             var timer = Stopwatch.StartNew();
             for (;;)
-            {                
+            {
                 if (IsClickable(control) == isClickable) break;
                 if ((int)timer.ElapsedMilliseconds > waitForMilliseconds)
                     throw new Exception(String.Format("The given control '{0}' 'IsClickable' property is not '{1}' after {2} seconds!", control.FriendlyName, isClickable, waitForMilliseconds / 1000));
                 Playback.Wait(500);
             }
             timer.Stop();
-        }        
+        }
 
         /// <summary>Waits for a specified row at a given results screen.</summary>
         /// <param name="rowName">Set a row name.</param>
@@ -135,7 +135,7 @@ namespace CodedUITestFAT
         /// <param name="resultsScreen">Set a results screen type.</param>
         internal static UITestControl[] GetRows(this WpfTabPage tab)
         {
-            if (tab == null) throw new Exception("The provided WPF tab is null!");
+            if (tab == null) throw new ArgumentException("The provided WPF tab is null!");
 
             int treeShift = 2;
             if (IsGroupedByFiles()) treeShift++;
@@ -170,7 +170,7 @@ namespace CodedUITestFAT
         /// <summary> Gets a given row status. </summary>
         /// <param name="row">Set a row.</param>
         internal static string GetRowStatus(this UITestControl row)
-        {            
+        {
             int statusShift = 1;
             if (IsGroupedByFiles()) statusShift = 0;
 
@@ -287,7 +287,7 @@ namespace CodedUITestFAT
         internal static ScanStatus GetScanStatus(this Computer endpoint)
         {
             UITestControl row;
-            CodedUITestMain useMain = new CodedUITestMain();            
+            CodedUITestMain useMain = new CodedUITestMain();
 
             int defaultTimeOut = Playback.PlaybackSettings.SearchTimeout;
             Playback.PlaybackSettings.SearchTimeout = 1000;
@@ -322,7 +322,7 @@ namespace CodedUITestFAT
         {
             var timer = Stopwatch.StartNew();
             while ((int)timer.ElapsedMilliseconds < waitTime)
-            {                
+            {
                 if (endpoint.GetScanStatus() == expectedScanStatus)
                 {
                     testContext.WriteLine(String.Format("The expected status '{0}' appeared for computer '{1}'.", expectedScanStatus, endpoint.Name));
@@ -331,7 +331,7 @@ namespace CodedUITestFAT
                 Playback.Wait(500);
             }
             timer.Stop();
-            throw new Exception(String.Format("The expected status '{0}' did not appear for computer '{1}' after {2} seconds!", expectedScanStatus, endpoint.Name, waitTime / 1000));            
+            throw new Exception(String.Format("The expected status '{0}' did not appear for computer '{1}' after {2} seconds!", expectedScanStatus, endpoint.Name, waitTime / 1000));
         }
 
         /// <summary> Gets a row with a given name from the indicated tab page. Returns null, if a row with the given name was not found on the tab page. </summary>
@@ -514,9 +514,16 @@ namespace CodedUITestFAT
             if (actualUri.Contains(expectedUri))
                 testContext.WriteLine("Browser link as expected.");
             else
-                error = String.Format("Browser link are incorrect! Actual: '{0}'; Expected: {1}", actualUri, Settings.General.Default.ComodoOneReferralUri);
+                error = String.Format("Browser link are incorrect! Actual: '{0}'; Expected: {1}", actualUri, expectedUri);
             webPage.Close();
             if (!String.IsNullOrEmpty(error)) Assert.Fail(error);
+        }
+
+        /// <summary>Checks whether control is present on UI</summary>
+        /// <param name="control">Given UI control.</param>        
+        internal static bool IsVisible(this UITestControl control)
+        {
+            return control.State != ControlStates.Offscreen;
         }
     }
 }
