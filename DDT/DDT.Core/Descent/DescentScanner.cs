@@ -39,7 +39,7 @@ namespace DDT.Core.Descent
             //if (Password == null)
             //    throw new ArgumentException("Password not specified.", "password");
 
-            var result = new PackageDescentResult(OnlineTargets, DevicesSourceDescription);
+            var result = new PackageDescentResult(Targets, DevicesSourceDescription);
             return result;
         }
 
@@ -50,7 +50,7 @@ namespace DDT.Core.Descent
                 _descentMod.Release();
             }
             _descentMod = new PackageDescentMod(TaskFactory, changeTrackingSubSystem);
-            foreach (var computer in OnlineTargets)
+            foreach (var computer in Targets)
             {
                 RemoteHostInfo ri = new RemoteHostInfo(computer.Uid,
                     computer.IPAddress != null ? computer.IPAddress.ToString() : computer.DnsName,

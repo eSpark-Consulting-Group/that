@@ -10,7 +10,7 @@ namespace DDT.Core.Descent
     class PackageDescentResult : DescentResult  
     {
         public PackageDescentResult(IEnumerable<IComputer> computers, IDevicesSourceDescription devicesSourceDescription) 
-            : base(computers, devicesSourceDescription, new PackageComputerDescentResultFactory())
+            : base(computers, devicesSourceDescription, new PackageComputerDescentResultFactory(), new DescentWatcherFactory())
         {
         }
 
@@ -21,7 +21,7 @@ namespace DDT.Core.Descent
                 return new PackageComputerDescentResult(computer, operationUid, timeStampProvider);
             }
         }
-        public override void Changed(params ChangesTrackingItem[] items)
+        public override void Changed(params IChangesTrackingItem[] items)
         {
             base.Changed(items);
             foreach (var item in items)

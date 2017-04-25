@@ -23,7 +23,7 @@ namespace DDT.Core.Descent
 
         public PackageDescentHelper(RemoteHostInfo remoteHostInfo, InstallPackageInfo packageInfoX86, 
             InstallPackageInfo packageInfoX64, CancellationToken cancellationToken) 
-            : base(remoteHostInfo)
+            : base(remoteHostInfo, cancellationToken)
         {
             if (packageInfoX86 == null) throw new ArgumentNullException("packageInfoX86 can not be null");
             _packageInfoX64 = packageInfoX64?? packageInfoX86;
