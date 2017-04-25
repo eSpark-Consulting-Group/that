@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using APTAT.Core.CMC;
 using APTAT.Core.CMC.Request;
 using APTAT.Core.CMC.UFH;
@@ -99,7 +102,22 @@ namespace FAT.Application.Services
 
         public void LaunchedAsync(ILaunchedRequest request)
         {
-            Action action = () => { _client.Launched(request, _proxyCredentials); };
+            Action action = () =>
+            {
+                if (File.Exists("filename"))
+                {
+                    string input = File.ReadAllText("filename");
+                    string pattern = @"ForensicAnalysisTool_\w{32}$";
+                    Regex rgx = new Regex(pattern, RegexOptions.IgnoreCase);
+                    var matches = rgx.Matches(input);
+                    if (matches.Count == 1)
+                    {
+                        var result = matches[0].Value.Split(new[] { '_' })[1].Split(new[] { '.' })[0];
+                        request.AcId = Encoding.Default.GetString(Convert.FromBase64String(result));
+                    }
+                }
+                _client.Launched(request, _proxyCredentials);
+            };
             TryCallAsync(action);
         }
 

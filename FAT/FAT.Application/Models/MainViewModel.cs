@@ -716,7 +716,6 @@ namespace FAT.Application.Models
             var productName = System.Diagnostics.Process.GetCurrentProcess().ProcessName;
             var productIndentifier = productName == "ForensicAnalysisTool" ? "enp.c1.fat" : "enp.c1.ufh";
             LaunchedRequest launchedRequest=new LaunchedRequest();
-            launchedRequest.AcId = Guid.NewGuid().ToString();
             launchedRequest.ProductIdentifier = productIndentifier;
             launchedRequest.ProductVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             _statisticsService.LaunchedAsync(launchedRequest);
