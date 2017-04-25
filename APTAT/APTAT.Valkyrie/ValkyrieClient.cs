@@ -26,6 +26,7 @@ namespace APTAT.Valkyrie
         private int _fileScanned;
         private int _filesCount;
         private CancellationTokenSource _cancellationTokenSource;
+        private CancellationToken _cancellationToken;
         private readonly string _endpointId;
         private string[] _emails = null;
 
@@ -182,7 +183,7 @@ namespace APTAT.Valkyrie
             if (_cancellationTokenSource == null)
                 waitNextInterval = true;
             else
-                cancellationToken = _cancellationTokenSource.Token;
+                cancellationToken = _cancellationToken;
             if (!waitNextInterval)
             {
                 CheckNewStatusesOnValkyrie(cancellationToken.Value);
@@ -385,9 +386,11 @@ namespace APTAT.Valkyrie
             Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : Scan Completed for API_KEY = {_apiKey}");
 
             _pendingItemsResolved.Clear();
+            _cancellationTokenSource?.Dispose();
 
             var cancellationTokenSource = new CancellationTokenSource();
             _cancellationTokenSource = cancellationTokenSource;
+            _cancellationToken = _cancellationTokenSource.Token;
             _isMainScanFinished = true;
             AnalyzeCompleted?.Invoke(this, new AnalyzeCompletedEventArgs(exception, task.IsCanceled, task.AsyncState));
 
@@ -634,7 +637,6 @@ namespace APTAT.Valkyrie
                 _apiKey = null;
                 _aptScanId = null;
                 _cancellationTokenSource?.Cancel();
-                _cancellationTokenSource?.Dispose();
 
                 _submitAllowed = false;
                 _filesToSubmit = new Dictionary<string, IValkyrieFileInfo>();
