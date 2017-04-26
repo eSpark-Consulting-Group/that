@@ -244,12 +244,6 @@ namespace FAT.Application.Models
 
                     if (!DiscoveryResults.Any(_ => _.IsSelected))
                         Set(() => SelectDiscoveryResults, true);
-
-                    CMCStatisticsMessages<IAutoDiscoveryFinishedRequest>.Send(request =>
-                    {
-                        request.CountOfPotentiallyScanableDiscoveredComputers = DiscoveryResults.Count;
-                        request.DiscoveryStatus = DiscoveryStatus.Success;
-                    });
                 }
 
                 StartScanCommand.InvalidateCanExecute();
@@ -904,7 +898,15 @@ namespace FAT.Application.Models
             Percentage = e.Progress * 100d;
 
             if (Math.Abs(Percentage - 100) < 0.0001)
+            {
                 IsAutoDiscoveryCompleted = true;
+
+                CMCStatisticsMessages<IAutoDiscoveryFinishedRequest>.Send(request =>
+                {
+                    request.CountOfPotentiallyScanableDiscoveredComputers = DiscoveryResults.Count;
+                    request.DiscoveryStatus = DiscoveryStatus.Success;
+                });
+            }
         }
 
         #endregion

@@ -136,5 +136,10 @@ namespace FAT.Application
                 _viewModel.OnSaveReportCompleted();
             }
         }
+
+        private void OnPrint(object sender, RoutedEventArgs e)
+        {
+            _viewModel.OnPrintReportCompleted();
+        }
     }  
 }

@@ -61,7 +61,7 @@
                     </telerik:RadButton>
 
                     <telerik:RadButton AutomationProperties.AutomationId="PrintButton"
-                                       x:Name="btnPrintPdfDocument" Command="{Binding PrintPdfDocumentCommand}" HorizontalAlignment="Left" VerticalAlignment="Stretch" 
+                                       x:Name="btnPrintPdfDocument" Command="{Binding PrintPdfDocumentCommand}" Click="OnPrint" HorizontalAlignment="Left" VerticalAlignment="Stretch" 
                                        Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ToolTip="Print" IsBackgroundVisible="False" Margin="2,2,2,2">
 
                         <Image Source="pack://application:,,,/Telerik.Windows.Controls.FixedDocumentViewers;component/Images/printer.png" Stretch="None"/>
