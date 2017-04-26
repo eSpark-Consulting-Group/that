@@ -11,6 +11,9 @@ namespace FAT.Application.Models
         bool HasUnknowns { get; }
         bool HasNotAnalyzed { get; }
         bool HasInProgress { get; }
+        int MalwaresCount { get; }
+        int UnknownsCount { get; }
+
         Action<int[]> SelectedOrdersChanged { set; }
 
         void AddComputer();

@@ -1,6 +1,6 @@
 ﻿using System;
 
-using System.Diagnostics;
+
 
 using System.Windows;
 using System.Windows.Controls;
@@ -11,11 +11,12 @@ using System.Windows.Input;
 
 using FAT.Application.Models;
 using APTAT.Common;
-using Telerik.Windows.Controls;
+
 using Telerik.Windows.Documents.Fixed;
 using Telerik.Windows.Documents.Fixed.FormatProviders;
 using Microsoft.Win32;
 using System.IO;
+
 
 namespace FAT.Application
 {
@@ -131,6 +132,8 @@ namespace FAT.Application
                     input.CopyTo(output);
                     output.Flush();
                 }
+
+                _viewModel.OnSaveReportCompleted();
             }
         }
     }  

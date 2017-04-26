@@ -90,7 +90,7 @@ namespace FAT.Application
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            AppMessages.FilterMessage.Send(MessageTypes.FilterTarget, _ => _.Target = treeList);
+            AppMessages.FilterMessages.Send(_ => _.Target = treeList);
         }
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)

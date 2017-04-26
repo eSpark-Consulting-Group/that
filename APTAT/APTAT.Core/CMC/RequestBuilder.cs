@@ -19,8 +19,8 @@ namespace APTAT.Core.CMC
         {
             List<Parameter> requestFields = new List<Parameter>
             {
-                new Parameter() {Value = "acid", Name =nameof(ILaunchedRequest.AcId)},
-                new Parameter() {Value = "pr_ve", Name =nameof(ILaunchedRequest.ProductVersion)},
+                new Parameter() {Value = "acid", Name =nameof(IApplicationLaunchedRequest.AcId)},
+                new Parameter() {Value = "pr_ve", Name =nameof(IApplicationLaunchedRequest.ProductVersion)},
 
                 new Parameter() {Value = "ds", Name =nameof(IAutoDiscoveryFinishedRequest.DiscoveryStatus)},
                 new Parameter() {Value = "pc_cc", Name =nameof(IAutoDiscoveryFinishedRequest.CountOfPotentiallyScanableDiscoveredComputers)},

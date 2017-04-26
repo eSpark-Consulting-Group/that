@@ -98,13 +98,13 @@
     <Compile Include="CMC\GeneralInfo.cs" />
     <Compile Include="CMC\Request\IApplicationClosedRequest.cs" />
     <Compile Include="CMC\Request\IAutoDiscoveryFinishedRequest.cs" />
-    <Compile Include="CMC\Request\ILaunchedRequest.cs" />
+    <Compile Include="CMC\Request\IApplicationLaunchedRequest.cs" />
     <Compile Include="CMC\Request\IReportGeneratedRequest.cs" />
     <Compile Include="CMC\Request\IReportPrintedOrSavedRequest.cs" />
     <Compile Include="CMC\Request\IScanFinishedRequest.cs" />
     <Compile Include="CMC\Request\IScanStartedRequest.cs" />
     <Compile Include="CMC\Request\IScanUpdatedRequest.cs" />
-    <Compile Include="CMC\Request\LaunchedRequest.cs" />
+    <Compile Include="CMC\Request\ApplicationLaunchedRequest.cs" />
     <Compile Include="CMC\Parameter.cs" />
     <Compile Include="CMC\Request\ReportGeneratedRequest.cs" />
     <Compile Include="CMC\Request\ReportPrintedOrSavedRequest.cs" />

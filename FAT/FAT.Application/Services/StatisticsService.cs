@@ -1,33 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 using APTAT.Core.CMC;
 using APTAT.Core.CMC.Request;
-using APTAT.Core.CMC.UFH;
-using APTAT.Core.Properties;
 using FAT.Application.Models;
 using FAT.Application.Properties;
+using System.Reflection;
+using FAT.Application.Messages;
+using static FAT.Application.Messages.AppMessages;
 
 namespace FAT.Application.Services
 {
     public interface IStatisticsService
     {
-        void LaunchedAsync(ILaunchedRequest request);
+        void ApplicationLaunchedAsync(IApplicationLaunchedRequest request);
         void AutoDiscoveryFinishedAsync(IAutoDiscoveryFinishedRequest request);
         void ScanStartedAsync(IScanStartedRequest request);
         void ScanFinishedAsync(IScanFinishedRequest request);
         void ScanUpdatedAsync(IScanUpdatedRequest request);
         void ReportGeneratedAsync(IReportGeneratedRequest request);
         void ReportPrintedOrSavedAsync(IReportPrintedOrSavedRequest request);
-        void AppicationClosedAsync(IApplicationClosedRequest request);
+        void ApplicationClosedAsync(IApplicationClosedRequest request);
     }
 
     public class SendDataResponse {
@@ -49,12 +45,82 @@ namespace FAT.Application.Services
             _client = client;
             if (Settings.Default.cmcStatistics == "Disabled")
             _isEnabledSendData = false;
+
+            MessageManager.Instance.RegisterListener(this);
         }
 
-        private void TryCallAsync(Action action)
+        #region Message Receivers
+
+        [MessageReceiver]
+        public void AcceptMessage(AppMessage<IApplicationLaunchedRequest> message)
         {
-            Task.Factory.StartNew(() =>
-            {
+            var request = new ApplicationLaunchedRequest();
+            message.Action?.Invoke(request);
+            ApplicationLaunchedAsync(request);
+        }
+
+        [MessageReceiver]
+        public void AcceptMessage(AppMessage<IAutoDiscoveryFinishedRequest> message)
+        {
+            var request = new AutoDiscoveryFinishedRequest();
+            message.Action?.Invoke(request);
+            AutoDiscoveryFinishedAsync(request);
+        }
+
+        [MessageReceiver]
+        public void AcceptMessage(AppMessage<IScanStartedRequest> message)
+        {
+            var request = new ScanStartedRequest();
+            message.Action?.Invoke(request);
+            ScanStartedAsync(request);
+        }
+
+        [MessageReceiver]
+        public void AcceptMessage(AppMessage<IScanFinishedRequest> message)
+        {
+            var request = new ScanFinishedRequest();
+            message.Action?.Invoke(request);
+            ScanFinishedAsync(request);
+        }
+
+        [MessageReceiver]
+        public void AcceptMessage(AppMessage<IScanUpdatedRequest> message)
+        {
+            var request = new ScanUpdatedRequest();
+            message.Action?.Invoke(request);
+            ScanUpdatedAsync(request);
+        }
+
+        [MessageReceiver]
+        public void AcceptMessage(AppMessage<IReportGeneratedRequest> message)
+        {
+            var request = new ReportGeneratedRequest();
+            message.Action?.Invoke(request);
+            ReportGeneratedAsync(request);
+        }
+
+        [MessageReceiver]
+        public void AcceptMessage(AppMessage<IReportPrintedOrSavedRequest> message)
+        {
+            var request = new ReportPrintedOrSavedRequest();
+            message.Action?.Invoke(request);
+            ReportPrintedOrSavedAsync(request);
+        }
+
+        [MessageReceiver]
+        public void AcceptMessage(AppMessage<IApplicationClosedRequest> message)
+        {
+            var request = new ApplicationClosedRequest();
+            message.Action?.Invoke(request);
+            ApplicationClosedAsync(request);
+        }
+
+        #endregion
+
+        private SendDataResponse TryCallAsync(Action action)
+        {
+            //Task.Factory.StartNew(() =>
+            //{
                 lock (lockObj)
                 {
                     int attemptsCounter = 0;
@@ -97,10 +163,10 @@ namespace FAT.Application.Services
                     }
                     return new SendDataResponse() { IsSuccess = false, SendDataException = new Exception() };
                 }
-            });
+            //});
         }
 
-        public void LaunchedAsync(ILaunchedRequest request)
+        public void ApplicationLaunchedAsync(IApplicationLaunchedRequest request)
         {
             Action action = () =>
             {
@@ -116,7 +182,9 @@ namespace FAT.Application.Services
                         request.AcId = Encoding.Default.GetString(Convert.FromBase64String(result));
                     }
                 }
-                _client.Launched(request, _proxyCredentials);
+                request.ProductIdentifier = "enp.c1.fat";
+                request.ProductVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                _client.ApplicationLaunched(request, _proxyCredentials);
             };
             TryCallAsync(action);
         }
@@ -157,9 +225,9 @@ namespace FAT.Application.Services
             TryCallAsync(action);
         }
 
-        public void AppicationClosedAsync(IApplicationClosedRequest request)
+        public void ApplicationClosedAsync(IApplicationClosedRequest request)
         {
-            Action action = () => { _client.AppicationClosed(request, _proxyCredentials); };
+            Action action = () => { _client.ApplicationClosed(request, _proxyCredentials); };
             TryCallAsync(action);
         }
     }

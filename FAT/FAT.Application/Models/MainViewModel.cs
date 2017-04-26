@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Threading;
 using Telerik.Windows.Controls;
 using FAT.Application.Messages;
@@ -25,6 +24,7 @@ using APTAT.Core.CMC;
 using APTAT.Core.CMC.Request;
 using FAT.Application.Helpers;
 using ReportKind = FAT.Application.Services.ReportKind;
+using static FAT.Application.Messages.AppMessages;
 
 namespace FAT.Application.Models
 {
@@ -39,7 +39,8 @@ namespace FAT.Application.Models
         private readonly IScanCounterManager _scanCounterManager;
         private readonly IScanOperationsManager _scanOperationsManager;
         private readonly IScanTimer _scanTimer;
-        private readonly IStatisticsService _statisticsService;
+        private readonly IStatisticsService _cmcService;
+
         private ObservableCollection<IThreatInfoItem> _files;
         private ObservableCollection<IThreatInfoItem> _computers;
 
@@ -70,6 +71,8 @@ namespace FAT.Application.Models
 
         private Guid _operationGuid;
         private int _scannedItemsCount;
+        private int _lastUnknownsCount;
+        private int _lastMalwaresCount;
         private double _percentage;
         private string _tcpPort = "80";
         private string _udpPort = "53";
@@ -235,10 +238,18 @@ namespace FAT.Application.Models
                 if (value)
                 {
                     IsAutoDiscoveryInProgress = false;
-                    _targetsDiscoveryService.DeploymentTargetsAutoResolving -= OnDeploymentTargetsAutoResolving;
                     Percentage = 0;
+
+                    _targetsDiscoveryService.DeploymentTargetsAutoResolving -= OnDeploymentTargetsAutoResolving;
+
                     if (!DiscoveryResults.Any(_ => _.IsSelected))
                         Set(() => SelectDiscoveryResults, true);
+
+                    CMCStatisticsMessages<IAutoDiscoveryFinishedRequest>.Send(request =>
+                    {
+                        request.CountOfPotentiallyScanableDiscoveredComputers = DiscoveryResults.Count;
+                        request.DiscoveryStatus = DiscoveryStatus.Success;
+                    });
                 }
 
                 StartScanCommand.InvalidateCanExecute();
@@ -627,7 +638,7 @@ namespace FAT.Application.Models
             IScanCounterManager scanCounterManager, 
             IScanOperationsManager scanOperationsManager,
             IScanTimer scanTimer,
-            IStatisticsService statisticsService)
+            IStatisticsService cmcService)
         {
             _targetsDiscoveryService = targetsDiscoveryService;
             _aptService = aptService;
@@ -635,7 +646,7 @@ namespace FAT.Application.Models
             _scanCounterManager = scanCounterManager;
             _scanOperationsManager = scanOperationsManager;
             _scanTimer = scanTimer;
-            _statisticsService = statisticsService;
+            _cmcService = cmcService;
 
             InitCommands();
         }
@@ -645,10 +656,10 @@ namespace FAT.Application.Models
             OnLoadedCommand = new DelegateCommand(OnLoaded);
 
             StartScanCommand = new DelegateCommand(o =>
-                AppMessages.ScanMessage.Send(MessageTypes.StartScan, InvokeStartScan),
+                AppMessages.ScanMessages.Send(MessageTypes.StartScan, InvokeStartScan),
                 o => !IsAnyScanInProgress);
             StopScanCommand = new DelegateCommand(o =>
-                AppMessages.ScanMessage.Send(MessageTypes.StopScan, InvokeStopScan),
+                AppMessages.ScanMessages.Send(MessageTypes.StopScan, InvokeStopScan),
                 o => IsGlobalStopEnabled);
 
             SelectCommand = new DelegateCommand(o => { },
@@ -712,20 +723,14 @@ namespace FAT.Application.Models
             InvokeStartAutoDiscovery(null);
             InvokeLoadInitialData();
 
-     
-            var productName = System.Diagnostics.Process.GetCurrentProcess().ProcessName;
-            var productIndentifier = productName == "ForensicAnalysisTool" ? "enp.c1.fat" : "enp.c1.ufh";
-            LaunchedRequest launchedRequest=new LaunchedRequest();
-            launchedRequest.ProductIdentifier = productIndentifier;
-            launchedRequest.ProductVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            _statisticsService.LaunchedAsync(launchedRequest);
-
             var name = await TryAction(GetCurrentDomainName());
 
             CurrentUser = _targetsDiscoveryService.GetLoggedInUser();
             CurrentDomainName = name?.Replace("DC=", "").Replace(",", ".");
             RaisePropertyChanged(nameof(CurrentDomainNameContent));
             RaisePropertyChanged(nameof(HasCurrentDomainName));
+
+            CMCStatisticsMessages<IApplicationLaunchedRequest>.Send();
         }
 
         private void InvokeLoadInitialData()
@@ -847,7 +852,7 @@ namespace FAT.Application.Models
                 });
                 _lastModifiesComputerDate = null;
                 options = new ScanOptions(_tcpPort, _udpPort, scanKind, Login, Password, true);
-              IsScanNowTriggerType= true;
+
              _aptService.BeginScan(DiscoveryResults.Where(_ => _.IsSelected).ToArray(),
                     _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
 
@@ -868,10 +873,11 @@ namespace FAT.Application.Models
             IsAutoDiscoveryCompleted = true;
             _targetsDiscoveryService.StopTargetsAutoDiscovery();
 
-            IAutoDiscoveryFinishedRequest request = new AutoDiscoveryFinishedRequest();
-            request.CountOfPotentiallyScanableDiscoveredComputers= DiscoveryResults?.Count ?? 0;
-            request.DiscoveryStatus=DiscoveryStatus.Skipped;
-            _statisticsService.AutoDiscoveryFinishedAsync(request);
+            CMCStatisticsMessages<IAutoDiscoveryFinishedRequest>.Send(request =>
+            {
+                request.CountOfPotentiallyScanableDiscoveredComputers = DiscoveryResults.Count;
+                request.DiscoveryStatus = DiscoveryStatus.Skipped;
+            });
         }
 
         private void OnDeploymentTargetsAutoResolving(object sender, DeploymentTargetResolvingEventArgs e)
@@ -1250,26 +1256,19 @@ namespace FAT.Application.Models
 
                 ScanProcessCompleted?.Invoke(this, new DomainEventArgs());
 
+                CMCStatisticsMessages<IScanFinishedRequest>.Send(request =>
+                {
+                    request.CountOfSuccessScans = ScannedItemsCount;
+                    request.CountOfUnknownFiles = _scanCounterManager.UnknownsCount;
+                    request.CountOfMaliciousFiles = _scanCounterManager.MalwaresCount;
 
-                IScanFinishedRequest request = new ScanFinishedRequest();
-                APTAT.Core.CMC.ScanStatus scanStatus = APTAT.Core.CMC.ScanStatus.Success;
-                if (IsScanFailed) scanStatus = APTAT.Core.CMC.ScanStatus.Failed;
-                if (IsScanCancelled) scanStatus = APTAT.Core.CMC.ScanStatus.Interrupted;
-                request.ScanStatus = scanStatus;
-
-                var countOfFailedScans =
-                    Computers.Count(c => c.ScanStatus.ToString() == ScanStatusEnum.Failed.ToString());
-                request.CountOfFailedScans = countOfFailedScans;
-
-                var countOfSuccessScans =
-                    Computers.Count(c => c.ScanStatus.ToString() == ScanStatusEnum.Completed.ToString());
-
-                request.CountOfSuccessScans = countOfSuccessScans;
-                var unknownFilesCount = Computers.Select(ufc => ufc.UnknownFilesCount).Sum(ufc => ufc);
-                request.CountOfUnknownFiles = unknownFilesCount;
-                var malwareFilesCount = Computers.Select(mfc => mfc.MalwareFilesCount).Sum(mfc => mfc);
-                request.CountOfMaliciousFiles = malwareFilesCount;
-                _statisticsService.ScanFinishedAsync(request);
+                    if (IsScanCancelled)
+                        request.ScanStatus = APTAT.Core.CMC.ScanStatus.Interrupted;
+                    else if (IsScanFailed)
+                        request.ScanStatus = APTAT.Core.CMC.ScanStatus.Failed;
+                    else
+                        request.ScanStatus = APTAT.Core.CMC.ScanStatus.Success;
+                });
             }
         }
 
@@ -1342,36 +1341,37 @@ namespace FAT.Application.Models
             }
 
             _lastModifiesComputerDate = null;
-            IsScanNowTriggerType = false;
-        _aptService.BeginScan(items.Select(item => item.DeploymentTarget).ToArray(), _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
+            _aptService.BeginScan(items.Select(item => item.DeploymentTarget).ToArray(), _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
 
             if (_onlineItems.Length == 0)
             {
                 IsScanInProgress = false;
             }
         }
-        private bool IsScanNowTriggerType = false;
+
         private void OnScanStarted(Object sender, ScanStartedEventArgs e)
         {
             _operationGuid = e.OperationUid;
             _lastModifiesComputerDate = null;
-
-            IScanStartedRequest request = new ScanStartedRequest();
-
-            request.TotalCountOfDiscoveredComputers = TotalItemsCount;
-            request.CountOfScannedComputers=ScannedItemsCount;
-
-            var targetsDiscovererType = _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false);
-            request.ScanTarget = targetsDiscovererType.Type;
-
-            ScanType scanType=IsQuickScan? ScanType.Quick: ScanType.Full;
-            if (_storage.ContainsKey(KnownKeys.CustomScanOptions)) scanType = ScanType.Custom;
-            request.ScanType = scanType;
-            request.ScanTriggerType = IsScanNowTriggerType ? ScanTriggerType.ScanNow : ScanTriggerType.CustomScan;
-
-            _statisticsService.ScanStartedAsync(request);
+            _lastUnknownsCount = 0;
+            _lastMalwaresCount = 0;
             _scanCounterManager.Clear();
             _scanTimer.Start();
+
+            CMCStatisticsMessages<IScanStartedRequest>.Send(request =>
+            {
+                request.TotalCountOfDiscoveredComputers = TotalItemsCount;
+
+                var targetsDiscovererType = _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false);
+                request.ScanTarget = targetsDiscovererType.Type;
+
+                ScanType scanType = IsQuickScan ? ScanType.Quick : ScanType.Full;
+                if (_storage.ContainsKey(KnownKeys.CustomScanOptions))
+                    scanType = ScanType.Custom;
+                request.ScanType = scanType;
+
+                request.ScanTriggerType = targetsDiscovererType.Type == ETargetsDiscovererType.AutoDiscovery ? ScanTriggerType.ScanNow : ScanTriggerType.CustomScan;
+            });
         }
 
         private void OnCancelScanStarted(object sender, EventArgs e)
@@ -1508,6 +1508,14 @@ namespace FAT.Application.Models
             }
 
             _scanCounterManager.UpdateCounters(counterDiff);
+            if (IsScanInProgress == false && (_scanCounterManager.MalwaresCount > _lastMalwaresCount || _scanCounterManager.UnknownsCount > _lastUnknownsCount))
+            {
+                CMCStatisticsMessages<IScanUpdatedRequest>.Send(request =>
+                {
+                    request.CountOfNewMaliciousFilesWhichWasFoundAfterTheScanWasFinished = _scanCounterManager.MalwaresCount - _lastMalwaresCount;
+                    request.CountOfNewUnknownFilesWhichWasFoundAfterTheScanWasFinished = _scanCounterManager.UnknownsCount - _lastUnknownsCount;
+                });
+            }
 
             ScannedItemsCount = scanned;
 
@@ -1527,7 +1535,11 @@ namespace FAT.Application.Models
             }
 
             if (Math.Abs(Percentage - 100) < 0.0001)
+            {
                 OnScanCompleted();
+                _lastMalwaresCount = _scanCounterManager.MalwaresCount;
+                _lastUnknownsCount = _scanCounterManager.UnknownsCount;
+            }
 
             _scanTimer.Start();
         }
@@ -1641,8 +1653,8 @@ namespace FAT.Application.Models
                 await _aptService.OnAppClosing();
                 action?.Invoke();
             }
-            ApplicationClosedRequest applicationClosedRequest = new ApplicationClosedRequest();
-            _statisticsService.AppicationClosedAsync(applicationClosedRequest);
+
+            CMCStatisticsMessages<IApplicationClosedRequest>.Send();
         }
 
         private async Task<T> TryAction<T>(Task<T> task) where T : class

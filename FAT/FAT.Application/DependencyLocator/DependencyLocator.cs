@@ -26,15 +26,17 @@ namespace FAT.Application
             resolver.Register<IScanCounterManager, ScanCounterManager>();
             resolver.Register<IScanTimer, ScanTimer>();
 
-          //overriding APTAT.Core registrations 
-            resolver.AllowOverridingRegistrations(true);
-            resolver.RegisterSingleton<IDistinctFileHelper, FatFileFilter>();
-            resolver.RegisterSingleton<IReportBuilderFactory, ReportBuilderFactoryFat>();
             resolver.Register<ICmcClient, CmcClient>();
             resolver.Register<IStatisticsService, StatisticsService>();
             resolver.Register<ICmcWebApiProvider, CmcWebApiProvider>();
             resolver.Register<ISystemInfoProvider, SystemInfoProvider>();
             resolver.Register<ICultureInfoProvider, CultureInfoProvider>();
+
+            //overriding APTAT.Core registrations 
+            resolver.AllowOverridingRegistrations(true);
+            resolver.RegisterSingleton<IDistinctFileHelper, FatFileFilter>();
+            resolver.RegisterSingleton<IReportBuilderFactory, ReportBuilderFactoryFat>();
+
         }
     }
 }

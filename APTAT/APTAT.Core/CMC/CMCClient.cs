@@ -61,7 +61,7 @@ namespace APTAT.Core.CMC
             _webApiProvider.SendData(info, networkCredential);
         }
 
-        public void Launched(ILaunchedRequest request, NetworkCredential credentials)
+        public void ApplicationLaunched(IApplicationLaunchedRequest request, NetworkCredential credentials)
         {
             _accountIdentifier = request.AcId;
             _sessionIdentifier = Guid.NewGuid().ToString();
@@ -190,12 +190,12 @@ namespace APTAT.Core.CMC
             };
         }
 
-        public void AppicationClosed(IApplicationClosedRequest request, NetworkCredential credentials)
+        public void ApplicationClosed(IApplicationClosedRequest request, NetworkCredential credentials)
         {
-            EventParams eventParams = GetAppicationClosedOrSavedParams();
+            EventParams eventParams = GetApplicationClosedOrSavedParams();
             SendData(request, eventParams, credentials);
         }
-        protected virtual EventParams GetAppicationClosedOrSavedParams()
+        protected virtual EventParams GetApplicationClosedOrSavedParams()
         {
             return new EventParams()
             {

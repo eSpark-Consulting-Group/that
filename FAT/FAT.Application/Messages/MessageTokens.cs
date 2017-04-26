@@ -1,4 +1,6 @@
-﻿using FAT.Application.Views;
+﻿
+using APTAT.Core.CMC;
+using FAT.Application.Views;
 using System;
 
 namespace FAT.Application.Messages
@@ -7,7 +9,8 @@ namespace FAT.Application.Messages
     {
         StartScan,
         StopScan,
-        FilterTarget
+        FilterTarget,
+        CMCStatistics
     }
 
     public static class AppMessages
@@ -24,7 +27,7 @@ namespace FAT.Application.Messages
             }
         }
 
-        public static class ScanMessage
+        public static class ScanMessages
         {
             public static void Send(MessageTypes type, Action<object> action = null)
             {
@@ -32,11 +35,19 @@ namespace FAT.Application.Messages
             }
         }
 
-        public static class FilterMessage
+        public static class FilterMessages
         {
-            public static void Send(MessageTypes type, Action<SearchUserControl> action = null)
+            public static void Send(Action<SearchUserControl> action = null)
             {
-                MessageManager.Instance.PublishMessage(new AppMessage<SearchUserControl>(type, action));
+                MessageManager.Instance.PublishMessage(new AppMessage<SearchUserControl>(MessageTypes.FilterTarget, action));
+            }
+        }
+
+        public static class CMCStatisticsMessages<T> where T: IRequest
+        {
+            public static void Send(Action<T> request = null)
+            {
+                MessageManager.Instance.PublishMessage(new AppMessage<T>(MessageTypes.CMCStatistics, request));
             }
         }
     }

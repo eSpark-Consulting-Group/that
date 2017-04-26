@@ -93,7 +93,7 @@ namespace FAT.Application
 
             RadContextMenu.SetContextMenu(treeList, menu);
 
-            AppMessages.FilterMessage.Send(MessageTypes.FilterTarget, _ => _.Target = treeList);
+            AppMessages.FilterMessages.Send(_ => _.Target = treeList);
         }
 
         private void treeList_RowIsExpandedChanged(object sender, RowEventArgs e)

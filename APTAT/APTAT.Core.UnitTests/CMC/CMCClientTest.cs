@@ -18,7 +18,7 @@ namespace APTAT.Core.UnitTests.CMC
         private readonly ISystemInfoProvider _systemInfoProvider;
         private readonly ICultureInfoProvider _cultureInfoProvider;
 
-        private ILaunchedRequest _launchedRequest;
+        private IApplicationLaunchedRequest _launchedRequest;
         private IAutoDiscoveryFinishedRequest _autoDiscoveryFinishedRequest;
         private IScanStartedRequest _scanStartedRequest;
         private IScanFinishedRequest _scanFinishedRequest;
@@ -43,7 +43,7 @@ namespace APTAT.Core.UnitTests.CMC
 
         private void MocksCreate()
         {
-            _launchedRequest = Mock.Create<ILaunchedRequest>();
+            _launchedRequest = Mock.Create<IApplicationLaunchedRequest>();
             Mock.Arrange(() => _launchedRequest.AcId).Returns(Guid.NewGuid().ToString());
             Mock.Arrange(() => _launchedRequest.ProductVersion).Returns("1.5.20801.85");
             Mock.Arrange(() => _launchedRequest.ProductIdentifier).Returns("enp.c1.fat");
@@ -111,7 +111,7 @@ namespace APTAT.Core.UnitTests.CMC
 
 
             //Act
-            client.Launched(_launchedRequest, _networkCredentionals);
+            client.ApplicationLaunched(_launchedRequest, _networkCredentionals);
             //Assert
 
             Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>()), Occurs.Once());
@@ -210,7 +210,7 @@ namespace APTAT.Core.UnitTests.CMC
             Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>())).OccursOnce();
             var client = new CmcClient(provider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
             //Act
-            client.AppicationClosed(_applicationClosedRequest, _networkCredentionals);
+            client.ApplicationClosed(_applicationClosedRequest, _networkCredentionals);
             //Assert
             Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>()), Occurs.Once());
         }
@@ -226,14 +226,14 @@ namespace APTAT.Core.UnitTests.CMC
             Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>())).DoInstead(() => { cnt++; });
             var client = new CmcClient(provider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
             //Act
-            client.Launched(_launchedRequest, _networkCredentionals);
+            client.ApplicationLaunched(_launchedRequest, _networkCredentionals);
             client.AutoDiscoveryFinished(_autoDiscoveryFinishedRequest, _networkCredentionals);
             client.ScanStarted(_scanStartedRequest, _networkCredentionals);
             client.ScanFinished(_scanFinishedRequest, _networkCredentionals);
             client.ScanUpdated(_scanUpdatedRequest, _networkCredentionals);
             client.ReportGenerated(_reportGeneratedRequest, _networkCredentionals);
             client.ReportPrintedOrSaved(_reportPrintedOrSavedRequest, _networkCredentionals);
-            client.AppicationClosed(_applicationClosedRequest, _networkCredentionals);
+            client.ApplicationClosed(_applicationClosedRequest, _networkCredentionals);
             //Assert
             Assert.Equal(8, cnt);
         }
@@ -255,7 +255,7 @@ namespace APTAT.Core.UnitTests.CMC
             var localTimeZone = TimeZone.CurrentTimeZone.ToLocalTime(DateTime.Now);
             IGeneralInfo generalInfo = null;
 
-            _launchedRequest = Mock.Create<ILaunchedRequest>();
+            _launchedRequest = Mock.Create<IApplicationLaunchedRequest>();
             Mock.Arrange(() => _launchedRequest.AcId).Returns(acId);
             Mock.Arrange(() => _launchedRequest.ProductVersion).Returns(productVersion);
             Mock.Arrange(() => _launchedRequest.ProductIdentifier).Returns(productId);
@@ -293,7 +293,7 @@ namespace APTAT.Core.UnitTests.CMC
             var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
 
             //Act
-            client.Launched(_launchedRequest, _networkCredentionals);
+            client.ApplicationLaunched(_launchedRequest, _networkCredentionals);
 
             //Assert
             Assert.Equal(generalInfo.ApplicationIdentifier, actualGeneralInfo.ApplicationIdentifier);
@@ -333,7 +333,7 @@ namespace APTAT.Core.UnitTests.CMC
             string eventId = "ei_rp_ad";
             string eventGroupId = "eg_da";
 
-            _launchedRequest = Mock.Create<ILaunchedRequest>();
+            _launchedRequest = Mock.Create<IApplicationLaunchedRequest>();
             Mock.Arrange(() => _launchedRequest.AcId).Returns(acId);
             Mock.Arrange(() => _launchedRequest.ProductVersion).Returns(productVersion);
             Mock.Arrange(() => _launchedRequest.ProductIdentifier).Returns(productId);
@@ -369,7 +369,7 @@ namespace APTAT.Core.UnitTests.CMC
                 .DoInstead((IGeneralInfo gi) => { generalInfo = gi; });
 
             var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
-            client.Launched(_launchedRequest, _networkCredentionals);
+            client.ApplicationLaunched(_launchedRequest, _networkCredentionals);
 
             //Act
             client.AutoDiscoveryFinished(_autoDiscoveryFinishedRequest, _networkCredentionals);
@@ -403,7 +403,7 @@ namespace APTAT.Core.UnitTests.CMC
             string eventId = "ei_rp_sc";
             string eventGroupId = "eg_da";
 
-            _launchedRequest = Mock.Create<ILaunchedRequest>();
+            _launchedRequest = Mock.Create<IApplicationLaunchedRequest>();
             Mock.Arrange(() => _launchedRequest.AcId).Returns(acId);
             Mock.Arrange(() => _launchedRequest.ProductVersion).Returns(productVersion);
             Mock.Arrange(() => _launchedRequest.ProductIdentifier).Returns(productId);
@@ -445,7 +445,7 @@ namespace APTAT.Core.UnitTests.CMC
                 .DoInstead((IGeneralInfo gi) => { generalInfo = gi; });
 
             var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
-            client.Launched(_launchedRequest, _networkCredentionals);
+            client.ApplicationLaunched(_launchedRequest, _networkCredentionals);
 
             //Act
             client.ScanStarted(_scanStartedRequest, _networkCredentionals);
@@ -480,7 +480,7 @@ namespace APTAT.Core.UnitTests.CMC
             string eventId = "ei_rp_sc";
             string eventGroupId = "eg_da";
 
-            _launchedRequest = Mock.Create<ILaunchedRequest>();
+            _launchedRequest = Mock.Create<IApplicationLaunchedRequest>();
             Mock.Arrange(() => _launchedRequest.AcId).Returns(acId);
             Mock.Arrange(() => _launchedRequest.ProductVersion).Returns(productVersion);
             Mock.Arrange(() => _launchedRequest.ProductIdentifier).Returns(productId);
@@ -515,7 +515,7 @@ namespace APTAT.Core.UnitTests.CMC
                 .DoInstead((IGeneralInfo gi) => { generalInfo = gi; });
 
             var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
-            client.Launched(_launchedRequest, _networkCredentionals);
+            client.ApplicationLaunched(_launchedRequest, _networkCredentionals);
 
             //Act
             client.ScanUpdated(_scanUpdatedRequest, _networkCredentionals);
@@ -549,7 +549,7 @@ namespace APTAT.Core.UnitTests.CMC
             string eventId = "ei_rp_sc";
             string eventGroupId = "eg_da";
 
-            _launchedRequest = Mock.Create<ILaunchedRequest>();
+            _launchedRequest = Mock.Create<IApplicationLaunchedRequest>();
             Mock.Arrange(() => _launchedRequest.AcId).Returns(acId);
             Mock.Arrange(() => _launchedRequest.ProductVersion).Returns(productVersion);
             Mock.Arrange(() => _launchedRequest.ProductIdentifier).Returns(productId);
@@ -593,7 +593,7 @@ namespace APTAT.Core.UnitTests.CMC
                 .DoInstead((IGeneralInfo gi) => { generalInfo = gi; });
 
             var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
-            client.Launched(_launchedRequest, _networkCredentionals);
+            client.ApplicationLaunched(_launchedRequest, _networkCredentionals);
 
             //Act
             client.ScanFinished(_scanFinishedRequest, _networkCredentionals);
@@ -626,7 +626,7 @@ namespace APTAT.Core.UnitTests.CMC
             string eventId = "ei_rp_info";
             string eventGroupId = "eg_da";
 
-            _launchedRequest = Mock.Create<ILaunchedRequest>();
+            _launchedRequest = Mock.Create<IApplicationLaunchedRequest>();
             Mock.Arrange(() => _launchedRequest.AcId).Returns(acId);
             Mock.Arrange(() => _launchedRequest.ProductVersion).Returns(productVersion);
             Mock.Arrange(() => _launchedRequest.ProductIdentifier).Returns(productId);
@@ -659,7 +659,7 @@ namespace APTAT.Core.UnitTests.CMC
             Mock.Arrange(() => webApiProvider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>()))
                 .DoInstead((IGeneralInfo gi) => { generalInfo = gi; });
             var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
-            client.Launched(_launchedRequest, _networkCredentionals);
+            client.ApplicationLaunched(_launchedRequest, _networkCredentionals);
             //Act
             client.ReportGenerated(_reportGeneratedRequest, _networkCredentionals);
 
@@ -691,7 +691,7 @@ namespace APTAT.Core.UnitTests.CMC
             string eventId = "ei_rp_info";
             string eventGroupId = "eg_da";
 
-            _launchedRequest = Mock.Create<ILaunchedRequest>();
+            _launchedRequest = Mock.Create<IApplicationLaunchedRequest>();
             Mock.Arrange(() => _launchedRequest.AcId).Returns(acId);
             Mock.Arrange(() => _launchedRequest.ProductVersion).Returns(productVersion);
             Mock.Arrange(() => _launchedRequest.ProductIdentifier).Returns(productId);
@@ -728,7 +728,7 @@ namespace APTAT.Core.UnitTests.CMC
                 .DoInstead((IGeneralInfo gi) => { generalInfo = gi; });
 
             var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
-            client.Launched(_launchedRequest, _networkCredentionals);
+            client.ApplicationLaunched(_launchedRequest, _networkCredentionals);
 
             //Act
             client.ReportPrintedOrSaved(_reportPrintedOrSavedRequest, _networkCredentionals);
@@ -761,7 +761,7 @@ namespace APTAT.Core.UnitTests.CMC
             string eventId = "ei_da";
             string eventGroupId = "eg_da";
 
-            _launchedRequest = Mock.Create<ILaunchedRequest>();
+            _launchedRequest = Mock.Create<IApplicationLaunchedRequest>();
             Mock.Arrange(() => _launchedRequest.AcId).Returns(acId);
             Mock.Arrange(() => _launchedRequest.ProductVersion).Returns(productVersion);
             Mock.Arrange(() => _launchedRequest.ProductIdentifier).Returns(productId);
@@ -789,10 +789,10 @@ namespace APTAT.Core.UnitTests.CMC
             Mock.Arrange(() => webApiProvider.SetBaseUri(Arg.AnyUri));
             Mock.Arrange(() => webApiProvider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>())).DoInstead((IGeneralInfo gi) => { generalInfo = gi; });
             var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
-            client.Launched(_launchedRequest, _networkCredentionals);
+            client.ApplicationLaunched(_launchedRequest, _networkCredentionals);
 
             //Act
-            client.AppicationClosed(_applicationClosedRequest, _networkCredentionals);
+            client.ApplicationClosed(_applicationClosedRequest, _networkCredentionals);
 
         }
 
