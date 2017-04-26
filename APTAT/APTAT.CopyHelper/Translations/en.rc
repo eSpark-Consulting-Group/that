@@ -1,0 +1,18 @@
+/////////////////////////////////////////////////////////////////////////////
+// English (United States) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE LANG_ENGLISH, SUBLANG_DEFAULT
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+	IDS_Descent_ConnectionError			"Cannot establish network connection to the server {0} ({1})"	// {0} is server address (string), {1} is error message (string)
+END
+
+#endif    // English (United States) resources
+/////////////////////////////////////////////////////////////////////////////

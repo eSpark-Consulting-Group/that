@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}</ProjectGuid>
+    <RootNamespace>DescentAgn</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <SccProjectName>SAK</SccProjectName>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccProvider>SAK</SccProvider>
+    <ProjectName>APTAT.DescentCopyHelper</ProjectName>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <UseOfAtl>Static</UseOfAtl>
+    <PlatformToolset>v140_xp</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <UseOfAtl>Static</UseOfAtl>
+    <PlatformToolset>v140_xp</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <TargetName>DescentCopyHelper</TargetName>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <GenerateManifest>false</GenerateManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)Agent;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;DISABLE_AGENT_STRING_DLL_LINKAGE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+    </ClCompile>
+    <Link>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>if exist "$(SolutionDir)DDT.Application\Bin\$(Configuration)\" xcopy "$(TargetPath)" "$(SolutionDir)DDT.Application\Bin\$(Configuration)\" /I /Y</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MinSpace</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)Agent;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;DISABLE_AGENT_STRING_DLL_LINKAGE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <OmitFramePointers>true</OmitFramePointers>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+    </ClCompile>
+    <Link>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <FixedBaseAddress>true</FixedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>if exist "$(SolutionDir)DDT.Application\Bin\$(Configuration)\" xcopy "$(TargetPath)" "$(SolutionDir)DDT.Application\Bin\$(Configuration)\" /I /Y</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="AgentCommonTools.cpp" />
+    <ClCompile Include="AgentInstallUtils.cpp" />
+    <ClCompile Include="AgentRegistry.cpp" />
+    <ClCompile Include="AgentSslSocketTools.cpp" />
+    <ClCompile Include="BaseExceptionsLT.cpp" />
+    <ClCompile Include="DebugLogger.cpp" />
+    <ClCompile Include="DefaultStrings.cpp" />
+    <ClCompile Include="EntryPoint.cpp" />
+    <ClCompile Include="FormattedText.cpp" />
+    <ClCompile Include="ImpersonationHelper.cpp" />
+    <ClCompile Include="Installer.cpp" />
+    <ClCompile Include="InstallReporter.cpp" />
+    <ClCompile Include="IPEndPoint.cpp" />
+    <ClCompile Include="LoggingBase.cpp" />
+    <ClCompile Include="LoggingImpl.cpp" />
+    <ClCompile Include="ResourceText.cpp" />
+    <ClCompile Include="ResponseActions.cpp" />
+    <ClCompile Include="sslsocket.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AgentCommon.h" />
+    <ClInclude Include="AgentCommonTools.h" />
+    <ClInclude Include="AgentInstallUtils.h" />
+    <ClInclude Include="AgentRegistry.h" />
+    <ClInclude Include="AgentSslSocketTools.h" />
+    <ClInclude Include="AgentVersion.h" />
+    <ClInclude Include="BaseExceptionsLT.h" />
+    <ClInclude Include="BaseTypes.h" />
+    <ClInclude Include="DebugLogger.h" />
+    <ClInclude Include="DefaultStrings.h" />
+    <ClInclude Include="DescentStatus.h" />
+    <ClInclude Include="FormattedText.h" />
+    <ClInclude Include="ImpersonationHelper.h" />
+    <ClInclude Include="Installer.h" />
+    <ClInclude Include="InstallReporter.h" />
+    <ClInclude Include="IPEndPoint.h" />
+    <ClInclude Include="LoggingBase.h" />
+    <ClInclude Include="LoggingImpl.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="ResourceText.h" />
+    <ClInclude Include="SAgentVersion.h" />
+    <ClInclude Include="sslsocket.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="trace_enum.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ResourceMappings.ini" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="AgnDescentHelper.rc" />
+    <None Include="Translations\de.rc" />
+    <None Include="Translations\en.rc" />
+    <None Include="Translations\tr.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
