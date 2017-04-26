@@ -98,7 +98,7 @@
 
                                 </Grid>
 
-                                <Border Grid.Row="2" Margin="0 -20 0 0" x:Name="bord"  Height="0" Background="#FFFFFBE7" BorderBrush="#FFFFAE10" BorderThickness="0 1">
+                                <Border Grid.Row="2" Margin="0 -20 0 0" x:Name="bord" Visibility="{Binding ElementName=this, Path=ShowProxyCredentials, Converter={converters:BoolToVisibilityConverter2}}" Height="0" Background="#FFFFFBE7" BorderBrush="#FFFFAE10" BorderThickness="0 1">
                                     <Grid >
                                         <Grid.RenderTransform>
                                             <TranslateTransform x:Name="translate1" X="1000" />
