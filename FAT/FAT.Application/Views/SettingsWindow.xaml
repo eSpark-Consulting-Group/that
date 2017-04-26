@@ -35,10 +35,9 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"></RowDefinition>
                                     <RowDefinition Height="*"></RowDefinition>
-
+                                    <RowDefinition Height="Auto"></RowDefinition>
                                     <RowDefinition Height="Auto"></RowDefinition>
                                 </Grid.RowDefinitions>
-
 
                                 <Grid Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0 20 20 20">
 
@@ -98,7 +97,54 @@
                                     </Grid>
 
                                 </Grid>
-                                <Border Background="White" Grid.Row="2" >
+
+                                <Border Grid.Row="2" Margin="0 -20 0 0" x:Name="bord"  Height="0" Background="#FFFFFBE7" BorderBrush="#FFFFAE10" BorderThickness="0 1">
+                                    <Grid >
+                                        <Grid.RenderTransform>
+                                            <TranslateTransform x:Name="translate1" X="1000" />
+                                        </Grid.RenderTransform>
+                                        <Grid.Triggers>
+                                            <EventTrigger RoutedEvent="FrameworkElement.SizeChanged">
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate1" Storyboard.TargetProperty="X" BeginTime="0:0:0.0">
+                                                            <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0" >
+                                                                <EasingDoubleKeyFrame.EasingFunction>
+                                                                    <CubicEase/>
+                                                                </EasingDoubleKeyFrame.EasingFunction>
+                                                            </EasingDoubleKeyFrame>
+                                                        </DoubleAnimationUsingKeyFrames>
+                                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="bord" Storyboard.TargetProperty="Height" BeginTime="0:0:0.0">
+                                                            <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="110" >
+                                                                <EasingDoubleKeyFrame.EasingFunction>
+                                                                    <CubicEase/>
+                                                                </EasingDoubleKeyFrame.EasingFunction>
+                                                            </EasingDoubleKeyFrame>
+                                                        </DoubleAnimationUsingKeyFrames>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger>
+                                        </Grid.Triggers>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Path Grid.RowSpan="2" VerticalAlignment="Top" Margin="20" SnapsToDevicePixels="True" Data="F1M53.129,62.4846C52.579,63.0346,51.819,63.3496,51.038,63.3496C50.256,63.3496,49.496,63.0346,48.94,62.4846C48.389,61.9346,48.075,61.1696,48.075,60.3876C48.075,59.6116,48.389,58.8476,48.94,58.2946C49.496,57.7446,50.261,57.4246,51.038,57.4246C51.815,57.4246,52.578,57.7446,53.129,58.2946C53.686,58.8466,54,59.6116,54,60.3876C54,61.1696,53.686,61.9336,53.129,62.4846 M51.038,37.6106C52.317,37.6106,53.355,38.6476,53.355,39.9276L52.763,53.7506C52.704,55.0006,51.732,55.4766,51.038,55.4766C50.26,55.4766,49.38,55.0656,49.312,53.7506L48.719,39.9276C48.72,38.6476,49.758,37.6106,51.038,37.6106 M72.544,58.1066L57.528,32.0976C56.192,29.7846,53.703,28.3466,51.032,28.3466C48.361,28.3466,45.873,29.7836,44.536,32.0966L29.347,58.4046C28.012,60.7166,28.013,63.5916,29.347,65.9026C30.684,68.2146,33.172,69.6536,35.843,69.6536L66.228,69.6536L66.292,69.6536C70.399,69.6206,73.729,66.2676,73.729,62.1556C73.73,60.7106,73.32,59.3156,72.544,58.1066" Fill="#FFFEAD48" Height="41.307" Canvas.Left="0" Stretch="Fill" Canvas.Top="0" Width="45.383"/>
+
+                                         <TextBlock Text="Warning!" FontSize="17" Margin="0 15 0 0" FontWeight="Bold" HorizontalAlignment="Left" Grid.Column="1"  VerticalAlignment="Top" />
+
+                                        <TextBlock Grid.Column="1" Grid.Row="1" TextAlignment="Left" Text="Files analysis in cloud cannot be completed without entering proxy credentials. Please enter correspondent credentials. Otherwise current operation will be aborted." TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0 5 65 15" FontSize="13"/>
+
+                                    </Grid>
+                                    
+                                    
+                                </Border>
+                                
+                                <Border Background="White" Grid.Row="3" >
                                     <StackPanel HorizontalAlignment="Right"  Margin="0,10,10,0" Orientation="Horizontal">
                                         <Button Content="Cancel" Visibility="{Binding ElementName=this, Path=ShowScanModes, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}" Height="32" Margin="5,5,5,15" Click="Button_CancelClick" Template="{StaticResource BackButton}" Foreground="Black"/>
                                         <Button Content="Close" Visibility="{Binding ElementName=this, Path=ShowScanModes, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Margin="5,5,5,15" Click="Button_CancelClick" Template="{StaticResource BackButton}" Foreground="Black"/>
