@@ -71,8 +71,6 @@ namespace FAT.Application.Models
 
         private Guid _operationGuid;
         private int _scannedItemsCount;
-        private int _lastUnknownsCount;
-        private int _lastMalwaresCount;
         private double _percentage;
         private string _tcpPort = "80";
         private string _udpPort = "53";
@@ -1355,8 +1353,6 @@ namespace FAT.Application.Models
         {
             _operationGuid = e.OperationUid;
             _lastModifiesComputerDate = null;
-            _lastUnknownsCount = 0;
-            _lastMalwaresCount = 0;
             _scanCounterManager.Clear();
             _scanTimer.Start();
 
@@ -1510,12 +1506,12 @@ namespace FAT.Application.Models
             }
 
             _scanCounterManager.UpdateCounters(counterDiff);
-            if (IsScanInProgress == false && (_scanCounterManager.MalwaresCount > _lastMalwaresCount || _scanCounterManager.UnknownsCount > _lastUnknownsCount))
+            if (IsScanInProgress == false && (counterDiff.MalwareDiff > 0 || counterDiff.UnknownDiff > 0))
             {
                 CMCStatisticsMessages<IScanUpdatedRequest>.Send(request =>
                 {
-                    request.CountOfNewMaliciousFilesWhichWasFoundAfterTheScanWasFinished = _scanCounterManager.MalwaresCount - _lastMalwaresCount;
-                    request.CountOfNewUnknownFilesWhichWasFoundAfterTheScanWasFinished = _scanCounterManager.UnknownsCount - _lastUnknownsCount;
+                    request.CountOfNewMaliciousFilesWhichWasFoundAfterTheScanWasFinished = counterDiff.MalwareDiff;
+                    request.CountOfNewUnknownFilesWhichWasFoundAfterTheScanWasFinished = counterDiff.UnknownDiff;
                 });
             }
 
@@ -1539,8 +1535,6 @@ namespace FAT.Application.Models
             if (Math.Abs(Percentage - 100) < 0.0001)
             {
                 OnScanCompleted();
-                _lastMalwaresCount = _scanCounterManager.MalwaresCount;
-                _lastUnknownsCount = _scanCounterManager.UnknownsCount;
             }
 
             _scanTimer.Start();
