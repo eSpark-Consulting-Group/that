@@ -5,6 +5,7 @@ VisualStudioVersion = 15.0.26403.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FAT.Application", "FAT.Application\FAT.Application.csproj", "{89CDF93E-B252-47A9-BB69-4E11D89DA35F}"
 	ProjectSection(ProjectDependencies) = postProject
+		{2F8EEE56-2DA6-4F0E-8F83-C55520779F55} = {2F8EEE56-2DA6-4F0E-8F83-C55520779F55}
 		{544313F0-D8AC-4440-8A49-83C8DC3B6433} = {544313F0-D8AC-4440-8A49-83C8DC3B6433}
 	EndProjectSection
 EndProject
