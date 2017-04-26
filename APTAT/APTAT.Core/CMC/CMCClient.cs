@@ -151,7 +151,7 @@ namespace APTAT.Core.CMC
         {
             return new EventParams()
             {
-                EventParamValue = "eh_fat_sf",
+                EventParamValue = "eh_sc_sf",
                 EventId = "ei_rp_sc",
                 EventGroupId = "eg_da",
                 AdditionalParameters = new List<IParameter>() { }
