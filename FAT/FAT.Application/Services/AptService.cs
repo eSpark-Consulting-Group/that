@@ -48,7 +48,7 @@ namespace FAT.Application.Services
         public async Task<BuildReportResult> BuildReportAsync(ReportKind reportKind)
         {
             var result = await _manager.BuildReportAsync(ToReportType(reportKind), false);
-            return new BuildReportResult(result.FileName, result.DocumentBytes, result.Error);                        
+            return new BuildReportResult(result.FileName, result.DocumentBytes, result.Error, result.IsGenerated);                        
         }
 
         private ReportType ToReportType(ReportKind kind)

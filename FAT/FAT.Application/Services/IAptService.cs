@@ -69,14 +69,16 @@ namespace FAT.Application.Services
     
     public class BuildReportResult
     {
-        public String FileName { get; private set; }
-        public byte[] DocumentBytes { get; private set; }
-        public Exception Exception { get; private set; }
-        public BuildReportResult(string fileName, byte[] documentBytes, Exception e)
+        public String FileName { get; }
+        public byte[] DocumentBytes { get; }
+        public Exception Exception { get; }
+        public Boolean IsGenerated { get; }
+        public BuildReportResult(string fileName, byte[] documentBytes, Exception e, Boolean reportGenerated)
         {
             DocumentBytes = documentBytes;
             Exception = e;
             FileName = fileName;
+            IsGenerated = reportGenerated;
         }
     }
 

@@ -161,28 +161,31 @@ namespace FAT.Application.Services
                 Action action;
                 if (_queue.TryDequeue(out action))
                 {
-                    try
+                    while (true)
                     {
-                        action.Invoke();
-                    }
-                    catch (Exception ex)
-                    {
-                        var webException = ex as WebException;
-                        var httpWebResponse = webException?.Response as HttpWebResponse;
-                        HttpStatusCode? code = httpWebResponse?.StatusCode;
-                        if (code == HttpStatusCode.ProxyAuthenticationRequired && _askCredentionals)
+                        try
                         {
-                            _proxyCredentials = _proxyCredentialsProvider.GetProxyCredentials();
-                            if (_proxyCredentials != null)
-                            {
-                                continue;
-                            }
-                            _askCredentionals = false;
+                            action.Invoke();
                         }
+                        catch (Exception ex)
+                        {
+                            var webException = ex as WebException;
+                            var httpWebResponse = webException?.Response as HttpWebResponse;
+                            HttpStatusCode? code = httpWebResponse?.StatusCode;
+                            if (code == HttpStatusCode.ProxyAuthenticationRequired && _askCredentionals)
+                            {
+                                _proxyCredentials = _proxyCredentialsProvider.GetProxyCredentials();
+                                if (_proxyCredentials != null)
+                                {
+                                    continue;
+                                }
+                                _askCredentionals = false;
+                            }
 
-                        LogHelper.Trace(TraceEventType.Error,
-                            $"Statistics service warning: {ex.GetType()} {ex.Message}{Environment.NewLine}{ex.StackTrace}");
-                        Thread.Sleep(1000);
+                            LogHelper.Trace(TraceEventType.Error,
+                                $"Statistics service warning: {ex.GetType()} {ex.Message}{Environment.NewLine}{ex.StackTrace}");
+                            Thread.Sleep(1000);
+                        }
                     }
                 }
                 else
@@ -210,7 +213,12 @@ namespace FAT.Application.Services
                     if (matches.Count == 1)
                     {
                         var result = matches[0].Value.Split(new[] { '_' })[1].Split(new[] { '.' })[0];
-                        request.AcId = Encoding.Default.GetString(Convert.FromBase64String(result));
+                        var id = Encoding.Default.GetString(Convert.FromBase64String(result));
+                        rgx = new Regex(@"[0-9a-zA-Z]{24}");
+                        if (rgx.IsMatch(id))
+                        {
+                            request.AcId = id;
+                        }
                     }
                 }
                 request.ProductIdentifier = "enp.c1.fat";

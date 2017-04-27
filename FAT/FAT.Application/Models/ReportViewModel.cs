@@ -90,11 +90,11 @@ namespace FAT.Application.Models
             DocumentBytes = e.DocumentBytes;
             
             ReportOpened?.Invoke(this, EventArgs.Empty);
-
-            CMCStatisticsMessages<IReportGeneratedRequest>.Send(request =>
-            {       
-                request.ReportKind = ReportKind;
-            });
+            if (e.IsGenerated)
+                CMCStatisticsMessages<IReportGeneratedRequest>.Send(request =>
+                {       
+                    request.ReportKind = ReportKind;
+                });
         }
 
         public void OnSaveReportCompleted()

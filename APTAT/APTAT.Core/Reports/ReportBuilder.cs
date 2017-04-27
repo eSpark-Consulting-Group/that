@@ -51,7 +51,7 @@ namespace APTAT.Core.Reports
                         _cache.Add(reportKey, fileName);
                     }
 
-                    return new ReportFile { FileName = path, DocumentBytes = reportBytes };
+                    return new ReportFile { FileName = path, DocumentBytes = reportBytes, IsGenerated = true};
                 });
             }
             catch (Exception ex)
