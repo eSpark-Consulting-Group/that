@@ -1,6 +1,6 @@
 ﻿using System;
 using FlsResult = APTAT.Core.Descent.Apt.CloudVerdict;
-using APTAT.Valkyrie;
+using APTAT.Core.Valkyrie;
 
 namespace APTAT.Application.Models.Apt
 {

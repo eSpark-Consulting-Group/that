@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using APTAT.Application.Models.Apt;
 using APTAT.DeploymentCore;
-using APTAT.Valkyrie;
+using APTAT.Core.Valkyrie;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 
 namespace FAT.Application.Models

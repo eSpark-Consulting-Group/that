@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using APTAT.Core.Descent.Apt;
-using APTAT.Valkyrie;
+using APTAT.Core.Valkyrie;
 
 namespace APTAT.Core.Reports
 {
@@ -118,19 +118,19 @@ namespace APTAT.Core.Reports
 
                 var itemRatingInfoList = new List<ItemRatingInfo>
                 {
-                    new FileRatingValkyrieInfo { CloudVerdict = APTAT.Valkyrie.ValkyrieVerdict.Clean, Count = SafeFilesCount, Value =
+                    new FileRatingValkyrieInfo { CloudVerdict = APTAT.Core.Valkyrie.ValkyrieVerdict.Clean, Count = SafeFilesCount, Value =
                         $"Trusted ({SafeFilesCount / (double) total:P2})"
                     },
-                    new FileRatingValkyrieInfo { CloudVerdict = APTAT.Valkyrie.ValkyrieVerdict.Undetected, Count = UnknownFilesFound, Value =
+                    new FileRatingValkyrieInfo { CloudVerdict = APTAT.Core.Valkyrie.ValkyrieVerdict.Undetected, Count = UnknownFilesFound, Value =
                         $"Unknown  ({UnknownFilesFound / (double) total:P2})"
                     },
-                    new FileRatingValkyrieInfo { CloudVerdict = APTAT.Valkyrie.ValkyrieVerdict.Malware, Count = MalwareFilesFound, Value =
+                    new FileRatingValkyrieInfo { CloudVerdict = APTAT.Core.Valkyrie.ValkyrieVerdict.Malware, Count = MalwareFilesFound, Value =
                         $"Malicious ({MalwareFilesFound / (double) total:P2})"
                     },
-                    new FileRatingValkyrieInfo { CloudVerdict = APTAT.Valkyrie.ValkyrieVerdict.NotAnalyzed, Count = NotAnalyzedFilesCount, Value =
+                    new FileRatingValkyrieInfo { CloudVerdict = APTAT.Core.Valkyrie.ValkyrieVerdict.NotAnalyzed, Count = NotAnalyzedFilesCount, Value =
                         $"Lookup In Progress ({NotAnalyzedFilesCount / (double) total:P2})"
                     },
-                    new FileRatingValkyrieInfo { CloudVerdict = APTAT.Valkyrie.ValkyrieVerdict.Pending, Count = PendingAnalysisFilesCount, Value =
+                    new FileRatingValkyrieInfo { CloudVerdict = APTAT.Core.Valkyrie.ValkyrieVerdict.Pending, Count = PendingAnalysisFilesCount, Value =
                         $"In Analysis ({PendingAnalysisFilesCount / (double) total:P2})"
                     }
                 };

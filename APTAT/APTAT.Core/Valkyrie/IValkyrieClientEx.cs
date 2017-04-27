@@ -1,4 +1,4 @@
-﻿using APTAT.Valkyrie;
+﻿using APTAT.Core.Valkyrie;
 using System;
 using System.Collections.Generic;
 using System.Linq;

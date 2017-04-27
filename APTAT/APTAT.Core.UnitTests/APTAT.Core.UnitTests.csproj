@@ -109,10 +109,6 @@
       <Project>{9e80a126-241c-4079-8975-e16204d03e8d}</Project>
       <Name>APTAT.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\APTAT.Valkyrie\APTAT.Valkyrie.csproj">
-      <Project>{46f67d2c-9368-456a-875a-f96628c18f90}</Project>
-      <Name>APTAT.Valkyrie</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

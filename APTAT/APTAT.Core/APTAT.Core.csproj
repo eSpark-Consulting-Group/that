@@ -338,8 +338,24 @@
     <Compile Include="TelerikReports\Template\FileDetailsValkyrieSubreport.Designer.cs">
       <DependentUpon>FileDetailsValkyrieSubreport.cs</DependentUpon>
     </Compile>
+    <Compile Include="Valkyrie\AnalyzeCompletedEventArgs.cs" />
+    <Compile Include="Valkyrie\AnalyzeCompletedEventHandler.cs" />
+    <Compile Include="Valkyrie\CamRegistration.cs" />
+    <Compile Include="Valkyrie\ICamRegistration.cs" />
+    <Compile Include="Valkyrie\IValkyrieAnalysisResult.cs" />
+    <Compile Include="Valkyrie\IValkyrieClient.cs" />
     <Compile Include="Valkyrie\IValkyrieClientEx.cs" />
+    <Compile Include="Valkyrie\IValkyrieFileInfo.cs" />
+    <Compile Include="Valkyrie\MapperHelper.cs" />
+    <Compile Include="Valkyrie\ProgressInfo.cs" />
+    <Compile Include="Valkyrie\ValkyrieAnalyseOperationContext.cs" />
+    <Compile Include="Valkyrie\ValkyrieAnalysisResult.cs" />
+    <Compile Include="Valkyrie\ValkyrieAnalyzeProgressChangedEventArgs.cs" />
+    <Compile Include="Valkyrie\ValkyrieAnalyzeStartedEventArgs.cs" />
+    <Compile Include="Valkyrie\ValkyrieClient.cs" />
     <Compile Include="Valkyrie\ValkyrieClientWithStorage.cs" />
+    <Compile Include="Valkyrie\ValkyrieFileInfo.cs" />
+    <Compile Include="Valkyrie\ValkyrieRegistrationFailedException.cs" />
     <Compile Include="Valkyrie\ValkyrieTrackableInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -428,10 +444,6 @@
     <ProjectReference Include="..\APTAT.Valkyrie.Client\Valkyrie.WebApiProvider.csproj">
       <Project>{851e6095-dd19-4c19-8f9c-20e134fb6f5a}</Project>
       <Name>Valkyrie.WebApiProvider</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\APTAT.Valkyrie\APTAT.Valkyrie.csproj">
-      <Project>{46f67d2c-9368-456a-875a-f96628c18f90}</Project>
-      <Name>APTAT.Valkyrie</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

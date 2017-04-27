@@ -1,4 +1,4 @@
-﻿using ValkyrieVerdict = APTAT.Valkyrie.ValkyrieVerdict;
+﻿using ValkyrieVerdict = APTAT.Core.Valkyrie.ValkyrieVerdict;
 namespace APTAT.Core.Reports
 {
     public class FileRatingValkyrieInfo : ItemRatingInfo

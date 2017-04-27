@@ -1,5 +1,5 @@
 ﻿using System;
-using APTAT.Valkyrie;
+using APTAT.Core.Valkyrie;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 
 namespace APTAT.Application.Models.Apt

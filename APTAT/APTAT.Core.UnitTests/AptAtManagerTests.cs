@@ -7,7 +7,7 @@ using APTAT.DeploymentCore;
 using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
-using APTAT.Valkyrie;
+using APTAT.Core.Valkyrie;
 using Telerik.JustMock;
 using Xunit;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;

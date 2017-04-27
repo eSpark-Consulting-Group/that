@@ -1,7 +1,7 @@
 ﻿using System;
 using APTAT.Core.Descent.Apt;
-using APTAT.Valkyrie;
 using System.Collections.Generic;
+using APTAT.Core.Valkyrie;
 
 namespace APTAT.Core
 {

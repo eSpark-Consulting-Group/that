@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using APTAT.Core.Apt;
-using APTAT.Valkyrie;
+using APTAT.Core.Valkyrie;
 
 namespace APTAT.Core.Reports
 {

@@ -4,11 +4,11 @@ using System.Linq;
 using APTAT.Core.Apt;
 using APTAT.Core.Descent;
 using APTAT.Core.Descent.Apt;
+using APTAT.Core.Valkyrie;
 using APTAT.DAL.Entities;
 using APTAT.DAL.Storage;
 using AptScanResult = APTAT.DAL.Entities.AptScanResult;
 using APTAT.DAL.Enums;
-using APTAT.Valkyrie;
 using ValkyrieFileInfo = APTAT.DAL.Entities.ValkyrieFileInfo;
 
 namespace APTAT.Core.Storage

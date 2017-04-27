@@ -103,6 +103,7 @@ struct RemoteInstallerService : CInstallReporter::IInstallationListener
 	int action_install_msi(CString responseFile, int argc, LPTSTR argv[]);
     int action_install_agent(int argc, LPTSTR argv[]);
 	int action_install_exe(int argc, LPTSTR argv[], int timeOut);
+	int action_copy_files(int argc, LPTSTR argv[]);
     int action_uninstall_agent(int argc, LPTSTR argv[]);
 
 

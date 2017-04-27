@@ -4,7 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Valkyrie.WebApiProvider.Contracts;
 using Valkyrie.WebApiProvider.Enums;
-using APTAT.Valkyrie;
+using APTAT.Core.Valkyrie;
 using APTAT.Core.Storage;
 using System.Linq;
 
@@ -36,7 +36,7 @@ namespace APTAT.Core.Valkyrie
         {
             if(_valkyrieScanId.HasValue)
                 _storage.SaveValkyrieResults(_valkyrieScanId.Value, filesToAnalyze.Select(f => 
-                (IValkyrieAnalysisResult) new ValkyrieAnalysisResult(f.Sha1, APTAT.Valkyrie.ValkyrieVerdict.InQueue)).ToArray());
+                (IValkyrieAnalysisResult) new ValkyrieAnalysisResult(f.Sha1, APTAT.Core.Valkyrie.ValkyrieVerdict.InQueue)).ToArray());
             _valkyrieClient.AddFilesToAnalyze(filesToAnalyze, shouldStartImmediately);
         }
 

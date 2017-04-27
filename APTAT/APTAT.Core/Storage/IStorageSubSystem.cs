@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using APTAT.Core.Descent;
 using APTAT.Core.Descent.Apt;
+using APTAT.Core.Valkyrie;
 using APTAT.DAL.Enums;
-using APTAT.Valkyrie;
 
 namespace APTAT.Core.Storage
 {

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using APTAT.Core.Descent.Apt;
-using APTAT.Valkyrie;
-using ValkyrieVerdict = APTAT.Valkyrie.ValkyrieVerdict;
+using APTAT.Core.Valkyrie;
+using ValkyrieVerdict = APTAT.Core.Valkyrie.ValkyrieVerdict;
 
 namespace APTAT.Core
 {

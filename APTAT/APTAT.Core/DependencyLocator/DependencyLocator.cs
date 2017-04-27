@@ -6,6 +6,7 @@ using APTAT.Core.Reports;
 using APTAT.Core.Storage;
 using APTAT.Core.Valkyrie;
 using APTAT.DeploymentCore.Descent;
+using Valkyrie.WebApiProvider;
 
 namespace APTAT.Core.DependencyLocator
 {
@@ -32,6 +33,8 @@ namespace APTAT.Core.DependencyLocator
             resolver.RegisterSingleton<IFinalVerdictCalculator, FinalVerdictCalculator>();
             resolver.RegisterSingleton<IReportBuilderFactory, ReportBuilderFactory>();
             resolver.RegisterSingleton<IReportNamesCache, ReportNamesCache>();
+            resolver.RegisterSingleton<IValkyrieWebApiProvider, ValkyrieWebApiProvider>();
+            resolver.RegisterSingleton<IValkyrieClient, ValkyrieClient>();
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Net;
 using APTAT.Core.Descent.Apt;
 using APTAT.Core.Reports;
 using APTAT.DeploymentCore.Directory;
-using APTAT.Valkyrie;
+using APTAT.Core.Valkyrie;
 using System.Threading.Tasks;
 using APTAT.Core.Apt;
 using APTAT.Core.FLS;

@@ -1,4 +1,4 @@
-﻿using APTAT.Valkyrie;
+﻿using APTAT.Core.Valkyrie;
 
 namespace FAT.Application.Models.Apt
 {

@@ -6,7 +6,7 @@ using FAT.Application.Services;
 using Telerik.Windows;
 using System.Diagnostics;
 using System.Linq;
-using APTAT.Valkyrie;
+using APTAT.Core.Valkyrie;
 using System.ComponentModel;
 using APTAT.Application.Services.EventArgs;
 using FAT.Application.Messages;

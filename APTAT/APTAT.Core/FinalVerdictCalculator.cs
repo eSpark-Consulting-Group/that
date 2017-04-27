@@ -16,7 +16,7 @@ namespace APTAT.Core
     {
 
         public FinalVerdictCalculator() { }
-        public FinalVerdict GetFinalVerdict(CloudVerdict cloud, APTAT.Valkyrie.ValkyrieVerdict valkyrie)
+        public FinalVerdict GetFinalVerdict(CloudVerdict cloud, APTAT.Core.Valkyrie.ValkyrieVerdict valkyrie)
         {
             if (cloud == CloudVerdict.Malware)
                 return FinalVerdict.Malware;
@@ -24,20 +24,20 @@ namespace APTAT.Core
                 return FinalVerdict.Clean;
             switch (valkyrie)
             {
-                case APTAT.Valkyrie.ValkyrieVerdict.NotAnalyzed:
+                case APTAT.Core.Valkyrie.ValkyrieVerdict.NotAnalyzed:
                     return FinalVerdict.NotAnalyzed;
-                case APTAT.Valkyrie.ValkyrieVerdict.PotentiallyUnwantedApplication:
-                case APTAT.Valkyrie.ValkyrieVerdict.Malware:
+                case APTAT.Core.Valkyrie.ValkyrieVerdict.PotentiallyUnwantedApplication:
+                case APTAT.Core.Valkyrie.ValkyrieVerdict.Malware:
                     return FinalVerdict.Malware;
-                case APTAT.Valkyrie.ValkyrieVerdict.Pending:
-                case APTAT.Valkyrie.ValkyrieVerdict.FirstSeen:
+                case APTAT.Core.Valkyrie.ValkyrieVerdict.Pending:
+                case APTAT.Core.Valkyrie.ValkyrieVerdict.FirstSeen:
                     return FinalVerdict.InProgress;
-                case APTAT.Valkyrie.ValkyrieVerdict.Undetected:
+                case APTAT.Core.Valkyrie.ValkyrieVerdict.Undetected:
                     return FinalVerdict.Unknown;
-                case APTAT.Valkyrie.ValkyrieVerdict.Clean:
+                case APTAT.Core.Valkyrie.ValkyrieVerdict.Clean:
                     return FinalVerdict.Clean;
-                case APTAT.Valkyrie.ValkyrieVerdict.PendingFls:
-                case APTAT.Valkyrie.ValkyrieVerdict.InQueue:
+                case APTAT.Core.Valkyrie.ValkyrieVerdict.PendingFls:
+                case APTAT.Core.Valkyrie.ValkyrieVerdict.InQueue:
                     {
                         switch (cloud)
                         {

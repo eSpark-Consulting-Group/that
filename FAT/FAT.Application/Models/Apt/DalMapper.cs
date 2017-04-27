@@ -207,28 +207,28 @@ namespace FAT.Application.Models
            return mappedModules;        
         }
 
-        public static APTAT.Valkyrie.ValkyrieVerdict ToAptatValkyrieVerdict(this APTAT.DAL.Entities.ValkyrieVerdict valkirieVerdict)
+        public static APTAT.Core.Valkyrie.ValkyrieVerdict ToAptatValkyrieVerdict(this APTAT.DAL.Entities.ValkyrieVerdict valkirieVerdict)
         {
             switch (valkirieVerdict)
             {
                 case APTAT.DAL.Entities.ValkyrieVerdict.Clean:
-                    return APTAT.Valkyrie.ValkyrieVerdict.Clean;
+                    return APTAT.Core.Valkyrie.ValkyrieVerdict.Clean;
                 case APTAT.DAL.Entities.ValkyrieVerdict.FirstSeen:
-                    return APTAT.Valkyrie.ValkyrieVerdict.FirstSeen;
+                    return APTAT.Core.Valkyrie.ValkyrieVerdict.FirstSeen;
                 case APTAT.DAL.Entities.ValkyrieVerdict.InQueue:
-                    return APTAT.Valkyrie.ValkyrieVerdict.InQueue;
+                    return APTAT.Core.Valkyrie.ValkyrieVerdict.InQueue;
                 case APTAT.DAL.Entities.ValkyrieVerdict.Malware:
-                    return APTAT.Valkyrie.ValkyrieVerdict.Malware;
+                    return APTAT.Core.Valkyrie.ValkyrieVerdict.Malware;
                 case APTAT.DAL.Entities.ValkyrieVerdict.NotAnalyzed:
-                    return APTAT.Valkyrie.ValkyrieVerdict.NotAnalyzed;
+                    return APTAT.Core.Valkyrie.ValkyrieVerdict.NotAnalyzed;
                 case APTAT.DAL.Entities.ValkyrieVerdict.Pending:
-                    return APTAT.Valkyrie.ValkyrieVerdict.Pending;
+                    return APTAT.Core.Valkyrie.ValkyrieVerdict.Pending;
                 case APTAT.DAL.Entities.ValkyrieVerdict.PendingFls:
-                    return APTAT.Valkyrie.ValkyrieVerdict.PendingFls;
+                    return APTAT.Core.Valkyrie.ValkyrieVerdict.PendingFls;
                 case APTAT.DAL.Entities.ValkyrieVerdict.PotentiallyUnwantedApplication:
-                    return APTAT.Valkyrie.ValkyrieVerdict.PotentiallyUnwantedApplication;
+                    return APTAT.Core.Valkyrie.ValkyrieVerdict.PotentiallyUnwantedApplication;
                 case APTAT.DAL.Entities.ValkyrieVerdict.Undetected:
-                    return APTAT.Valkyrie.ValkyrieVerdict.Undetected;
+                    return APTAT.Core.Valkyrie.ValkyrieVerdict.Undetected;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(valkirieVerdict));
             }

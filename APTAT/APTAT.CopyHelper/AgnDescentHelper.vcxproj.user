@@ -5,7 +5,7 @@
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LocalDebuggerCommandArguments>-test process_response_action action_install_exe responseFile 10 C:\Users\a.serebriakov\Downloads\APTAT.exe*</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-test process_response_action action_copy_files responseFile 10 C:\Users\a.serebriakov\Downloads\APTAT.exe</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>

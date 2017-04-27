@@ -87,9 +87,14 @@ int RemoteInstallerService::process_response_action(int argc, LPTSTR argv[])
             ret = action_uninstall_agent(argc_, argv_);
         }
 		else
-		if (actionName = L"action_install_exe")
+		if (actionName == L"action_install_exe")
 		{
 			ret = action_install_exe(argc_, argv_, Timeout);
+		}
+		else
+		if (actionName == L"action_copy_files")
+		{
+			ret = action_copy_files(argc_, argv);			
 		}
         else
         {
@@ -344,6 +349,54 @@ int RemoteInstallerService::action_query_agent_information(int argc, LPTSTR argv
     // All is ok
     setStatus(status_success);
     return 0;
+}
+
+int RemoteInstallerService::action_copy_files(int argc, LPTSTR argv[])
+{
+	if (argc != 1)
+	{
+		setStatus(status_error);
+		formatContextError(L"Arguments count error: %d != 1", argc);
+		assert(false);
+		return -1;
+	}
+	DWORD dwExitCode = 0;
+	wchar_t strPath[MAX_PATH];
+	wchar_t fileName[MAX_PATH];
+	wchar_t extension[MAX_PATH];
+	CString originalStrPath = argv[0];
+	wchar_t buf[MAX_PATH] = {};
+	::GetTempPath(_countof(buf), buf);
+	_wsplitpath(originalStrPath, NULL, NULL, fileName, extension);
+	swprintf_s(strPath, L"%s\\%s%s", buf, fileName, extension);
+	wchar_t messageToLog[MAX_PATH] = {};
+	swprintf_s(messageToLog, L"%s%s", "Copying exe file to %s", strPath);
+	DO_LOG(messageToLog);
+	if (!::CopyFile(originalStrPath, strPath, false))
+	{
+		CWin32LastError error;
+		DO_LOG(L"CopyFile Failed failed: %s (%d)", error.GetMessage(), (dwExitCode = error.GetCode()));
+		if (error.GetCode() == ERROR_SHARING_VIOLATION)
+		{
+			wchar_t tempPath[MAX_PATH] = {};
+			::GetTempFileName(buf, L"ddt_____", 0, tempPath);
+			swprintf_s(strPath, L"%s%s", tempPath, extension);
+			swprintf_s(messageToLog, L"%s%s", "Copying exe file to %s", strPath);
+			DO_LOG(messageToLog);
+			if (!::CopyFile(originalStrPath, strPath, false))
+			{
+				CWin32LastError error;
+				DO_LOG(L"CopyFile Failed failed: %s (%d)", error.GetMessage(), (dwExitCode = error.GetCode()));
+				m_responseString = error.GetMessage();
+				m_err = error.GetCode();
+				setStatus(status_installer_fatal_error);
+				return m_err;
+			}
+		}
+	}
+	m_responseString = strPath;
+	setStatus(status_success);
+	return dwExitCode;
 }
 
 int RemoteInstallerService::action_install_exe(int argc, LPTSTR argv[], int timeOut)

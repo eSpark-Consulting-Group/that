@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using APTAT.Core.Descent.Apt;
-using APTAT.Valkyrie;
+using APTAT.Core.Valkyrie;
 
 namespace APTAT.Core.Reports
 {

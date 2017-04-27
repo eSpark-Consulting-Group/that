@@ -5,7 +5,7 @@ using FAT.Application.Models;
 using APTAT.Core;
 using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
-using APTAT.Valkyrie;
+using APTAT.Core.Valkyrie;
 using APTAT.Core.Descent.Apt;
 using APTAT.Application.Services.EventArgs;
 using APTAT.Core.Apt;

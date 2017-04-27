@@ -67,13 +67,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\APTAT\APTAT.Core\APTAT.Core.csproj">
+      <Project>{9e80a126-241c-4079-8975-e16204d03e8d}</Project>
+      <Name>APTAT.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\APTAT\APTAT.Valkyrie.Client\Valkyrie.WebApiProvider.csproj">
       <Project>{851E6095-DD19-4C19-8F9C-20E134FB6F5A}</Project>
       <Name>Valkyrie.WebApiProvider</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\APTAT\APTAT.Valkyrie\APTAT.Valkyrie.csproj">
-      <Project>{46f67d2c-9368-456a-875a-f96628c18f90}</Project>
-      <Name>APTAT.Valkyrie</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Common\APTAT.Common\APTAT.Common.csproj">
       <Project>{49BA3C32-1495-4EA5-8D32-3997788ADE2F}</Project>

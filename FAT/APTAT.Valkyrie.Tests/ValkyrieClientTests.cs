@@ -4,13 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading;
+using APTAT.Core.Descent.Apt;
+using APTAT.Core.Valkyrie;
 using Telerik.JustMock;
 using Valkyrie.WebApiProvider;
 using Valkyrie.WebApiProvider.Contracts;
 using Valkyrie.WebApiProvider.Enums;
 using Xunit;
+using ValkyrieVerdict = APTAT.Core.Valkyrie.ValkyrieVerdict;
 
-namespace APTAT.Valkyrie.Tests
+namespace APTAT.Core.Valkyrie.Tests
 {
     public class ValkyrieClientTests
     {

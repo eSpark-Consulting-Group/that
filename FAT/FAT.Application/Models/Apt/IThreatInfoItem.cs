@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using APTAT.Application.Models.Apt;
 using APTAT.Core.Descent.Apt;
 using APTAT.DeploymentCore;
-using APTAT.Valkyrie;
+using APTAT.Core.Valkyrie;
 
 namespace FAT.Application.Models
 {

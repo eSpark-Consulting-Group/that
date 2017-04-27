@@ -5,6 +5,7 @@ using FAT.Application.Models;
 using System;
 using System.IO;
 using Telerik.JustMock;
+using Telerik.JustMock.Helpers;
 using Xunit;
 
 namespace FAT.Application.Tests
@@ -197,11 +198,11 @@ namespace FAT.Application.Tests
         }
 
         [Theory]
-        [InlineData("teststatus", "testreason", true, 1f, APTAT.Valkyrie.ValkyrieVerdict.Malware)]
-        public void UpdateFileVerdictTest2(string status, string reason, bool isWhitelisted, float probability, APTAT.Valkyrie.ValkyrieVerdict verdict)
+        [InlineData("teststatus", "testreason", true, 1f, APTAT.Core.Valkyrie.ValkyrieVerdict.Malware)]
+        public void UpdateFileVerdictTest2(string status, string reason, bool isWhitelisted, float probability, APTAT.Core.Valkyrie.ValkyrieVerdict verdict)
         {
             var context = Mock.Create<IFileVerdictContext>(Behavior.Strict);
-            var result = Mock.Create<APTAT.Valkyrie.IValkyrieAnalysisResult>(Behavior.Strict);
+            var result = Mock.Create<APTAT.Core.Valkyrie.IValkyrieAnalysisResult>(Behavior.Strict);
             var badFile = Mock.Create<IBadFileItem>(Behavior.Strict);
 
             Mock.Arrange(() => badFile.Name).Returns(Arg.AnyString);
