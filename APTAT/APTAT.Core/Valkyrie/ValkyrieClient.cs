@@ -15,7 +15,7 @@ using APTAT.Common;
 
 using DTO = Valkyrie.WebApiProvider.Enums;
 
-namespace APTAT.Valkyrie
+namespace APTAT.Core.Valkyrie
 {
     public sealed class ValkyrieClient : IValkyrieClient
     {

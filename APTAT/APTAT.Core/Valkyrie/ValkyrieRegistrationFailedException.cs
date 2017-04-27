@@ -1,7 +1,7 @@
 ﻿using System;
 using Valkyrie.WebApiProvider.Contracts;
 
-namespace APTAT.Valkyrie
+namespace APTAT.Core.Valkyrie
 {
     public class ValkyrieRegistrationFailedException : Exception
     {

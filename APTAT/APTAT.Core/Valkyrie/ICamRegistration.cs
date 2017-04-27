@@ -1,4 +1,4 @@
-﻿namespace APTAT.Valkyrie
+﻿namespace APTAT.Core.Valkyrie
 {
     public interface ICamRegistration
     {

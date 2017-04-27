@@ -1,7 +1,7 @@
 ﻿using System;
 using Valkyrie.WebApiProvider.Enums;
 
-namespace APTAT.Valkyrie
+namespace APTAT.Core.Valkyrie
 {
     public interface IValkyrieAnalysisResult
     {

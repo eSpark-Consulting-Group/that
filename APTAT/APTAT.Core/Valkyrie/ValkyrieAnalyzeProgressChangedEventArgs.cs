@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace APTAT.Valkyrie
+namespace APTAT.Core.Valkyrie
 {
     public class ValkyrieAnalyzeProgressChangedEventArgs<T> : EventArgs
     {

@@ -4,7 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Valkyrie.WebApiProvider.Contracts;
 
-namespace APTAT.Valkyrie
+namespace APTAT.Core.Valkyrie
 {
     public interface IValkyrieClient : IDisposable
     {

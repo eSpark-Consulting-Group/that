@@ -4,8 +4,9 @@ using System.Net;
 using APTAT.Common;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using APTAT.Core.Descent.Apt;
 
-namespace APTAT.Valkyrie
+namespace APTAT.Core.Valkyrie
 {
     public class ValkyrieFileInfo : IValkyrieFileInfo
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using DTO = Valkyrie.WebApiProvider.Enums;
 
-namespace APTAT.Valkyrie
+namespace APTAT.Core.Valkyrie
 {
     public static class MapperHelper
     {

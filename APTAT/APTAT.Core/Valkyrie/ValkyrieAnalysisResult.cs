@@ -3,7 +3,7 @@ using System.ComponentModel;
 using Valkyrie.WebApiProvider.Contracts;
 using Valkyrie.WebApiProvider.Enums;
 
-namespace APTAT.Valkyrie
+namespace APTAT.Core.Valkyrie
 {
     public class ValkyrieAnalysisResult : IValkyrieAnalysisResult
     {

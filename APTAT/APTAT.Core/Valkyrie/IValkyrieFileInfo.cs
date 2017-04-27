@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
+using APTAT.Core.Descent.Apt;
 
-namespace APTAT.Valkyrie
+namespace APTAT.Core.Valkyrie
 {
     public interface IValkyrieFileInfo
     {
