@@ -60,12 +60,7 @@ namespace FAT.Application
         [MessageReceiver]
         public void AcceptMessage(AppMessage<SearchUserControl> message)
         {
-            switch (message.Type)
-            {
-                case MessageTypes.FilterTarget:
-                    message.Action(_viewModel.CurrentScanAvailable ? SearchTextBox2 : SearchTextBox);
-                    break;
-            }
+            message.Action(_viewModel.CurrentScanAvailable ? SearchTextBox2 : SearchTextBox);
         }
 
         private ConfirmationWindow _confirmation;
@@ -105,7 +100,7 @@ namespace FAT.Application
         {
             if (_onCompletedAction != null)
             {
-                _onCompletedAction();
+                _viewModel.OnAppClose(_onCompletedAction);
                 return;
             }
 

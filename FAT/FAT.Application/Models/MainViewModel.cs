@@ -1358,6 +1358,7 @@ namespace FAT.Application.Models
             CMCStatisticsMessages<IScanStartedRequest>.Send(request =>
             {
                 request.TotalCountOfDiscoveredComputers = TotalItemsCount;
+                request.CountOfScannedComputers = _onlineItems.Length;
                 var targetsDiscovererType = _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false);
                 request.ScanTarget = targetsDiscovererType.Type;
                 ScanType scanType = IsQuickScan ? ScanType.Quick : ScanType.Full;
