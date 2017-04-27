@@ -84,7 +84,7 @@ namespace FAT.Application
         {
             if (_onCompletedAction != null)
             {
-                _onCompletedAction();
+                _viewModel.OnAppClose(_onCompletedAction);
                 return;
             }
 

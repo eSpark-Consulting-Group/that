@@ -2,6 +2,5 @@
 {
     public interface IApplicationClosedRequest:IRequest
     {
-        string SId { get; set; }
     }
 }

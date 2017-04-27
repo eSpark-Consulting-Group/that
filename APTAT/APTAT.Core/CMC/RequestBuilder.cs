@@ -42,8 +42,6 @@ namespace APTAT.Core.CMC
 
                 new Parameter() {Value = "rp_kd", Name =nameof(IReportGeneratedRequest.ReportKind)},
                 new Parameter() {Value = "act",Name =nameof(IReportPrintedOrSavedRequest.ReportAction)},
-
-                new Parameter() {Value = "sid", Name =nameof(IApplicationClosedRequest.SId)}
             };
 
             string findedfieldValue = string.Empty;

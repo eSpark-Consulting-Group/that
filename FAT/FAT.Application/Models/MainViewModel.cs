@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+
 using System.Windows.Threading;
 using Telerik.Windows.Controls;
 using FAT.Application.Messages;
@@ -39,8 +40,7 @@ namespace FAT.Application.Models
         private readonly IScanCounterManager _scanCounterManager;
         private readonly IScanOperationsManager _scanOperationsManager;
         private readonly IScanTimer _scanTimer;
-        private readonly IStatisticsService _cmcService;
-
+        private readonly IStatisticsService _statisticsService;
         private ObservableCollection<IThreatInfoItem> _files;
         private ObservableCollection<IThreatInfoItem> _computers;
 
@@ -630,7 +630,7 @@ namespace FAT.Application.Models
             IScanCounterManager scanCounterManager, 
             IScanOperationsManager scanOperationsManager,
             IScanTimer scanTimer,
-            IStatisticsService cmcService)
+            IStatisticsService statisticsService)
         {
             _targetsDiscoveryService = targetsDiscoveryService;
             _aptService = aptService;
@@ -638,7 +638,7 @@ namespace FAT.Application.Models
             _scanCounterManager = scanCounterManager;
             _scanOperationsManager = scanOperationsManager;
             _scanTimer = scanTimer;
-            _cmcService = cmcService;
+            _statisticsService = statisticsService;
 
             InitCommands();
         }
@@ -714,7 +714,7 @@ namespace FAT.Application.Models
             
             InvokeStartAutoDiscovery(null);
             InvokeLoadInitialData();
-
+            
             var name = await TryAction(GetCurrentDomainName());
 
             CurrentUser = _targetsDiscoveryService.GetLoggedInUser();
@@ -1254,8 +1254,6 @@ namespace FAT.Application.Models
                     OpenPreviousScansCommand.InvalidateCanExecute();
                 }
 
-                ScanProcessCompleted?.Invoke(this, new DomainEventArgs());
-
                 CMCStatisticsMessages<IScanFinishedRequest>.Send(request =>
                 {
                     request.CountOfSuccessScans = ScannedItemsCount;
@@ -1269,6 +1267,7 @@ namespace FAT.Application.Models
                     else
                         request.ScanStatus = APTAT.Core.CMC.ScanStatus.Success;
                 });
+                ScanProcessCompleted?.Invoke(this, new DomainEventArgs());
             }
         }
 
@@ -1359,15 +1358,12 @@ namespace FAT.Application.Models
             CMCStatisticsMessages<IScanStartedRequest>.Send(request =>
             {
                 request.TotalCountOfDiscoveredComputers = TotalItemsCount;
-
                 var targetsDiscovererType = _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false);
                 request.ScanTarget = targetsDiscovererType.Type;
-
                 ScanType scanType = IsQuickScan ? ScanType.Quick : ScanType.Full;
                 if (_storage.ContainsKey(KnownKeys.CustomScanOptions))
                     scanType = ScanType.Custom;
                 request.ScanType = scanType;
-
                 request.ScanTriggerType = targetsDiscovererType.Type == ETargetsDiscovererType.AutoDiscovery ? ScanTriggerType.ScanNow : ScanTriggerType.CustomScan;
             });
         }
@@ -1508,6 +1504,7 @@ namespace FAT.Application.Models
             _scanCounterManager.UpdateCounters(counterDiff);
             if (IsScanInProgress == false && (counterDiff.MalwareDiff > 0 || counterDiff.UnknownDiff > 0))
             {
+
                 CMCStatisticsMessages<IScanUpdatedRequest>.Send(request =>
                 {
                     request.CountOfNewMaliciousFilesWhichWasFoundAfterTheScanWasFinished = counterDiff.MalwareDiff;
@@ -1634,11 +1631,13 @@ namespace FAT.Application.Models
 
         public async void OnAppClose(Action action)
         {
+            IApplicationClosedRequest request=new ApplicationClosedRequest();
             if (IsAnyScanInProgress)
             {
                 if (IsAutoDiscoveryInProgress)
                 {
                     InvokeStopAutoDiscovery(null);
+                    await _statisticsService.ApplicationClosed(request);
                     action?.Invoke();
                 }
                 else
@@ -1647,10 +1646,9 @@ namespace FAT.Application.Models
             else
             {
                 await _aptService.OnAppClosing();
+                await _statisticsService.ApplicationClosed(request);
                 action?.Invoke();
             }
-
-            CMCStatisticsMessages<IApplicationClosedRequest>.Send();
         }
 
         private async Task<T> TryAction<T>(Task<T> task) where T : class

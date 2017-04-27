@@ -77,7 +77,7 @@ namespace APTAT.Core.UnitTests.CMC
             Mock.Arrange(() => _reportPrintedOrSavedRequest.ReportAction).Returns(ReportAction.Saved);
 
             _applicationClosedRequest = Mock.Create<IApplicationClosedRequest>();
-            Mock.Arrange(() => _applicationClosedRequest.SId).Returns(Guid.NewGuid().ToString());
+
         }
 
         private string GetLinuxFormatTime(DateTime localTime)
@@ -767,7 +767,6 @@ namespace APTAT.Core.UnitTests.CMC
             Mock.Arrange(() => _launchedRequest.ProductIdentifier).Returns(productId);
 
             _applicationClosedRequest = Mock.Create<IApplicationClosedRequest>();
-            Mock.Arrange(() => _applicationClosedRequest.SId).Returns(Guid.NewGuid().ToString());
 
             IGeneralInfo generalInfo = null;
             IGeneralInfo actualGeneralInfo = new GeneralInfo("enp", "TBD", "TBD", productId)
