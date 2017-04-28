@@ -59,8 +59,8 @@ namespace APTAT.Core.UnitTests.CMC
             Mock.Arrange(() => _scanStartedRequest.ScanType).Returns(ScanType.Custom);
 
             _scanUpdatedRequest = Mock.Create<IScanUpdatedRequest>();
-            Mock.Arrange(() => _scanUpdatedRequest.CountOfNewMaliciousFilesWhichWasFoundAfterTheScanWasFinished).Returns(12);
-            Mock.Arrange(() => _scanUpdatedRequest.CountOfNewUnknownFilesWhichWasFoundAfterTheScanWasFinished).Returns(21);
+            Mock.Arrange(() => _scanUpdatedRequest.CountOfNewMaliciousFilesAfterTheScanWasFinished).Returns(12);
+            Mock.Arrange(() => _scanUpdatedRequest.CountOfNewUnknownFilesAfterTheScanWasFinished).Returns(21);
 
             _scanFinishedRequest = Mock.Create<IScanFinishedRequest>();
             Mock.Arrange(() => _scanFinishedRequest.CountOfFailedScans).Returns(4);
@@ -430,7 +430,6 @@ namespace APTAT.Core.UnitTests.CMC
                             new Parameter() { Name = "pc_cc", Value = "50",IsApplication = false},
                             new Parameter() { Name = "pc_sc", Value = "15",IsApplication = false},
                             new Parameter() {Name = "acid",Value = acId,IsApplication = false},
-                            new Parameter() { Name = "sid", Value = sId,IsApplication = false},
                             new Parameter() { Name = "aid", Value = sId,IsApplication = false}
                         }
                     }
@@ -486,8 +485,8 @@ namespace APTAT.Core.UnitTests.CMC
             Mock.Arrange(() => _launchedRequest.ProductIdentifier).Returns(productId);
 
             _scanUpdatedRequest = Mock.Create<IScanUpdatedRequest>();
-            Mock.Arrange(() => _scanUpdatedRequest.CountOfNewUnknownFilesWhichWasFoundAfterTheScanWasFinished).Returns(21);
-            Mock.Arrange(() => _scanUpdatedRequest.CountOfNewMaliciousFilesWhichWasFoundAfterTheScanWasFinished).Returns(12);
+            Mock.Arrange(() => _scanUpdatedRequest.CountOfNewUnknownFilesAfterTheScanWasFinished).Returns(21);
+            Mock.Arrange(() => _scanUpdatedRequest.CountOfNewMaliciousFilesAfterTheScanWasFinished).Returns(12);
 
             IGeneralInfo generalInfo = null;
             IGeneralInfo actualGeneralInfo = new GeneralInfo("enp", "TBD", "TBD", productId)

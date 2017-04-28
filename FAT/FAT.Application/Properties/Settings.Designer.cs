@@ -34,10 +34,19 @@ namespace FAT.Application.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Disabled")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Enabled")]
         public string cmcStatistics {
             get {
                 return ((string)(this["cmcStatistics"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30000")]
+        public int sendUpdateTimerIntervalMs {
+            get {
+                return ((int)(this["sendUpdateTimerIntervalMs"]));
             }
         }
     }

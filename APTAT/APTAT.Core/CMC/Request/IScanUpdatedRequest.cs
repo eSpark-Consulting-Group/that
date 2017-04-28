@@ -2,7 +2,7 @@
 {
     public interface IScanUpdatedRequest : IRequest
     {
-        int CountOfNewUnknownFilesWhichWasFoundAfterTheScanWasFinished { get; set; }
-        int CountOfNewMaliciousFilesWhichWasFoundAfterTheScanWasFinished { get; set; }
+        int CountOfNewUnknownFilesAfterTheScanWasFinished { get; set; }
+        int CountOfNewMaliciousFilesAfterTheScanWasFinished { get; set; }
     }
 }

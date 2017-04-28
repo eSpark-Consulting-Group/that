@@ -10,6 +10,34 @@ namespace APTAT.Core.CMC
     {
         private readonly IGeneralInfoParameters _generalInfoParameters;
 
+        readonly List<Parameter> _requestFields = new List<Parameter>
+        {
+            new Parameter() {Value = "acid", Name =nameof(IApplicationLaunchedRequest.AcId)},
+            new Parameter() {Value = "pr_ve", Name =nameof(IApplicationLaunchedRequest.ProductVersion)},
+
+            new Parameter() {Value = "ds", Name =nameof(IAutoDiscoveryFinishedRequest.DiscoveryStatus)},
+            new Parameter() {Value = "pc_cc", Name =nameof(IAutoDiscoveryFinishedRequest.CountOfPotentiallyScanableDiscoveredComputers)},
+
+            new Parameter() {Value = "sc_trg_tp", Name =nameof(IScanStartedRequest.ScanTriggerType)},
+            new Parameter() {Value = "sc_tg", Name =nameof(IScanStartedRequest.ScanTarget)},
+            new Parameter() {Value = "sc_tp", Name =nameof(IScanStartedRequest.ScanType)},
+            new Parameter() {Value = "pc_cc", Name =nameof(IScanStartedRequest.TotalCountOfDiscoveredComputers)},
+            new Parameter() {Value = "pc_sc", Name =nameof(IScanStartedRequest.CountOfScannedComputers)},
+
+            new Parameter() {Value = "u_fc", Name = nameof(IScanUpdatedRequest.CountOfNewUnknownFilesAfterTheScanWasFinished)},
+            new Parameter() {Value = "mlc_fc", Name =nameof(IScanUpdatedRequest.CountOfNewMaliciousFilesAfterTheScanWasFinished)},
+
+            new Parameter() {Value = "sc_st", Name =nameof(IScanFinishedRequest.ScanStatus)},
+            new Parameter() {Value = "ps_sc_s", Name =nameof(IScanFinishedRequest.CountOfSuccessScans)},
+            new Parameter() {Value = "ps_sc_f", Name =nameof(IScanFinishedRequest.CountOfFailedScans)},
+            new Parameter() {Value = "u_fc", Name =nameof(IScanFinishedRequest.CountOfUnknownFiles)},
+            new Parameter() {Value = "mlc_fc", Name =nameof(IScanFinishedRequest.CountOfMaliciousFiles)},
+
+            new Parameter() {Value = "rp_kd", Name =nameof(IReportGeneratedRequest.ReportKind)},
+            new Parameter() {Value = "act",Name =nameof(IReportPrintedOrSavedRequest.ReportAction)},
+        };
+
+
         public RequestBuilder(IGeneralInfoParameters generalInfoParameters)
         {
             _generalInfoParameters = generalInfoParameters;
@@ -17,35 +45,8 @@ namespace APTAT.Core.CMC
 
         private string GetRequestFieldValue(string fieldName)
         {
-            List<Parameter> requestFields = new List<Parameter>
-            {
-                new Parameter() {Value = "acid", Name =nameof(IApplicationLaunchedRequest.AcId)},
-                new Parameter() {Value = "pr_ve", Name =nameof(IApplicationLaunchedRequest.ProductVersion)},
-
-                new Parameter() {Value = "ds", Name =nameof(IAutoDiscoveryFinishedRequest.DiscoveryStatus)},
-                new Parameter() {Value = "pc_cc", Name =nameof(IAutoDiscoveryFinishedRequest.CountOfPotentiallyScanableDiscoveredComputers)},
-
-                new Parameter() {Value = "sc_trg_tp", Name =nameof(IScanStartedRequest.ScanTriggerType)},
-                new Parameter() {Value = "sc_tg", Name =nameof(IScanStartedRequest.ScanTarget)},
-                new Parameter() {Value = "sc_tp", Name =nameof(IScanStartedRequest.ScanType)},
-                new Parameter() {Value = "pc_cc", Name =nameof(IScanStartedRequest.TotalCountOfDiscoveredComputers)},
-                new Parameter() {Value = "pc_sc", Name =nameof(IScanStartedRequest.CountOfScannedComputers)},
-
-                new Parameter() {Value = "u_fc", Name = nameof(IScanUpdatedRequest.CountOfNewUnknownFilesWhichWasFoundAfterTheScanWasFinished)},
-                new Parameter() {Value = "mlc_fc", Name =nameof(IScanUpdatedRequest.CountOfNewMaliciousFilesWhichWasFoundAfterTheScanWasFinished)},
-
-                new Parameter() {Value = "sc_st", Name =nameof(IScanFinishedRequest.ScanStatus)},
-                new Parameter() {Value = "ps_sc_s", Name =nameof(IScanFinishedRequest.CountOfSuccessScans)},
-                new Parameter() {Value = "ps_sc_f", Name =nameof(IScanFinishedRequest.CountOfFailedScans)},
-                new Parameter() {Value = "u_fc", Name =nameof(IScanFinishedRequest.CountOfUnknownFiles)},
-                new Parameter() {Value = "mlc_fc", Name =nameof(IScanFinishedRequest.CountOfMaliciousFiles)},
-
-                new Parameter() {Value = "rp_kd", Name =nameof(IReportGeneratedRequest.ReportKind)},
-                new Parameter() {Value = "act",Name =nameof(IReportPrintedOrSavedRequest.ReportAction)},
-            };
-
             string findedfieldValue = string.Empty;
-            var requestedField = requestFields.FirstOrDefault(c => c.Name == fieldName);
+            var requestedField = _requestFields.FirstOrDefault(c => c.Name == fieldName);
             if (requestedField != null)
                 findedfieldValue = requestedField.Value;
             return findedfieldValue;
@@ -61,7 +62,7 @@ namespace APTAT.Core.CMC
                 if (prop.PropertyType.IsEnum)
                     fieldValue = (int)fieldValue;
                 var fieldName = GetRequestFieldValue(prop.Name);
-                if (fieldName != String.Empty)
+                if (fieldName != String.Empty && fieldValue != null)
                     requestFields.Add(fieldName, fieldValue?.ToString());
             }
             return requestFields;

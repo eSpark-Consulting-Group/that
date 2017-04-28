@@ -48,8 +48,14 @@ namespace FAT.Application.Services
         private bool _isNotStarted = true;
         private readonly bool _isEnabledSendData = true;
         private bool _askCredentionals = true;
+        private IScheduler _sendUpdateTimer;
 
-        public StatisticsService(IProxySettingsViewModel settingsViewModel, ICmcClient client)
+        private int _malwareDiffCount = 0;
+        private int _unknownDiffCount = 0;
+
+        private object _objCountersLock=new object(); 
+
+        public StatisticsService(IProxySettingsViewModel settingsViewModel, ICmcClient client,IScheduler timer )
         {
             _proxyCredentialsProvider = settingsViewModel;
             _client = client;
@@ -57,6 +63,11 @@ namespace FAT.Application.Services
             _isEnabledSendData = false;
 
             MessageManager.Instance.RegisterListener(this);
+            _sendUpdateTimer = timer;
+            _sendUpdateTimer.SetInterval(TimeSpan.FromMilliseconds(Settings.Default.sendUpdateTimerIntervalMs));
+            _sendUpdateTimer.TimeoutCallback += SendUpdateScanByTimerCallback;
+            _sendUpdateTimer.Start();
+
         }
 
         #region Message Receivers
@@ -127,10 +138,10 @@ namespace FAT.Application.Services
 
         public async Task ApplicationClosed(IApplicationClosedRequest request)
         {
-            await Task.Factory.StartNew(t =>
+            await Task.Run(() =>
             {
                _client.ApplicationClosed(request, _proxyCredentials);
-            }, TaskCreationOptions.None);
+            });
         }
 
         private void ProduceRequest(Action action)
@@ -155,6 +166,7 @@ namespace FAT.Application.Services
             {
                 if (!_isNotStarted)
                     return;
+                _isNotStarted = false;
             }
             while (true)
             {
@@ -166,6 +178,7 @@ namespace FAT.Application.Services
                         try
                         {
                             action.Invoke();
+                            break;
                         }
                         catch (Exception ex)
                         {
@@ -248,8 +261,11 @@ namespace FAT.Application.Services
 
         public void ScanUpdatedAsync(IScanUpdatedRequest request)
         {
-            Action action = () => { _client.ScanUpdated(request, _proxyCredentials); };
-                ProduceRequest(action);
+            lock (_objCountersLock)
+            {
+                _malwareDiffCount += request.CountOfNewMaliciousFilesAfterTheScanWasFinished;
+                _unknownDiffCount += request.CountOfNewUnknownFilesAfterTheScanWasFinished;
+            }
         }
 
         public void ReportGeneratedAsync(IReportGeneratedRequest request)
@@ -269,5 +285,32 @@ namespace FAT.Application.Services
             Action action = () => { _client.ApplicationClosed(request, _proxyCredentials); };
             ProduceRequest(action);
         }
+
+        private void SendUpdateScanByTimerCallback(object source, EventArgs eventArgs)
+        {
+            int malwareDiffCount = 0;
+            int unknownDiffCount = 0;
+            lock (_objCountersLock)
+            {
+                malwareDiffCount = _malwareDiffCount;
+                unknownDiffCount = _unknownDiffCount;
+
+                _malwareDiffCount = 0;
+                _unknownDiffCount = 0;
+            }
+
+            if(malwareDiffCount==0&& unknownDiffCount == 0) return;
+            
+
+            IScanUpdatedRequest request = new ScanUpdatedRequest()
+            {
+                CountOfNewMaliciousFilesAfterTheScanWasFinished = malwareDiffCount,
+                CountOfNewUnknownFilesAfterTheScanWasFinished = unknownDiffCount
+            };
+            
+            Action action = () => { _client.ScanUpdated(request, _proxyCredentials); };
+                ProduceRequest(action);
+        }
+
     }
 }

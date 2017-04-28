@@ -26,11 +26,11 @@ namespace FAT.Application
             resolver.Register<IScanCounterManager, ScanCounterManager>();
             resolver.Register<IScanTimer, ScanTimer>();
 
-            resolver.Register<ICmcClient, CmcClient>();
-            resolver.Register<IStatisticsService, StatisticsService>();
-            resolver.Register<ICmcWebApiProvider, CmcWebApiProvider>();
-            resolver.Register<ISystemInfoProvider, SystemInfoProvider>();
-            resolver.Register<ICultureInfoProvider, CultureInfoProvider>();
+            resolver.RegisterSingleton<ICmcClient, CmcClient>();
+            resolver.RegisterSingleton<IStatisticsService, StatisticsService>();
+            resolver.RegisterSingleton<ICmcWebApiProvider, CmcWebApiProvider>();
+            resolver.RegisterSingleton<ISystemInfoProvider, SystemInfoProvider>();
+            resolver.RegisterSingleton<ICultureInfoProvider, CultureInfoProvider>();
 
             //overriding APTAT.Core registrations 
             resolver.AllowOverridingRegistrations(true);

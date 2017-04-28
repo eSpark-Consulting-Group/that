@@ -2,7 +2,7 @@
 {
     public class ScanUpdatedRequest: IScanUpdatedRequest
     {
-        public int CountOfNewUnknownFilesWhichWasFoundAfterTheScanWasFinished { get; set; }
-        public int CountOfNewMaliciousFilesWhichWasFoundAfterTheScanWasFinished { get; set; }
+        public int CountOfNewUnknownFilesAfterTheScanWasFinished { get; set; }
+        public int CountOfNewMaliciousFilesAfterTheScanWasFinished { get; set; }
     }
 }
