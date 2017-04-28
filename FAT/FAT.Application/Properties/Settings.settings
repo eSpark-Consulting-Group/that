@@ -5,8 +5,8 @@
     <Setting Name="applicationName" Type="System.String" Scope="Application">
       <Value Profile="(Default)">FAT</Value>
     </Setting>
-    <Setting Name="cmcStatistics" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">Enabled</Value>
+    <Setting Name="cmcStatistics" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="sendUpdateTimerIntervalMs" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">30000</Value>

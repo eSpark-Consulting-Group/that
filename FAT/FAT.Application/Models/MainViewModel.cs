@@ -1358,7 +1358,7 @@ namespace FAT.Application.Models
             CMCStatisticsMessages<IScanStartedRequest>.Send(request =>
             {
                 request.TotalCountOfDiscoveredComputers = TotalItemsCount;
-                request.CountOfScannedComputers = _onlineItems.Length;
+                request.CountOfScannedComputers = _onlineItems?.Length ?? 0;
                 var targetsDiscovererType = _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false);
                 request.ScanTarget = targetsDiscovererType.Type;
                 ScanType scanType = IsQuickScan ? ScanType.Quick : ScanType.Full;
@@ -1631,13 +1631,12 @@ namespace FAT.Application.Models
 
         public async void OnAppClose(Action action)
         {
-            IApplicationClosedRequest request=new ApplicationClosedRequest();
             if (IsAnyScanInProgress)
             {
                 if (IsAutoDiscoveryInProgress)
                 {
                     InvokeStopAutoDiscovery(null);
-                    await _statisticsService.ApplicationClosed(request);
+                    await _statisticsService.OnAppClosing();
                     action?.Invoke();
                 }
                 else
@@ -1646,7 +1645,7 @@ namespace FAT.Application.Models
             else
             {
                 await _aptService.OnAppClosing();
-                await _statisticsService.ApplicationClosed(request);
+                await _statisticsService.OnAppClosing();
                 action?.Invoke();
             }
         }
@@ -1663,7 +1662,7 @@ namespace FAT.Application.Models
                 var domainException = ex as DirectoryQueryException;
                 if (domainException != null && domainException.Error == DirectoryError.DefaultDomainNotFound)
                 {
-
+                    ;
                 }
                 else
                 {

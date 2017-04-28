@@ -8,7 +8,6 @@ using APTAT.Core.Valkyrie;
 using System.Threading.Tasks;
 using APTAT.Core.Apt;
 using APTAT.Core.FLS;
-using APTAT.Core.Valkyrie;
 using APTAT.DeploymentCore;
 
 namespace APTAT.Core

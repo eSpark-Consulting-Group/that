@@ -28,7 +28,7 @@ namespace FAT.Application.Services
         void ReportGeneratedAsync(IReportGeneratedRequest request);
         void ReportPrintedOrSavedAsync(IReportPrintedOrSavedRequest request);
         void ApplicationClosedAsync(IApplicationClosedRequest request);
-        Task ApplicationClosed(IApplicationClosedRequest request);
+        Task OnAppClosing();
     }
 
     public class SendDataResponse
@@ -46,8 +46,8 @@ namespace FAT.Application.Services
         private NetworkCredential _proxyCredentials;
         private ConcurrentQueue<Action> _queue = new ConcurrentQueue<Action>();
         private bool _isNotStarted = true;
-        private readonly bool _isEnabledSendData = true;
-        private bool _askCredentionals = true;
+        private bool _isEnabledSendData = true;
+        private bool _askCredentials = true;
         private IScheduler _sendUpdateTimer;
 
         private int _malwareDiffCount = 0;
@@ -59,8 +59,8 @@ namespace FAT.Application.Services
         {
             _proxyCredentialsProvider = settingsViewModel;
             _client = client;
-            if (Settings.Default.cmcStatistics == "Disabled")
-            _isEnabledSendData = false;
+
+            _isEnabledSendData = Settings.Default.cmcStatistics;
 
             MessageManager.Instance.RegisterListener(this);
             _sendUpdateTimer = timer;
@@ -68,6 +68,11 @@ namespace FAT.Application.Services
             _sendUpdateTimer.TimeoutCallback += SendUpdateScanByTimerCallback;
             _sendUpdateTimer.Start();
 
+        }
+
+        public void OverrideEnabledSendData(bool value)
+        {
+            _isEnabledSendData = value;
         }
 
         #region Message Receivers
@@ -136,11 +141,12 @@ namespace FAT.Application.Services
         }
         #endregion
 
-        public async Task ApplicationClosed(IApplicationClosedRequest request)
+        public async Task OnAppClosing()
         {
             await Task.Run(() =>
             {
-               _client.ApplicationClosed(request, _proxyCredentials);
+                var request = new ApplicationClosedRequest();
+                _client.ApplicationClosed(request, _proxyCredentials);
             });
         }
 
@@ -156,7 +162,7 @@ namespace FAT.Application.Services
             }
             if (shouldStart)
             {
-                Task.Factory.StartNew(ConsumeRequest);
+                ConsumeRequest();
             }
         }
 
@@ -168,44 +174,35 @@ namespace FAT.Application.Services
                     return;
                 _isNotStarted = false;
             }
-            while (true)
+            
+            Action action;
+            while (_queue.TryDequeue(out action))
             {
-                Action action;
-                if (_queue.TryDequeue(out action))
+                try
                 {
-                    while (true)
-                    {
-                        try
-                        {
-                            action.Invoke();
-                            break;
-                        }
-                        catch (Exception ex)
-                        {
-                            var webException = ex as WebException;
-                            var httpWebResponse = webException?.Response as HttpWebResponse;
-                            HttpStatusCode? code = httpWebResponse?.StatusCode;
-                            if (code == HttpStatusCode.ProxyAuthenticationRequired && _askCredentionals)
-                            {
-                                _proxyCredentials = _proxyCredentialsProvider.GetProxyCredentials();
-                                if (_proxyCredentials != null)
-                                {
-                                    continue;
-                                }
-                                _askCredentionals = false;
-                            }
-
-                            LogHelper.Trace(TraceEventType.Error,
-                                $"Statistics service warning: {ex.GetType()} {ex.Message}{Environment.NewLine}{ex.StackTrace}");
-                            Thread.Sleep(1000);
-                        }
-                    }
+                    action.Invoke();
                 }
-                else
+                catch (Exception ex)
                 {
-                    break;
+                    var webException = ex as WebException;
+                    var httpWebResponse = webException?.Response as HttpWebResponse;
+                    HttpStatusCode? code = httpWebResponse?.StatusCode;
+                    if (code == HttpStatusCode.ProxyAuthenticationRequired && _askCredentials)
+                    {
+                        _proxyCredentials = _proxyCredentialsProvider.GetProxyCredentials();
+                        if (_proxyCredentials != null)
+                        {
+                            continue;
+                        }
+                        _askCredentials = false;
+                    }
+
+                    LogHelper.Trace(TraceEventType.Error,
+                        $"Statistics service warning: {ex.GetType()} {ex.Message}{Environment.NewLine}{ex.StackTrace}");
+                    Thread.Sleep(1000);
                 }
             }
+
             lock (_lockObj)
             {
                 _isNotStarted = true;
@@ -238,7 +235,7 @@ namespace FAT.Application.Services
                 request.ProductVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
                 _client.ApplicationLaunched(request, _proxyCredentials);
             };
-                ProduceRequest(action);
+            ProduceRequest(action);
         }
 
         public void AutoDiscoveryFinishedAsync(IAutoDiscoveryFinishedRequest request)
