@@ -75,6 +75,7 @@ namespace FAT.Application.Tests
             var service6 = Mock.Create<IScanTimer>(Behavior.Strict);
             var service7 = Mock.Create<IProxySettingsViewModel>(Behavior.Strict);
             var service8 = Mock.Create<ICmcClient>(Behavior.Strict);
+           
 
             Func<GetDomainNameResponse> func = () => new GetDomainNameResponse(name, null);
 
@@ -88,7 +89,7 @@ namespace FAT.Application.Tests
             Mock.Arrange(() => service7.GetProxyCredentials()).DoNothing();
             Mock.Arrange(() => service8.ApplicationLaunched(Arg.IsAny<IApplicationLaunchedRequest>(), Arg.IsAny<NetworkCredential>())).DoNothing().MustBeCalled();
 
-            var statisticsService = new StatisticsService(service7, service8);
+            var statisticsService = new StatisticsService(service7, service8, Mock.Create<APTAT.Common.IScheduler>());
             statisticsService.OverrideEnabledSendData(true);
             MainViewModel target = new MainViewModel(service1, service2, service3, service4, service5, service6, statisticsService);
 
