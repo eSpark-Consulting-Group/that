@@ -1,11 +1,9 @@
-﻿using APTAT.Core.CMC;
-using APTAT.Core.CMC.Request;
+﻿
 using APTAT.DeploymentCore;
 using APTAT.DeploymentCore.Directory;
 using FAT.Application.Models;
 using FAT.Application.Services;
 using System;
-using System.Net;
 using System.Threading.Tasks;
 using Telerik.JustMock;
 using Xunit;
@@ -23,7 +21,7 @@ namespace FAT.Application.Tests
             var service4 = Mock.Create<IScanCounterManager>(Behavior.Strict);
             var service5 = Mock.Create<IScanOperationsManager>(Behavior.Strict);
             var service6 = Mock.Create<IScanTimer>(Behavior.Strict);
-            var statisticsService = Mock.Create<IStatisticsService>(Behavior.Strict);
+
             var col = Mock.Create<IScanCounterCollection>(Behavior.Strict);
             var col2 = Mock.Create<IScanOperationCollection>(Behavior.Strict);
 
@@ -65,17 +63,14 @@ namespace FAT.Application.Tests
         [Theory]
         [InlineData("testname", "DiscoveryResults")]
         [InlineData(null, "HasCurrentDomainName")]
-        public async void OnLoadedCommandTest(string name, string propertyChanged)
+        public void OnLoadedCommandTest(string name, string propertyChanged)
         {
             var service1 = Mock.Create<ITargetsDiscoveryService>(Behavior.Strict);
             var service2 = Mock.Create<IAptService>(Behavior.Strict);
             var service3 = Mock.Create<IStorageService>(Behavior.Strict);
             var service4 = Mock.Create<IScanCounterManager>(Behavior.Strict);
             var service5 = Mock.Create<IScanOperationsManager>(Behavior.Strict);
-            var service6 = Mock.Create<IScanTimer>(Behavior.Strict);
-            var service7 = Mock.Create<IProxySettingsViewModel>(Behavior.Strict);
-            var service8 = Mock.Create<ICmcClient>(Behavior.Strict);
-           
+            var service6 = Mock.Create<IScanTimer>(Behavior.Strict);         
 
             Func<GetDomainNameResponse> func = () => new GetDomainNameResponse(name, null);
 
@@ -86,12 +81,8 @@ namespace FAT.Application.Tests
             Mock.Arrange(() => service5.HasPreviousScans()).Returns(Arg.AnyBool).OnAllThreads().MustBeCalled();
             Mock.Arrange(() => service5.GetEmail()).Returns(Arg.AnyString).OnAllThreads().MustBeCalled();
             Mock.Arrange(() => service6.ScanActive).Returns(false);
-            Mock.Arrange(() => service7.GetProxyCredentials()).DoNothing();
-            Mock.Arrange(() => service8.ApplicationLaunched(Arg.IsAny<IApplicationLaunchedRequest>(), Arg.IsAny<NetworkCredential>())).DoNothing().MustBeCalled();
 
-            var statisticsService = new StatisticsService(service7, service8, Mock.Create<APTAT.Common.IScheduler>());
-            statisticsService.OverrideEnabledSendData(true);
-            MainViewModel target = new MainViewModel(service1, service2, service3, service4, service5, service6, statisticsService);
+            MainViewModel target = new MainViewModel(service1, service2, service3, service4, service5, service6, null);
 
             //act
             Action a = () =>
@@ -101,7 +92,6 @@ namespace FAT.Application.Tests
             };
 
             Assert.PropertyChanged(target, propertyChanged, a);
-            await Task.Delay(100);
             Assert.True(target.Loaded);
             Assert.True(target.IsAutoDiscoveryInProgress);
             Assert.NotNull(target.DiscoveryResults);
@@ -112,7 +102,6 @@ namespace FAT.Application.Tests
             Mock.Assert(service1);
             Mock.Assert(service4);
             Mock.Assert(service5);
-            Mock.Assert(service8);
         }
 
         [Fact]

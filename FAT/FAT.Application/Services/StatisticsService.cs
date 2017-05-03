@@ -55,7 +55,7 @@ namespace FAT.Application.Services
 
         private object _objCountersLock=new object(); 
 
-        public StatisticsService(IProxySettingsViewModel settingsViewModel, ICmcClient client,IScheduler timer )
+        public StatisticsService(IProxySettingsViewModel settingsViewModel, ICmcClient client, IScheduler timer)
         {
             _proxyCredentialsProvider = settingsViewModel;
             _client = client;
@@ -63,6 +63,7 @@ namespace FAT.Application.Services
             _isEnabledSendData = Settings.Default.cmcStatistics;
 
             MessageManager.Instance.RegisterListener(this);
+
             _sendUpdateTimer = timer;
             _sendUpdateTimer.SetInterval(TimeSpan.FromMilliseconds(Settings.Default.sendUpdateTimerIntervalMs));
             _sendUpdateTimer.TimeoutCallback += SendUpdateScanByTimerCallback;
@@ -70,9 +71,13 @@ namespace FAT.Application.Services
 
         }
 
-        public void OverrideEnabledSendData(bool value)
+        public bool IsEnabledSendData
         {
-            _isEnabledSendData = value;
+            get { return _isEnabledSendData; }
+            set
+            {
+                _isEnabledSendData = value;
+            }
         }
 
         #region Message Receivers
@@ -197,9 +202,10 @@ namespace FAT.Application.Services
                         _askCredentials = false;
                     }
 
+                    Task.Delay(1000).ContinueWith(_ => _queue.Enqueue(action));
+
                     LogHelper.Trace(TraceEventType.Error,
                         $"Statistics service warning: {ex.GetType()} {ex.Message}{Environment.NewLine}{ex.StackTrace}");
-                    Thread.Sleep(1000);
                 }
             }
 
