@@ -223,11 +223,14 @@ namespace FAT.Application.Services
         {
             Action action =() =>
             {
-                if (File.Exists("originalfile"))
+                var folderPath = new DirectoryInfo(System.Reflection.Assembly.GetEntryAssembly().Location).Parent.FullName;
+                var filePath= $"{folderPath}\\originalfile";
+
+                if (File.Exists(filePath))
                 {
-                    string input = File.ReadAllText("originalfile");
+                    string input = File.ReadAllText(filePath);
                     string pattern = @"ForensicAnalysisTool_\w{32}$";
-                    Regex rgx = new Regex(pattern, RegexOptions.IgnoreCase);
+                    Regex  rgx = new Regex(pattern, RegexOptions.IgnoreCase);
                     var matches = rgx.Matches(input);
                     if (matches.Count == 1)
                     {
