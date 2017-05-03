@@ -232,7 +232,6 @@ namespace APTAT.Core.Valkyrie
             foreach (var context in filesToCheckAnalysisResult)
             {
                 CheckAnalysisResultResponse automaticAnalysisResponse = null;
-                Exception ex = null;
                 if (!cancellationToken.IsCancellationRequested)
                     try
                     {
@@ -240,7 +239,7 @@ namespace APTAT.Core.Valkyrie
                             _provider.CheckAnalysisResult(new CheckAnalysisResultRequest(analysisId: context.AnalysisId,
                                             apiKey: _apiKey));
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         Trace.WriteLine(
                             $"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : CheckAnalysisResult failed = {context.HashSha1} Reason : {ex.Message}" +
