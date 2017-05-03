@@ -77,7 +77,7 @@ namespace FAT.Application.Services
         public bool IsEnabledSendData
         {
             get { return _isEnabledSendData; }
-            set
+            internal set
             {
                 _isEnabledSendData = value;
             }
