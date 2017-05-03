@@ -65,9 +65,12 @@ namespace FAT.Application.Services
             MessageManager.Instance.RegisterListener(this);
 
             _sendUpdateTimer = timer;
-            _sendUpdateTimer.SetInterval(TimeSpan.FromMilliseconds(Settings.Default.sendUpdateTimerIntervalMs));
-            _sendUpdateTimer.TimeoutCallback += SendUpdateScanByTimerCallback;
-            _sendUpdateTimer.Start();
+            if (_sendUpdateTimer != null)
+            {
+                _sendUpdateTimer.SetInterval(TimeSpan.FromMilliseconds(Settings.Default.sendUpdateTimerIntervalMs));
+                _sendUpdateTimer.TimeoutCallback += SendUpdateScanByTimerCallback;
+                _sendUpdateTimer.Start();
+            }
 
         }
 

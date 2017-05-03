@@ -62,7 +62,6 @@ namespace FAT.Application.Tests
 
         [Theory]
         [InlineData("testname", "DiscoveryResults")]
-        [InlineData(null, "HasCurrentDomainName")]
         public void OnLoadedCommandTest(string name, string propertyChanged)
         {
             var service1 = Mock.Create<ITargetsDiscoveryService>(Behavior.Strict);
