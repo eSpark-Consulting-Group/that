@@ -39,8 +39,8 @@ void Extractor::ExtractId()
 		{
 			directory = directory.substr(0, last_slash_idx);
 		}
-		ShellExecute(NULL, NULL, directory.c_str(), NULL, NULL, SW_SHOWNORMAL);
 	}
+	ShellExecute(NULL, NULL, directory.c_str(), NULL, NULL, SW_SHOWNORMAL);
 }
 
 bool Extractor::WriteAllTextUtf8(LPCWSTR path, const std::wstring& text)
