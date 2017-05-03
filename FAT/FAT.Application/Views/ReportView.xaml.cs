@@ -139,7 +139,21 @@ namespace FAT.Application
 
         private void OnPrint(object sender, RoutedEventArgs e)
         {
-            _viewModel.OnPrintReportCompleted();
+            if (pdfViewer.Settings.PrintSettings != null && pdfViewer.Document != null && pdfViewer.Document.Pages != null)
+            {
+                var printDialog = new PrintDialog
+                {
+                    UserPageRangeEnabled = true,
+                    MinPage = 1,
+                    MaxPage = (uint)pdfViewer.Document.Pages.Count
+                };
+
+                if (pdfViewer.Settings.PrintSettings.UseDefaultPrinter || printDialog.ShowDialog() == true)
+                {
+                    pdfViewer.Print(printDialog, pdfViewer.Settings.PrintSettings);
+                    _viewModel.OnPrintReportCompleted();
+                }
+            }
         }
     }  
 }

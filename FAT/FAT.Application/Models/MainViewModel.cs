@@ -877,6 +877,11 @@ namespace FAT.Application.Models
             if (e.Error != null)
             {
                 HandleNetworkConnectionError(e.Error);
+                CMCStatisticsMessages<IAutoDiscoveryFinishedRequest>.Send(request =>
+                {
+                    request.CountOfPotentiallyScanableDiscoveredComputers = DiscoveryResults.Count;
+                    request.DiscoveryStatus = DiscoveryStatus.Failed;
+                });
                 return;
             }
 
