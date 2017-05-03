@@ -169,7 +169,7 @@ namespace APTAT.Core.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://cmc.comodo.com/apipie/1.0/put_events_api/put_event.html")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://cmc.comodo.com/get_ads_api/put_event.json")]
         public string cmcWebApiProviderBaseUrl {
             get {
                 return ((string)(this["cmcWebApiProviderBaseUrl"]));

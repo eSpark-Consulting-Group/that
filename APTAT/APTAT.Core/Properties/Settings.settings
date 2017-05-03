@@ -51,7 +51,7 @@
       <Value Profile="(Default)">Reports</Value>
     </Setting>
     <Setting Name="cmcWebApiProviderBaseUrl" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">https://cmc.comodo.com/apipie/1.0/put_events_api/put_event.html</Value>
+      <Value Profile="(Default)">https://cmc.comodo.com/get_ads_api/put_event.json</Value>
     </Setting>
   </Settings>
 </SettingsFile>
