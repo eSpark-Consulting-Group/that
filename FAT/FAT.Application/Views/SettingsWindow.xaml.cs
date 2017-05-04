@@ -105,11 +105,25 @@ namespace FAT.Application
             }
         }
 
+        private bool _warningDisplayed;
+
         private void Button_CancelClick(object sender, RoutedEventArgs e)
         {
-            tcp.Text = _tcp;
-            udp.Text = _udp;
-            this.DialogResult = false;
+            if (ShowProxyCredentials)
+            {
+                if (!_warningDisplayed)
+                {
+                    _warningDisplayed = true;
+                    bord.Visibility = Visibility.Visible;
+                    return;
+                }
+            }
+            else
+            {
+                tcp.Text = _tcp;
+                udp.Text = _udp;
+            }
+            DialogResult = false;
         }
 
         private void Window_MouseLeftButtonDown(Object sender, MouseButtonEventArgs e)
