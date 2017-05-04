@@ -150,8 +150,9 @@ namespace APTAT.Core.Apt
             DateTime? lastModified;
             lock (ValkyrieAnalysisResult)
             {
-                fileResults = _valkyrieAnalysisResultsModified.ToArray();
                 lastModified = _latestValkyrieVerdictUpdate;
+                fileResults = _valkyrieAnalysisResultsModified.Select(r =>
+                    new KeyValuePair<DateTime, List<IValkyrieAnalysisResult>>(r.Key, new List<IValkyrieAnalysisResult>(r.Value))).ToArray();
             }
             if (lastModified == null)
                 return new ValkyrieTrackableInfo(modifiedDate, new IValkyrieAnalysisResult[0]);
@@ -238,6 +239,7 @@ namespace APTAT.Core.Apt
             _filesShouldSendToValkyrieCount = 0;
             ValkyrieAnalysisResult.Clear();
             _shouldSendToValkyrie.Clear();
+            _valkyrieAnalysisResultsModified.Clear();
             ValkyrieOperationUid = Guid.NewGuid();
             ValkyrieAnalyzeStarted?.Invoke(this, EventArgs.Empty);
             lock (_queueToValkyrie)

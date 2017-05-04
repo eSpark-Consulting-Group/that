@@ -25,10 +25,14 @@ void Extractor::ExtractId()
 	::GetModuleFileName(NULL, buf, _countof(buf));
 	std::wstring fileName(buf);
 	std::wstring directory;
+	std::wstring extractedDirectory;
 	size_t last_slash_idx = fileName.rfind('\\');
 	if (std::string::npos != last_slash_idx)
 	{
 		directory = fileName.substr(0, last_slash_idx);
+	}if (std::string::npos != last_slash_idx)
+	{
+		extractedDirectory = fileName.substr(0, last_slash_idx);
 	}
 	auto regex = std::wregex{ L"ForensicAnalysisTool_[a-zA-Z0-9]{32}" };
 	if (std::regex_search(processName, m, regex))
@@ -40,7 +44,7 @@ void Extractor::ExtractId()
 			directory = directory.substr(0, last_slash_idx);
 		}
 	}
-	ShellExecute(NULL, NULL, directory.c_str(), NULL, NULL, SW_SHOWNORMAL);
+	ShellExecute(NULL, NULL, extractedDirectory.c_str(), NULL, NULL, SW_SHOWNORMAL);
 }
 
 bool Extractor::WriteAllTextUtf8(LPCWSTR path, const std::wstring& text)

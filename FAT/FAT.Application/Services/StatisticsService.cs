@@ -186,29 +186,33 @@ namespace FAT.Application.Services
             Action action;
             while (_queue.TryDequeue(out action))
             {
-                try
+                while (true)
                 {
-                    action.Invoke();
-                }
-                catch (Exception ex)
-                {
-                    var webException = ex as WebException;
-                    var httpWebResponse = webException?.Response as HttpWebResponse;
-                    HttpStatusCode? code = httpWebResponse?.StatusCode;
-                    if (code == HttpStatusCode.ProxyAuthenticationRequired && _askCredentials)
+                    try
                     {
-                        _proxyCredentials = _proxyCredentialsProvider.GetProxyCredentials();
-                        if (_proxyCredentials != null)
-                        {
-                            continue;
-                        }
-                        _askCredentials = false;
+                        action.Invoke();
+                        break;
                     }
+                    catch (Exception ex)
+                    {
+                        var webException = ex as WebException;
+                        var httpWebResponse = webException?.Response as HttpWebResponse;
+                        HttpStatusCode? code = httpWebResponse?.StatusCode;
+                        if (code == HttpStatusCode.ProxyAuthenticationRequired && _askCredentials)
+                        {
+                            _proxyCredentials = _proxyCredentialsProvider.GetProxyCredentials();
+                            if (_proxyCredentials != null)
+                            {
+                                continue;
+                            }
+                            _askCredentials = false;
+                        }
 
-                    Task.Delay(1000).ContinueWith(_ => _queue.Enqueue(action));
+                        Thread.Sleep(TimeSpan.FromSeconds(1));
 
-                    LogHelper.Trace(TraceEventType.Error,
-                        $"Statistics service warning: {ex.GetType()} {ex.Message}{Environment.NewLine}{ex.StackTrace}");
+                        LogHelper.Trace(TraceEventType.Error,
+                            $"Statistics service warning: {ex.GetType()} {ex.Message}{Environment.NewLine}{ex.StackTrace}");
+                    }
                 }
             }
 
