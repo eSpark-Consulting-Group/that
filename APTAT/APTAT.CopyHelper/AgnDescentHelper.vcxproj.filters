@@ -29,9 +29,6 @@
     <ClCompile Include="AgentCommonTools.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AgentInstallUtils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AgentRegistry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -53,9 +50,6 @@
     <ClCompile Include="ResourceText.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AgentSslSocketTools.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="IPEndPoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -69,6 +63,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ImpersonationHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AgentInstallUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AgentSslSocketTools.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -86,9 +86,6 @@
       <Filter>Resource Files</Filter>
     </ClInclude>
     <ClInclude Include="AgentCommonTools.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AgentInstallUtils.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
     <ClInclude Include="AgentRegistry.h">
@@ -118,9 +115,6 @@
     <ClInclude Include="trace_enum.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
-    <ClInclude Include="AgentSslSocketTools.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
     <ClInclude Include="AgentVersion.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
@@ -145,6 +139,8 @@
     <ClInclude Include="ImpersonationHelper.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
+    <ClInclude Include="AgentInstallUtils.h" />
+    <ClInclude Include="AgentSslSocketTools.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ResourceMappings.ini">

@@ -42,7 +42,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		{
 			g_pLoggerAutoInit->m_logger.init(true, L"descentAgn.log");
 			g_runFromService = false;
-			ServiceMain(argc, argv);
+			ServiceMain(argc - 1, argv + 1);
 			LocalFree(argv);
 			return 0;
 		}
