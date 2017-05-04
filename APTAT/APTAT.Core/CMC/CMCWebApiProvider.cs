@@ -18,7 +18,7 @@ namespace APTAT.Core.CMC
         public Uri GetBaseUri() { return _cmcBaseUri;}
         public void SetBaseUri(Uri uri) { _cmcBaseUri = uri; }
 
-        public void SendData(IGeneralInfo request,NetworkCredential networkCredential) {
+        public void SendData(IGeneralInfo request,ICredentials networkCredential) {
             SetProxy(networkCredential);
             Post(_cmcBaseUri.ToString(), request);
         }
@@ -27,7 +27,7 @@ namespace APTAT.Core.CMC
             _cmcBaseUri = new Uri(Settings.Default.cmcWebApiProviderBaseUrl);
         }
 
-        private void SetProxy(NetworkCredential networkCredential)
+        private void SetProxy(ICredentials networkCredential)
         {
             var proxy = WebRequest.GetSystemWebProxy();
             if (networkCredential != null)

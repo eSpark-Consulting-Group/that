@@ -26,7 +26,7 @@ namespace APTAT.Core.UnitTests.CMC
         private IReportGeneratedRequest _reportGeneratedRequest;
         private IReportPrintedOrSavedRequest _reportPrintedOrSavedRequest;
         private IApplicationClosedRequest _applicationClosedRequest;
-        private NetworkCredential _networkCredentionals = new NetworkCredential("user", "test");
+        
         public CmcClientTest()
         {
             _keyProviderMock = Mock.Create<IMachineKeyProvider>(Behavior.Strict);
@@ -111,7 +111,7 @@ namespace APTAT.Core.UnitTests.CMC
 
 
             //Act
-            client.ApplicationLaunched(_launchedRequest, _networkCredentionals);
+            client.ApplicationLaunched(_launchedRequest);
             //Assert
 
             Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>()), Occurs.Once());
@@ -126,7 +126,7 @@ namespace APTAT.Core.UnitTests.CMC
             Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>())).OccursOnce();
             var client = new CmcClient(provider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
             //Act
-            client.AutoDiscoveryFinished(_autoDiscoveryFinishedRequest, _networkCredentionals);
+            client.AutoDiscoveryFinished(_autoDiscoveryFinishedRequest);
             //Assert
             Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>()), Occurs.Once());
         }
@@ -140,7 +140,7 @@ namespace APTAT.Core.UnitTests.CMC
             Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>())).OccursOnce();
             var client = new CmcClient(provider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
             //Act
-            client.ScanStarted(_scanStartedRequest, _networkCredentionals);
+            client.ScanStarted(_scanStartedRequest);
             //Assert
             Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>()), Occurs.Once());
         }
@@ -154,7 +154,7 @@ namespace APTAT.Core.UnitTests.CMC
             Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>())).OccursOnce();
             var client = new CmcClient(provider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
             //Act
-            client.ScanFinished(_scanFinishedRequest, _networkCredentionals);
+            client.ScanFinished(_scanFinishedRequest);
             //Assert
             Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>()), Occurs.Once());
         }
@@ -168,7 +168,7 @@ namespace APTAT.Core.UnitTests.CMC
             Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>())).OccursOnce();
             var client = new CmcClient(provider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
             //Act
-            client.ScanUpdated(_scanUpdatedRequest, _networkCredentionals);
+            client.ScanUpdated(_scanUpdatedRequest);
             //Assert
             Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>()), Occurs.Once());
         }
@@ -182,7 +182,7 @@ namespace APTAT.Core.UnitTests.CMC
             Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>())).OccursOnce();
             var client = new CmcClient(provider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
             //Act
-            client.ReportGenerated(_reportGeneratedRequest, _networkCredentionals);
+            client.ReportGenerated(_reportGeneratedRequest);
             //Assert
             Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>()), Occurs.Once());
         }
@@ -196,7 +196,7 @@ namespace APTAT.Core.UnitTests.CMC
             Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>())).OccursOnce();
             var client = new CmcClient(provider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
             //Act
-            client.ReportPrintedOrSaved(_reportPrintedOrSavedRequest, _networkCredentionals);
+            client.ReportPrintedOrSaved(_reportPrintedOrSavedRequest);
             //Assert
             Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>()), Occurs.Once());
         }
@@ -210,7 +210,7 @@ namespace APTAT.Core.UnitTests.CMC
             Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>())).OccursOnce();
             var client = new CmcClient(provider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
             //Act
-            client.ApplicationClosed(_applicationClosedRequest, _networkCredentionals);
+            client.ApplicationClosed(_applicationClosedRequest);
             //Assert
             Mock.Assert(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>()), Occurs.Once());
         }
@@ -226,14 +226,14 @@ namespace APTAT.Core.UnitTests.CMC
             Mock.Arrange(() => provider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>())).DoInstead(() => { cnt++; });
             var client = new CmcClient(provider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
             //Act
-            client.ApplicationLaunched(_launchedRequest, _networkCredentionals);
-            client.AutoDiscoveryFinished(_autoDiscoveryFinishedRequest, _networkCredentionals);
-            client.ScanStarted(_scanStartedRequest, _networkCredentionals);
-            client.ScanFinished(_scanFinishedRequest, _networkCredentionals);
-            client.ScanUpdated(_scanUpdatedRequest, _networkCredentionals);
-            client.ReportGenerated(_reportGeneratedRequest, _networkCredentionals);
-            client.ReportPrintedOrSaved(_reportPrintedOrSavedRequest, _networkCredentionals);
-            client.ApplicationClosed(_applicationClosedRequest, _networkCredentionals);
+            client.ApplicationLaunched(_launchedRequest);
+            client.AutoDiscoveryFinished(_autoDiscoveryFinishedRequest);
+            client.ScanStarted(_scanStartedRequest);
+            client.ScanFinished(_scanFinishedRequest);
+            client.ScanUpdated(_scanUpdatedRequest);
+            client.ReportGenerated(_reportGeneratedRequest);
+            client.ReportPrintedOrSaved(_reportPrintedOrSavedRequest);
+            client.ApplicationClosed(_applicationClosedRequest);
             //Assert
             Assert.Equal(8, cnt);
         }
@@ -293,7 +293,7 @@ namespace APTAT.Core.UnitTests.CMC
             var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
 
             //Act
-            client.ApplicationLaunched(_launchedRequest, _networkCredentionals);
+            client.ApplicationLaunched(_launchedRequest);
 
             //Assert
             Assert.Equal(generalInfo.ApplicationIdentifier, actualGeneralInfo.ApplicationIdentifier);
@@ -369,10 +369,10 @@ namespace APTAT.Core.UnitTests.CMC
                 .DoInstead((IGeneralInfo gi) => { generalInfo = gi; });
 
             var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
-            client.ApplicationLaunched(_launchedRequest, _networkCredentionals);
+            client.ApplicationLaunched(_launchedRequest);
 
             //Act
-            client.AutoDiscoveryFinished(_autoDiscoveryFinishedRequest, _networkCredentionals);
+            client.AutoDiscoveryFinished(_autoDiscoveryFinishedRequest);
 
             for (int j = 0; j < generalInfo.EventsInfo.Count; j++)
             {
@@ -444,10 +444,10 @@ namespace APTAT.Core.UnitTests.CMC
                 .DoInstead((IGeneralInfo gi) => { generalInfo = gi; });
 
             var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
-            client.ApplicationLaunched(_launchedRequest, _networkCredentionals);
+            client.ApplicationLaunched(_launchedRequest);
 
             //Act
-            client.ScanStarted(_scanStartedRequest, _networkCredentionals);
+            client.ScanStarted(_scanStartedRequest);
 
             for (int j = 0; j < generalInfo.EventsInfo.Count; j++)
             {
@@ -514,10 +514,10 @@ namespace APTAT.Core.UnitTests.CMC
                 .DoInstead((IGeneralInfo gi) => { generalInfo = gi; });
 
             var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
-            client.ApplicationLaunched(_launchedRequest, _networkCredentionals);
+            client.ApplicationLaunched(_launchedRequest);
 
             //Act
-            client.ScanUpdated(_scanUpdatedRequest, _networkCredentionals);
+            client.ScanUpdated(_scanUpdatedRequest);
 
             for (int j = 0; j < generalInfo.EventsInfo.Count; j++)
             {
@@ -592,10 +592,10 @@ namespace APTAT.Core.UnitTests.CMC
                 .DoInstead((IGeneralInfo gi) => { generalInfo = gi; });
 
             var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
-            client.ApplicationLaunched(_launchedRequest, _networkCredentionals);
+            client.ApplicationLaunched(_launchedRequest );
 
             //Act
-            client.ScanFinished(_scanFinishedRequest, _networkCredentionals);
+            client.ScanFinished(_scanFinishedRequest );
 
             for (int j = 0; j < generalInfo.EventsInfo.Count; j++)
             {
@@ -658,9 +658,9 @@ namespace APTAT.Core.UnitTests.CMC
             Mock.Arrange(() => webApiProvider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>()))
                 .DoInstead((IGeneralInfo gi) => { generalInfo = gi; });
             var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
-            client.ApplicationLaunched(_launchedRequest, _networkCredentionals);
+            client.ApplicationLaunched(_launchedRequest );
             //Act
-            client.ReportGenerated(_reportGeneratedRequest, _networkCredentionals);
+            client.ReportGenerated(_reportGeneratedRequest);
 
             for (int j = 0; j < generalInfo.EventsInfo.Count; j++)
             {
@@ -727,10 +727,10 @@ namespace APTAT.Core.UnitTests.CMC
                 .DoInstead((IGeneralInfo gi) => { generalInfo = gi; });
 
             var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
-            client.ApplicationLaunched(_launchedRequest, _networkCredentionals);
+            client.ApplicationLaunched(_launchedRequest);
 
             //Act
-            client.ReportPrintedOrSaved(_reportPrintedOrSavedRequest, _networkCredentionals);
+            client.ReportPrintedOrSaved(_reportPrintedOrSavedRequest);
 
             for (int j = 0; j < generalInfo.EventsInfo.Count; j++)
             {
@@ -787,10 +787,10 @@ namespace APTAT.Core.UnitTests.CMC
             Mock.Arrange(() => webApiProvider.SetBaseUri(Arg.AnyUri));
             Mock.Arrange(() => webApiProvider.SendData(Arg.IsAny<IGeneralInfo>(), Arg.IsAny<NetworkCredential>())).DoInstead((IGeneralInfo gi) => { generalInfo = gi; });
             var client = new CmcClient(webApiProvider, _keyProviderMock, _systemInfoProvider, _cultureInfoProvider);
-            client.ApplicationLaunched(_launchedRequest, _networkCredentionals);
+            client.ApplicationLaunched(_launchedRequest);
 
             //Act
-            client.ApplicationClosed(_applicationClosedRequest, _networkCredentionals);
+            client.ApplicationClosed(_applicationClosedRequest);
 
         }
 

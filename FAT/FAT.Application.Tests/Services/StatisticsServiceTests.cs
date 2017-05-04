@@ -21,7 +21,7 @@ namespace FAT.Application.Tests.Services
             var service2 = Mock.Create<ICmcClient>(Behavior.Strict);
 
             Mock.Arrange(() => service1.GetProxyCredentials()).DoNothing();
-            Mock.Arrange(() => service2.ApplicationLaunched(Arg.IsAny<IApplicationLaunchedRequest>(), Arg.IsAny<NetworkCredential>())).DoNothing().MustBeCalled();
+            Mock.Arrange(() => service2.ApplicationLaunched(Arg.IsAny<IApplicationLaunchedRequest>())).DoNothing().MustBeCalled();
 
             var target = new StatisticsService(service1, service2, null);
             target.IsEnabledSendData = true;
@@ -45,8 +45,8 @@ namespace FAT.Application.Tests.Services
             Mock.Arrange(() => service1.GetProxyCredentials()).DoNothing();
             Mock.Arrange(() => service2.AutoDiscoveryFinished(Arg.Matches<IAutoDiscoveryFinishedRequest>(_ => 
                 _.CountOfPotentiallyScanableDiscoveredComputers == count && 
-                _.DiscoveryStatus == status), 
-            Arg.IsAny<NetworkCredential>())).DoNothing().MustBeCalled();
+                _.DiscoveryStatus == status) 
+            )).DoNothing().MustBeCalled();
 
             var target = new StatisticsService(service1, service2, null);
             target.IsEnabledSendData = true;
@@ -77,8 +77,8 @@ namespace FAT.Application.Tests.Services
                 _.TotalCountOfDiscoveredComputers == totalCount &&
                 _.ScanTarget == discovererTarget &&
                 _.ScanTriggerType == triggerType &&
-                _.ScanType == type),
-            Arg.IsAny<NetworkCredential>())).DoNothing().MustBeCalled();
+                _.ScanType == type)
+            )).DoNothing().MustBeCalled();
 
             var target = new StatisticsService(service1, service2, null);
             target.IsEnabledSendData = true;

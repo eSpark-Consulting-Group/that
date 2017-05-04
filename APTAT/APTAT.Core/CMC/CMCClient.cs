@@ -6,6 +6,7 @@ using System.Net;
 using System.Threading.Tasks;
 using APTAT.Core.CMC.Request;
 using APTAT.Core.CMC.UFH;
+using Valkyrie.WebApiProvider;
 
 namespace APTAT.Core.CMC
 {
@@ -37,14 +38,14 @@ namespace APTAT.Core.CMC
             };
         }
 
-        private string GetLinuxFormatTime(DateTime localTime)
+        private static string GetLinuxFormatTime(DateTime localTime)
         {
             DateTime unixEpoch = new DateTime(1970, 1, 1);
             TimeSpan timeSpan = localTime - unixEpoch;
             return ((int)timeSpan.TotalSeconds).ToString(CultureInfo.InvariantCulture);
         }
 
-        private void SendData(IRequest request, EventParams eventParams, NetworkCredential networkCredential)
+        private void SendData(IRequest request, EventParams eventParams)
         {
             RequestParameters requestParameters = new RequestParameters()
             {
@@ -58,10 +59,10 @@ namespace APTAT.Core.CMC
             };
             RequestBuilder requestBuilder = new RequestBuilder(_generalInfoParameters);
             var info = requestBuilder.GenerateRequest(requestParameters, eventParams.AdditionalParameters, request);
-            _webApiProvider.SendData(info, networkCredential);
+            _webApiProvider.SendData(info, ProxySettings.Proxy?.Credentials);
         }
 
-        public void ApplicationLaunched(IApplicationLaunchedRequest request, NetworkCredential credentials)
+        public void ApplicationLaunched(IApplicationLaunchedRequest request)
         {
             _accountIdentifier = request.AcId;
             _sessionIdentifier = Guid.NewGuid().ToString();
@@ -89,13 +90,13 @@ namespace APTAT.Core.CMC
                 EventGroupId = "eg_da",
                 AdditionalParameters = additionalParameters
             };
-            SendData(request, eventParams, credentials);
+            SendData(request, eventParams);
         }
 
-        public void AutoDiscoveryFinished(IAutoDiscoveryFinishedRequest request, NetworkCredential credentials)
+        public void AutoDiscoveryFinished(IAutoDiscoveryFinishedRequest request)
         {
             EventParams eventParams = GetAutoDiscoveryFinishedParams();
-            SendData(request, eventParams, credentials);
+            SendData(request, eventParams);
         }
         protected virtual EventParams GetAutoDiscoveryFinishedParams()
         {
@@ -108,12 +109,12 @@ namespace APTAT.Core.CMC
             };
         }
 
-        public void ScanStarted(IScanStartedRequest request, NetworkCredential credentials)
+        public void ScanStarted(IScanStartedRequest request)
         {
             _analyzeIdentifier = Guid.NewGuid().ToString();
 
             EventParams eventParams = GetScanStartedParams();
-            SendData(request, eventParams, credentials);
+            SendData(request, eventParams);
         }
         protected virtual EventParams GetScanStartedParams()
         {
@@ -126,10 +127,10 @@ namespace APTAT.Core.CMC
             };
         }
 
-        public void ScanUpdated(IScanUpdatedRequest request, NetworkCredential credentials)
+        public void ScanUpdated(IScanUpdatedRequest request)
         {
             EventParams eventParams = GetScanUpdatedParams();
-            SendData(request, eventParams, credentials);
+            SendData(request, eventParams);
         }
         protected virtual EventParams GetScanUpdatedParams()
         {
@@ -142,10 +143,10 @@ namespace APTAT.Core.CMC
             };
         }
 
-        public void ScanFinished(IScanFinishedRequest request, NetworkCredential credentials)
+        public void ScanFinished(IScanFinishedRequest request)
         {
             EventParams eventParams = GetScanFinishedParams();
-            SendData(request, eventParams, credentials);
+            SendData(request, eventParams);
         }
         protected virtual EventParams GetScanFinishedParams()
         {
@@ -158,10 +159,10 @@ namespace APTAT.Core.CMC
             };
         }
 
-        public void ReportGenerated(IReportGeneratedRequest request, NetworkCredential credentials)
+        public void ReportGenerated(IReportGeneratedRequest request)
         {
             EventParams eventParams = GetReportGeneratedParams();
-            SendData(request, eventParams, credentials);
+            SendData(request, eventParams);
         }
         protected virtual EventParams GetReportGeneratedParams()
         {
@@ -174,10 +175,10 @@ namespace APTAT.Core.CMC
             };
         }
 
-        public void ReportPrintedOrSaved(IReportPrintedOrSavedRequest request, NetworkCredential credentials)
+        public void ReportPrintedOrSaved(IReportPrintedOrSavedRequest request)
         {
             EventParams eventParams = GetReportPrintedOrSavedParams();
-            SendData(request, eventParams, credentials);
+            SendData(request, eventParams);
         }
         protected virtual EventParams GetReportPrintedOrSavedParams()
         {
@@ -190,10 +191,10 @@ namespace APTAT.Core.CMC
             };
         }
 
-        public void ApplicationClosed(IApplicationClosedRequest request, NetworkCredential credentials)
+        public void ApplicationClosed(IApplicationClosedRequest request)
         {
             EventParams eventParams = GetApplicationClosedOrSavedParams();
-            SendData(request, eventParams, credentials);
+            SendData(request, eventParams);
         }
         protected virtual EventParams GetApplicationClosedOrSavedParams()
         {

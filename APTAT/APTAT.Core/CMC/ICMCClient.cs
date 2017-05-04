@@ -5,14 +5,14 @@ namespace APTAT.Core.CMC
 {
     public interface ICmcClient
     {
-        void ApplicationLaunched(IApplicationLaunchedRequest request, NetworkCredential credentials);
-        void AutoDiscoveryFinished(IAutoDiscoveryFinishedRequest request, NetworkCredential credentials);
-        void ScanStarted(IScanStartedRequest request,NetworkCredential credentials);
-        void ScanFinished(IScanFinishedRequest request, NetworkCredential credentials);
-        void ScanUpdated(IScanUpdatedRequest request, NetworkCredential credentials);
-        void ReportGenerated(IReportGeneratedRequest request, NetworkCredential credentials);
-        void ReportPrintedOrSaved(IReportPrintedOrSavedRequest request, NetworkCredential credentials);
-        void ApplicationClosed(IApplicationClosedRequest request, NetworkCredential credentials);
+        void ApplicationLaunched(IApplicationLaunchedRequest request);
+        void AutoDiscoveryFinished(IAutoDiscoveryFinishedRequest request);
+        void ScanStarted(IScanStartedRequest request);
+        void ScanFinished(IScanFinishedRequest request);
+        void ScanUpdated(IScanUpdatedRequest request);
+        void ReportGenerated(IReportGeneratedRequest request);
+        void ReportPrintedOrSaved(IReportPrintedOrSavedRequest request);
+        void ApplicationClosed(IApplicationClosedRequest request);
     }
 
     

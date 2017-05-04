@@ -7,6 +7,6 @@ namespace APTAT.Core.CMC
     {
         Uri GetBaseUri();
         void SetBaseUri(Uri uri);
-        void SendData(IGeneralInfo request, NetworkCredential networkCredential);
+        void SendData(IGeneralInfo request, ICredentials networkCredential);
     }
 }

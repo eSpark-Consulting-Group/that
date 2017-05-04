@@ -44,7 +44,7 @@ namespace FAT.Application.Services
         private readonly ICmcClient _client;
         private readonly object _lockObj = new object();
 
-        private NetworkCredential _proxyCredentials;
+        
         private ConcurrentQueue<Action> _queue = new ConcurrentQueue<Action>();
         private bool _isNotStarted = true;
         private bool _isEnabledSendData = true;
@@ -155,7 +155,7 @@ namespace FAT.Application.Services
             await Task.Run(() =>
             {
                 var request = new ApplicationClosedRequest();
-                _client.ApplicationClosed(request, _proxyCredentials);
+                _client.ApplicationClosed(request);
             });
         }
 
@@ -201,12 +201,12 @@ namespace FAT.Application.Services
                         HttpStatusCode? code = httpWebResponse?.StatusCode;
                         if (code == HttpStatusCode.ProxyAuthenticationRequired && _askCredentials)
                         {
-                            _proxyCredentials = _proxyCredentialsProvider.GetProxyCredentials();
+                            var proxyCredentials = _proxyCredentialsProvider.GetProxyCredentials();
                             
 
-                            if (_proxyCredentials != null)
+                            if (proxyCredentials != null)
                             {
-                                ProxySettings.Proxy.Credentials = _proxyCredentials;
+                                ProxySettings.Proxy.Credentials = proxyCredentials;
                                 continue;
                             }
                             _askCredentials = false;
@@ -253,26 +253,26 @@ namespace FAT.Application.Services
                 }
                 request.ProductIdentifier = "enp.c1.fat";
                 request.ProductVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-                _client.ApplicationLaunched(request, _proxyCredentials);
+                _client.ApplicationLaunched(request);
             };
             ProduceRequest(action);
         }
 
         public void AutoDiscoveryFinishedAsync(IAutoDiscoveryFinishedRequest request)
         {
-            Action action = () => { _client.AutoDiscoveryFinished(request, _proxyCredentials); };
+            Action action = () => { _client.AutoDiscoveryFinished(request); };
             ProduceRequest(action);
         }
 
         public void ScanStartedAsync(IScanStartedRequest request)
         {
-            Action action = () => { _client.ScanStarted(request, _proxyCredentials); };
+            Action action = () => { _client.ScanStarted(request); };
             ProduceRequest(action);
         }
 
         public void ScanFinishedAsync(IScanFinishedRequest request)
         {
-            Action action = () => { _client.ScanFinished(request, _proxyCredentials); };
+            Action action = () => { _client.ScanFinished(request ); };
             ProduceRequest(action);
         }
 
@@ -287,19 +287,19 @@ namespace FAT.Application.Services
 
         public void ReportGeneratedAsync(IReportGeneratedRequest request)
         {
-            Action action = () => { _client.ReportGenerated(request, _proxyCredentials); };
+            Action action = () => { _client.ReportGenerated(request ); };
             ProduceRequest(action);
         }
 
         public void ReportPrintedOrSavedAsync(IReportPrintedOrSavedRequest request)
         {
-            Action action = () => { _client.ReportPrintedOrSaved(request, _proxyCredentials); };
+            Action action = () => { _client.ReportPrintedOrSaved(request ); };
             ProduceRequest(action);
         }
 
         public void ApplicationClosedAsync(IApplicationClosedRequest request)
         {
-            Action action = () => { _client.ApplicationClosed(request, _proxyCredentials); };
+            Action action = () => { _client.ApplicationClosed(request); };
             ProduceRequest(action);
         }
 
@@ -325,7 +325,7 @@ namespace FAT.Application.Services
                 CountOfNewUnknownFilesAfterTheScanWasFinished = unknownDiffCount
             };
             
-            Action action = () => { _client.ScanUpdated(request, _proxyCredentials); };
+            Action action = () => { _client.ScanUpdated(request ); };
                 ProduceRequest(action);
         }
 
