@@ -352,7 +352,7 @@ namespace FAT.Application.Models
                 }
                 else
                 {
-                    if (IsScanCancelled)
+                    if (IsScanCancelled || Computers.Any(_ => _.ScanStage == ScanStage.OperationCanceled))
                         return "Scan Canceled";
                     if (IsScanFailed)
                         return "Scan Failed";
