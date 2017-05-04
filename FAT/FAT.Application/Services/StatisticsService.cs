@@ -14,6 +14,7 @@ using FAT.Application.Properties;
 using System.Reflection;
 using APTAT.Common;
 using FAT.Application.Messages;
+using Valkyrie.WebApiProvider;
 using static FAT.Application.Messages.AppMessages;
 
 namespace FAT.Application.Services
@@ -201,8 +202,11 @@ namespace FAT.Application.Services
                         if (code == HttpStatusCode.ProxyAuthenticationRequired && _askCredentials)
                         {
                             _proxyCredentials = _proxyCredentialsProvider.GetProxyCredentials();
+                            
+
                             if (_proxyCredentials != null)
                             {
+                                ProxySettings.Proxy.Credentials = _proxyCredentials;
                                 continue;
                             }
                             _askCredentials = false;

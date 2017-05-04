@@ -38,6 +38,7 @@ namespace APTAT.Core.CMC
         static string Get(string url)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.Proxy = ProxySettings.Proxy;
             try
             {
                 WebResponse response = request.GetResponse();
@@ -71,6 +72,7 @@ namespace APTAT.Core.CMC
                            request.Method = "POST";
                            request.ContentLength = byteArray.Length;
                            request.ContentType = @"application/json";
+            request.Proxy = ProxySettings.Proxy;
 
             using (Stream dataStream = request.GetRequestStream())
             {

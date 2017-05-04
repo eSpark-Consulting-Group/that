@@ -519,6 +519,10 @@
       <Project>{af4ace83-d560-40ec-aa29-5b962e1d3c5c}</Project>
       <Name>APTAT.DAL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\APTAT\APTAT.Valkyrie.Client\Valkyrie.WebApiProvider.csproj">
+      <Project>{851e6095-dd19-4c19-8f9c-20e134fb6f5a}</Project>
+      <Name>Valkyrie.WebApiProvider</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Common\APTAT.Common\APTAT.Common.csproj">
       <Project>{49ba3c32-1495-4ea5-8d32-3997788ade2f}</Project>
       <Name>APTAT.Common</Name>

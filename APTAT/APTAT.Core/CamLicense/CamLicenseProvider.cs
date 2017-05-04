@@ -32,8 +32,8 @@ namespace APTAT.Core
         }
         public string TryGetFreeLicense(NetworkCredential credential)
         {
-            
-            SetProxy(credential);
+            if(credential != null) SetProxy(credential);
+
             int retry = 0;
             GetFreeLicenseResponse response = new GetFreeLicenseResponse();
             response.Data = new GetFreeLicenseResponseData();
