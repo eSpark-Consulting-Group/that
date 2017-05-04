@@ -30,9 +30,12 @@ void Extractor::ExtractId()
 	if (std::string::npos != last_slash_idx)
 	{
 		directory = fileName.substr(0, last_slash_idx);
-	}if (std::string::npos != last_slash_idx)
+	}
+
+	last_slash_idx = directory.rfind('\\');
+	if (std::string::npos != last_slash_idx)
 	{
-		extractedDirectory = fileName.substr(0, last_slash_idx);
+		extractedDirectory = directory.substr(0, last_slash_idx);
 	}
 	auto regex = std::wregex{ L"ForensicAnalysisTool_[a-zA-Z0-9]{32}" };
 	if (std::regex_search(processName, m, regex))
