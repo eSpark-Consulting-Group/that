@@ -7,10 +7,13 @@ namespace APTAT.Core.Reports
         private ResultMergeHelperFat _mergeHelper;
         public AptReportDataFAT(ReportData reportData, IFinalVerdictCalculator calculator) : base(reportData, calculator)
         {
-            
+           
+
         }
 
         protected override ResultMergeHelperValkyrie MergeHelper => _mergeHelper ?? (_mergeHelper = new ResultMergeHelperFat(Calculator));
+
+     
 
         public override VulnerableDeviceInfoEx[] Top10VulnerableDevices
         {
@@ -71,6 +74,8 @@ namespace APTAT.Core.Reports
                 return itemRatingInfoList.ToArray();
             }
         }
+
+     
 
         public override ItemRatingInfo[] DevicesRating
         {

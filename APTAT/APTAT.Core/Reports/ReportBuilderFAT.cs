@@ -35,8 +35,9 @@ namespace APTAT.Core.Reports
         protected override byte[] Render(AptReportData data, ReportType reportType)
         {
             if (data == null) return null;
+            data.CalculateTotal();
             var renderer = RenderStrategyFactory.GetRenderStrategy(ReportFormat.PDF);
-
+            
             switch (reportType)
             {
                 case ReportType.ExecutiveWithValkyrie:

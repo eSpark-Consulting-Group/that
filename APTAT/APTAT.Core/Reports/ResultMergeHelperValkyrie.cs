@@ -61,6 +61,19 @@ namespace APTAT.Core.Reports
                         CalculateStatistics(module, computerStatistics, valkyrieAnalysisResult.Verdict);
 
                     }
+                    else
+                    {
+                        if (module.IsBad)
+                        {
+                            DetailedBadFileWithValkyrie badFile2 = new DetailedBadFileWithValkyrie(module, new ScannedTarget(flsResult), Calculator,new ValkyrieAnalysisResult(module.Sha1, ValkyrieVerdict.InQueue));
+                            AddBadFile(uniqueFiles, badFile2, module);
+                            DetailedBadFileWithValkyrie copiedBadFile = new DetailedBadFileWithValkyrie(module, new ScannedTarget(flsResult), Calculator, new ValkyrieAnalysisResult(module.Sha1, ValkyrieVerdict.InQueue));
+                            nonUniqueBadFilesInternal.Add(copiedBadFile);
+                        }
+                        #region Calculate Statistics
+                        CalculateStatistics(module, computerStatistics);
+                        #endregion
+                    }
                 }
 
                 #endregion

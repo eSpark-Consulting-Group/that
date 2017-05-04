@@ -270,12 +270,11 @@ namespace APTAT.Core.Reports
             }
         }
 
-        private void CalculateTotal()
+        public  virtual void CalculateTotal()
         {
             if (_Targets == null) return;
             var statistics = StatisticsCalculator.CalculateFilesStatistics(_Targets);
-
-            ReplaceStatistics(statistics);
+           ReplaceStatistics(statistics);
         }
 
         protected void ReplaceStatistics(IFilesStatistics statistics)
@@ -461,7 +460,7 @@ namespace APTAT.Core.Reports
 
         //    return files.ToArray();
         //}
-        private DetailedBadFile[] GetAllBadFilesSorted(bool isUniqueSetOfFiles = true)
+        protected  virtual DetailedBadFile[] GetAllBadFilesSorted(bool isUniqueSetOfFiles = true)
         {
             IEnumerable<ScannedTarget> targets;
             IEnumerable<DetailedBadFile> allUniqueBadFiles;

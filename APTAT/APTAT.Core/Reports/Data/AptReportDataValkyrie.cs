@@ -20,7 +20,7 @@ namespace APTAT.Core.Reports
 
             ValkyrieAnalysisResult = reportData.ValkyrieAnalysisResult;
         }
-        private DetailedBadFileWithValkyrie[] GetAllBadFilesSorted(bool isUniqueSetOfFiles = true)
+        protected override DetailedBadFile[] GetAllBadFilesSorted(bool isUniqueSetOfFiles = true)
         {
             IEnumerable<ScannedTarget> targets;
             IEnumerable<DetailedBadFileWithValkyrie> allUniqueBadFiles;
@@ -40,7 +40,7 @@ namespace APTAT.Core.Reports
             {
                 if (_allBadFilesSorted == null)
                 {
-                    _allBadFilesSorted = GetAllBadFilesSorted();
+                    _allBadFilesSorted = GetAllBadFilesSorted().Cast<DetailedBadFileWithValkyrie>().ToArray();
                 }
 
                 return _allBadFilesSorted;
@@ -59,6 +59,7 @@ namespace APTAT.Core.Reports
         }
         private MergedScanResults<DetailedBadFileWithValkyrie> _mergedScanResultsCache;
         
+
         protected virtual void MergeResults(IEnumerable<IAptScanResult> flsResults, Dictionary<string, IValkyrieAnalysisResult> valkyrieResults, out IEnumerable<ScannedTarget> mergedTargets,
             out IEnumerable<DetailedBadFileWithValkyrie> uniqueBadFiles, out IEnumerable<DetailedBadFileWithValkyrie> nonUniqueBadFiles)
         {
@@ -79,7 +80,14 @@ namespace APTAT.Core.Reports
                 MergedTargets = mergedTargets
             };
         }
-    
+
+        public override void CalculateTotal()
+        {
+            IEnumerable<ScannedTarget> targets = new ScannedTarget[] { };
+            IEnumerable<DetailedBadFileWithValkyrie> files;
+            MergeResults(_Targets, ValkyrieAnalysisResult, out targets, out files, out files);
+
+        }
 
         public override VulnerableDeviceInfoEx[] Top10VulnerableDevices
         {
