@@ -154,17 +154,8 @@ namespace FAT.Application.Services
         {
             await Task.Run(() =>
             {
-                try
-                {
-                    var request = new ApplicationClosedRequest();
-                    _client.ApplicationClosed(request);
-                }
-                catch (Exception ex)
-                {
-                    LogHelper.Trace(TraceEventType.Error,
-                        $"Statistics service warning: {ex.GetType()} {ex.Message}{Environment.NewLine}{ex.StackTrace}");
-                }
-                
+                var request = new ApplicationClosedRequest();
+                ProduceRequest(() => _client.ApplicationClosed(request));
             });
         }
 
@@ -208,10 +199,12 @@ namespace FAT.Application.Services
                         var webException = ex as WebException;
                         var httpWebResponse = webException?.Response as HttpWebResponse;
                         HttpStatusCode? code = httpWebResponse?.StatusCode;
-                        if (code == HttpStatusCode.ProxyAuthenticationRequired && _askCredentials)
+                        if (code == HttpStatusCode.ProxyAuthenticationRequired)
                         {
+                            if (!_askCredentials)
+                                break;
+
                             var proxyCredentials = _proxyCredentialsProvider.GetProxyCredentials();
-                            
 
                             if (proxyCredentials != null)
                             {
@@ -221,10 +214,9 @@ namespace FAT.Application.Services
                             _askCredentials = false;
                         }
 
-                        Thread.Sleep(TimeSpan.FromSeconds(1));
-
                         LogHelper.Trace(TraceEventType.Error,
                             $"Statistics service warning: {ex.GetType()} {ex.Message}{Environment.NewLine}{ex.StackTrace}");
+                        Thread.Sleep(TimeSpan.FromSeconds(1));
                     }
                 }
             }

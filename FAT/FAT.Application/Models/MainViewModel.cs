@@ -1649,6 +1649,8 @@ namespace FAT.Application.Models
             }
             else
             {
+                IsBusy = true;
+
                 await _aptService.OnAppClosing();
                 await _statisticsService.OnAppClosing();
                 action?.Invoke();
