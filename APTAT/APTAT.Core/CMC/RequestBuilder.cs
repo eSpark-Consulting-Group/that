@@ -13,7 +13,7 @@ namespace APTAT.Core.CMC
         readonly List<Parameter> _requestFields = new List<Parameter>
         {
             new Parameter() {Value = "acid", Name =nameof(IApplicationLaunchedRequest.AcId)},
-            new Parameter() {Value = "pr_ve", Name =nameof(IApplicationLaunchedRequest.ProductVersion)},
+           
 
             new Parameter() {Value = "ds", Name =nameof(IAutoDiscoveryFinishedRequest.DiscoveryStatus)},
             new Parameter() {Value = "pc_cc", Name =nameof(IAutoDiscoveryFinishedRequest.CountOfPotentiallyScanableDiscoveredComputers)},

@@ -70,7 +70,9 @@ namespace APTAT.Core.CMC
 
             var systemInfo = _systemInfoProvider.GetSystemInfo();
             var culture = _cultureInfoProvider.GetCulture();
-            var localTimeZone = TimeZone.CurrentTimeZone.ToLocalTime(DateTime.Now);
+            var localTimeZone = TimeZone.CurrentTimeZone.ToUniversalTime(DateTime.Now);
+            var offset = TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now);
+            string timeZoneFormated = $"GMT+{offset:hh}:{offset:mm}";
 
             List<IParameter> additionalParameters = new List<IParameter>()
             {
@@ -79,8 +81,7 @@ namespace APTAT.Core.CMC
                new Parameter() { Name = "op_pl", Value = systemInfo.Platform,IsApplication = true},
                new Parameter() { Name = "cul",   Value =culture, IsApplication = true},
                new Parameter() { Name = "pr_ve", Value = request.ProductVersion ,IsApplication = true},
-
-               new Parameter() { Name = "iu_tz", Value = localTimeZone.ToString(CultureInfo.InvariantCulture)  },
+               new Parameter() { Name = "iu_tz", Value = timeZoneFormated },
                new Parameter() { Name = "iu_ts", Value =GetLinuxFormatTime(localTimeZone) }
             };
 
@@ -106,7 +107,7 @@ namespace APTAT.Core.CMC
             {
                 EventParamValue = "eh_ad_adf",
                 EventId = "ei_rp_ad",
-                EventGroupId = "eg_da",
+                 EventGroupId = "eg_da",
                 AdditionalParameters = new List<IParameter>() { }
             };
             SendData(request, eventParams);
