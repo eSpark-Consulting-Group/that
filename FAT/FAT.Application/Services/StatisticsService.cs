@@ -154,8 +154,17 @@ namespace FAT.Application.Services
         {
             await Task.Run(() =>
             {
-                var request = new ApplicationClosedRequest();
-                _client.ApplicationClosed(request);
+                try
+                {
+                    var request = new ApplicationClosedRequest();
+                    _client.ApplicationClosed(request);
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.Trace(TraceEventType.Error,
+                        $"Statistics service warning: {ex.GetType()} {ex.Message}{Environment.NewLine}{ex.StackTrace}");
+                }
+                
             });
         }
 
