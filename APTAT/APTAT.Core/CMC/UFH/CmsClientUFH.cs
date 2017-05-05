@@ -24,20 +24,19 @@ namespace APTAT.Core.CMC.UFH
 
         }
 
-        protected override EventParams GetScanStartedParams()
-        {
-            return new EventParams()
-            {
-                EventParamValue = "eh_sc_ss",
-                EventId = "ei_rp_sc",
-                EventGroupId = "eg_da",
-                AdditionalParameters = new List<IParameter>()
-                {
 
-                }
+        protected override EventParams GetApplicationLaunchedParams()
+        {
+            var eventParams = new EventParams()
+            {
+                EventParamValue = "eh_pu",
+                EventId = "ei_da",
+                EventGroupId = "eg_da"
             };
+            return eventParams;
         }
 
+  
 
         public void ValkyrieUnkownFileUploadUpdated(IValkyrieUnkownFileUploadWithTrigger request)
         {

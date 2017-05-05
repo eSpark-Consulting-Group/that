@@ -137,6 +137,7 @@
     <Compile Include="Models\Valkyrie\ValkyrieFile.cs" />
     <Compile Include="Services\BuildReportResult.cs" />
     <Compile Include="Services\MapperHelper.cs" />
+    <Compile Include="Services\StatisticsService.cs" />
     <Compile Include="SplashWindow.xaml.cs">
       <DependentUpon>SplashWindow.xaml</DependentUpon>
     </Compile>
@@ -514,9 +515,9 @@
       <Project>{af4ace83-d560-40ec-aa29-5b962e1d3c5c}</Project>
       <Name>APTAT.DAL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\APTAT.Valkyrie\APTAT.Valkyrie.csproj">
-      <Project>{46F67D2C-9368-456A-875A-F96628C18F90}</Project>
-      <Name>APTAT.Valkyrie</Name>
+    <ProjectReference Include="..\APTAT.Valkyrie.Client\Valkyrie.WebApiProvider.csproj">
+      <Project>{851E6095-DD19-4C19-8F9C-20E134FB6F5A}</Project>
+      <Name>Valkyrie.WebApiProvider</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

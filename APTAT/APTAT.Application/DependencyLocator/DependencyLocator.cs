@@ -11,7 +11,7 @@ namespace APTAT.Application
             resolver.RegisterSingleton<IAptService, AptService>();
             resolver.RegisterSingleton<IStorageService, StorageService>();
             resolver.RegisterSingleton<IFileBrowserService, FileBrowserService>();
-
+            resolver.RegisterSingleton<IProxySettingsViewModel, ProxySettingsViewModel>();
         }
     }
 }

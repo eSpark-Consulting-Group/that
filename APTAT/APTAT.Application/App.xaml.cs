@@ -41,7 +41,6 @@ namespace APTAT.Application
                         typeof(DeploymentCore.DependencyLocator),
                         typeof(APTAT.DAL.DependencyLocator.DependencyLocator),
                         typeof(DependencyLocator),
-                        typeof(Valkyrie.DependencyLocator.DependencyLocator),
                         typeof(Core.DependencyLocator.DependencyLocator)
                     });
                     CompositionHelper.Instance.Verify();

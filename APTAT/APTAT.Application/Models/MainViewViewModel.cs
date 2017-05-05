@@ -7,8 +7,6 @@ using System.Net;
 using System.Threading;
 using System.Windows.Threading;
 using Telerik.Windows.Controls;
-using APTAT.Core;
-using APTAT.Valkyrie;
 using APTAT.Application.Messages;
 using APTAT.Application.Extensions;
 using APTAT.Application.Services;
@@ -23,6 +21,7 @@ using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 using System.Collections.Concurrent;
 using APTAT.Core.Apt;
 using APTAT.Core.FLS;
+using APTAT.Core.Valkyrie;
 
 
 namespace APTAT.Application.Models
@@ -659,10 +658,10 @@ namespace APTAT.Application.Models
             _scanIteratorTimer.Tick += IterateThroughScan;
 
             StartScanCommand = new DelegateCommand(o =>
-                AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.StartScan, InvokeStartScan),
+                Messages.AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.StartScan, InvokeStartScan),
                 o => !IsAnyScanInProgress && IsScanInProgress.HasValue);
             StopScanCommand = new DelegateCommand(o =>
-                AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.StopScan, InvokeStopScan),
+                Messages.AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.StopScan, InvokeStopScan),
                 o => StopScanPredicate);
 
             SelectCommand = new DelegateCommand(o => { }, o => IsDetailsEnabled);

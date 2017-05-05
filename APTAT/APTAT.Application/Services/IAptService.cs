@@ -5,12 +5,12 @@ using APTAT.Application.Models.Valkyrie;
 using APTAT.Core;
 using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
-using APTAT.Valkyrie;
 using APTAT.Core.Descent.Apt;
 using System.Collections.Generic;
 using APTAT.Core.Apt;
 using APTAT.Core.FLS;
 using System.Threading.Tasks;
+using APTAT.Core.Valkyrie;
 
 namespace APTAT.Application.Services
 {

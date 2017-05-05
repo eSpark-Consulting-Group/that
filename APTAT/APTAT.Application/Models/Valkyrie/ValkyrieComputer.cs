@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using APTAT.Core;
-using APTAT.Valkyrie;
+using APTAT.Core.Valkyrie;
 using OperatingSystem = APTAT.Core.Descent.Apt.OperatingSystem;
 
 namespace APTAT.Application.Models.Valkyrie

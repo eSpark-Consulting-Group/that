@@ -5,10 +5,9 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using System.Windows;
 using APTAT.Core;
 using APTAT.Core.Descent.Apt;
-using APTAT.Valkyrie;
+using APTAT.Core.Valkyrie;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 
 namespace APTAT.Application.Models.Valkyrie

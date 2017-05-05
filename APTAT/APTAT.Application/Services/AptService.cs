@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net;
 using APTAT.Application.Models.Valkyrie;
 using APTAT.Core.Descent.Apt;
-using APTAT.Valkyrie;
 using APTAT.Core.Reports;
 using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Directory;
@@ -14,6 +13,7 @@ using System.Collections.Generic;
 using APTAT.Core.Apt;
 using APTAT.Core.FLS;
 using System.Threading.Tasks;
+using APTAT.Core.Valkyrie;
 
 namespace APTAT.Application.Services
 {
@@ -68,7 +68,7 @@ namespace APTAT.Application.Services
         {
             Action action = () =>
             {
-                ValkyrieAnalyzeProgressChanged?.Invoke(this,e.ToClient());
+                ValkyrieAnalyzeProgressChanged?.Invoke(this, e.ToClient());
             };
             App.Current.Dispatcher.Invoke(action);
         }

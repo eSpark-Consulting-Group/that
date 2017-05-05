@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using APTAT.Application.Models.Valkyrie;
 using APTAT.Core;
-using APTAT.Valkyrie;
+using APTAT.Core.Valkyrie;
+
 
 namespace APTAT.Application.Services
 {

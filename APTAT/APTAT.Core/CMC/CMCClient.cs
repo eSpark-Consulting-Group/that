@@ -83,30 +83,33 @@ namespace APTAT.Core.CMC
                new Parameter() { Name = "iu_tz", Value = localTimeZone.ToString(CultureInfo.InvariantCulture)  },
                new Parameter() { Name = "iu_ts", Value =GetLinuxFormatTime(localTimeZone) }
             };
-            var eventParams = new EventParams()
-            {
-                EventParamValue = "eh_pu",
-                EventId = "ei_da",
-                EventGroupId = "eg_da",
-                AdditionalParameters = additionalParameters
-            };
+
+            var eventParams = GetApplicationLaunchedParams();
+            eventParams.AdditionalParameters = additionalParameters;
             SendData(request, eventParams);
         }
 
-        public void AutoDiscoveryFinished(IAutoDiscoveryFinishedRequest request)
+        protected virtual EventParams GetApplicationLaunchedParams()
         {
-            EventParams eventParams = GetAutoDiscoveryFinishedParams();
-            SendData(request, eventParams);
+            var eventParams = new EventParams()
+            {
+                EventId = "ei_da",
+                EventParamValue = "eh_pu",
+                EventGroupId = "eg_da"
+            };
+            return eventParams;
         }
-        protected virtual EventParams GetAutoDiscoveryFinishedParams()
+
+        public  void AutoDiscoveryFinished(IAutoDiscoveryFinishedRequest request)
         {
-            return new EventParams()
+            EventParams eventParams = new EventParams()
             {
                 EventParamValue = "eh_ad_adf",
                 EventId = "ei_rp_ad",
                 EventGroupId = "eg_da",
                 AdditionalParameters = new List<IParameter>() { }
             };
+            SendData(request, eventParams);
         }
 
         public void ScanStarted(IScanStartedRequest request)

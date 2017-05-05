@@ -6,14 +6,10 @@ using APTAT.Application.Services;
 using Telerik.Windows;
 using System.Diagnostics;
 using System.Linq;
-using APTAT.Core;
-using APTAT.Valkyrie;
 using Process = System.Diagnostics.Process;
-using ScanCompletedEventArgs = APTAT.Application.Services.ScanCompletedEventArgs;
 using System.ComponentModel;
 using APTAT.Application.Messages;
-using System.Threading.Tasks;
-using APTAT.Application.Models.Valkyrie;
+using APTAT.Core.Valkyrie;
 using Telerik.Windows.Controls;
 
 namespace APTAT.Application
