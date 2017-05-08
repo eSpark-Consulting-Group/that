@@ -833,6 +833,7 @@ namespace FAT.Application.Models
             if (_onlineItems.Length > 0)
             {
                 ScanKind scanKind = ScanKind.Quick;
+                IsQuickScan = true;
                 ScanOptions options = new ScanOptions(_tcpPort, _udpPort, scanKind, Login, Password, true);  
 
                 var ipAddressesString = DiscoveryResults.Where(_ => _.IsSelected).Select(_ => _.IPAddress).ToArray();
