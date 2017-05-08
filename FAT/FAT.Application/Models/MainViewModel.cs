@@ -1265,7 +1265,7 @@ namespace FAT.Application.Models
                     request.CountOfSuccessScans = ScannedItemsCount;
                     request.CountOfUnknownFiles = _scanCounterManager.UnknownsCount;
                     request.CountOfMaliciousFiles = _scanCounterManager.MalwaresCount;
-
+                    request.CountOfFailedScans = _computers.Count(c => c.HasFailed);
                     if (IsScanCancelled)
                         request.ScanStatus = APTAT.Core.CMC.ScanStatus.Interrupted;
                     else if (IsScanFailed)
