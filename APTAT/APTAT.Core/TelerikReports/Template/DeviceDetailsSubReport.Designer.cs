@@ -14,6 +14,7 @@ namespace APTAT.Core.TelerikReports.Template
             Telerik.Reporting.Drawing.FormattingRule formattingRule3 = new Telerik.Reporting.Drawing.FormattingRule();
             Telerik.Reporting.Drawing.FormattingRule formattingRule4 = new Telerik.Reporting.Drawing.FormattingRule();
             Telerik.Reporting.Drawing.FormattingRule formattingRule5 = new Telerik.Reporting.Drawing.FormattingRule();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DeviceDetailsSubReport));
             Telerik.Reporting.TypeReportSource typeReportSource1 = new Telerik.Reporting.TypeReportSource();
             Telerik.Reporting.Group group1 = new Telerik.Reporting.Group();
             Telerik.Reporting.ReportParameter reportParameter1 = new Telerik.Reporting.ReportParameter();
@@ -497,7 +498,7 @@ namespace APTAT.Core.TelerikReports.Template
             // 
             // subReportFiles
             // 
-            this.subReportFiles.Bindings.Add(new Telerik.Reporting.Binding("Visible", "=ReportItem.DataObject.MaliciousFilesValkyrie.Length>0"));
+            this.subReportFiles.Bindings.Add(new Telerik.Reporting.Binding("Visible", resources.GetString("subReportFiles.Bindings")));
             this.subReportFiles.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(0.18333366513252258D));
             this.subReportFiles.Name = "subReportFiles";
             typeReportSource1.Parameters.Add(new Telerik.Reporting.Parameter("DataSourceBinding", "EndPointFiles"));
