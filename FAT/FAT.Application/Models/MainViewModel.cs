@@ -1365,7 +1365,34 @@ namespace FAT.Application.Models
                 request.TotalCountOfDiscoveredComputers = TotalItemsCount;
                 request.CountOfScannedComputers = _onlineItems?.Length ?? 0;
                 var targetsDiscovererType = _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false);
-                request.ScanTarget = targetsDiscovererType.Type;
+                ETargetsDiscovererTypeRequest targetDiscoverTypeMapped;
+                switch (targetsDiscovererType.Type)
+                {
+                    case ETargetsDiscovererType.NetworkAddresses:
+                        targetDiscoverTypeMapped = ETargetsDiscovererTypeRequest.NetworkAddresses;
+                        break;
+
+                    case ETargetsDiscovererType.Workgroup:
+                        targetDiscoverTypeMapped = ETargetsDiscovererTypeRequest.Workgroup;
+                        break;
+
+                    case ETargetsDiscovererType.ActiveDirectory:
+                        targetDiscoverTypeMapped = ETargetsDiscovererTypeRequest.ActiveDirectory;
+                        break;
+
+                    case ETargetsDiscovererType.LocalComputer:
+                        targetDiscoverTypeMapped = ETargetsDiscovererTypeRequest.LocalComputer;
+                        break;
+
+                    case ETargetsDiscovererType.AutoDiscovery:
+                        targetDiscoverTypeMapped = ETargetsDiscovererTypeRequest.AutoDiscovery;
+                        break;
+                    
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(targetsDiscovererType));
+                        
+                }
+                request.ScanTarget = targetDiscoverTypeMapped;
                 ScanType scanType = IsQuickScan ? ScanType.Quick : ScanType.Full;
                 if (_storage.ContainsKey(KnownKeys.CustomScanOptions))
                     scanType = ScanType.Custom;

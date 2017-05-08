@@ -66,7 +66,7 @@ namespace FAT.Application.Tests.Services
         [Theory]
         [InlineData(ScanTriggerType.CustomScan, ETargetsDiscovererType.ActiveDirectory, ScanType.Custom, 0, 0)]
         [InlineData(ScanTriggerType.ScanNow, ETargetsDiscovererType.AutoDiscovery, ScanType.Full, 1, 1)]
-        public async void ScanStartedTest(ScanTriggerType triggerType, ETargetsDiscovererType discovererTarget, ScanType type, int count, int totalCount)
+        public async void ScanStartedTest(ScanTriggerType triggerType, ETargetsDiscovererTypeRequest discovererTarget, ScanType type, int count, int totalCount)
         {
             var service1 = Mock.Create<IProxySettingsViewModel>(Behavior.Strict);
             var service2 = Mock.Create<ICmcClient>(Behavior.Strict);

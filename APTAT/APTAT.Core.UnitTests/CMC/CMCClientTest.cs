@@ -54,7 +54,7 @@ namespace APTAT.Core.UnitTests.CMC
 
             _scanStartedRequest = Mock.Create<IScanStartedRequest>();
             Mock.Arrange(() => _scanStartedRequest.CountOfScannedComputers).Returns(12);
-            Mock.Arrange(() => _scanStartedRequest.ScanTarget).Returns(ETargetsDiscovererType.Workgroup);
+            Mock.Arrange(() => _scanStartedRequest.ScanTarget).Returns(ETargetsDiscovererTypeRequest.Workgroup);
             Mock.Arrange(() => _scanStartedRequest.ScanTriggerType).Returns(ScanTriggerType.ScanNow);
             Mock.Arrange(() => _scanStartedRequest.ScanType).Returns(ScanType.Custom);
 
@@ -410,7 +410,7 @@ namespace APTAT.Core.UnitTests.CMC
 
             _scanStartedRequest = Mock.Create<IScanStartedRequest>();
             Mock.Arrange(() => _scanStartedRequest.ScanTriggerType).Returns(ScanTriggerType.ScanNow);
-            Mock.Arrange(() => _scanStartedRequest.ScanTarget).Returns(ETargetsDiscovererType.Workgroup);
+            Mock.Arrange(() => _scanStartedRequest.ScanTarget).Returns(ETargetsDiscovererTypeRequest.Workgroup);
             Mock.Arrange(() => _scanStartedRequest.ScanType).Returns(ScanType.Custom);
             Mock.Arrange(() => _scanStartedRequest.TotalCountOfDiscoveredComputers).Returns(50);
             Mock.Arrange(() => _scanStartedRequest.CountOfScannedComputers).Returns(15);
