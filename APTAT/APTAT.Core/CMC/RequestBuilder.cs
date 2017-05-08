@@ -28,8 +28,8 @@ namespace APTAT.Core.CMC
             new Parameter() {Value = "mlc_fc", Name =nameof(IScanUpdatedRequest.CountOfNewMaliciousFilesAfterTheScanWasFinished)},
 
             new Parameter() {Value = "sc_st", Name =nameof(IScanFinishedRequest.ScanStatus)},
-            new Parameter() {Value = "ps_sc_s", Name =nameof(IScanFinishedRequest.CountOfSuccessScans)},
-            new Parameter() {Value = "ps_sc_f", Name =nameof(IScanFinishedRequest.CountOfFailedScans)},
+            new Parameter() {Value = "pc_sc_s", Name =nameof(IScanFinishedRequest.CountOfSuccessScans)},
+            new Parameter() {Value = "pc_sc_f", Name =nameof(IScanFinishedRequest.CountOfFailedScans)},
             new Parameter() {Value = "u_fc", Name =nameof(IScanFinishedRequest.CountOfUnknownFiles)},
             new Parameter() {Value = "mlc_fc", Name =nameof(IScanFinishedRequest.CountOfMaliciousFiles)},
 
