@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.0
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.Core", "APTAT.Core\APTAT.Core.csproj", "{9E80A126-241C-4079-8975-E16204D03E8D}"
 EndProject
@@ -25,8 +25,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodedUITestAT", "CodedUITestAT\CodedUITestAT.csproj", "{B7F52D86-683C-4339-A09B-FDBC85A5F5A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.Valkyrie", "APTAT.Valkyrie\APTAT.Valkyrie.csproj", "{46F67D2C-9368-456A-875A-F96628C18F90}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.DeploymentCore", "..\Common\APTAT.DeploymentCore\APTAT.DeploymentCore.csproj", "{8C99A7F4-76F5-4899-8E57-C032F1E2EC41}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.Common", "..\Common\APTAT.Common\APTAT.Common.csproj", "{49BA3C32-1495-4EA5-8D32-3997788ADE2F}"
@@ -40,9 +38,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.DAL", "APTAT.DAL\APTAT.DAL.csproj", "{AF4ACE83-D560-40EC-AA29-5B962E1D3C5C}"
 EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -139,22 +134,6 @@ Global
 		{B7F52D86-683C-4339-A09B-FDBC85A5F5A1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{B7F52D86-683C-4339-A09B-FDBC85A5F5A1}.Release|Win32.ActiveCfg = Release|Any CPU
 		{B7F52D86-683C-4339-A09B-FDBC85A5F5A1}.Release|x86.ActiveCfg = Release|Any CPU
-		{46F67D2C-9368-456A-875A-F96628C18F90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{46F67D2C-9368-456A-875A-F96628C18F90}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{46F67D2C-9368-456A-875A-F96628C18F90}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{46F67D2C-9368-456A-875A-F96628C18F90}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{46F67D2C-9368-456A-875A-F96628C18F90}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{46F67D2C-9368-456A-875A-F96628C18F90}.Debug|Win32.Build.0 = Debug|Any CPU
-		{46F67D2C-9368-456A-875A-F96628C18F90}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{46F67D2C-9368-456A-875A-F96628C18F90}.Debug|x86.Build.0 = Debug|Any CPU
-		{46F67D2C-9368-456A-875A-F96628C18F90}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{46F67D2C-9368-456A-875A-F96628C18F90}.Release|Any CPU.Build.0 = Release|Any CPU
-		{46F67D2C-9368-456A-875A-F96628C18F90}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{46F67D2C-9368-456A-875A-F96628C18F90}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{46F67D2C-9368-456A-875A-F96628C18F90}.Release|Win32.ActiveCfg = Release|Any CPU
-		{46F67D2C-9368-456A-875A-F96628C18F90}.Release|Win32.Build.0 = Release|Any CPU
-		{46F67D2C-9368-456A-875A-F96628C18F90}.Release|x86.ActiveCfg = Release|Any CPU
-		{46F67D2C-9368-456A-875A-F96628C18F90}.Release|x86.Build.0 = Release|Any CPU
 		{8C99A7F4-76F5-4899-8E57-C032F1E2EC41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8C99A7F4-76F5-4899-8E57-C032F1E2EC41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C99A7F4-76F5-4899-8E57-C032F1E2EC41}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -244,7 +223,7 @@ Global
 		{6FE8C46F-D0F2-4313-8F84-070FDCC2DFB0} = {49414CD5-5F5C-43FC-91C7-10263B37F0E7}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 13
+		SccNumberOfProjects = 12
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://pss05v:8080/tfs/defaultcollection
 		SccLocalPath0 = .
@@ -263,29 +242,29 @@ Global
 		SccProjectUniqueName5 = CodedUITestAT\\CodedUITestAT.csproj
 		SccProjectName5 = CodedUITestAT
 		SccLocalPath5 = CodedUITestAT
-		SccProjectUniqueName6 = APTAT.Valkyrie\\APTAT.Valkyrie.csproj
-		SccProjectName6 = APTAT.Valkyrie
-		SccLocalPath6 = APTAT.Valkyrie
-		SccProjectUniqueName7 = APTAT.Core\\APTAT.Core.csproj
-		SccProjectName7 = APTAT.Core
-		SccLocalPath7 = APTAT.Core
-		SccProjectUniqueName8 = ..\\Common\\APTAT.DeploymentCore\\APTAT.DeploymentCore.csproj
-		SccProjectName8 = ../Common/APTAT.DeploymentCore
-		SccLocalPath8 = ..\\Common\\APTAT.DeploymentCore
-		SccProjectUniqueName9 = ..\\Common\\APTAT.Common\\APTAT.Common.csproj
-		SccProjectName9 = ../Common/APTAT.Common
-		SccLocalPath9 = ..\\Common\\APTAT.Common
-		SccProjectUniqueName10 = ..\\Common\\APTAT.DeploymentCore.UnitTests\\APTAT.DeploymentCore.UnitTests.csproj
+		SccProjectUniqueName6 = APTAT.Core\\APTAT.Core.csproj
+		SccProjectName6 = APTAT.Core
+		SccLocalPath6 = APTAT.Core
+		SccProjectUniqueName7 = ..\\Common\\APTAT.DeploymentCore\\APTAT.DeploymentCore.csproj
+		SccProjectName7 = ../Common/APTAT.DeploymentCore
+		SccLocalPath7 = ..\\Common\\APTAT.DeploymentCore
+		SccProjectUniqueName8 = ..\\Common\\APTAT.Common\\APTAT.Common.csproj
+		SccProjectName8 = ../Common/APTAT.Common
+		SccLocalPath8 = ..\\Common\\APTAT.Common
+		SccProjectUniqueName9 = ..\\Common\\APTAT.DeploymentCore.UnitTests\\APTAT.DeploymentCore.UnitTests.csproj
+		SccProjectTopLevelParentUniqueName9 = APTAT.sln
+		SccProjectName9 = ../Common/APTAT.DeploymentCore.UnitTests
+		SccLocalPath9 = ..\\Common\\APTAT.DeploymentCore.UnitTests
+		SccProjectUniqueName10 = APTAT.Core.UnitTests\\APTAT.Core.UnitTests.csproj
 		SccProjectTopLevelParentUniqueName10 = APTAT.sln
-		SccProjectName10 = ../Common/APTAT.DeploymentCore.UnitTests
-		SccLocalPath10 = ..\\Common\\APTAT.DeploymentCore.UnitTests
-		SccProjectUniqueName11 = APTAT.Core.UnitTests\\APTAT.Core.UnitTests.csproj
-		SccProjectTopLevelParentUniqueName11 = APTAT.sln
-		SccProjectName11 = APTAT.Core.UnitTests
-		SccLocalPath11 = APTAT.Core.UnitTests
-		SccProjectUniqueName12 = APTAT.DAL\\APTAT.DAL.csproj
-		SccProjectName12 = APTAT.DAL
-		SccLocalPath12 = APTAT.DAL
+		SccProjectName10 = APTAT.Core.UnitTests
+		SccLocalPath10 = APTAT.Core.UnitTests
+		SccProjectUniqueName11 = APTAT.DAL\\APTAT.DAL.csproj
+		SccProjectName11 = APTAT.DAL
+		SccLocalPath11 = APTAT.DAL
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true

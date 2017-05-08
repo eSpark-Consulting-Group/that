@@ -18,7 +18,9 @@ using APTAT.Application.Messages;
 using APTAT.Application.Properties;
 using APTAT.Application.Views;
 using APTAT.Common;
+using APTAT.Core.CMC.UFH;
 using Valkyrie.WebApiProvider;
+using Valkyrie.WebApiProvider.Extensions;
 
 namespace FAT.Application.Services
 {
@@ -176,14 +178,7 @@ public class ProxySettingsViewModel : IProxySettingsViewModel
 }
 public interface IStatisticsService
 {
-    void ApplicationLaunchedAsync(IApplicationLaunchedRequest request);
-    void AutoDiscoveryFinishedAsync(IAutoDiscoveryFinishedRequest request);
-    void ScanStartedAsync(IScanStartedRequest request);
-    void ScanFinishedAsync(IScanFinishedRequest request);
-    void ScanUpdatedAsync(IScanUpdatedRequest request);
-    void ReportGeneratedAsync(IReportGeneratedRequest request);
-    void ReportPrintedOrSavedAsync(IReportPrintedOrSavedRequest request);
-    void ApplicationClosedAsync(IApplicationClosedRequest request);
+
     Task OnAppClosing();
 }
 
@@ -193,25 +188,25 @@ public class SendDataResponse
     public Exception SendDataException { get; set; }
 }
 
-public class StatisticsService : IStatisticsService
+public class StatisticsService : IStatisticsService, IDisposable
 {
     private readonly IProxySettingsViewModel _proxyCredentialsProvider;
-    private readonly ICmcClient _client;
+    private readonly ICmcClientUfh _client;
     private readonly object _lockObj = new object();
 
 
-    private ConcurrentQueue<Action> _queue = new ConcurrentQueue<Action>();
+    private readonly ConcurrentQueue<Action> _queue = new ConcurrentQueue<Action>();
     private bool _isNotStarted = true;
     private bool _isEnabledSendData = true;
     private bool _askCredentials = true;
-    private IScheduler _sendUpdateTimer;
+    private readonly IScheduler _sendUpdateTimer;
 
     private int _malwareDiffCount = 0;
     private int _unknownDiffCount = 0;
 
-    private object _objCountersLock = new object();
+    private readonly object _objCountersLock = new object();
 
-    public StatisticsService(IProxySettingsViewModel settingsViewModel, ICmcClient client, IScheduler timer)
+    public StatisticsService(IProxySettingsViewModel settingsViewModel, ICmcClientUfh client, IScheduler timer)
     {
         _proxyCredentialsProvider = settingsViewModel;
         _client = client;
@@ -240,6 +235,7 @@ public class StatisticsService : IStatisticsService
     }
 
     #region Message Receivers
+    //Launched
     [MessageReceiver]
     public void AcceptMessage(AppMessages.AppMessage<IApplicationLaunchedRequest> message)
     {
@@ -248,30 +244,26 @@ public class StatisticsService : IStatisticsService
         ApplicationLaunchedAsync(request);
     }
 
-    [MessageReceiver]
-    public void AcceptMessage(AppMessages.AppMessage<IAutoDiscoveryFinishedRequest> message)
-    {
-        var request = new AutoDiscoveryFinishedRequest();
-        message.Action?.Invoke(request);
-        AutoDiscoveryFinishedAsync(request);
-    }
 
+    //ScanStarted
     [MessageReceiver]
     public void AcceptMessage(AppMessages.AppMessage<IScanStartedRequest> message)
     {
         var request = new ScanStartedRequest();
         message.Action?.Invoke(request);
-        ScanStartedAsync(request);
+        ProduceRequest(() => { _client.ScanStarted(request); });
     }
-
+    
+    //ScanFinished
     [MessageReceiver]
     public void AcceptMessage(AppMessages.AppMessage<IScanFinishedRequest> message)
     {
         var request = new ScanFinishedRequest();
         message.Action?.Invoke(request);
-        ScanFinishedAsync(request);
+        ProduceRequest(() => { _client.ScanFinished(request); });
     }
 
+    //ScanUpdated
     [MessageReceiver]
     public void AcceptMessage(AppMessages.AppMessage<IScanUpdatedRequest> message)
     {
@@ -280,12 +272,31 @@ public class StatisticsService : IStatisticsService
         ScanUpdatedAsync(request);
     }
 
+    
+    [MessageReceiver]
+    public void AcceptMessage(AppMessages.AppMessage<IValkyrieUnkownFileUploadWithTrigger> message)
+    {
+        var request = new ValkyrieUnkownFileUploadWithTriggerRequest();
+        message.Action?.Invoke(request);
+        ProduceRequest(() => { _client.ValkyrieUnkownFileUpload(request); });
+    }
+
+    //ScanUpdated
+    [MessageReceiver]
+    public void AcceptMessage(AppMessages.AppMessage<IValkyrieUnkownFileUpload> message)
+    {
+        var request = new ValkyrieUnkownFileUpload();
+        message.Action?.Invoke(request);
+        ProduceRequest(() => { _client.ValkyrieUnkownFileUploadUpdated(request); });
+    }
+
+
     [MessageReceiver]
     public void AcceptMessage(AppMessages.AppMessage<IReportGeneratedRequest> message)
     {
         var request = new ReportGeneratedRequest();
         message.Action?.Invoke(request);
-        ReportGeneratedAsync(request);
+        ProduceRequest(() => { _client.ReportGenerated(request); });
     }
 
     [MessageReceiver]
@@ -293,7 +304,7 @@ public class StatisticsService : IStatisticsService
     {
         var request = new ReportPrintedOrSavedRequest();
         message.Action?.Invoke(request);
-        ReportPrintedOrSavedAsync(request);
+        ProduceRequest(() => { _client.ReportPrintedOrSaved(request); });
     }
 
     [MessageReceiver]
@@ -301,7 +312,7 @@ public class StatisticsService : IStatisticsService
     {
         var request = new ApplicationClosedRequest();
         message.Action?.Invoke(request);
-        ApplicationClosedAsync(request);
+        ProduceRequest(() => { _client.ApplicationClosed(request); });
     }
     #endregion
 
@@ -415,20 +426,7 @@ public class StatisticsService : IStatisticsService
 
     public void AutoDiscoveryFinishedAsync(IAutoDiscoveryFinishedRequest request)
     {
-        Action action = () => { _client.AutoDiscoveryFinished(request); };
-        ProduceRequest(action);
-    }
-
-    public void ScanStartedAsync(IScanStartedRequest request)
-    {
-        Action action = () => { _client.ScanStarted(request); };
-        ProduceRequest(action);
-    }
-
-    public void ScanFinishedAsync(IScanFinishedRequest request)
-    {
-        Action action = () => { _client.ScanFinished(request); };
-        ProduceRequest(action);
+        ProduceRequest(() => { _client.AutoDiscoveryFinished(request); });
     }
 
     public void ScanUpdatedAsync(IScanUpdatedRequest request)
@@ -438,24 +436,6 @@ public class StatisticsService : IStatisticsService
             _malwareDiffCount += request.CountOfNewMaliciousFilesAfterTheScanWasFinished;
             _unknownDiffCount += request.CountOfNewUnknownFilesAfterTheScanWasFinished;
         }
-    }
-
-    public void ReportGeneratedAsync(IReportGeneratedRequest request)
-    {
-        Action action = () => { _client.ReportGenerated(request); };
-        ProduceRequest(action);
-    }
-
-    public void ReportPrintedOrSavedAsync(IReportPrintedOrSavedRequest request)
-    {
-        Action action = () => { _client.ReportPrintedOrSaved(request); };
-        ProduceRequest(action);
-    }
-
-    public void ApplicationClosedAsync(IApplicationClosedRequest request)
-    {
-        Action action = () => { _client.ApplicationClosed(request); };
-        ProduceRequest(action);
     }
 
     private void SendUpdateScanByTimerCallback(object source, EventArgs eventArgs)
@@ -484,6 +464,10 @@ public class StatisticsService : IStatisticsService
         ProduceRequest(action);
     }
 
+    public void Dispose()
+    {
+        _sendUpdateTimer.Dispose();
+    }
 }
 
 

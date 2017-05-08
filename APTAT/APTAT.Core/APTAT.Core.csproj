@@ -110,7 +110,7 @@
     <Compile Include="CMC\Request\ReportPrintedOrSavedRequest.cs" />
     <Compile Include="CMC\Request\ScanFinishedRequest.cs" />
     <Compile Include="CMC\Request\ScanStartedRequest.cs" />
-    <Compile Include="CMC\Request\ScanUpdatedRequest.cs" />
+    <Compile Include="CMC\Request\ValkyrieUnkownFileUploadWithTriggerRequest.cs" />
     <Compile Include="CMC\ScanType.cs" />
     <Compile Include="CMC\Request\AutoDiscoveryFinishedRequest.cs" />
     <Compile Include="Apt\IDescentScannerFactory.cs" />
@@ -118,6 +118,7 @@
     <Compile Include="CMC\SystemInfoProvider.cs" />
     <Compile Include="CMC\UFH\CmsClientUFH.cs" />
     <Compile Include="CMC\UFH\IValkyrieUnkownFileUpload.cs" />
+    <Compile Include="CMC\UFH\ScanUpdatedRequest.cs" />
     <Compile Include="Descent\Apt\AptComputerDescentResultFactory.cs" />
     <Compile Include="Descent\Apt\AptFactory.cs" />
     <Compile Include="Descent\Apt\ContextFactory.cs" />

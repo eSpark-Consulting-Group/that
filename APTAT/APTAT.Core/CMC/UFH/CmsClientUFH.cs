@@ -17,7 +17,21 @@ namespace APTAT.Core.CMC.UFH
 
     }
 
-    public class CmcClientUfh : CmcClient
+    public interface ICmcClientUfh
+    {
+        void ValkyrieUnkownFileUpload(IValkyrieUnkownFileUploadWithTrigger request);
+        void ValkyrieUnkownFileUploadUpdated(IValkyrieUnkownFileUpload request);
+        void ApplicationLaunched(IApplicationLaunchedRequest request);
+        void AutoDiscoveryFinished(IAutoDiscoveryFinishedRequest request);
+        void ScanStarted(IScanStartedRequest request);
+        void ScanUpdated(IScanUpdatedRequest request);
+        void ScanFinished(IScanFinishedRequest request);
+        void ReportGenerated(IReportGeneratedRequest request);
+        void ReportPrintedOrSaved(IReportPrintedOrSavedRequest request);
+        void ApplicationClosed(IApplicationClosedRequest request);
+    }
+
+    public class CmcClientUfh : CmcClient, ICmcClientUfh
     {
         public CmcClientUfh(ICmcWebApiProvider icmcWebApiProvider, IMachineKeyProvider machineKeyProvider, ISystemInfoProvider systemInfoProvider, ICultureInfoProvider cultureInfoProvider) : base(icmcWebApiProvider, machineKeyProvider, systemInfoProvider, cultureInfoProvider)
         {
@@ -36,25 +50,23 @@ namespace APTAT.Core.CMC.UFH
             return eventParams;
         }
 
-  
 
-        public void ValkyrieUnkownFileUploadUpdated(IValkyrieUnkownFileUploadWithTrigger request)
+        //5)       Valkyrie Unknown File Upload
+        public void ValkyrieUnkownFileUpload(IValkyrieUnkownFileUploadWithTrigger request)
         {
-            string eventId = "ei_rp_vuu";
-            string eventParamValue = "eh_ufh_vuu";
-            string eventGroupId = "eg_da";
-            List<Parameter> additionalParameters = new List<Parameter>
+
+            var additionalParameters = new List<IParameter>
             {
                 new Parameter
                 {
                     IsApplication = false,
-                    Name = "vuu_tfc",
+                    Name = "vu_tfc",
                     Value = request.TotalFilesCount.ToString()
                 },
                 new Parameter
                 {
                     IsApplication = false,
-                    Name = "vuu_mfc",
+                    Name = "vu_mfc",
                     Value = request.MalwareFilesCount.ToString()
                 },
                 new Parameter
@@ -66,26 +78,19 @@ namespace APTAT.Core.CMC.UFH
                 }
             };
 
-
-            RequestParameters requestParameters = new RequestParameters()
+            EventParams eventParams = new EventParams
             {
-                SessionIdentifier = _sessionIdentifier,
-                AnalizeIdentifier = _analyzeIdentifier,
-                AccountIdentifier = _accountIdentifier,
-                EventParamValue = eventParamValue,
-                EventId = eventId,
-                EventGroupId = eventGroupId
+                AdditionalParameters = additionalParameters,
+                EventGroupId = "eg_da",
+                EventParamValue = "eh_ufh_vu",
+                EventId = "ei_rp_vu"
             };
-
-         //   SendData(requestParameters, additionalParameters, request);
+            SendData(request, eventParams);
         }
-
-        public void ValkyrieUnkownFileUpload(IValkyrieUnkownFileUpload request)
+        //6)       Valkyrie Unknown File Upload Updated
+        public void ValkyrieUnkownFileUploadUpdated(IValkyrieUnkownFileUpload request)
         {
-            string eventId = "ei_rp_vu";
-            string eventParamValue = "eh_ufh_vu";
-            string eventGroupId = "eg_da";
-            List<Parameter> additionalParameters = new List<Parameter>
+            List<IParameter> additionalParameters = new List<IParameter>
             {
                 new Parameter
                 {
@@ -102,17 +107,15 @@ namespace APTAT.Core.CMC.UFH
             };
 
 
-            RequestParameters requestParameters = new RequestParameters()
+            EventParams eventParams = new EventParams
             {
-                SessionIdentifier = _sessionIdentifier,
-                AnalizeIdentifier = _analyzeIdentifier,
-                AccountIdentifier = _accountIdentifier,
-                EventParamValue = eventParamValue,
-                EventId = eventId,
-                EventGroupId = eventGroupId
+                AdditionalParameters = additionalParameters,
+                EventGroupId = "eg_da",
+                EventParamValue = "eh_ufh_vuu",
+                EventId = "ei_rp_vuu"
             };
 
-           // SendData(requestParameters, additionalParameters, request);
+            SendData(request, eventParams);
         }
 
     }

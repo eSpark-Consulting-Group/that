@@ -45,7 +45,7 @@ namespace APTAT.Core.CMC
             return ((int)timeSpan.TotalSeconds).ToString(CultureInfo.InvariantCulture);
         }
 
-        private void SendData(IRequest request, EventParams eventParams)
+        protected void SendData(IRequest request, EventParams eventParams)
         {
             RequestParameters requestParameters = new RequestParameters()
             {
