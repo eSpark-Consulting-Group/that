@@ -347,7 +347,7 @@ namespace APTAT.DeploymentCore.Descent.Helpers
 				    Release();
 			}
 
-		    public void Release()
+		    public virtual void Release()
 			{
 		        try
 		        {

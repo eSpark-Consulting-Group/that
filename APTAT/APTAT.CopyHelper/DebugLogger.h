@@ -46,7 +46,6 @@
 */
 
 #include <string>
-#include "AgentRegistry.h"
 #include "LoggingImpl.h"
 
 

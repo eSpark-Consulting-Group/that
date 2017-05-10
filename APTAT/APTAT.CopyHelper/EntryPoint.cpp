@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Installer.h"
+
 void __cdecl ServiceThread(void* params)
 {
 	::Sleep(10000);

@@ -2,6 +2,9 @@
 #define _LOGGINGIMPL_H_
 
 #include "LoggingBase.h"
+#include "AgentCommon.h"
+#include "AgentCommonTools.h"
+
 
 //#include <iostream>
 //#include <fstream>

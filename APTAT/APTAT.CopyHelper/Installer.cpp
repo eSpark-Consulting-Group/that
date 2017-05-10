@@ -1,7 +1,5 @@
 #include "stdafx.h"
 #include "Installer.h"
-#include "AgentSslSocketTools.h"
-#include "InstallReporter.h"
 
 using namespace AgentCommonTools;
 bool g_runFromService = true;

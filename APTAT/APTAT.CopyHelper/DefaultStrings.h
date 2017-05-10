@@ -1,4 +1,4 @@
-#pragma once
+pragma once
 #include "ResourceText.h"
 
 using namespace CRM::Localization;

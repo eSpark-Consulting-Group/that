@@ -1,0 +1,144 @@
+﻿using System;
+using System.Collections.Generic;
+
+using APTAT.Common;
+using APTAT.DeploymentCore.Descent;
+using APTAT.DeploymentCore.Descent.Exceptions.Transport;
+using APTAT.DeploymentCore.Descent.Helpers;
+using APTAT.DeploymentCore.Directory;
+using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
+using APTAT.DeploymentCore.Messages;
+
+namespace APTAT.Core.Descent.Copy
+{
+    public class CopyDescentScanner : Scanner
+    {
+        public const int CancelItemsInQueue = 0;
+        public const int CancelAllITems = 1;
+        private CopyDescentMod _descentMod;
+        private readonly string[] _filePathes;
+
+        public CopyDescentScanner(IEnumerable<DeploymentTarget> targets,
+            string login, string password, IDevicesSourceDescription devicesSourceDescription, 
+            string[] filePathes)
+            : base(targets, login, password, devicesSourceDescription)
+        {
+            _filePathes = filePathes;
+        }
+
+
+        public override IDescentQueryResult ValidateAndGetResult()
+        {
+            //if (Login == null)
+            //    throw new ArgumentException("Login name not specified.", "login");
+            //if (Password == null)
+            //    throw new ArgumentException("Password not specified.", "password");
+                
+            var result = new DescentResult(Targets, DevicesSourceDescription, new CopyComputerDescentResultFactory(), 
+                new DescentWatcherFactory());
+            return result;
+        }
+
+        public override void StartScan(IChangeTrackingSubSystem changeTrackingSubSystem, IDescentQueryResult result)
+        {
+            if (_descentMod != null)
+            {
+                _descentMod.Release();
+            }
+            _descentMod = new CopyDescentMod(TaskFactory, changeTrackingSubSystem);
+            foreach (var computer in Targets)
+            {
+                RemoteHostInfo ri = new RemoteHostInfo(computer.Uid,
+                    computer.IPAddress != null ? computer.IPAddress.ToString() : computer.DnsName,
+                    Login, Password, computer.IsLocalComputer);
+
+                var job = new RemoteInstallerJob(result, changeTrackingSubSystem, this, computer);
+                _descentMod.StartDeployment(ri, job, computer.Uid, result.OperationUid, _filePathes);
+            }
+        }
+
+        public override void AbortAllThread(int code = 0)
+        {
+            if (code == CancelAllITems)
+                _descentMod.SetCancellationToken();
+            base.AbortAllThread(code);
+        }
+
+        public override void StopScan(Guid targetUid)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void GetDescriptionAndSuggestionByStatus(DescentStatus status, out ResourceText description, out ResourceText suggestion)
+        {
+            suggestion = ResourceText.Empty;
+            description = ResourceText.Empty;
+            var askBase = false;
+            switch (status)
+            {
+                case DescentStatus.status_operation_canceled:
+                    description = new ResourceText("", "null", "Deployment operation was stopped.");
+                    break;
+                case DescentStatus.status_invalid_command_line:
+                    description = new ResourceText("", "null", "Invalid command line argument.");
+                    break;
+                case DescentStatus.status_error_product_version:
+                    description = new ResourceText("", "null", "Another version of this product is already installed. " +
+                                                                 "Installation of this version cannot continue.");
+                    break;
+                case DescentStatus.status_success_reboot_required:
+                    description = new ResourceText("", "null", "Installation was successful, but changes will not be " +
+                                                                 "effective until the system is rebooted.");
+                    break;
+                case DescentStatus.status_agent_was_crashed:
+                    description = new ResourceText("", "null", "Agent was crashed.");
+                    break;
+                default:
+                    askBase = true;
+                    break;
+            }
+            if (askBase)
+                base.GetDescriptionAndSuggestionByStatus(status, out description, out suggestion);
+        }
+
+        public override FormattedText GetDescentStatusInformation(ResourceText errorFormat, DescentStatus status, int win32Error,
+            string errorString, out FormattedText shortMessage)
+        {
+            switch (status)
+            {
+                case DescentStatus.status_remote_invalid_response:
+                    {
+                        if (errorString == "The network path was not found.")
+                        {
+                            var text = new FormattedText(new ResourceText("", "null", errorString));
+                            shortMessage = text;
+                            return text;
+                        }
+                        break;
+                    }
+                case DescentStatus.status_msi_error:
+                    {
+                        var text = new FormattedText(new ResourceText("", "null", $"Error \"{win32Error}\" occurred during installation"));
+                        shortMessage = text;
+                        return text;
+                    }
+                case DescentStatus.status_exe_error:
+                    {
+                        var text = new FormattedText(new ResourceText("", "null", $"Installation finished with error code \"{win32Error}\""));
+                        shortMessage = text;
+                        return text;
+                    }
+            }
+            return base.GetDescentStatusInformation(errorFormat, status, win32Error, errorString, out shortMessage);
+        }
+        public override void Dispose()
+        {
+            base.Dispose();
+            if (_descentMod != null)
+            {
+                _descentMod.Release();
+                _descentMod = null;
+            }
+        }
+    }
+}

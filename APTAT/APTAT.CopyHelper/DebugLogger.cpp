@@ -2,7 +2,6 @@
 #include <windows.h>
 #include "DebugLogger.h"
 #include <assert.h>
-#include "AgentRegistry.h"
 
 #define CHECK_LOGGING_ENABLED if(!m_bLoggingEnabled && !m_bLoggingSourceEnabled)return;
 //#define LOG_ALWAYS
@@ -337,7 +336,7 @@ tLoggerAutoInit::tLoggerAutoInit(const wchar_t* logPath, const wchar_t* prefix, 
     g_pLoggerAutoInit = this;
 
 	DWORD loggingEnabled = 0;
-	if( ( bAllowEnableLoggingKey == false ) || ( !LoadAgentAttributeFromTheRegistry(L"EnableLogging", loggingEnabled) || !loggingEnabled ))
+	if( ( bAllowEnableLoggingKey == false ))
     {
         // No file created... Logging is disabled
         m_logger.enableLogging(false);

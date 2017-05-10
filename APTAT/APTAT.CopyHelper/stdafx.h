@@ -26,6 +26,7 @@
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 // Windows Header Files:
 #include <windows.h>
+#import <msxml6.dll>
 #include <winsock2.h>
 
 // C RunTime Header Files
@@ -34,7 +35,7 @@
 #include <malloc.h>
 #include <memory.h>
 
-#include <msi.h>
+//#include <msi.h>
 #include <shellapi.h>
 #include <assert.h>
 #include <comdef.h>
@@ -46,10 +47,13 @@
 #include <atlbase.h>
 
 
+//#include <Psapi.h>
+//#pragma comment( lib, "psapi.lib" )
+
+
 typedef ATL::CComAutoCriticalSection CAutoCriticalSection;
 typedef ATL::CComCritSecLock<ATL::CComCriticalSection> CLocker;
 
-#import <msxml6.dll>
 using namespace std;
 
 #include "resource.h"
@@ -60,8 +64,7 @@ using namespace std;
 
 #include "DebugLogger.h"
 #include "BaseExceptionsLT.h"
-#include "AgentInstallUtils.h"
-//#include "FormattedText.h"
-#include "DefaultStrings.h"
 
 using namespace AgentCommonTools;
+
+#define BUFSIZE 512

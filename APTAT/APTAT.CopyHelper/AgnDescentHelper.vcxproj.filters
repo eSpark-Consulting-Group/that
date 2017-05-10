@@ -9,9 +9,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
-    <Filter Include="Resource Files\Translations">
-      <UniqueIdentifier>{d7b111da-3c2b-437b-9dcb-0a74a3a4438b}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -29,16 +26,10 @@
     <ClCompile Include="AgentCommonTools.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AgentRegistry.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BaseExceptionsLT.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DebugLogger.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FormattedText.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LoggingBase.cpp">
@@ -47,28 +38,10 @@
     <ClCompile Include="LoggingImpl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceText.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="IPEndPoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sslsocket.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="InstallReporter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DefaultStrings.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ImpersonationHelper.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AgentInstallUtils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AgentSslSocketTools.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -76,19 +49,10 @@
     <ClInclude Include="Resource.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
-    <ClInclude Include="stdafx.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DefaultStrings.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
     <ClInclude Include="AgentCommon.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
     <ClInclude Include="AgentCommonTools.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AgentRegistry.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
     <ClInclude Include="BaseExceptionsLT.h">
@@ -100,16 +64,10 @@
     <ClInclude Include="DebugLogger.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
-    <ClInclude Include="FormattedText.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
     <ClInclude Include="LoggingBase.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
     <ClInclude Include="LoggingImpl.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ResourceText.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
     <ClInclude Include="trace_enum.h">
@@ -121,39 +79,22 @@
     <ClInclude Include="IPEndPoint.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
-    <ClInclude Include="SAgentVersion.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sslsocket.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
     <ClInclude Include="DescentStatus.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
     <ClInclude Include="Installer.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
-    <ClInclude Include="InstallReporter.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
     <ClInclude Include="ImpersonationHelper.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
-    <ClInclude Include="AgentInstallUtils.h" />
-    <ClInclude Include="AgentSslSocketTools.h" />
+    <ClInclude Include="stdafx.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ResourceMappings.ini">
       <Filter>Resource Files</Filter>
-    </None>
-    <None Include="Translations\en.rc">
-      <Filter>Resource Files\Translations</Filter>
-    </None>
-    <None Include="Translations\tr.rc">
-      <Filter>Resource Files\Translations</Filter>
-    </None>
-    <None Include="Translations\de.rc">
-      <Filter>Resource Files\Translations</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

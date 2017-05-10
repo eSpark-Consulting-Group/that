@@ -1,16 +1,9 @@
 #include "stdafx.h"
-#include <atlstr.h>
 #include "Installer.h"
-#include "AgentInstallUtils.h"
-#include "AgentSslSocketTools.h"
-#include "FormattedText.h"
 #include <ATLComTime.h>
 #include <sstream>
+#include <strsafe.h>
 #include "ImpersonationHelper.h"
-
-using namespace CRM::AgnCore::Transport;
-using namespace CRM::Localization;
-
 #include <algorithm>
 
 void RemoteInstallerService::formatResponse(LPCWSTR format, ...)
@@ -114,10 +107,8 @@ bool RemoteInstallerService::writeStatusToFile(CString responseFile, bool forceW
 
 		// Write in the response file
 		wchar_t buf[1024] = { 0 };
-		wchar_t buf2[1024] = { 0 };
 		DWORD dw;
 		swprintf_s(buf, L"%d;%d#%s", (UINT)m_status, (UINT)m_err, m_ErrorString);
-		swprintf_s(buf2, L"%d", (UINT)m_currentPercentage);
 
 
 		DO_LOG(L"ResponseErr: %s", buf);
@@ -126,12 +117,7 @@ bool RemoteInstallerService::writeStatusToFile(CString responseFile, bool forceW
 
 		::WriteFile(hFile, buf, wcslen(buf) * sizeof(buf[0]), &dw, NULL);
 		::WriteFile(hFile, L"\r\n", 4, &dw, NULL);
-		::WriteFile(hFile, m_responseString, m_responseString.GetLength() * sizeof(WCHAR), &dw, NULL);
-		::WriteFile(hFile, L"\r\n", 4, &dw, NULL);
-		::WriteFile(hFile, buf2, wcslen(buf2) * sizeof(buf2[0]), &dw, NULL);
-		::WriteFile(hFile, L"\r\n", 4, &dw, NULL);
 
-		///////////////////////////////////////////////////////////////////////////////////////////////////
 		for (int i = 0; i < m_fileStatus.size(); i++)
 		{
 			wchar_t buf3[MAX_PATH + 3] = { 0 };
@@ -198,6 +184,13 @@ int RemoteInstallerService::action_copy_file(int argc, LPTSTR argv[])
 	return dwExitCode;
 }
 
+void RemoteInstallerService::add_response_for_file(const wchar_t* strPath ,int err)
+{
+	m_filePath.push_back(strPath);
+	m_fileStatus.push_back(err);
+	writeStatusToFile(m_responseFile, false);
+}
+
 int RemoteInstallerService::action_copy_files(int argc, LPTSTR argv[])
 {
 	if (argc != 1)
@@ -216,7 +209,7 @@ int RemoteInstallerService::action_copy_files(int argc, LPTSTR argv[])
 			(std::istreambuf_iterator<wchar_t>()));
 		AgentCommonTools::SplitString(content.c_str(), L";", pathes, false);
 	}
-
+	setStatus(status_install_in_progress);
 
 	for (int i = 0; i < pathes.size(); i++)
 	{
@@ -235,7 +228,8 @@ int RemoteInstallerService::action_copy_files(int argc, LPTSTR argv[])
 		if (!::CopyFile(originalStrPath, strPath, false))
 		{
 			CWin32LastError error;
-			DO_LOG(L"CopyFile Failed failed: %s (%d)", error.GetMessage(), (dwExitCode = error.GetCode()));
+			err = error.GetCode();
+			DO_LOG(L"CopyFile Failed failed: %s (%d)", error.GetMessage(), (dwExitCode = err));
 			if (error.GetCode() == ERROR_SHARING_VIOLATION)
 			{
 				wchar_t tempPath[MAX_PATH] = {};
@@ -246,41 +240,19 @@ int RemoteInstallerService::action_copy_files(int argc, LPTSTR argv[])
 				if (!::CopyFile(originalStrPath, strPath, false))
 				{
 					CWin32LastError error;
-					DO_LOG(L"CopyFile Failed failed: %s (%d)", error.GetMessage(), (dwExitCode = error.GetCode()));
-					m_responseString = error.GetMessage();
 					err = error.GetCode();
-					m_filePath.push_back(strPath);
-					m_fileStatus.push_back(err);
+					DO_LOG(L"CopyFile Failed failed: %s (%d)", error.GetMessage(), (dwExitCode = err));
+					m_responseString = error.GetMessage();
+					add_response_for_file(strPath, err);
 				}
 			}
 		}
-		if (err == 0)
-		{
-			TCHAR Path[MAX_PATH];
-			HANDLE hFile;
-			DWORD dwRet;
 
-			hFile = CreateFile(strPath,               // file to open
-				GENERIC_READ,          // open for reading
-				FILE_SHARE_READ,       // share for reading
-				NULL,                  // default security
-				OPEN_EXISTING,         // existing file only
-				FILE_ATTRIBUTE_NORMAL, // normal file
-				NULL);                 // no attr. template
-
-			if (hFile == INVALID_HANDLE_VALUE)
-			{
-				m_filePath.push_back(strPath);
-				m_fileStatus.push_back(m_err);
-			}
-
-			dwRet = GetFinalPathNameByHandle(hFile, Path, MAX_PATH, VOLUME_NAME_NT);
-			CloseHandle(hFile);
-			m_filePath.push_back(strPath);
-			m_fileStatus.push_back(0);
-		}
+		add_response_for_file(strPath, err);
+		setStatus(status_success);
+		return dwExitCode;
 	}
-	setStatus(status_success);
-	return dwExitCode;
 }
+
+
 

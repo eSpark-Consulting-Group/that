@@ -126,6 +126,12 @@
     <Compile Include="Descent\Apt\IAptDescentMod.cs" />
     <Compile Include="Descent\Apt\IAptFactory.cs" />
     <Compile Include="Descent\Apt\ScanResultExt.cs" />
+    <Compile Include="Descent\Copy\CopyComputerDescentResultFactory.cs" />
+    <Compile Include="Descent\Copy\CopyDescentHelper.cs" />
+    <Compile Include="Descent\Copy\CopyDescentMod.cs" />
+    <Compile Include="Descent\Copy\CopyDescentProgressItem.cs" />
+    <Compile Include="Descent\Copy\CopyDescentScanner.cs" />
+    <Compile Include="Descent\Copy\CopyResult.cs" />
     <Compile Include="FinalVerdictCalculator.cs" />
     <Compile Include="FLS\IFlsResponse.cs" />
     <Compile Include="IFinalVerdictCalculator.cs" />

@@ -4,7 +4,6 @@
 #include <vector>
 #include <string>
 #include "DescentStatus.h"
-#include "InstallReporter.h"
 
 using namespace AgentCommonTools;
 
@@ -85,5 +84,6 @@ struct RemoteInstallerService
 
 
 	int action_copy_file(int argc, LPTSTR argv[]);
+	void add_response_for_file(const wchar_t* strPath, int err);
 	int action_copy_files(int argc, LPTSTR argv[]);
 };
