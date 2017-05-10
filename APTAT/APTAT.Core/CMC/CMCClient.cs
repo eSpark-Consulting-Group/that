@@ -72,7 +72,8 @@ namespace APTAT.Core.CMC
             var culture = _cultureInfoProvider.GetCulture();
             var localTimeZone = TimeZone.CurrentTimeZone.ToUniversalTime(DateTime.Now);
             var offset = TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now);
-            string timeZoneFormated = $"GMT+{offset:hh}:{offset:mm}";
+            var s = offset.ToString().Substring(0,6);
+            string timeZoneFormated = "GMT " + s;
 
             List<IParameter> additionalParameters = new List<IParameter>()
             {
