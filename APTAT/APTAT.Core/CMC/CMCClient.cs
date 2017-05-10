@@ -62,6 +62,21 @@ namespace APTAT.Core.CMC
             _webApiProvider.SendData(info, ProxySettings.Proxy?.Credentials);
         }
 
+        private static string GetTimeZoneFormated()
+        {            
+            TimeSpan offset = TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now);
+            string timeZoneFormated = String.Empty;
+            if (offset.Ticks > 0)
+            {
+                timeZoneFormated = "GMT+" + offset.ToString().Substring(0, 5);
+            }
+            else
+            {
+                timeZoneFormated = "GMT" + offset.ToString().Substring(0, 6);
+            }
+            return timeZoneFormated;
+        }
+
         public void ApplicationLaunched(IApplicationLaunchedRequest request)
         {
             _accountIdentifier = request.AcId;
@@ -71,9 +86,7 @@ namespace APTAT.Core.CMC
             var systemInfo = _systemInfoProvider.GetSystemInfo();
             var culture = _cultureInfoProvider.GetCulture();
             var localTimeZone = TimeZone.CurrentTimeZone.ToUniversalTime(DateTime.Now);
-            var offset = TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now);
-            var s = offset.ToString().Substring(0,6);
-            string timeZoneFormated = "GMT " + s;
+            var timeZoneFormated = GetTimeZoneFormated();
 
             List<IParameter> additionalParameters = new List<IParameter>()
             {
