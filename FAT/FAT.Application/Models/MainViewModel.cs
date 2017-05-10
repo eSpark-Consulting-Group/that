@@ -1398,7 +1398,10 @@ namespace FAT.Application.Models
                 if (_storage.ContainsKey(KnownKeys.CustomScanOptions))
                     scanType = ScanType.Custom;
                 request.ScanType = scanType;
+                
                 request.ScanTriggerType = targetsDiscovererType.Type == ETargetsDiscovererType.AutoDiscovery ? ScanTriggerType.ScanNow : ScanTriggerType.CustomScan;
+                if (request.ScanTriggerType == ScanTriggerType.CustomScan)
+                    request.ScanType = ScanType.Custom;
             });
         }
 
