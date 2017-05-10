@@ -76,7 +76,7 @@ namespace APTAT.Core.CMC
 
             List<IParameter> additionalParameters = new List<IParameter>()
             {
-               new Parameter() { Name = "op_sy", Value = systemInfo.FamilyName,IsApplication = true},
+               new Parameter() { Name = "op_sy", Value = "Windows",IsApplication = true},
                new Parameter() { Name = "op_ve", Value = systemInfo.Version,IsApplication = true },
                new Parameter() { Name = "op_pl", Value = systemInfo.Platform,IsApplication = true},
                new Parameter() { Name = "cul",   Value =culture, IsApplication = true},
