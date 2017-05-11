@@ -10,4 +10,13 @@ namespace APTAT.Application.Services.EventArgs
         }
         public Exception Error { get; set; }
     }
+
+    public class CancelEventArgs : System.EventArgs
+    {
+        public CancelEventArgs(Boolean isProxyError)
+        {
+            IsProxyError = isProxyError;
+        }
+        public Boolean IsProxyError { get; set; }
+    }
 }

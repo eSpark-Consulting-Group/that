@@ -113,6 +113,6 @@ namespace FAT.Application.Services
 
         event EventHandler<ScanStartedEventArgs> FatScanStarted;
         event EventHandler<ErrorEventArgs> FatScanCompleted;
-        event EventHandler CancelScanStarted;
+        event EventHandler<CancelEventArgs> CancelScanStarted;
     }
 }

@@ -74,5 +74,6 @@ namespace FAT.Application.Models
         bool UpdateFileVerdict(IFileVerdictContext fileVerdictContext);
         void UpdateFileVerdict(APTAT.Core.Descent.Apt.CloudVerdict verdict);
         void UpdateVerdictForFiles(IFileVerdictContext[] fileVerdictContext, IScanCounterDiff scanCounterDiff);
+        void TrySetCancelledStatus(bool isValkyrieError);
     }
 }

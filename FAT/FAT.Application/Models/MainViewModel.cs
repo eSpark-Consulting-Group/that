@@ -191,6 +191,7 @@ namespace FAT.Application.Models
         }
 
         public Boolean IsScanCancelled { get; set; }
+        public Boolean IsValkyrieError { get; set; }
 
         public Boolean IsScanFailed { get; set; }
 
@@ -648,8 +649,7 @@ namespace FAT.Application.Models
             OnLoadedCommand = new DelegateCommand(OnLoaded);
 
             StartScanCommand = new DelegateCommand(o =>
-                AppMessages.ScanMessages.Send(MessageTypes.StartScan, InvokeStartScan),
-                o => !IsAnyScanInProgress);
+                AppMessages.ScanMessages.Send(MessageTypes.StartScan, InvokeStartScan), o => !IsAnyScanInProgress);
             StopScanCommand = new DelegateCommand(o =>
                 AppMessages.ScanMessages.Send(MessageTypes.StopScan, InvokeStopScan),
                 o => IsGlobalStopEnabled);
@@ -1333,9 +1333,11 @@ namespace FAT.Application.Models
             }
 
             ScanOptions options;
+            _IsCustomScan = false;
             if (_storage.ContainsKey(KnownKeys.CustomScanOptions))
             {
                 var customScanOptions = _storage.GetValue<CustomScanOptions>(KnownKeys.CustomScanOptions, true);
+                _IsCustomScan = true;
                 scanKind = ScanKind.Custom;
                 options = new ScanOptions(_tcpPort, _udpPort, customScanOptions.FolderItems.Select(f => f.FullName).ToArray(),
                     customScanOptions.ScanCriticalAreas, Login, Password);
@@ -1367,6 +1369,7 @@ namespace FAT.Application.Models
                 request.CountOfScannedComputers = _onlineItems?.Length ?? 0;
                 var targetsDiscovererType = _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false);
                 ETargetsDiscovererTypeRequest targetDiscoverTypeMapped;
+                
                 switch (targetsDiscovererType.Type)
                 {
                     case ETargetsDiscovererType.NetworkAddresses:
@@ -1395,22 +1398,22 @@ namespace FAT.Application.Models
                 }
                 request.ScanTarget = targetDiscoverTypeMapped;
                 ScanType scanType = IsQuickScan ? ScanType.Quick : ScanType.Full;
-                if (_storage.ContainsKey(KnownKeys.CustomScanOptions))
+                if (_IsCustomScan)
                     scanType = ScanType.Custom;
-                request.ScanType = scanType;
-                
-                request.ScanTriggerType = targetsDiscovererType.Type == ETargetsDiscovererType.AutoDiscovery ? ScanTriggerType.ScanNow : ScanTriggerType.CustomScan;
-                if (request.ScanTriggerType == ScanTriggerType.CustomScan)
-                    request.ScanType = ScanType.Custom;
+
+                request.ScanType = scanType;                
+                request.ScanTriggerType = targetsDiscovererType.Type == ETargetsDiscovererType.AutoDiscovery ? ScanTriggerType.ScanNow : ScanTriggerType.CustomScan;            
+            
             });
         }
 
-        private void OnCancelScanStarted(object sender, EventArgs e)
+        private void OnCancelScanStarted(object sender, CancelEventArgs e)
         {
             if (_scanTimer.ScanActive)
             {
                 CancelInProgress = true;
                 IsScanCancelled = true;
+                IsValkyrieError = e.IsProxyError;
             }
         }
 
@@ -1504,6 +1507,9 @@ namespace FAT.Application.Models
                 {
                     if (infoItem.ScanStage == ScanStage.ScanInProgress)
                         infoItem.ScanStage = ScanStage.OperationCancelling;
+                    else
+                        infoItem.TrySetCancelledStatus(IsValkyrieError);
+
 
                     counterDiff.MalwareDiff += (-1) * infoItem.MalwareFilesCount;
                     counterDiff.CleanDiff += (-1) * infoItem.CleanFilesCount;
@@ -1606,6 +1612,8 @@ namespace FAT.Application.Models
                 };
             }
         }
+
+        private bool _IsCustomScan;
 
         private bool FilterComputerByOrders(IThreatInfoItem item)
         {

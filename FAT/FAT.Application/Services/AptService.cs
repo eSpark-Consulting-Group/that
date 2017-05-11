@@ -89,7 +89,7 @@ namespace FAT.Application.Services
         #region Scan for FAT
         public event EventHandler<ScanStartedEventArgs> FatScanStarted;
         public event EventHandler<ErrorEventArgs> FatScanCompleted;
-        public event EventHandler CancelScanStarted;
+        public event EventHandler<CancelEventArgs> CancelScanStarted;
         public void BeginScan(IComputer[] targets, IDevicesSourceDescription devicesSourceDescription,
             ScanOptions options)
         {
@@ -176,7 +176,7 @@ namespace FAT.Application.Services
                     StartValkyrieAnalysis();
                 }
                 else
-                    StopScan(new Guid[0]);
+                    StopScanInternal(new Guid[0], true);
                 return;
             }
             Action a = () =>
@@ -289,8 +289,6 @@ namespace FAT.Application.Services
 
             if (e.Error != null)
                 return;
-
-            StartValkyrieAnalysis();
             
             Action action = () =>
             {
@@ -303,12 +301,19 @@ namespace FAT.Application.Services
                 FatScanStarted?.Invoke(this, args);
             };
             App.Current.Dispatcher.BeginInvoke(action);
+
+            StartValkyrieAnalysis();
         }
         public void StopScan(Guid[] targets)
         {
+            StopScanInternal(targets);
+        }
+
+        private void StopScanInternal(Guid[] targets, bool proxyError = false)
+        {
             _manager.StopScan(targets);
 
-            CancelScanStarted?.Invoke(this, new EventArgs());
+            CancelScanStarted?.Invoke(this, new CancelEventArgs(proxyError));
         }
 
         public void UpdateFlsPorts(int udpPort, int tcpPort)

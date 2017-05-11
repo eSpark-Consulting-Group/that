@@ -542,9 +542,9 @@ namespace FAT.Application.Models
             string errorCounterText = PendingFilesCount > 0 ?
                     $"In Analysis {PendingFilesCount}."
                     : String.Empty;
+            
 
-            
-            
+
             if (Math.Abs(TotalProgressPercentage - 100) < 0.0001)
             {
                 string message = $"Completed: Total files scanned: {TotalFilesCount}. Unknown: {UnknownFilesCount}. Malicious: {MalwareFilesCount}.";
@@ -923,6 +923,17 @@ namespace FAT.Application.Models
         public override string ToString()
         {
             return NameAndIpAddress;
+        }
+
+        public void TrySetCancelledStatus(bool isValkyrieError)
+        {
+            if (ScanStage != ScanStage.OperationCompleted) return;
+            if (ValkyrieProgressPercentage != 100)
+            {
+                ScanStage = ScanStage.OperationCancelling;
+            }
+            FilesToCheckOnValkyrieCount = new IThreatInfoItem[0];
+            ReCalculateValkyriePercentage();
         }
     }
 }
