@@ -210,15 +210,14 @@ namespace FAT.Application.Services
                         HttpStatusCode? code = httpWebResponse?.StatusCode;
                         if (code == HttpStatusCode.ProxyAuthenticationRequired)
                         {
-                            if (!_askCredentials)
-                                break;
-
-                            var proxyCredentials = _proxyCredentialsProvider.GetProxyCredentials();
-
-                            if (proxyCredentials != null)
+                            if (_askCredentials)
                             {
-                                ProxySettings.Proxy.Credentials = proxyCredentials;
-                                continue;
+                                var proxyCredentials = _proxyCredentialsProvider.GetProxyCredentials();
+                                if (proxyCredentials != null)
+                                {
+                                    ProxySettings.Proxy.Credentials = proxyCredentials;
+                                    continue;
+                                }
                             }
                             _askCredentials = false;
                         }
