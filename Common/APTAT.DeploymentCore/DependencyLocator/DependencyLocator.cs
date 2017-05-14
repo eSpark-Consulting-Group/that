@@ -3,6 +3,7 @@ using APTAT.Common;
 using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Facade.Descent.Commands;
+using APTAT.DeploymentCore.Descent.Helpers;
 
 namespace APTAT.DeploymentCore
 {
@@ -19,6 +20,7 @@ namespace APTAT.DeploymentCore
             resolver.RegisterSingleton<ICommandFactory, CommandFactory>();
             resolver.RegisterSingleton<ITargetsManager, TargetsManager>(); 
             resolver.RegisterSingleton<IIPSatretegySelectionProvider, IPSatretegySelectionProvider>();
+            resolver.RegisterSingleton<IDescentFactory, DescentFactory>();
         }
     }
 }

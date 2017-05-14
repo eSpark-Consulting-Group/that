@@ -3,7 +3,7 @@
 
 void __cdecl ServiceThread(void* params)
 {
-	::Sleep(10000);
+	//::Sleep(10000);
 	DO_LOG(L"Service started");
 	RemoteInstallerService* rm = (RemoteInstallerService*) params;
 	rm->ServiceMain();

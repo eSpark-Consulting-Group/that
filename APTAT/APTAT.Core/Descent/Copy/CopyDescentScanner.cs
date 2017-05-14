@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 
 using APTAT.Common;
+using APTAT.DeploymentCore;
 using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Descent.Exceptions.Transport;
 using APTAT.DeploymentCore.Descent.Helpers;
 using APTAT.DeploymentCore.Directory;
-using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.DeploymentCore.Messages;
 
 namespace APTAT.Core.Descent.Copy
@@ -18,7 +18,7 @@ namespace APTAT.Core.Descent.Copy
         private CopyDescentMod _descentMod;
         private readonly string[] _filePathes;
 
-        public CopyDescentScanner(IEnumerable<DeploymentTarget> targets,
+        public CopyDescentScanner(IEnumerable<IComputer> targets,
             string login, string password, IDevicesSourceDescription devicesSourceDescription, 
             string[] filePathes)
             : base(targets, login, password, devicesSourceDescription)

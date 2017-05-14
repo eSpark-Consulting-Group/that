@@ -24,7 +24,7 @@ namespace APTAT.DeploymentCore.Descent.Helpers
             public string RemoteWorkingDirectory;
             protected string RemoteHost;
 			public string TempFolderName = "ComodoRemoteDeployment";
-            private readonly NetworkHelper _networkHelper = new NetworkHelper();
+            private readonly IDescentImpersonationHelper _networkHelper;
 		    protected string PackageFileName;
 		    protected readonly INetworkObserver NetworkObserver;
 		    protected readonly CancellationToken CancellationToken;
@@ -75,7 +75,8 @@ namespace APTAT.DeploymentCore.Descent.Helpers
 		        CancellationToken = cancellationToken;
 				_oldRemoteHostName = info.HostName;
 				InitPaths();
-			}
+                _networkHelper = new DescentImpersonationHelper(NetworkObserver);
+            }
 
 			protected virtual void InitPaths()
 			{
@@ -84,165 +85,21 @@ namespace APTAT.DeploymentCore.Descent.Helpers
                 RemoteWorkingDirectory =  $@"{RemoteAdminPath}\{TempFolderName}";
             }
 
-			private static bool ExtractUserNameAndDomain( string login, out string userName, out string domain )
+			
+
+            private void SetHostName(string hostName)
+            {
+                RemoteHostInfo.HostName = hostName;
+                InitPaths();
+            }
+
+            private void InitWithHostName( bool impersonateAsNetworkService )
 			{
-                userName = "";
-                domain = "";
-                if (login == null) return false;
-				string[] splitted = login.Split( '\\' );
-				if ( splitted.Length == 2 )
-				{
-					userName = splitted[1];
-					domain = splitted[0];
-					return true;
-				}
+                var hostName = _networkHelper.Impersonate(RemoteHostInfo, CancellationToken,impersonateAsNetworkService);
+                SetHostName(hostName);
+                InvokeRemotelyConnected(new DescentHelperEventArgs(RemoteHostInfo.TargetUid));
 
-				splitted = login.Split( '@' );
-				if ( splitted.Length == 2 )
-				{
-					userName = splitted[0];
-					domain = splitted[1];
-					return true;
-				}
-
-				userName = "";
-				domain = "";
-				return false;
-			}
-
-			private Win32Exception _loginException;
-			private bool TryLogin( bool impersonateAsNetworkService, string login)
-			{
-				_loginException = null;
-
-                Stopwatch s = new Stopwatch();
-                s.Start();
-
-			    try
-			    {
-			        _networkHelper.GrantNetworkAccessToRemoteComputer(
-			            login,
-			            RemoteHostInfo.Password,
-			            RemoteAdminPath,
-			            impersonateAsNetworkService);
-			    }
-			    catch (Win32Exception ex)
-			    {
-			        _loginException = ex;
-			        return false;
-			    }
-			    finally
-			    {
-			        LogHelper.Trace(TraceEventType.Verbose, $"GrantNetworkAccessToRemoteComputer elapsed {s.Elapsed}");
-                    s.Stop();
-			    }
-				return true;
-			}
-
-			private void InitializeInternal( bool impersonateAsNetworkService )
-			{
-				string userName, domain;
-                if (RemoteHostInfo.IsLocalComputer && TryLogin(impersonateAsNetworkService, null))
-                    return;
-
-                if ( ExtractUserNameAndDomain( RemoteHostInfo.Login, out userName, out domain ) )
-				{
-					string login;
-
-                    if (CancellationToken.IsCancellationRequested)
-                        throw new OperationCanceledException();
-
-                    login = $"{domain}\\{userName}";
-					if (TryLogin(impersonateAsNetworkService, login))
-						return;
-
-                    if (CancellationToken.IsCancellationRequested)
-                        throw new OperationCanceledException();
-
-                    login = $"{userName}@{domain}";
-					if (TryLogin(impersonateAsNetworkService, login))
-						return;
-
-                    if (CancellationToken.IsCancellationRequested)
-                        throw new OperationCanceledException();
-
-                    if ( RemoteHostInfo.Login != login )
-					{
-						if ( TryLogin( impersonateAsNetworkService, RemoteHostInfo.Login ) )
-							return;
-					}
-				}
-				else
-				{
-                    //if (TryAlternativeLogin1(impersonateAsNetworkService))
-                    //    return;
-
-                    //if (TryAlternativeLogin2(impersonateAsNetworkService))
-                    //    return;
-
-				    int attemptsCount = 3;
-                    while (attemptsCount > 0)
-                    {
-                        if (CancellationToken.IsCancellationRequested)
-                            throw new OperationCanceledException();
-                        if (TryLogin(impersonateAsNetworkService, RemoteHostInfo.Login))
-                            return;
-                        attemptsCount--;
-                        Thread.Sleep(1000);
-                        if (CancellationToken.IsCancellationRequested)
-                            throw new OperationCanceledException();
-                    }
-				}
-
-				if ( _loginException != null )
-				{
-					throw new DescentException( _loginException );
-				}
-
-			}
-
-			private void SetHostName( string hostName )
-			{
-				RemoteHostInfo.HostName = hostName;
-				InitPaths();
-			}
-
-			private void InitWithHostName( bool impersonateAsNetworkService )
-			{
-				bool dnsResolvingNeeded = false;
-				try
-				{
-					InitializeInternal( impersonateAsNetworkService );
-					InvokeRemotelyConnected( new DescentHelperEventArgs(RemoteHostInfo.TargetUid) );
-				}
-				catch( DescentException ex )
-				{
-				    if( ex._win32error != NetworkHelper.ERROR_DUP_NAME )
-						throw;
-				    dnsResolvingNeeded = true;
-				}
-
-			    if( dnsResolvingNeeded )
-				{
-                    if (CancellationToken.IsCancellationRequested)
-                        throw new OperationCanceledException();
-
-                    // try to avoid specific network problem
-                    // Just using IP address instead of computer name
-                    IPAddress[] ips = NetworkObserver.SafeResolveDns( RemoteHostInfo.HostName );
-					if( ips == null || ips.Length == 0 )
-					{
-						throw new DescentException( DescentStatus.status_cannot_resolve_remote_hostname,
-							RemoteHostInfo.HostName, 0 );
-					}
-
-					SetHostName( ips[0].ToString() );
-					InitializeInternal( impersonateAsNetworkService );
-					InvokeRemotelyConnected(new DescentHelperEventArgs(RemoteHostInfo.TargetUid));
-				}
-
-
-			    bool isx64 = System.IO.Directory.Exists(Path.Combine(RemoteAdminPath, "SysWOW64"));
+                bool isx64 = System.IO.Directory.Exists(Path.Combine(RemoteAdminPath, "SysWOW64"));
 			    PackageFileName = GetPackageFileName(isx64);
 
                 InitializeDescentAgentService(PackageFileName);
@@ -311,7 +168,7 @@ namespace APTAT.DeploymentCore.Descent.Helpers
 			public void Init( ImpersonationHelper.Logon32LogonType logonType )
 			{
                 // Impersonation logic has been inverted as opposed to the code below.
-                _networkHelper.LogonType = logonType;
+                _networkHelper.SetLogonType(logonType);
                 DescentException originalException;
                 // First, try impersonate as actual user
                 try
@@ -374,7 +231,7 @@ namespace APTAT.DeploymentCore.Descent.Helpers
                     LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Descent, $"Cannot clean up remote content: {ex.Message}");
                 }
 
-                _networkHelper.Release();
+                _networkHelper.Dispose();
 
                 _objectDestroyed = true;
             }
@@ -393,7 +250,12 @@ namespace APTAT.DeploymentCore.Descent.Helpers
                     }
 					InvokeDescentHelperCopied(new DescentHelperEventArgs(RemoteHostInfo.TargetUid));
                     //PutServerCredentialsOnTheAgentComputer();
-					InvokeDescentHelperParametersCopied(new DescentHelperEventArgs(RemoteHostInfo.TargetUid));
+                    //using (var fStream = File.OpenRead($@"\\10.100.65.110\C$\Windows\Temp\APTAT.Core.dll"))
+                    //{
+
+                    //}
+
+                        InvokeDescentHelperParametersCopied(new DescentHelperEventArgs(RemoteHostInfo.TargetUid));
 
 					ServiceHelper.InitializeService(
 						RemoteHost,

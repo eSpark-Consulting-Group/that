@@ -70,8 +70,10 @@
     <Compile Include="Descent\Exceptions\NoAvailableTargetsException.cs" />
     <Compile Include="Descent\Exceptions\ScanCanceledException.cs" />
     <Compile Include="Descent\Exceptions\StatusFileEmptyException.cs" />
+    <Compile Include="Descent\Helpers\DescentFactory.cs" />
     <Compile Include="Descent\Helpers\DescentHelper.cs" />
     <Compile Include="Descent\Helpers\DescentHelperEventArgs.cs" />
+    <Compile Include="Descent\Helpers\DescentImpersonationHelper.cs" />
     <Compile Include="Descent\Helpers\DescentMod.cs" />
     <Compile Include="Descent\Helpers\IDescentCallback.cs" />
     <Compile Include="Descent\Helpers\IDescentMod.cs" />

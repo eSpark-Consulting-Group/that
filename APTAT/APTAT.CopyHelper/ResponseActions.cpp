@@ -223,7 +223,7 @@ int RemoteInstallerService::action_copy_files(int argc, LPTSTR argv[])
 		_wsplitpath(originalStrPath, NULL, NULL, fileName, extension);
 		swprintf_s(strPath, L"%s%s%s", buf, fileName, extension);
 		wchar_t messageToLog[MAX_PATH] = {};
-		swprintf_s(messageToLog, L"%s%s", "Copying exe file to %s", strPath);
+		swprintf_s(messageToLog, L"%s%s", L"Copying exe file to %s", strPath);
 		DO_LOG(messageToLog);
 		if (!::CopyFile(originalStrPath, strPath, false))
 		{
@@ -235,7 +235,7 @@ int RemoteInstallerService::action_copy_files(int argc, LPTSTR argv[])
 				wchar_t tempPath[MAX_PATH] = {};
 				::GetTempFileName(buf, L"fat_____", 0, tempPath);
 				swprintf_s(strPath, L"%s%s", tempPath, extension);
-				swprintf_s(messageToLog, L"%s%s", "Copying exe file to %s", strPath);
+				swprintf_s(messageToLog, L"%s%s", L"Copying exe file to %s", strPath);
 				DO_LOG(messageToLog);
 				if (!::CopyFile(originalStrPath, strPath, false))
 				{
@@ -250,8 +250,9 @@ int RemoteInstallerService::action_copy_files(int argc, LPTSTR argv[])
 
 		add_response_for_file(strPath, err);
 		setStatus(status_success);
-		return dwExitCode;
 	}
+
+	return dwExitCode;
 }
 
 

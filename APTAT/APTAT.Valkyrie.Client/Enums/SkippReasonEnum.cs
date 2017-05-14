@@ -7,6 +7,7 @@
         FileNotFound, 
         WebException,
         Failed,
-        WaitNextInterval
+        WaitNextInterval,
+        UserNameIsInvalid
     }
 }

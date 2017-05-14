@@ -5,6 +5,7 @@ namespace APTAT.Core.Valkyrie
 {
     public interface IValkyrieAnalysisResult
     {
+        bool IsRemoteNeeded { get; }
         DateTime AnalysisDate { get; }
         string AnalyzeId { get; }
         DateTime? FirstAnalysisDate { get; }

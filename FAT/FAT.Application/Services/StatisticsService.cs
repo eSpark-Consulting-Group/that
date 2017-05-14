@@ -228,12 +228,15 @@ namespace FAT.Application.Services
                     }
                 }
             }
-
+            bool shouldStart = false;
             lock (_lockObj)
             {
                 _isNotStarted = true;
-                if (!_queue.IsEmpty) ConsumeRequest();
+                if (!_queue.IsEmpty)
+                    shouldStart = true;
             }
+            if (shouldStart)
+                ConsumeRequest();
         }
 
         public void ApplicationLaunchedAsync(IApplicationLaunchedRequest request)

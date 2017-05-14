@@ -71,13 +71,15 @@ namespace APTAT.Core.Valkyrie
         public string OperationStatus { get; private set; }
         public bool IsSkipped { get; private set; }
         public string SkipReason { get; private set; }
-        
+        public bool IsRemoteNeeded { get; private set; }
+
         public SkippReasonEnum SkipReasonEnum { get; internal set; }
 
         public static ValkyrieAnalysisResult CreateSkipInfo(string sha1, string reason, SkippReasonEnum skippReasonEnum)
         {
             var verdict = ValkyrieVerdict.NotAnalyzed;
             string operationStatus = null;
+            bool isRemoteNeeded = false;
             switch (skippReasonEnum)
             {
                 case SkippReasonEnum.Skipped:
@@ -99,6 +101,10 @@ namespace APTAT.Core.Valkyrie
                 case SkippReasonEnum.Failed:
                     operationStatus = reason;
                     break;
+                case SkippReasonEnum.UserNameIsInvalid:
+                    verdict = ValkyrieVerdict.Pending;
+                    isRemoteNeeded = true;
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(skippReasonEnum), skippReasonEnum, null);
             }
@@ -109,7 +115,8 @@ namespace APTAT.Core.Valkyrie
                 SkipReasonEnum = skippReasonEnum,
                 IsWhiteListed = false,
                 LastAnalysisDate = null,
-                OperationStatus = operationStatus
+                OperationStatus = operationStatus,
+                IsRemoteNeeded = isRemoteNeeded
             };
             return result;
         }
@@ -138,7 +145,7 @@ namespace APTAT.Core.Valkyrie
 
         [Description("In Analysis")]
         InQueue,
-
+       
         [Description("Lookup in Progress")]
         PendingFls
     }

@@ -5,7 +5,7 @@ using APTAT.DeploymentCore.Descent;
 
 namespace APTAT.Core.Descent.Copy
 {
-    public class CopyResult : ComputerDescentResult
+    public class CopyResult : ComputerDescentResult, ICopyResult
     {
         public string[] FilePathes { get; private set; }
         public CopyResult(IComputer computer, Guid operationUid, ITimeStampProvider timeStampProvider)

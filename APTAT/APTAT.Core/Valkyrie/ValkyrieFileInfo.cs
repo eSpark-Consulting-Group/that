@@ -5,64 +5,83 @@ using APTAT.Common;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using APTAT.Core.Descent.Apt;
+using APTAT.DeploymentCore;
+using APTAT.Core.Descent.Copy;
+using APTAT.Core.DescentCopy;
 
 namespace APTAT.Core.Valkyrie
 {
     public class ValkyrieFileInfo : IValkyrieFileInfo
     {
-        public ValkyrieFileInfo(string sha1, string iP, string path, long size, CloudVerdict cloud, 
-            bool isLocal, ValkyrieVerdict previousVerdict)
+        public ValkyrieFileInfo(string sha1, IComputer computer, string path, long size, CloudVerdict cloud, 
+            ValkyrieVerdict previousVerdict)
         {
             Sha1 = sha1;
             PreviousValkyrieVerdict = previousVerdict;
-            Paths = new ReadOnlyCollection<string>(_pathList);
-            Ip = iP;
+            Instances = new ReadOnlyCollection<IFileInstanceInformation>(_instanceList);
             Path = path;
             Size = size;
             FlsCloud = cloud;
-            IsLocalComputer = isLocal;
+            Computer = computer;
         }
-
+        public IComputer Computer { get; }
         public string Path { get; set; }
-        private readonly List<string> _pathList = new List<string>();
-        public ReadOnlyCollection<string> Paths { get; }
 
-        public string Sha1 { get; }
-        public string Ip { get; set; }     
+        private readonly List<IFileInstanceInformation> _instanceList = new List<IFileInstanceInformation>();
+        public ReadOnlyCollection<IFileInstanceInformation> Instances { get; }
+
+        public string Sha1 { get; }    
         public CloudVerdict FlsCloud { get; set; }
         public ValkyrieVerdict PreviousValkyrieVerdict { get; set; }
+
+        public IEnumerable<string> FilePathes
+        {
+            get
+            {
+                foreach(var instance in Instances)
+                {
+                    if (instance.Path.StartsWith("\\\\"))
+                        yield return instance.Path;
+                    else
+                        yield return $@"\\{instance.Computer.IPAddress}\{instance.Path}";
+                }
+            }
+        }
 
         public string GetFullPath()
         {
             if (Path.StartsWith("\\\\"))
                 return Path;
-            return $"\\\\{Ip}\\{Path}";
+            return $"\\\\{Computer.IPAddress}\\{Path}";
         }
 
-        public void AddFullPath(string ip, string path)
+        public void AddFullPath(IComputer computer, string path)
         {
-            if (Path.StartsWith("\\\\"))
-                _pathList.Add(path);
-            _pathList.Add( $"\\\\{ip}\\{path}");
+            _instanceList.Add(new FileInstanceInformation(computer, path));
         }                
 
         public long Size { get; set; }
-        public bool IsLocalComputer { get; set; }
-
-        public string GetNetworkPath()
+        public ICopyFileResult CopyResult
         {
-            if (Path.StartsWith("\\\\"))
+            get;set;
+        }
+
+        public string GetNetworkPath(string path = null)
+        {
+            if (path == null)
+                path = Path;
+            if (path.StartsWith("\\\\"))
             {
-                if (IsLocalComputer)
+                if (Computer.IsLocalComputer)
                 {
-                    var p = Path.TrimStart(new[] {'\\'});
+                    var p = path.TrimStart(new[] {'\\'});
                     return p.Substring(p.IndexOf('\\') + 1).Replace("$", ":");
                 }
-                return Path.Replace(":", "$");
+                return path.Replace(":", "$");
             }
-            if (IsLocalComputer)
-                return Path;
-            return $"\\\\{GetMachineName()}\\{Path.Replace(":", "$")}";
+            if (Computer.IsLocalComputer)
+                return path;
+            return $"\\\\{GetMachineName()}\\{path.Replace(":", "$")}";
         }
         public override int GetHashCode()
         {
@@ -79,18 +98,31 @@ namespace APTAT.Core.Valkyrie
             string machineName = string.Empty;
             try
             {
-                IPHostEntry hostEntry = Dns.GetHostEntry(Ip);
+                IPHostEntry hostEntry = Dns.GetHostEntry(Computer.IPAddress);
 
                 machineName = hostEntry.HostName;
             }
             catch (Exception ex)
             {
-                LogHelper.Trace(TraceEventType.Warning, TraceCategory.Network, $"{ex.GetType()} occurred during getting host name for {Ip}");
+                LogHelper.Trace(TraceEventType.Warning, TraceCategory.Network, $"{ex.GetType()} occurred" +
+                    $" during getting host name for {Computer.IPAddress}");
                 LogHelper.Trace(TraceEventType.Warning, TraceCategory.Network, ex.ToString());
-                machineName = Ip;
+                machineName = Computer.IPAddress;
                 // Machine not found...
             }
             return machineName;
+        }
+
+        public class FileInstanceInformation : IFileInstanceInformation
+        {
+            public FileInstanceInformation(IComputer computer, string path)
+            {
+                Path = path;
+                Computer = computer;
+            }
+            public IComputer Computer { get; }
+
+            public string Path { get; }
         }
     }
 }

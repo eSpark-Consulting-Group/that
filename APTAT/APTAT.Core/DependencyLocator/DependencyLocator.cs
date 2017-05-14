@@ -2,6 +2,8 @@
 using APTAT.Core.Apt;
 using APTAT.Core.CamLicense;
 using APTAT.Core.Descent.Apt;
+using APTAT.Core.Descent.Copy;
+using APTAT.Core.DescentCopy;
 using APTAT.Core.Reports;
 using APTAT.Core.Storage;
 using APTAT.Core.Valkyrie;
@@ -25,6 +27,7 @@ namespace APTAT.Core.DependencyLocator
             resolver.RegisterSingleton<IFlsManager, FlsManager>();
             resolver.RegisterSingleton<IFlsApiProvider, FlsApiProvider>();
             resolver.RegisterSingleton<IValkyrieClientEx, ValkyrieClientWithStorage>();
+            resolver.RegisterSingleton<ICopyHelper, CopyHelper>();
             
             resolver.RegisterSingleton<IComputerDescentResultFactory, AptComputerDescentResultFactory>();
             resolver.RegisterSingleton<IDistinctFileHelper, DistinctFileHelper>();

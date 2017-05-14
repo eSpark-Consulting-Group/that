@@ -120,6 +120,9 @@
     <Compile Include="CMC\UFH\CmsClientUFH.cs" />
     <Compile Include="CMC\UFH\IValkyrieUnkownFileUpload.cs" />
     <Compile Include="CMC\UFH\ScanUpdatedRequest.cs" />
+    <Compile Include="DescentCopy\CopyDescentCompletedEventArgs.cs" />
+    <Compile Include="DescentCopy\CopyFileResult.cs" />
+    <Compile Include="DescentCopy\ParallelQueues.cs" />
     <Compile Include="Descent\Apt\AptComputerDescentResultFactory.cs" />
     <Compile Include="Descent\Apt\AptFactory.cs" />
     <Compile Include="Descent\Apt\ContextFactory.cs" />
@@ -131,7 +134,11 @@
     <Compile Include="Descent\Copy\CopyDescentMod.cs" />
     <Compile Include="Descent\Copy\CopyDescentProgressItem.cs" />
     <Compile Include="Descent\Copy\CopyDescentScanner.cs" />
+    <Compile Include="DescentCopy\CopyHelper.cs" />
     <Compile Include="Descent\Copy\CopyResult.cs" />
+    <Compile Include="DescentCopy\ICopyHelper.cs" />
+    <Compile Include="Descent\Copy\ICopyResult.cs" />
+    <Compile Include="Descent\Copy\IFileInstanceInformation.cs" />
     <Compile Include="FinalVerdictCalculator.cs" />
     <Compile Include="FLS\IFlsResponse.cs" />
     <Compile Include="IFinalVerdictCalculator.cs" />
@@ -350,6 +357,7 @@
     <Compile Include="Valkyrie\AnalyzeCompletedEventHandler.cs" />
     <Compile Include="Valkyrie\CamRegistration.cs" />
     <Compile Include="Valkyrie\ICamRegistration.cs" />
+    <Compile Include="Valkyrie\InvalidUserNameException.cs" />
     <Compile Include="Valkyrie\IValkyrieAnalysisResult.cs" />
     <Compile Include="Valkyrie\IValkyrieClient.cs" />
     <Compile Include="Valkyrie\IValkyrieClientEx.cs" />

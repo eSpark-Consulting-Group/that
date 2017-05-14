@@ -43,15 +43,15 @@ namespace APTAT.Core
                 {
                     if (!files.ContainsKey(badFile.Sha1))
                     {
-                        var val = new ValkyrieFileInfo(badFile.Sha1, scanResult.Computer.IPAddress, badFile.Path, 
-                            badFile.Size, badFile.Cloud, scanResult.Computer.IsLocalComputer, ValkyrieVerdict.InQueue);
-                        val.AddFullPath(scanResult.Computer.IPAddress, badFile.Path);
+                        var val = new ValkyrieFileInfo(badFile.Sha1, scanResult.Computer, badFile.Path, 
+                            badFile.Size, badFile.Cloud, ValkyrieVerdict.InQueue);
+                        val.AddFullPath(scanResult.Computer, badFile.Path);
 
                         files.Add(badFile.Sha1, val);
                     }
                     else
                     {
-                        files[badFile.Sha1].AddFullPath(scanResult.Computer.IPAddress, badFile.Path);
+                        files[badFile.Sha1].AddFullPath(scanResult.Computer, badFile.Path);
                     }
                 }
             }

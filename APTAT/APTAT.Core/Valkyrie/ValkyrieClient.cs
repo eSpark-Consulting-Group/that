@@ -14,6 +14,9 @@ using Valkyrie.WebApiProvider.Enums;
 using APTAT.Common;
 
 using DTO = Valkyrie.WebApiProvider.Enums;
+using APTAT.Core.Descent.Copy;
+using APTAT.Core.DescentCopy;
+using APTAT.DeploymentCore.Descent.Helpers;
 
 namespace APTAT.Core.Valkyrie
 {
@@ -39,12 +42,15 @@ namespace APTAT.Core.Valkyrie
         private string _aptScanId;
         private readonly Object _aptScanIdLock = new object();
         private readonly HashSet<IValkyrieFileInfo> _lookupContexts = new HashSet<IValkyrieFileInfo>();
-
+        private readonly ConcurrentDictionary<string, IValkyrieFileInfo> _remoteCopyQueue 
+            = new ConcurrentDictionary<string, IValkyrieFileInfo>(StringComparer.OrdinalIgnoreCase);
         private readonly Object _lookupSync = new object();
         private bool _isMainScanFinished = true;
 
         private readonly IScheduler _progressNotifyTimer;
         private readonly IScheduler _checkStatusesTimer;
+        private readonly ICopyHelper _copyHelper;
+        private readonly IDescentFactory _impersonationHelperFactory;
         private readonly IScheduler _delayTimer;
         private int _machineCount;
         private string _login;
@@ -60,19 +66,31 @@ namespace APTAT.Core.Valkyrie
         private readonly IValkyrieWebApiProvider _provider;
         private Dictionary<string, IValkyrieFileInfo> _filesToSubmit;
 
-        public ValkyrieClient(IMachineKeyProvider machineKeyProvider, IValkyrieWebApiProvider provider, IScheduler progressNotifyTimer, IScheduler checkStatusTimer,
-            IScheduler delayTimer)
+        public ValkyrieClient(IMachineKeyProvider machineKeyProvider, IValkyrieWebApiProvider provider, IScheduler progressNotifyTimer, 
+            IScheduler checkStatusTimer, IScheduler delayTimer, ICopyHelper copyHelper, IDescentFactory impersonationHelperFactory)
         {
             _provider = provider;
+            _impersonationHelperFactory = impersonationHelperFactory;
             _endpointId = machineKeyProvider.GlobalMachineKey;
+            _copyHelper = copyHelper;
             _progressNotifyTimer = progressNotifyTimer;
             _checkStatusesTimer = checkStatusTimer;
+            _delayTimer = delayTimer;
             _progressNotifyTimer.SetInterval(TimeSpan.FromSeconds(1));
             _checkStatusesTimer.SetInterval(TimeSpan.FromMilliseconds(_changeTrakingIntervalInMs));
             _progressNotifyTimer.TimeoutCallback += ProgressNotifyTimerCallback;
             _checkStatusesTimer.TimeoutCallback += CheckStatusesTimerCallback;
-            _delayTimer = delayTimer;
             _delayTimer.SetInterval(TimeSpan.FromSeconds(_delayAfterStartScanInSeconds));
+            _copyHelper.CopyCompleted += _copyHelper_CopyCompleted;
+        }
+
+        private void _copyHelper_CopyCompleted(object sender, CopyDescentCompletedEventArgs e)
+        {
+            var cancellationToken = _cancellationToken;
+            if (cancellationToken.IsCancellationRequested) return;
+            var valkyrieFiles = e.Results.OfType<IValkyrieFileInfo>().ToList();
+            if (valkyrieFiles.Any())
+                AddFilesToAnalyze(valkyrieFiles, true);
         }
 
         public void AllowSubmit(Dictionary<string, IValkyrieFileInfo> updatedData)
@@ -215,14 +233,28 @@ namespace APTAT.Core.Valkyrie
 
         private void CheckNewStatusesOnValkyrie(CancellationToken cancellationToken)
         {
-            List<IValkyrieFileInfo> filesToAnalyze;
-            lock (_lookupSync)
-            {
-                filesToAnalyze = _lookupContexts.ToList();
-                _lookupContexts.Clear();
-            }
-            SubmitToAutomaticAnalysis(filesToAnalyze, cancellationToken);
+            SubmitToAutomaticAnalysis(cancellationToken);
+            CheckInAnalysisFiles(cancellationToken);
+            HandleCredentialsErrors(cancellationToken);
+        }
 
+        private void HandleCredentialsErrors(CancellationToken cancellationToken)
+        {
+            List<IValkyrieFileInfo> filesToCopy = _remoteCopyQueue.Values.ToList();
+
+            foreach (var item in filesToCopy)
+            {
+                IValkyrieFileInfo result;
+                _remoteCopyQueue.TryRemove(item.Sha1, out result);
+            }
+            if (filesToCopy.Any())
+            {
+                var res = _copyHelper.RequestFiles(filesToCopy.ToArray(), _login, _password);
+            }
+        }
+
+        private void CheckInAnalysisFiles(CancellationToken cancellationToken)
+        {
             List<ValkyrieAnalyseOperationContext> filesToCheckAnalysisResult;
             lock (_automaticAnalyseSync)
             {
@@ -251,7 +283,7 @@ namespace APTAT.Core.Valkyrie
 
         private void MergeResult(IValkyrieAnalysisResult result, IValkyrieFileInfo fileInfo)
         {
-            if (!result.IsSubmitted && (result.Verdict == ValkyrieVerdict.FirstSeen ||
+            if (!result.IsSubmitted && !result.IsRemoteNeeded && (result.Verdict == ValkyrieVerdict.FirstSeen ||
                     result.Verdict == ValkyrieVerdict.Undetected || result.Verdict == ValkyrieVerdict.Pending))
                 lock (_lookupSync)
                 {
@@ -261,6 +293,10 @@ namespace APTAT.Core.Valkyrie
             {
                 fileInfo.PreviousValkyrieVerdict = result.Verdict;
                 _pendingItemsResolved.TryAdd(result.Sha1, result);
+            }
+            if (result.IsRemoteNeeded)
+            {
+                _remoteCopyQueue.TryAdd(fileInfo.Sha1, fileInfo);
             }
         }
 
@@ -302,8 +338,14 @@ namespace APTAT.Core.Valkyrie
         }
 
 
-        private void SubmitToAutomaticAnalysis(List<IValkyrieFileInfo> badFiles, CancellationToken cancellationToken)
+        private void SubmitToAutomaticAnalysis(CancellationToken cancellationToken)
         {
+            List<IValkyrieFileInfo> badFiles;
+            lock (_lookupSync)
+            {
+                badFiles = _lookupContexts.ToList();
+                _lookupContexts.Clear();
+            }
             var endpointId = _endpointId;
             ParallelOptions opt = new ParallelOptions
             {
@@ -334,6 +376,8 @@ namespace APTAT.Core.Valkyrie
                 else
                 {
                     SkippReasonEnum s = SkippReasonEnum.Failed;
+                    if (e is InvalidUserNameException)
+                        s = SkippReasonEnum.UserNameIsInvalid;
                     string m = e.Message;
                     if (e.Message.StartsWith("Could not find file"))
                     {
@@ -499,21 +543,29 @@ namespace APTAT.Core.Valkyrie
 
                     SubmitToAutomaticResponse response;
                     ValkyrieResponse fatSubmitFilesResponse;
-                    using (fileInfo.IsLocalComputer || _login == null ? null :
-                        new ImpersonationHelper(_login, "", _password, ImpersonationHelper.Logon32LogonType.NewCredentials))
+                    using (var helper = _impersonationHelperFactory.CreateImpersonationHelper())
                     {
+                        if (!fileInfo.Computer.IsLocalComputer && _login != null)
+                        {
+                            helper.Impersonate(new RemoteHostInfo(fileInfo.Computer.Uid, fileInfo.Computer.IPAddress,
+                                _login, _password,
+                                fileInfo.Computer.IsLocalComputer), cancellationToken, false);
+                        }
                         //var data = ReadFile(fileInfo, login, password);
-                        var remoteFilePath = fileInfo.GetNetworkPath();
+                        var copyResult = fileInfo.CopyResult;
+                        var remoteFilePath = copyResult == null ? fileInfo.GetNetworkPath() : fileInfo.GetNetworkPath(copyResult.RemoteFilePath);
                         Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff}: reading remote file {remoteFilePath}");
                         var fileName = Path.GetFileName(orgFilePath);
-                        using (var fStream = File.OpenRead(remoteFilePath))
+                        try
                         {
-                            if (cancellationToken.IsCancellationRequested)
+                            using (var fStream = File.OpenRead(remoteFilePath))
                             {
-                                return CancelOperation(originalFilePath, sha1);
+                                if (cancellationToken.IsCancellationRequested)
+                                {
+                                    return CancelOperation(originalFilePath, sha1);
+                                }
+                                response = _provider.SubmitToAutomaticAnalysis(request, fStream, cancellationToken, fileName);
                             }
-                            response = _provider.SubmitToAutomaticAnalysis(request, fStream, cancellationToken, fileName);
-
                             IValkyrieFileInfo fileInfoNew = null;
                             if (_filesToSubmit != null && _filesToSubmit.ContainsKey(fileInfo.Sha1))
                             {
@@ -523,26 +575,39 @@ namespace APTAT.Core.Valkyrie
                             {
                                 fileInfoNew = fileInfo;
                             }
-
-                            FilePath[] paths = new FilePath[fileInfoNew.Paths.Count];
-                            for (int i = 0; i < fileInfoNew.Paths.Count; i++)
+                            List<FilePath> paths = new List<FilePath>();
+                            foreach (var item in fileInfoNew.FilePathes)
                             {
-                                var uri = new Uri(fileInfoNew.Paths[i]);
-                                paths[i] = new FilePath()
+                                var uri = new Uri(item);
+                                paths.Add(new FilePath()
                                 {
                                     MachineName = uri.Host,
                                     Path = uri.LocalPath.Substring(uri.Host.Length + 3)
-                                };
+                                });
                             }
 
                             fatSubmitFilesResponse = _provider.FatSubmitFiles(new FatSubmitFilePathsRequest()
                             {
                                 Sha1 = sha1,
                                 ApiKey = _apiKey,
-                                FilePaths = paths,
+                                FilePaths = paths.ToArray(),
                                 ScanId = _aptScanId
-
                             });
+
+                        }
+                        catch (System.IO.IOException ex)
+                        {
+                            if (ex.Message.StartsWith("The user name or password is incorrect."))
+                                throw new InvalidUserNameException(ex);
+                            throw;
+                        }
+                        finally
+                        {
+                            if (copyResult != null)
+                            {
+                                copyResult.Dispose();
+                                fileInfo.CopyResult = null;
+                            }
                         }
                     }
                     if (response.ReturnCode != ErrorCodesEnum.Success)
@@ -712,6 +777,7 @@ namespace APTAT.Core.Valkyrie
             _progressNotifyTimer?.Dispose();
             _checkStatusesTimer?.Dispose();
             _delayTimer?.Dispose();
+            _copyHelper.CopyCompleted += _copyHelper_CopyCompleted;
             _cancellationTokenSource?.Dispose();
         }
 

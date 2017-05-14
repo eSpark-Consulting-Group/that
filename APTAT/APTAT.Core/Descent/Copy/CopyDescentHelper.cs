@@ -146,6 +146,7 @@ namespace APTAT.Core.Descent.Copy
                     else if (_response.Status == DescentStatus.status_success)
                     {
                         InvokeCopyCompleted(lines);
+                        break;
                     }
                     else
                         break;
