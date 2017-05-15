@@ -40,6 +40,7 @@ namespace APTAT.Core.Valkyrie
             = new Dictionary<string, ValkyrieAnalyseOperationContext>(StringComparer.OrdinalIgnoreCase);
         private readonly Object _automaticAnalyseSync = new object();
         private string _aptScanId;
+        private bool _aptScanEnded;
         private readonly Object _aptScanIdLock = new object();
         private readonly HashSet<IValkyrieFileInfo> _lookupContexts = new HashSet<IValkyrieFileInfo>();
         private readonly ConcurrentDictionary<string, IValkyrieFileInfo> _remoteCopyQueue 
@@ -669,10 +670,11 @@ namespace APTAT.Core.Valkyrie
 
         public void SendEndScanAsync()
         {
-            if (_aptScanId != null)
+            if (_aptScanId != null && !_aptScanEnded)
                 Task.Factory.StartNew(t =>
                 {
                     _provider.EndScanWithErrorHandling(new EndScanRequest(_apiKey, _machineCount, _aptScanId));
+                    _aptScanEnded = true;
                 }, TaskCreationOptions.None);
         }
 
@@ -680,9 +682,10 @@ namespace APTAT.Core.Valkyrie
         {
             await Task.Factory.StartNew(t =>
             {
-                if (_aptScanId != null)
+                if (_aptScanId != null && !_aptScanEnded)
                 {
                     _provider.EndScan(new EndScanRequest(_apiKey, _machineCount, _aptScanId));
+                    _aptScanEnded = true;
                 }
             }, TaskCreationOptions.None);
         }
@@ -759,6 +762,7 @@ namespace APTAT.Core.Valkyrie
                 }
                 _apiKey = apiKeyInternal;
                 _aptScanId = scanIdInternal;
+                _aptScanEnded = false;
                 _progressNotifyTimer.Start(false);
                 OnAnalyzeStarted(_apiKey, _aptScanId);
 

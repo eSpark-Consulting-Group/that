@@ -254,6 +254,7 @@ namespace APTAT.Core.Apt
                 var aptScanResults = GetResultsEnumerator().ToArray();
                 _valkyrieClient.AllowSubmit(_distinctHelper.GetDistinctFileInfoDict(aptScanResults));
             }
+            TryInvokeEndScan();
         }
 
         private void OnValkyrieManagerAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs e)
