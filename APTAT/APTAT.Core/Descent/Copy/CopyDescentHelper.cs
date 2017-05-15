@@ -40,7 +40,9 @@ namespace APTAT.Core.Descent.Copy
 
         protected override string GetPackageFileName(bool is64)
         {
-            return DescentAgentName;
+            var folderPath = new DirectoryInfo(System.Reflection.Assembly.GetEntryAssembly().Location)
+                       .Parent.FullName;
+            return folderPath + "\\" + DescentAgentName;
         }
     
 
