@@ -5,7 +5,6 @@ using FAT.Application.Models;
 using System;
 using System.IO;
 using Telerik.JustMock;
-using Telerik.JustMock.Helpers;
 using Xunit;
 
 namespace FAT.Application.Tests

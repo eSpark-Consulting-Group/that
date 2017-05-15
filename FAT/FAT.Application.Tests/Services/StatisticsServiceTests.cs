@@ -4,7 +4,6 @@ using APTAT.Core.CMC.Request;
 using APTAT.DeploymentCore.Directory;
 using FAT.Application.Models;
 using FAT.Application.Services;
-using System.Net;
 using System.Threading.Tasks;
 using Telerik.JustMock;
 using Xunit;

@@ -1,4 +1,5 @@
 ﻿
+using APTAT.Application.Services.EventArgs;
 using APTAT.DeploymentCore;
 using APTAT.DeploymentCore.Directory;
 using FAT.Application.Models;
@@ -127,8 +128,8 @@ namespace FAT.Application.Tests
             target.ViewLoadedCommand.Execute(null);
             Mock.Raise(() => service1.DirectoryItemsResolved += null, args: new[] { new DirectoryItemsResolvedEventArgs(null, target) });
             Mock.Raise(() => service2.FatScanStarted += null, args: new[] { new APTAT.Core.ScanStartedEventArgs() });
-            Mock.Raise(() => service2.FatScanCompleted += null, args: new[] { new APTAT.Application.Services.EventArgs.ErrorEventArgs(null) });
-            Mock.Raise(() => service2.CancelScanStarted += null, args: new[] { new EventArgs() });
+            Mock.Raise(() => service2.FatScanCompleted += null, args: new[] { new ErrorEventArgs(null) });
+            Mock.Raise(() => service2.CancelScanStarted += null, args: new[] { new CancelEventArgs(false) });
 
             Assert.True(target.CancelInProgress);
             Assert.True(target.IsScanCancelled);

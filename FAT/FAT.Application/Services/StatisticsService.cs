@@ -241,25 +241,28 @@ namespace FAT.Application.Services
 
         public void ApplicationLaunchedAsync(IApplicationLaunchedRequest request)
         {
-            Action action =() =>
+            Action action = () =>
             {
-                var folderPath = new DirectoryInfo(System.Reflection.Assembly.GetEntryAssembly().Location).Parent.FullName;
-                var filePath= $"{folderPath}\\originalfile";
+                if (Assembly.GetEntryAssembly() != null)
+                {   
+                    var folderPath = new DirectoryInfo(Assembly.GetEntryAssembly().Location).Parent.FullName;
+                    var filePath = $"{folderPath}\\originalfile";
 
-                if (File.Exists(filePath))
-                {
-                    string input = File.ReadAllText(filePath);
-                    string pattern = @"ForensicAnalysisTool_\w{32}$";
-                    Regex  rgx = new Regex(pattern, RegexOptions.IgnoreCase);
-                    var matches = rgx.Matches(input);
-                    if (matches.Count == 1)
+                    if (File.Exists(filePath))
                     {
-                        var result = matches[0].Value.Split(new[] { '_' })[1].Split(new[] { '.' })[0];
-                        var id = Encoding.Default.GetString(Convert.FromBase64String(result));
-                        rgx = new Regex(@"[0-9a-zA-Z]{24}");
-                        if (rgx.IsMatch(id))
+                        string input = File.ReadAllText(filePath);
+                        string pattern = @"ForensicAnalysisTool_\w{32}$";
+                        Regex rgx = new Regex(pattern, RegexOptions.IgnoreCase);
+                        var matches = rgx.Matches(input);
+                        if (matches.Count == 1)
                         {
-                            request.AcId = id;
+                            var result = matches[0].Value.Split(new[] { '_' })[1].Split(new[] { '.' })[0];
+                            var id = Encoding.Default.GetString(Convert.FromBase64String(result));
+                            rgx = new Regex(@"[0-9a-zA-Z]{24}");
+                            if (rgx.IsMatch(id))
+                            {
+                                request.AcId = id;
+                            }
                         }
                     }
                 }
