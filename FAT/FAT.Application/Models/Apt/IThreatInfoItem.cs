@@ -50,6 +50,7 @@ namespace FAT.Application.Models
         bool ScanCompleted { get; }
         ScanStage ScanStage { get; set; }
         ScanStatus ScanStatus { get; }
+        ScanStatusEnum ScanStatusAsEnum { get; }
         string ShortName { get; set; }
         bool ShouldCheckOnValkyrie { get; }
         long Size { get; set; }

@@ -386,27 +386,35 @@ namespace FAT.Application.Models
         {
             get
             {
+                return new ScanStatus(ScanStatusAsEnum);
+            }
+        }
+
+        public ScanStatusEnum ScanStatusAsEnum
+        {
+            get
+            {
                 if (!IsOnline)
                 {
-                    return new ScanStatus(ScanStatusEnum.Offline);
+                    return ScanStatusEnum.Offline;
                 }
 
                 if (ScanStage == ScanStage.OperationFailed)
                 {
-                    return new ScanStatus(ScanStatusEnum.Failed);
+                    return ScanStatusEnum.Failed;
                 }
 
                 if (ScanStage == ScanStage.OperationCanceled)
                 {
-                    return new ScanStatus(ScanStatusEnum.Canceled);
+                    return ScanStatusEnum.Canceled;
                 }
 
                 if (TotalProgressPercentage == 100)
                 {
-                    return new ScanStatus(ScanStatusEnum.Completed);
+                    return ScanStatusEnum.Completed;
                 }
 
-                return IsComputer ? new ScanStatus(ScanStatusEnum.InProgress) : Parent.ScanStatus;
+                return IsComputer ? ScanStatusEnum.InProgress : Parent.ScanStatusAsEnum;
             }
         }
 
