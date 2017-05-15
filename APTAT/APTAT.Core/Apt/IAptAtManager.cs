@@ -36,6 +36,7 @@ namespace APTAT.Core
 
         string GetValkyrieDetailsLink();
         string GetValkyrieDetailsLink(string apiKey, string scanId);
+        void InitEmail(string[] addresses);
 
         IOperationResult SubmitEmail(string[] addresses);
         Task<ReportFile> BuildReportAsync(ReportType reportType, bool saveFile);        

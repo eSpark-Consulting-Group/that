@@ -22,5 +22,6 @@ namespace APTAT.Core.Valkyrie
         void SetBaseUri(Uri uri);
         void AllowSubmit(Dictionary<string, IValkyrieFileInfo> updatedData);
         ValkyrieResponse SubmitEmail(string[] addresses);
+        void InitEmail(string[] addresses);
     }
 }

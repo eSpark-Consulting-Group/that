@@ -790,6 +790,11 @@ namespace APTAT.Core.Valkyrie
             _provider.SetBaseUri(uri);
         }
 
+        public void InitEmail(string[] addresses)
+        {
+            _emails = addresses;
+        }
+
         public ValkyrieResponse SubmitEmail(string[] addresses)
         {
             if (_apiKey == null || _aptScanId == null)

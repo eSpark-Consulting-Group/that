@@ -602,6 +602,11 @@ namespace APTAT.Core.Apt
             return _valkyrieClient.GetValkyrieDetailsLink(apiKey, scanId);
         }
 
+        public void InitEmail(string[] addresses)
+        {
+            _valkyrieClient.InitEmail(addresses);
+        }
+
         public IOperationResult SubmitEmail(string[] addresses)
         {
             var response = _valkyrieClient.SubmitEmail(addresses);

@@ -111,6 +111,10 @@ namespace APTAT.Core.Valkyrie
             return response;
         }
 
+        public void InitEmail(string[] addresses)
+        {
+            _valkyrieClient.InitEmail(addresses);
+        }
 
 
         #endregion

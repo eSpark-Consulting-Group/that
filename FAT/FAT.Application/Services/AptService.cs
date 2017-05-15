@@ -336,9 +336,15 @@ namespace FAT.Application.Services
             return _manager.GetValkyrieDetailsLink(apiKey, scanId);
         }
 
+        public void InitEmail(string[] addresses)
+        {
+            _manager.InitEmail(addresses);
+        }
+
         public IOperationResult SubmitEmail(string[] addresses)
         {
-            lock (this){
+            lock (this)
+            {
                 if (_isValkyrieStarted == false)
                     StartValkyrieAnalysis();
             }

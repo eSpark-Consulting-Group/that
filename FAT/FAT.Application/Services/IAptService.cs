@@ -102,6 +102,7 @@ namespace FAT.Application.Services
         string GetValkyrieDetailsLink();
         string GetValkyrieDetailsLink(string apiKey, string scanId);
         IOperationResult SubmitEmail(string[] addresses);
+        void InitEmail(string[] addresses);
 
         void BeginScan(IComputer[] targets, IDevicesSourceDescription devicesSourceDescription,
             ScanOptions options);

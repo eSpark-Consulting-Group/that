@@ -732,6 +732,7 @@ namespace FAT.Application.Models
                 var email = _scanOperationsManager.GetEmail();
                 if (!string.IsNullOrEmpty(email))
                 {
+                    _aptService.InitEmail(new[] { email });
                     App.Current?.Dispatcher.Invoke(() =>
                     {
                         Email = email;
