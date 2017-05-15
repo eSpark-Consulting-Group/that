@@ -137,7 +137,7 @@
 
                                         <TextBlock Text="Warning!" FontSize="17" Margin="0 15 0 0" FontWeight="Bold" HorizontalAlignment="Left" Grid.Column="1"  VerticalAlignment="Top" />
 
-                                        <TextBlock Grid.Column="1" Grid.Row="1" TextAlignment="Left" Text="Files analysis in cloud cannot be completed without entering proxy credentials. Please enter correspondent credentials. Otherwise current operation will be aborted." TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0 5 65 15" FontSize="13"/>
+                                        <TextBlock x:Name="txt" Grid.Column="1" Grid.Row="1" TextAlignment="Left" Text="Files analysis in cloud cannot be completed without entering proxy credentials. Please enter correspondent credentials." TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0 5 65 15" FontSize="13"/>
                                     </Grid>
                                 </Border>
                                 

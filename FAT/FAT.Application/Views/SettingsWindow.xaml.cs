@@ -69,11 +69,11 @@ namespace FAT.Application
 
         #endregion
 
-       public bool IsQuickScan { get; set; }
+        public bool IsQuickScan { get; set; }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            MainViewModel model = DataContext as MainViewModel;
+            var model = DataContext as MainViewModel;
             string message;
             if (!ShowProxyCredentials && !ShowCredentials && !model.ValidatePorts(out message))
             {
@@ -109,12 +109,15 @@ namespace FAT.Application
 
         private void Button_CancelClick(object sender, RoutedEventArgs e)
         {
+            var model = Owner.DataContext as MainViewModel;
             if (ShowProxyCredentials)
             {
                 if (!_warningDisplayed)
                 {
                     _warningDisplayed = true;
                     bord.Visibility = Visibility.Visible;
+                    if (model.IsScanInProgress.GetValueOrDefault())
+                        txt.Text += " Otherwise current operation will be aborted.";
                     return;
                 }
             }
