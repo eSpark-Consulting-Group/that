@@ -9,7 +9,7 @@ mkdir "%CD%\data"
 copy *.dll bin\*.dll
 move ForensicAnalysisTool.exe bin\ForensicAnalysisTool.exe
 copy ForensicAnalysisTool.exe.config bin\ForensicAnalysisTool.exe.config
-move FAT.Extractor.exe bin\FAT.Extractor.exe
+copy FAT.Extractor.exe bin\FAT.Extractor.exe
 copy cmdapt64.exe bin\cmdapt64.exe
 copy cmdapt86.exe bin\cmdapt86.exe
 copy DescentCopyHelper.exe bin\DescentCopyHelper.exe
