@@ -28,6 +28,7 @@ namespace APTAT.Core.Valkyrie
         string GetFullPath();
         int GetHashCode();
         string GetMachineName();
-        string GetNetworkPath(string path = null);
+        string GetNetworkPath(string path, string host = null);
+        string GetNetworkPath(string hostName = null);
     }
 }

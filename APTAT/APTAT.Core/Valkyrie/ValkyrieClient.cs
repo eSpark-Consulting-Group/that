@@ -250,6 +250,8 @@ namespace APTAT.Core.Valkyrie
             }
             if (filesToCopy.Any())
             {
+                Trace.WriteLine(
+                        $"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff}: ValyrieClient requested {filesToCopy.Count} files from copyHelper");
                 var res = _copyHelper.RequestFiles(filesToCopy.ToArray(), _login, _password);
             }
         }
@@ -546,15 +548,16 @@ namespace APTAT.Core.Valkyrie
                     ValkyrieResponse fatSubmitFilesResponse;
                     using (var helper = _impersonationHelperFactory.CreateImpersonationHelper())
                     {
+                        string host = null;
                         if (!fileInfo.Computer.IsLocalComputer && _login != null)
                         {
-                            helper.Impersonate(new RemoteHostInfo(fileInfo.Computer.Uid, fileInfo.Computer.IPAddress,
+                            host = helper.Impersonate(new RemoteHostInfo(fileInfo.Computer.Uid, fileInfo.Computer.IPAddress,
                                 _login, _password,
                                 fileInfo.Computer.IsLocalComputer), cancellationToken, false);
                         }
                         //var data = ReadFile(fileInfo, login, password);
                         var copyResult = fileInfo.CopyResult;
-                        var remoteFilePath = copyResult == null ? fileInfo.GetNetworkPath() : fileInfo.GetNetworkPath(copyResult.RemoteFilePath);
+                        var remoteFilePath = copyResult == null ? fileInfo.GetNetworkPath(host) : fileInfo.GetNetworkPath(copyResult.RemoteFilePath, host);
                         Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff}: reading remote file {remoteFilePath}");
                         var fileName = Path.GetFileName(orgFilePath);
                         try

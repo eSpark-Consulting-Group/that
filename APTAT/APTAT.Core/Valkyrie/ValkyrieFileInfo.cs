@@ -66,10 +66,10 @@ namespace APTAT.Core.Valkyrie
             get;set;
         }
 
-        public string GetNetworkPath(string path = null)
+        public string GetNetworkPath(string path, string hostName = null)
         {
-            if (path == null)
-                path = Path;
+            if (hostName == null)
+                hostName = GetMachineName();
             if (path.StartsWith("\\\\"))
             {
                 if (Computer.IsLocalComputer)
@@ -81,8 +81,28 @@ namespace APTAT.Core.Valkyrie
             }
             if (Computer.IsLocalComputer)
                 return path;
-            return $"\\\\{GetMachineName()}\\{path.Replace(":", "$")}";
+            return $"\\\\{hostName}\\{path.Replace(":", "$")}";
         }
+
+        public string GetNetworkPath(string hostName = null)
+        {
+            if (hostName == null)
+                hostName = GetMachineName();
+            if (Path.StartsWith("\\\\"))
+            {
+                if (Computer.IsLocalComputer)
+                {
+                    var p = Path.TrimStart(new[] { '\\' });
+                    return p.Substring(p.IndexOf('\\') + 1).Replace("$", ":");
+                }
+                return Path.Replace(":", "$");
+            }
+            if (Computer.IsLocalComputer)
+                return Path;
+            return $"\\\\{hostName}\\{Path.Replace(":", "$")}";
+        }
+
+
         public override int GetHashCode()
         {
             return StringComparer.OrdinalIgnoreCase.GetHashCode(Sha1);
