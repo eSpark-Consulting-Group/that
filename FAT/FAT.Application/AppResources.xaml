@@ -37,6 +37,9 @@
     <grid:DistinctValueConverter x:Key="DistinctValueConverter" />
     <converters:ScanStageToOpacityConverter x:Key="ScanStageToOpacityConverter"/>
 
+    <Style TargetType="TextBlock" >
+        <Setter Property="RenderOptions.ClearTypeHint" Value="Enabled" />
+    </Style>
 
     <Style TargetType="TextBlock" x:Key="HeaderTextBlock">
         <Setter Property="FontFamily" Value="{StaticResource myriadpro}" />

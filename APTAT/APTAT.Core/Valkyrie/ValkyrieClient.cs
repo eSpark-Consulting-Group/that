@@ -768,7 +768,8 @@ namespace APTAT.Core.Valkyrie
 
 
                 if (_emails != null)
-                    SubmitEmail(_emails);
+                    SubmitEmailAsync(_emails);
+
             }, TaskCreationOptions.None)
                 .ContinueWith(OnAnalyzeCompleted, TaskContinuationOptions.NotOnCanceled);
         }
@@ -795,14 +796,19 @@ namespace APTAT.Core.Valkyrie
             _emails = addresses;
         }
 
-        public ValkyrieResponse SubmitEmail(string[] addresses)
+        public Task<ValkyrieResponse> SubmitEmailAsync(string[] addresses)
         {
-            if (_apiKey == null || _aptScanId == null)
-                throw new InvalidOperationException("Analyze isn't started");
-            var result = _provider.SubmitEmail(new SubscribeEmailRequest { ApiKey = _apiKey, ScanId = _aptScanId, CustomerEmails = addresses });
-            if (result.ReturnCode == ErrorCodesEnum.Success)
-                _emails = addresses;
-            return result;
+            return Task.Run(() =>
+            {
+                while (_aptScanId == null && !_aptScanEnded)
+                    Thread.Sleep(1000);
+                    
+                var result = _provider.SubmitEmail(new SubscribeEmailRequest { ApiKey = _apiKey, ScanId = _aptScanId, CustomerEmails = addresses });
+                if (result.ReturnCode == ErrorCodesEnum.Success)
+                    _emails = addresses;
+
+                return result;
+            });
         }
     }
 }

@@ -341,15 +341,9 @@ namespace FAT.Application.Services
             _manager.InitEmail(addresses);
         }
 
-        public IOperationResult SubmitEmail(string[] addresses)
+        public Task<IOperationResult> SubmitEmailAsync(string[] addresses)
         {
-            lock (this)
-            {
-                if (_isValkyrieStarted == false)
-                    StartValkyrieAnalysis();
-            }
-            var result = _manager.SubmitEmail(addresses);
-            return result;
+            return _manager.SubmitEmailAsync(addresses);
         }
 
         private ScanStage FromAptScanStage(AptScanStage stage)

@@ -801,7 +801,7 @@
                                     <TextBlock Margin="0 1 0 0" FontSize="14" Opacity="0.5" Text="customermail@enterprise.com" Foreground="#FF547D98"/>
                                 </telerik:RadWatermarkTextBox.WatermarkContent>
                             </telerik:RadWatermarkTextBox>
-                            <Button Content="Submit" BorderBrush="White" Command="{Binding SubmitEmailCommand}" Visibility="{Binding HideSubmitEmail, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}" MaxHeight="32" Grid.Column="2" Margin="7"/>
+                            <Button Content="{Binding SubmitHeader}" BorderBrush="White" Command="{Binding SubmitEmailCommand}" Visibility="{Binding HideSubmitEmail, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}" MaxHeight="32" Grid.Column="2" Margin="7"/>
                             <Button Content="Edit Email" Click="EditEmail" BorderBrush="White" Command="{Binding EditEmailCommand}" Visibility="{Binding HideSubmitEmail, Converter={converters:BoolToVisibilityConverter2}}" MaxHeight="32" Grid.Column="2" Margin="7"/>
                         </Grid>
                     </Border>

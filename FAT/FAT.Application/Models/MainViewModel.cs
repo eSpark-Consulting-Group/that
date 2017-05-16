@@ -365,6 +365,11 @@ namespace FAT.Application.Models
             }
         }
 
+        public string SubmitHeader
+        {
+            get { return _submitingEmail ? "Please Wait..." : "Submit"; }
+        }
+
         public bool IsDetailsEnabled
         {
             get { return SelectedItem != null && !SelectedItem.IsComputer; }
@@ -1653,12 +1658,13 @@ namespace FAT.Application.Models
             _aptService.UpdateFlsPorts(udpPort, tcpPort);
         }
 
-        private void InvokeSubmitEmail(Object arg)
+        private async void InvokeSubmitEmail(Object arg)
         {
             _submitingEmail = true;
             SubmitEmailCommand.InvalidateCanExecute();
+            RaisePropertyChanged(nameof(SubmitHeader));
 
-            var result = _aptService.SubmitEmail(Email.Split(new[] { ',', ';' }));
+            var result = await _aptService.SubmitEmailAsync(Email.Split(new[] { ',', ';' }));
 
             if (result.IsSucceeded)
                 Set(() => HideSubmitEmail, true);
@@ -1667,6 +1673,7 @@ namespace FAT.Application.Models
 
             _submitingEmail = false;
             SubmitEmailCommand.InvalidateCanExecute();
+            RaisePropertyChanged(nameof(SubmitHeader));
         }
 
         public void SetReportKind(ReportKind kind)

@@ -101,9 +101,9 @@ namespace APTAT.Core.Valkyrie
             _valkyrieClient.StartAnalyze(camRegistration, login, password, machineCount, proxyCredential, productName);
         }
 
-        public ValkyrieResponse SubmitEmail(string[] addresses)
+        public async Task<ValkyrieResponse> SubmitEmailAsync(string[] addresses)
         {
-            var response = _valkyrieClient.SubmitEmail(addresses);
+            var response = await _valkyrieClient.SubmitEmailAsync(addresses);
             if (response.Error == null && response.ReturnCode == ErrorCodesEnum.Success)
             {
                 _storage.UpdateEmails(addresses);

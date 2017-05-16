@@ -21,7 +21,7 @@ namespace APTAT.Core.Valkyrie
         Task SendEndScan();
         void SetBaseUri(Uri uri);
         void AllowSubmit(Dictionary<string, IValkyrieFileInfo> updatedData);
-        ValkyrieResponse SubmitEmail(string[] addresses);
+        Task<ValkyrieResponse> SubmitEmailAsync(string[] addresses);
         void InitEmail(string[] addresses);
     }
 }
