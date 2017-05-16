@@ -707,7 +707,6 @@ namespace APTAT.Core.Valkyrie
             string scanIdInternal = null;
             Task.Factory.StartNew(t =>
             {
-                Thread.Sleep(TimeSpan.FromSeconds(20));
                 _isMainScanFinished = false;
                 _apiKey = null;
                 _aptScanId = null;
