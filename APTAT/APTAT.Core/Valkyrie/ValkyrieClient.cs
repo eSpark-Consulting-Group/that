@@ -598,6 +598,13 @@ namespace APTAT.Core.Valkyrie
                         }
                         catch (System.IO.IOException ex)
                         {
+                            foreach(var data in ex.Data)
+                            {
+                                var stringData = data as string;
+                                if (stringData == null)
+                                    stringData = data.ToString();
+                                Trace.WriteLine($"{Thread.CurrentThread.ManagedThreadId}: {stringData}");
+                            }
                             if (ex.Message.StartsWith("The user name or password is incorrect."))
                                 throw new InvalidUserNameException(ex);
                             throw;
@@ -700,6 +707,7 @@ namespace APTAT.Core.Valkyrie
             string scanIdInternal = null;
             Task.Factory.StartNew(t =>
             {
+                Thread.Sleep(TimeSpan.FromSeconds(20));
                 _isMainScanFinished = false;
                 _apiKey = null;
                 _aptScanId = null;
@@ -796,13 +804,13 @@ namespace APTAT.Core.Valkyrie
             _emails = addresses;
         }
 
-        public Task<ValkyrieResponse> SubmitEmailAsync(string[] addresses)
+        public async Task<ValkyrieResponse> SubmitEmailAsync(string[] addresses)
         {
-            return Task.Run(() =>
+            return await Task.Run(() =>
             {
-                while (_aptScanId == null && !_aptScanEnded)
-                    Thread.Sleep(1000);
-                    
+                if (_apiKey == null || _aptScanId == null)
+                    throw new InvalidOperationException("Analyze isn't started");
+
                 var result = _provider.SubmitEmail(new SubscribeEmailRequest { ApiKey = _apiKey, ScanId = _aptScanId, CustomerEmails = addresses });
                 if (result.ReturnCode == ErrorCodesEnum.Success)
                     _emails = addresses;

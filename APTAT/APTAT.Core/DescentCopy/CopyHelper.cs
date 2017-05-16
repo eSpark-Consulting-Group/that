@@ -170,8 +170,12 @@ namespace APTAT.Core.DescentCopy
                 {
                     var path = copyResult.FilePathes[i];
                     var split = path.Split(new[] { ';' });
+                    int win32Error;
+                    int.TryParse(split[0], out win32Error);
                     if (split[0] == "0")
                         input[i].CopyResult = new CopyFileResult(split[1]);
+                    else
+                        input[i].CopyResult = new CopyFileResult(win32Error);
                 }
                 RaiseCopyCompleted(new CopyDescentCompletedEventArgs(input));
                 _queue.UnfreezeQueue(copyResult.TargetUid);

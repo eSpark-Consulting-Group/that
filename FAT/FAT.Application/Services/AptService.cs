@@ -15,6 +15,8 @@ using APTAT.Core.Valkyrie;
 using APTAT.DeploymentCore;
 using FAT.Application.Properties;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
+using System.Threading;
+using APTAT.Common;
 
 namespace FAT.Application.Services
 {
@@ -30,6 +32,7 @@ namespace FAT.Application.Services
         private string _systemPassword;
         private bool _isValkyrieStarted = false;
         public Guid SessionId { get; } = new Guid("C78DA9FA-4DC3-4F26-B7C3-304D24220B15");
+        private ManualResetEventSlim _valkyrieEvent = new ManualResetEventSlim(false);
 
         
 
@@ -93,6 +96,7 @@ namespace FAT.Application.Services
         public void BeginScan(IComputer[] targets, IDevicesSourceDescription devicesSourceDescription,
             ScanOptions options)
         {
+            _valkyrieEvent.Reset();
             lock (this)
             {
                 _isValkyrieStarted = false;
@@ -176,7 +180,10 @@ namespace FAT.Application.Services
                     StartValkyrieAnalysis();
                 }
                 else
+                {
                     StopScanInternal(new Guid[0], true);
+                    _valkyrieEvent.Set();
+                }
                 return;
             }
             Action a = () =>
@@ -184,6 +191,7 @@ namespace FAT.Application.Services
                 FatScanCompleted?.Invoke(this, new ErrorEventArgs(ex));
             };
             App.Current.Dispatcher.BeginInvoke(a);
+            _valkyrieEvent.Set();
             StopScan(new Guid[0]);
         }
 
@@ -273,6 +281,7 @@ namespace FAT.Application.Services
                     {
                         args.Error = new OperationCanceledException("Scan operation was canceled.");
                     }
+                    _valkyrieEvent.Set();
                     FatScanCompleted?.Invoke(this, args);
                 };
             }
@@ -341,11 +350,12 @@ namespace FAT.Application.Services
             _manager.InitEmail(addresses);
         }
 
-        public Task<IOperationResult> SubmitEmailAsync(string[] addresses)
+        public async Task<IOperationResult> SubmitEmailAsync(string[] addresses)
         {
-            return _manager.SubmitEmailAsync(addresses);
+            await _valkyrieEvent.WaitHandle.AsTask();
+            return await _manager.SubmitEmailAsync(addresses);
         }
-
+        \
         private ScanStage FromAptScanStage(AptScanStage stage)
         {
             switch (stage)
