@@ -355,7 +355,7 @@ namespace FAT.Application.Services
             await _valkyrieEvent.WaitHandle.AsTask();
             return await _manager.SubmitEmailAsync(addresses);
         }
-        \
+
         private ScanStage FromAptScanStage(AptScanStage stage)
         {
             switch (stage)
