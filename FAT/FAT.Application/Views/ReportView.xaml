@@ -159,9 +159,9 @@
 
                     <telerik:RadWatermarkTextBox AutomationProperties.AutomationId="SearchWatermarkTextBox"
                                      MinHeight="24" MaxHeight="24"  BorderThickness="1" BorderBrush="#FFD6D4D4"  x:Name="search" Padding="24 2 24 0" 
-                                      KeyDown="TbFindKeyDown" KeyUp="TbFindKeyUp" Width="150" Background="White" >
+                                      KeyDown="TbFindKeyDown" KeyUp="TbFindKeyUp" Width="200" Background="White" >
                         <telerik:RadWatermarkTextBox.WatermarkContent>
-                            <TextBlock Text="Search"  FontSize="13" Margin="0 0 0 0" Style="{DynamicResource SubTitleTextStyle}" Opacity="0.5"/>
+                            <TextBlock Text="Search"  FontSize="13" Margin="2 2 0 0" Style="{DynamicResource SubTitleTextStyle}" Opacity="0.5"/>
                         </telerik:RadWatermarkTextBox.WatermarkContent>
                     </telerik:RadWatermarkTextBox>
 
