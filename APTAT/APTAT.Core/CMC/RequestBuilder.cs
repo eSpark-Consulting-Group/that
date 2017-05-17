@@ -21,8 +21,8 @@ namespace APTAT.Core.CMC
             new Parameter() {Value = "sc_trg_tp", Name =nameof(IScanStartedRequest.ScanTriggerType)},
             new Parameter() {Value = "sc_tg", Name =nameof(IScanStartedRequest.ScanTarget)},
             new Parameter() {Value = "sc_tp", Name =nameof(IScanStartedRequest.ScanType)},
-            new Parameter() {Value = "pc_cc", Name =nameof(IScanStartedRequest.TotalCountOfDiscoveredComputers)},
-            new Parameter() {Value = "pc_sc", Name =nameof(IScanStartedRequest.CountOfScannedComputers)},
+            new Parameter() {Value = "pc_sc_f", Name =nameof(IScanStartedRequest.TotalCountOfDiscoveredComputers)},
+            new Parameter() {Value = "pc_sc_s", Name =nameof(IScanStartedRequest.CountOfScannedComputers)},
 
             new Parameter() {Value = "u_fc", Name = nameof(IScanUpdatedRequest.CountOfNewUnknownFilesAfterTheScanWasFinished)},
             new Parameter() {Value = "mlc_fc", Name =nameof(IScanUpdatedRequest.CountOfNewMaliciousFilesAfterTheScanWasFinished)},
