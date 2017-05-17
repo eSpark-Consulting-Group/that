@@ -49,7 +49,7 @@ namespace APTAT.Core.TelerikReports
             var graph = (Telerik.Reporting.Processing.DataItem)sender;
             var obj = (Reports.AptReportData)graph.DataObject.RawData;
 
-            if (obj.Top10VulnerableDevices.Sum(t => t.BadFilesCount) == 1)
+            if (obj.Top10VulnerableDevices.Max(t => t.BadFilesCount) == 1)
             {
                 ((NumericalScale)graphAxis1.Scale).LabelStep = 1;
                 ((NumericalScale)graphAxis1.Scale).DataPointTicks = true;
