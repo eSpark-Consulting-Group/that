@@ -12,7 +12,6 @@ using Valkyrie.WebApiProvider.Contracts;
 using Valkyrie.WebApiProvider.Enums;
 using Xunit;
 using ValkyrieVerdict = APTAT.Core.Valkyrie.ValkyrieVerdict;
-using APTAT.Core.DescentCopy;
 using APTAT.DeploymentCore.Descent.Helpers;
 
 namespace APTAT.Core.Valkyrie.Tests
@@ -27,13 +26,12 @@ namespace APTAT.Core.Valkyrie.Tests
             var progressNotifyTimer = Mock.Create<IScheduler>(Behavior.Strict);
             var checkStatusTimer = Mock.Create<IScheduler>(Behavior.Strict);
             var delayTimer = Mock.Create<IScheduler>(Behavior.Strict);
-            var copyHelper = Mock.Create<ICopyHelper>(Behavior.Strict);
             Mock.Arrange(() => progressNotifyTimer.SetInterval(TimeSpan.FromSeconds(1))).OccursOnce();
             Mock.Arrange(() => checkStatusTimer.SetInterval(TimeSpan.FromMinutes(3))).OccursOnce();
             Mock.Arrange(() => delayTimer.SetInterval(TimeSpan.FromSeconds(2))).OccursOnce();
 
             ValkyrieClient client = new ValkyrieClient(keyProviderMock, apiProviderMock, progressNotifyTimer, checkStatusTimer, 
-                delayTimer, copyHelper, Mock.Create<IDescentFactory>(Behavior.Strict));
+                delayTimer, Mock.Create<IDescentFactory>(Behavior.Strict));
 
             Mock.AssertAll(progressNotifyTimer);
             Mock.AssertAll(checkStatusTimer);
@@ -50,10 +48,9 @@ namespace APTAT.Core.Valkyrie.Tests
             var progressNotifyTimer = Mock.Create<IScheduler>();
             var checkStatusTimer = Mock.Create<IScheduler>();
             var delayTimer = Mock.Create<IScheduler>();
-            var copyHelper = Mock.Create<ICopyHelper>(Behavior.Strict);
 
             ValkyrieClient client = new ValkyrieClient(keyProviderMock, apiProviderMock, progressNotifyTimer, checkStatusTimer, 
-                delayTimer, copyHelper, Mock.Create<IDescentFactory>(Behavior.Strict));
+                delayTimer,  Mock.Create<IDescentFactory>(Behavior.Strict));
 
             Mock.AssertAll(keyProviderMock);
         }
@@ -74,10 +71,9 @@ namespace APTAT.Core.Valkyrie.Tests
             Mock.Arrange(() => basicResponse.ReturnCode).Returns(ErrorCodesEnum.BadRequest);
             Mock.Arrange(() => apiProviderMockInternal.GetBasicInfoEmpty()).Returns(basicResponse);
             delayScheduler = Mock.Create<IScheduler>();
-            var copyHelper = Mock.Create<ICopyHelper>(Behavior.Strict);
 
             var client = new ValkyrieClient(Mock.Create<IMachineKeyProvider>(), apiProviderMockInternal, Mock.Create<IScheduler>(), Mock.Create<IScheduler>(),
-                delayScheduler, copyHelper, Mock.Create<IDescentFactory>(Behavior.Strict));
+                delayScheduler, Mock.Create<IDescentFactory>(Behavior.Strict));
             apiProviderMock = apiProviderMockInternal;
             return client;
 
@@ -140,7 +136,7 @@ namespace APTAT.Core.Valkyrie.Tests
             Assert.True(isEventRised, "isEventRised");
         }
         [Fact]
-        public void SecondStartAnalyzeShouldSubmitEmails()
+        public async void SecondStartAnalyzeShouldSubmitEmails()
         {
             IScheduler delayScheduler;
             IValkyrieWebApiProvider apiProvider;
@@ -164,7 +160,7 @@ namespace APTAT.Core.Valkyrie.Tests
             client.StartAnalyze(camRegistration, "user", "test", 1, new System.Net.NetworkCredential(), "FAT");
             Assert.True(ev.Wait(TimeSpan.FromMilliseconds(200)), "timeout");
             ev.Reset();
-            client.SubmitEmail(emails);
+            await client.SubmitEmailAsync(emails);
             //Act       
             client.StartAnalyze(camRegistration, "user", "test", 1, new System.Net.NetworkCredential(), "FAT");
             Assert.True(ev.Wait(TimeSpan.FromMilliseconds(200)), "timeout");
@@ -173,7 +169,7 @@ namespace APTAT.Core.Valkyrie.Tests
         }
 
         [Fact]
-        public void SecondStartAnalyzeShouldntIfSubmitWasFailed()
+        public async void SecondStartAnalyzeShouldntIfSubmitWasFailed()
         {
             IScheduler delayScheduler;
             IValkyrieWebApiProvider apiProvider;
@@ -197,7 +193,7 @@ namespace APTAT.Core.Valkyrie.Tests
             client.StartAnalyze(camRegistration, "user", "test", 1, new System.Net.NetworkCredential(), "FAT");
             Assert.True(ev.Wait(TimeSpan.FromMilliseconds(200)), "timeout");
             ev.Reset();
-            client.SubmitEmail(emails);
+            await client.SubmitEmailAsync(emails);
             //Act       
             Mock.Reset();
             client.StartAnalyze(camRegistration, "user", "test", 1, new System.Net.NetworkCredential(), "FAT");
@@ -217,10 +213,9 @@ namespace APTAT.Core.Valkyrie.Tests
         public void StartAnalyzeCallsGetBasicInfoEmptyTest()
         {
             var apiProviderMock = CreateApiProvider();
-            var copyHelper = Mock.Create<ICopyHelper>(Behavior.Strict);
 
             ValkyrieClient client = new ValkyrieClient(Mock.Create<IMachineKeyProvider>(), apiProviderMock, Mock.Create<IScheduler>(), 
-                Mock.Create<IScheduler>(), Mock.Create<IScheduler>(), copyHelper, Mock.Create<IDescentFactory>(Behavior.Strict));
+                Mock.Create<IScheduler>(), Mock.Create<IScheduler>(), Mock.Create<IDescentFactory>(Behavior.Strict));
             var camRegistration = CreateCamRegistrationLoginPwd();
 
             //Act                       
@@ -238,7 +233,6 @@ namespace APTAT.Core.Valkyrie.Tests
         {
             //Arange   
             var apiProviderMock = Mock.Create<IValkyrieWebApiProvider>(Behavior.Strict);
-            var copyHelper = Mock.Create<ICopyHelper>(Behavior.Strict);
 
             var apiKey = Guid.NewGuid().ToString();
             Mock.Arrange(() => apiProviderMock.RegisterWithCamLicense(Arg.IsAny<RegisterWithCamLicenseRequest>()))
@@ -248,7 +242,7 @@ namespace APTAT.Core.Valkyrie.Tests
                 .Returns(() => new StartAndFinalizeScanResponse() { ReturnCode = ErrorCodesEnum.Success });
 
             ValkyrieClient client = new ValkyrieClient(Mock.Create<IMachineKeyProvider>(), apiProviderMock, Mock.Create<IScheduler>(), 
-                Mock.Create<IScheduler>(), Mock.Create<IScheduler>(), copyHelper, Mock.Create<IDescentFactory>(Behavior.Strict));
+                Mock.Create<IScheduler>(), Mock.Create<IScheduler>(), Mock.Create<IDescentFactory>(Behavior.Strict));
             var camRegistration = CreateCamRegistrationMock();
             var basicResponse = Mock.Create<IBasicInfoResponse>();
             Mock.Arrange(() => basicResponse.ReturnCode).Returns(ErrorCodesEnum.BadRequest);
@@ -270,10 +264,9 @@ namespace APTAT.Core.Valkyrie.Tests
         public void StartAnalyzeCallsRegisterWithCamLicenseTest()
         {
             var camRegistration = CreateCamRegistrationLicense();
-            var copyHelper = Mock.Create<ICopyHelper>(Behavior.Strict);
             IValkyrieWebApiProvider apiProviderMock = CreateApiProvider();
             ValkyrieClient client = new ValkyrieClient(Mock.Create<IMachineKeyProvider>(), apiProviderMock, Mock.Create<IScheduler>(), 
-                Mock.Create<IScheduler>(), Mock.Create<IScheduler>(), copyHelper, Mock.Create<IDescentFactory>(Behavior.Strict));
+                Mock.Create<IScheduler>(), Mock.Create<IScheduler>(), Mock.Create<IDescentFactory>(Behavior.Strict));
             if (camRegistration == null)
                 camRegistration = CreateCamRegistrationLoginPwd();
 
@@ -292,11 +285,10 @@ namespace APTAT.Core.Valkyrie.Tests
         public void StartAnalyzeCallsRegisterWithCamCredenitalsTest()
         {
             var camRegistration = CreateCamRegistrationLoginPwd();
-            var copyHelper = Mock.Create<ICopyHelper>(Behavior.Strict);
             IValkyrieWebApiProvider apiProviderMock = CreateApiProvider();
 
             ValkyrieClient client = new ValkyrieClient(Mock.Create<IMachineKeyProvider>(), apiProviderMock, Mock.Create<IScheduler>(), 
-                Mock.Create<IScheduler>(), Mock.Create<IScheduler>(), copyHelper, Mock.Create<IDescentFactory>(Behavior.Strict));
+                Mock.Create<IScheduler>(), Mock.Create<IScheduler>(), Mock.Create<IDescentFactory>(Behavior.Strict));
             if (camRegistration == null)
                 camRegistration = CreateCamRegistrationLoginPwd();
 
@@ -314,7 +306,7 @@ namespace APTAT.Core.Valkyrie.Tests
         [Theory(DisplayName = "SubmitEmail of ValkyrieWebApiProvider method should be called")]
         [InlineData(ErrorCodesEnum.Success)]
         [InlineData(ErrorCodesEnum.InvalidApiKey)]
-        public void SubmitEmailTest(ErrorCodesEnum status)
+        public async void SubmitEmailTest(ErrorCodesEnum status)
         {
             //Arange
             IScheduler delayScheduler;
@@ -340,7 +332,7 @@ namespace APTAT.Core.Valkyrie.Tests
             Assert.True(ev.Wait(TimeSpan.FromMilliseconds(200)), "timeout");
 
             //Act       
-            var t = client.SubmitEmail(emails);
+            var t = await client.SubmitEmailAsync(emails);
 
             //Assert
             Mock.Assert(() => apiProvider.SubmitEmail(Arg.Matches<SubscribeEmailRequest>((request) => 
@@ -350,25 +342,24 @@ namespace APTAT.Core.Valkyrie.Tests
         }
 
         [Fact(DisplayName = "SubmitEmail of ValkyrieWebApiProvider method should be called")]
-        public void SubmitEmailShouldntCallApiProviderBeforeStartAnalyze()
+        public async void SubmitEmailShouldntCallApiProviderBeforeStartAnalyze()
         {
             //Arange
             var apiProviderMock = Mock.Create<IValkyrieWebApiProvider>(Behavior.Strict);
             Mock.Arrange(() => apiProviderMock.SetBaseUri(Arg.AnyUri));
 
             var keyProviderMock = Mock.Create<IMachineKeyProvider>();
-            var copyHelper = Mock.Create<ICopyHelper>(Behavior.Strict);
             var timer = Mock.Create<IScheduler>();
 
             ValkyrieClient client = new ValkyrieClient(keyProviderMock, apiProviderMock, timer, timer, 
-                Mock.Create<IScheduler>(), copyHelper, Mock.Create<IDescentFactory>(Behavior.Strict));
+                Mock.Create<IScheduler>(),  Mock.Create<IDescentFactory>(Behavior.Strict));
 
             var emails = new[] { "some@mail.com", "other_mail@yahoo.com" };
 
             //Act  
             try
             {
-                var t = client.SubmitEmail(emails);
+                var t = await client.SubmitEmailAsync(emails);
             }
             catch (Exception)
             {
@@ -379,7 +370,7 @@ namespace APTAT.Core.Valkyrie.Tests
         }
 
         [Fact(DisplayName = "SubmitEmail of ValkyrieWebApiProvider method should be called")]
-        public void SubmitEmailShouldThrowExceptionBeforeStartAnalyze()
+        public async void SubmitEmailShouldThrowExceptionBeforeStartAnalyze()
         {
             //Arange
             var apiProviderMock = Mock.Create<IValkyrieWebApiProvider>(Behavior.Strict);
@@ -387,15 +378,15 @@ namespace APTAT.Core.Valkyrie.Tests
 
             var keyProviderMock = Mock.Create<IMachineKeyProvider>();
             var timer = Mock.Create<IScheduler>();
-            var copyHelper = Mock.Create<ICopyHelper>(Behavior.Strict);
+
 
             ValkyrieClient client = new ValkyrieClient(keyProviderMock, apiProviderMock, timer, timer, Mock.Create<IScheduler>(),
-                copyHelper, Mock.Create<IDescentFactory>(Behavior.Strict));
+                Mock.Create<IDescentFactory>(Behavior.Strict));
 
             var emails = new[] { "some@mail.com", "other_mail@yahoo.com" };
 
             //Act  
-            var ex = Assert.Throws<InvalidOperationException>(() => client.SubmitEmail(emails));
+            var ex = await Assert.ThrowsAsync<InvalidOperationException>(async () => await client.SubmitEmailAsync(emails));
             
             //Assert
             Assert.Equal("Analyze isn't started", ex.Message);
@@ -412,10 +403,9 @@ namespace APTAT.Core.Valkyrie.Tests
 
             var keyProviderMock = Mock.Create<IMachineKeyProvider>();
             var timer = Mock.Create<IScheduler>();
-            var copyHelper = Mock.Create<ICopyHelper>(Behavior.Strict);
 
             ValkyrieClient client = new ValkyrieClient(keyProviderMock, apiProviderMock, timer, timer, Mock.Create<IScheduler>(), 
-                copyHelper, Mock.Create<IDescentFactory>(Behavior.Strict));
+                Mock.Create<IDescentFactory>(Behavior.Strict));
 
             //Act
             var uri = new Uri(@"http://myUrl");
@@ -434,7 +424,6 @@ namespace APTAT.Core.Valkyrie.Tests
             var progressNotifyTimer = Mock.Create<IScheduler>(Behavior.Strict);
             var checkStatusTimer = Mock.Create<IScheduler>(Behavior.Strict);
             var delayTimer = Mock.Create<IScheduler>(Behavior.Strict);
-            var copyHelper = Mock.Create<ICopyHelper>(Behavior.Strict);
             Mock.Arrange(() => progressNotifyTimer.Dispose());
             Mock.Arrange(() => checkStatusTimer.Dispose());
             Mock.Arrange(() => delayTimer.Dispose());
@@ -443,7 +432,7 @@ namespace APTAT.Core.Valkyrie.Tests
             Mock.Arrange(() => delayTimer.SetInterval(Arg.AnyTimeSpan));
 
             ValkyrieClient client = new ValkyrieClient(keyProviderMock, apiProviderMock, progressNotifyTimer, checkStatusTimer
-                , delayTimer, copyHelper, Mock.Create<IDescentFactory>(Behavior.Strict));
+                , delayTimer,  Mock.Create<IDescentFactory>(Behavior.Strict));
 
             //Act
             client.Dispose();
@@ -461,7 +450,6 @@ namespace APTAT.Core.Valkyrie.Tests
             var files = ValkyrieFileInfos();
 
             var apiProviderMock = Mock.Create<IValkyrieWebApiProvider>(Behavior.Strict);
-            var copyHelper = Mock.Create<ICopyHelper>(Behavior.Strict);
             var apiKey = Guid.NewGuid().ToString();
             Mock.Arrange(() => apiProviderMock.RegisterWithCamLicense(Arg.IsAny<RegisterWithCamLicenseRequest>()))
                 .Returns(() => new RegisterWithResponse() { ApiKey = apiKey, ReturnCode = 0 });
@@ -496,7 +484,7 @@ namespace APTAT.Core.Valkyrie.Tests
 
 
             ValkyrieClient client = new ValkyrieClient(Mock.Create<IMachineKeyProvider>(), apiProviderMock, progressNotify, statusTimer
-                , delayScheduler, copyHelper, Mock.Create<IDescentFactory>(Behavior.Strict));
+                , delayScheduler, Mock.Create<IDescentFactory>(Behavior.Strict));
 
             var camRegistration = Mock.Create<ICamRegistration>();
             Mock.Arrange(() => camRegistration.LicenseId).Returns(() => Guid.NewGuid().ToString());
@@ -536,7 +524,6 @@ namespace APTAT.Core.Valkyrie.Tests
             var files = ValkyrieFileInfos();
 
             var apiProviderMock = Mock.Create<IValkyrieWebApiProvider>(Behavior.Strict);
-            var copyHelper = Mock.Create<ICopyHelper>(Behavior.Strict);
 
             var apiKey = Guid.NewGuid().ToString();
             Mock.Arrange(() => apiProviderMock.RegisterWithCamLicense(Arg.IsAny<RegisterWithCamLicenseRequest>()))
@@ -575,7 +562,7 @@ namespace APTAT.Core.Valkyrie.Tests
 
 
             ValkyrieClient client = new ValkyrieClient(Mock.Create<IMachineKeyProvider>(), apiProviderMock, progressNotify, statusTimer
-                , delayScheduler, copyHelper, Mock.Create<IDescentFactory>(Behavior.Strict));
+                , delayScheduler, Mock.Create<IDescentFactory>(Behavior.Strict));
             
             var camRegistration = Mock.Create<ICamRegistration>();
             Mock.Arrange(() => camRegistration.LicenseId).Returns(() => Guid.NewGuid().ToString());
