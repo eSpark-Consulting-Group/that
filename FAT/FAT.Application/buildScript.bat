@@ -12,7 +12,6 @@ copy ForensicAnalysisTool.exe.config bin\ForensicAnalysisTool.exe.config
 copy FAT.Extractor.exe bin\FAT.Extractor.exe
 copy cmdapt64.exe bin\cmdapt64.exe
 copy cmdapt86.exe bin\cmdapt86.exe
-copy DescentCopyHelper.exe bin\DescentCopyHelper.exe
 mkdir "%CD%\bin\amd64"
 mkdir "%CD%\bin\x86"
 xcopy /s amd64 bin\amd64

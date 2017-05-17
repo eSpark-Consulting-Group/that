@@ -6,8 +6,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using APTAT.Core.Descent.Apt;
 using APTAT.DeploymentCore;
-using APTAT.Core.Descent.Copy;
-using APTAT.Core.DescentCopy;
 
 namespace APTAT.Core.Valkyrie
 {
@@ -61,10 +59,10 @@ namespace APTAT.Core.Valkyrie
         }                
 
         public long Size { get; set; }
-        public ICopyFileResult CopyResult
-        {
-            get;set;
-        }
+        //public ICopyFileResult CopyResult
+        //{
+        //    get;set;
+        //}
 
         public string GetNetworkPath(string path, string hostName = null)
         {
@@ -144,5 +142,6 @@ namespace APTAT.Core.Valkyrie
 
             public string Path { get; }
         }
+
     }
 }

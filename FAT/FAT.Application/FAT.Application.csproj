@@ -542,8 +542,7 @@
 
       xcopy "$(SolutionDir)$(ConfigurationName)\FAT.Bootstrapper.exe" "$(TargetDir)" /Y /D
 
-    xcopy "$(SolutionDir)$(ConfigurationName)\FAT.Extractor.exe" "$(TargetDir)" /Y /D
-    xcopy "$(SolutionDir)$(ConfigurationName)\DescentCopyHelper.exe" "$(TargetDir)" /Y /D</PostBuildEvent>
+    xcopy "$(SolutionDir)$(ConfigurationName)\FAT.Extractor.exe" "$(TargetDir)" /Y /D</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

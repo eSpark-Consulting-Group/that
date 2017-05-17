@@ -1,9 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using APTAT.Core.Descent.Apt;
 using APTAT.DeploymentCore;
-using APTAT.Core.Descent.Copy;
 using System.Collections.Generic;
-using APTAT.Core.DescentCopy;
 
 namespace APTAT.Core.Valkyrie
 {
@@ -14,9 +12,14 @@ namespace APTAT.Core.Valkyrie
         string Path { get; }
         ReadOnlyCollection<IFileInstanceInformation> Instances { get; }
         string Sha1 { get; }
-        ICopyFileResult CopyResult { get; set; }
+        //ICopyFileResult CopyResult { get; set; }
     }
-    
+    public interface IFileInstanceInformation
+    {
+        IComputer Computer { get; }
+        string Path { get; }
+    }
+
     public interface IValkyrieFileInfo : IFileInfo
     {
         IEnumerable<string> FilePathes {get;}
