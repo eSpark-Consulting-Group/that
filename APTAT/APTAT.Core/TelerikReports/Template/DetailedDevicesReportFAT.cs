@@ -29,13 +29,6 @@ namespace APTAT.Core.TelerikReports
 
         }
 
-        
-        internal void ChangeScaleForOne()
-        {
-            ((NumericalScale) graphAxis1.Scale).LabelStep = 1;
-            ((NumericalScale)graphAxis1.Scale).MajorStep = 1;
-        }
-
         private void DetailedDevicesReportFAT_ItemDataBound(object sender, EventArgs e)
         {
           
@@ -45,20 +38,24 @@ namespace APTAT.Core.TelerikReports
         private void DetailedDeviceReportFAT_ItemDataBinding(object sender, EventArgs e)
         {
             var obj = (Telerik.Reporting.Processing.Report)sender;
-            var dataSource = (Reports.AptReportData)obj.DataSource;
-            
+            var dataSource = (Reports.AptReportData)obj.DataSource;       
 
             var hasBadFiles = dataSource.AllBadFilesSorted.Length > 0;
             panelSpaceBeforeDetailsPerProgram.Visible = hasBadFiles;
-
-            
-
         }
 
         private void graph1_ItemDataBinding(object sender, EventArgs e)
         {
             var graph = (Telerik.Reporting.Processing.DataItem)sender;
             var obj = (Reports.AptReportData)graph.DataObject.RawData;
+
+            if (obj.Top10VulnerableDevices.Sum(t => t.BadFilesCount) == 1)
+            {
+                ((NumericalScale)graphAxis1.Scale).LabelStep = 1;
+                ((NumericalScale)graphAxis1.Scale).DataPointTicks = true;
+                ((NumericalScale)graphAxis1.Scale).Minimum = 0.1d;
+            }
+
             var len = obj.Top10VulnerableDevices.Select(t=>t.Uid).Distinct().Count();            
             ((CategoryScale)graphAxis2.Scale).SpacingSlotCount = ChartHelper.CalculateSpacingSlotCount(len, 8);
         }
