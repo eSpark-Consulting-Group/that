@@ -221,7 +221,7 @@ namespace APTAT.Core.TelerikReports.Template
             this.textBox64.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(3.6600000858306885D), Telerik.Reporting.Drawing.Unit.Cm(0.599999725818634D));
             this.textBox64.Style.Color = System.Drawing.Color.DimGray;
             this.textBox64.Style.Font.Name = "Segoe UI";
-            this.textBox64.Value = "Operation System:";
+            this.textBox64.Value = "Operating System:";
             // 
             // textBox49
             // 
@@ -251,7 +251,7 @@ namespace APTAT.Core.TelerikReports.Template
             this.textBox63.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(3.6600000858306885D), Telerik.Reporting.Drawing.Unit.Cm(0.599999725818634D));
             this.textBox63.Style.Color = System.Drawing.Color.DimGray;
             this.textBox63.Style.Font.Name = "Segoe UI";
-            this.textBox63.Value = "Organization Unit:";
+            this.textBox63.Value = "Organizational Unit:";
             // 
             // textBox48
             // 

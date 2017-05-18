@@ -280,7 +280,7 @@ namespace APTAT.Core.TelerikReports.Template
             this.textBox6.Style.Color = System.Drawing.Color.DimGray;
             this.textBox6.Style.Font.Name = "Segoe UI Light";
             this.textBox6.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(10D);
-            this.textBox6.Value = "Organization Unit:";
+            this.textBox6.Value = "Organizational Unit:";
             // 
             // pageFooterSection1
             // 

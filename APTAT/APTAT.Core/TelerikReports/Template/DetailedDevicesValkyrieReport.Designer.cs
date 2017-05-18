@@ -415,7 +415,7 @@ namespace APTAT.Core.TelerikReports
             this.textBox64.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(3.440971851348877D), Telerik.Reporting.Drawing.Unit.Cm(0.599999725818634D));
             this.textBox64.Style.Color = System.Drawing.Color.Gray;
             this.textBox64.Style.Font.Name = "Segoe UI Light";
-            this.textBox64.Value = "Operation System:";
+            this.textBox64.Value = "Operating System:";
             // 
             // textBox63
             // 
