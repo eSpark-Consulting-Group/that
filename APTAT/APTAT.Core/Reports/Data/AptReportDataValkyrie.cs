@@ -84,8 +84,9 @@ namespace APTAT.Core.Reports
         public override void CalculateTotal()
         {
             IEnumerable<ScannedTarget> targets = new ScannedTarget[] { };
+            IEnumerable<DetailedBadFileWithValkyrie> ufiles;
             IEnumerable<DetailedBadFileWithValkyrie> files;
-            MergeResults(_Targets, ValkyrieAnalysisResult, out targets, out files, out files);
+            MergeResults(_Targets, ValkyrieAnalysisResult, out targets, out ufiles, out files);
 
         }
 
