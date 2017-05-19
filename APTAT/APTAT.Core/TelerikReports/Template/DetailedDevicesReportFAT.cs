@@ -52,7 +52,7 @@ namespace APTAT.Core.TelerikReports
             if (obj.Top10VulnerableDevices.Max(t => t.BadFilesCount) < 3)
             {
                 ((NumericalScale)graphAxis1.Scale).LabelStep = 1;
-                ((NumericalScale)graphAxis1.Scale).DataPointTicks = true;
+                ((NumericalScale)graphAxis1.Scale).MajorStep = 1;
                 ((NumericalScale)graphAxis1.Scale).Minimum = 0.1d;
             }
 
