@@ -1101,6 +1101,11 @@ namespace FAT.Application.Models
                     };
 
                     var ti = createFile(badFile, file);
+                    if (ti.ShouldCheckOnValkyrie && ti.ValkyrieVerdict == APTAT.Core.Valkyrie.ValkyrieVerdict.PendingFls)
+                    {
+                        item.ScanStage = ScanStage.OperationCanceled;
+                        item.StatusMessageSystem = "Scan operation was canceled.";
+                    }
                     item.AddFile(ti);
 
                     ti = createFile(badFile, file);
