@@ -117,7 +117,7 @@ namespace FAT.Application
                     _warningDisplayed = true;
                     bord.Visibility = Visibility.Visible;
                     if (model.IsScanInProgress.GetValueOrDefault())
-                        txt.Text = "You need to provide proxy credentials to complete file analysis in cloud. Please ented valid proxy login and password, otherwise the current operation will be aborted.";
+                        txt.Text = "You need to provide proxy credentials to complete file analysis in cloud. Please enter valid proxy login and password, otherwise the current operation will be aborted.";
                     return;
                 }
             }
