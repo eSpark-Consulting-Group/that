@@ -371,6 +371,11 @@ namespace FAT.Application.Models
             get { return _submitingEmail ? "Please Wait..." : "Submit"; }
         }
 
+        public bool NotSubmitingEmail
+        {
+            get { return !_submitingEmail; }
+        }
+
         public bool IsDetailsEnabled
         {
             get { return SelectedItem != null && !SelectedItem.IsComputer; }
@@ -1671,6 +1676,7 @@ namespace FAT.Application.Models
             _submitingEmail = true;
             SubmitEmailCommand.InvalidateCanExecute();
             RaisePropertyChanged(nameof(SubmitHeader));
+            RaisePropertyChanged(nameof(NotSubmitingEmail));
 
             var result = await _aptService.SubmitEmailAsync(Email.Split(new[] { ',', ';' }));
 
@@ -1690,6 +1696,7 @@ namespace FAT.Application.Models
             _submitingEmail = false;
             SubmitEmailCommand.InvalidateCanExecute();
             RaisePropertyChanged(nameof(SubmitHeader));
+            RaisePropertyChanged(nameof(NotSubmitingEmail));
         }
 
         public void SetReportKind(ReportKind kind)

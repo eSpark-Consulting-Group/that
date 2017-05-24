@@ -796,7 +796,7 @@
                             <TextBlock Foreground="White" FontSize="13" VerticalAlignment="Center" HorizontalAlignment="Right" Text="Please enter your email to receive a detailed scan results report:" Visibility="{Binding HideSubmitEmail, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"/>
                             <telerik:RadWatermarkTextBox MaxLength="254" Margin="7 0 0 0" x:Name="email" Grid.Column="1" Width="300" Visibility="{Binding HideSubmitEmail, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"
                                      MinHeight="31" MaxHeight="31"  BorderThickness="1" BorderBrush="#FFD6D4D4" Padding="7 7 0 0" 
-                                     Background="White" Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                     Background="White" Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsHitTestVisible="{Binding NotSubmitingEmail}">
                                 <telerik:RadWatermarkTextBox.WatermarkContent>
                                     <TextBlock Margin="0 1 0 0" FontSize="14" Opacity="0.5" Text="customermail@enterprise.com" Foreground="#FF547D98"/>
                                 </telerik:RadWatermarkTextBox.WatermarkContent>
