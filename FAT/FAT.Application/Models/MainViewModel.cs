@@ -1672,7 +1672,13 @@ namespace FAT.Application.Models
             var result = await _aptService.SubmitEmailAsync(Email.Split(new[] { ',', ';' }));
 
             if (result.IsSucceeded)
+            {
+                CMCStatisticsMessages<IEmailActionRequest>.Send(request =>
+                {
+                    request.EmailAction = HideSubmitEmail ? EmailAction.Edit : EmailAction.Save;
+                });
                 Set(() => HideSubmitEmail, true);
+            }
             else
                 ErrorOccurred?.Invoke(this, new DomainEventArgs(null, new InvalidOperationException(result.ErrorMessage)));
 

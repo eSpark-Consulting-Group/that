@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace APTAT.Core.CMC.Request
 {
-    public interface IEmailActionRequest
+    public interface IEmailActionRequest : IRequest
     {
         EmailAction EmailAction { get; set; }
     }
