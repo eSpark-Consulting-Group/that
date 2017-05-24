@@ -1673,9 +1673,10 @@ namespace FAT.Application.Models
 
             if (result.IsSucceeded)
             {
+                var editAvailable = HideSubmitEmail;
                 CMCStatisticsMessages<IEmailActionRequest>.Send(request =>
                 {
-                    request.EmailAction = HideSubmitEmail ? EmailAction.Edit : EmailAction.Save;
+                    request.EmailAction = editAvailable ? EmailAction.Edit : EmailAction.Save;
                 });
                 Set(() => HideSubmitEmail, true);
             }
