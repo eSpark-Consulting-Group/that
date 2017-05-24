@@ -56,6 +56,7 @@ namespace FAT.Application.Models
         private bool _isAutoDiscoveryCompleted;
         private bool _cancelInProgress;
         private bool _submitingEmail;
+        private bool _hasEmail;
         private bool _previousScansAvailable;
         private bool _valkyrieDetailsLinkAvailable;
 
@@ -586,6 +587,7 @@ namespace FAT.Application.Models
             }
         }
 
+        
         public bool HideSubmitEmail { get; set; }
 
         public string ScanKeyword
@@ -742,6 +744,7 @@ namespace FAT.Application.Models
                     {
                         Email = email;
                         Set(() => HideSubmitEmail, true);
+                        _hasEmail = true;
                     });
                 }
             });
@@ -1673,12 +1676,13 @@ namespace FAT.Application.Models
 
             if (result.IsSucceeded)
             {
-                var editAvailable = HideSubmitEmail;
+                var editAvailable = _hasEmail;
                 CMCStatisticsMessages<IEmailActionRequest>.Send(request =>
                 {
-                    request.EmailAction = editAvailable ? EmailAction.Edit : EmailAction.Save;
+                    request.EmailAction = _hasEmail ? EmailAction.Edit : EmailAction.Save;
                 });
                 Set(() => HideSubmitEmail, true);
+                _hasEmail = true;
             }
             else
                 ErrorOccurred?.Invoke(this, new DomainEventArgs(null, new InvalidOperationException(result.ErrorMessage)));
