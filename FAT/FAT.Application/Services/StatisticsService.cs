@@ -148,6 +148,15 @@ namespace FAT.Application.Services
             message.Action?.Invoke(request);
             ApplicationClosedAsync(request);
         }
+
+        [MessageReceiver]
+        public void AcceptMessage(AppMessage<IEmailActionRequest> message)
+        {
+            var request = new EmailActionRequest();
+            message.Action?.Invoke(request);
+            Action action = () => { _client.EmailAction(request); };
+            ProduceRequest(action);
+        }
         #endregion
 
         public async Task OnAppClosing()
@@ -272,6 +281,7 @@ namespace FAT.Application.Services
             };
             ProduceRequest(action);
         }
+        
 
         public void AutoDiscoveryFinishedAsync(IAutoDiscoveryFinishedRequest request)
         {
@@ -331,7 +341,7 @@ namespace FAT.Application.Services
                 _unknownDiffCount = 0;
             }
 
-            if(malwareDiffCount==0&& unknownDiffCount == 0) return;
+            if(malwareDiffCount==0 && unknownDiffCount == 0) return;
             
 
             IScanUpdatedRequest request = new ScanUpdatedRequest()

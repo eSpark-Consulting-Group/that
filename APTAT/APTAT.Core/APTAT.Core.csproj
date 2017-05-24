@@ -96,10 +96,12 @@
     <Compile Include="CMC\Request\ApplicationClosedRequest.cs" />
     <Compile Include="CMC\ICmcWebApiProvider.cs" />
     <Compile Include="CMC\GeneralInfo.cs" />
+    <Compile Include="CMC\Request\EmailActionRequest.cs" />
     <Compile Include="CMC\Request\ETargetsDiscovererTypeRequest.cs" />
     <Compile Include="CMC\Request\IApplicationClosedRequest.cs" />
     <Compile Include="CMC\Request\IAutoDiscoveryFinishedRequest.cs" />
     <Compile Include="CMC\Request\IApplicationLaunchedRequest.cs" />
+    <Compile Include="CMC\Request\IEmailAction.cs" />
     <Compile Include="CMC\Request\IReportGeneratedRequest.cs" />
     <Compile Include="CMC\Request\IReportPrintedOrSavedRequest.cs" />
     <Compile Include="CMC\Request\IScanFinishedRequest.cs" />

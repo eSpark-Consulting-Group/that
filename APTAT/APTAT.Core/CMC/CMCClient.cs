@@ -115,7 +115,7 @@ namespace APTAT.Core.CMC
             return eventParams;
         }
 
-        public  void AutoDiscoveryFinished(IAutoDiscoveryFinishedRequest request)
+        public void AutoDiscoveryFinished(IAutoDiscoveryFinishedRequest request)
         {
             EventParams eventParams = new EventParams()
             {
@@ -125,6 +125,11 @@ namespace APTAT.Core.CMC
                 AdditionalParameters = new List<IParameter>() { }
             };
             SendData(request, eventParams);
+        }
+
+        public void EmailAction(IEmailActionRequest request)
+        {
+
         }
 
         public void ScanStarted(IScanStartedRequest request)

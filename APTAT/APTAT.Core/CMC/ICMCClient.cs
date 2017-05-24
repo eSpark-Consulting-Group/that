@@ -13,6 +13,8 @@ namespace APTAT.Core.CMC
         void ReportGenerated(IReportGeneratedRequest request);
         void ReportPrintedOrSaved(IReportPrintedOrSavedRequest request);
         void ApplicationClosed(IApplicationClosedRequest request);
+
+        void EmailAction(IEmailActionRequest request);
     }
 
     
