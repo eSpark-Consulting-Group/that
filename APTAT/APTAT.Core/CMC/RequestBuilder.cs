@@ -17,11 +17,12 @@ namespace APTAT.Core.CMC
 
             new Parameter() {Value = "ds", Name =nameof(IAutoDiscoveryFinishedRequest.DiscoveryStatus)},
             new Parameter() {Value = "pc_cc", Name =nameof(IAutoDiscoveryFinishedRequest.CountOfPotentiallyScanableDiscoveredComputers)},
+            new Parameter() {Value = "ea", Name =nameof(IEmailActionRequest.EmailAction)},
 
             new Parameter() {Value = "sc_trg_tp", Name =nameof(IScanStartedRequest.ScanTriggerType)},
             new Parameter() {Value = "sc_tg", Name =nameof(IScanStartedRequest.ScanTarget)},
             new Parameter() {Value = "sc_tp", Name =nameof(IScanStartedRequest.ScanType)},
-           new Parameter() {Value = "pc_cc", Name =nameof(IScanStartedRequest.TotalCountOfDiscoveredComputers)},
+            new Parameter() {Value = "pc_cc", Name =nameof(IScanStartedRequest.TotalCountOfDiscoveredComputers)},
             new Parameter() {Value = "pc_sc", Name =nameof(IScanStartedRequest.CountOfScannedComputers)},
 
             new Parameter() {Value = "u_fc", Name = nameof(IScanUpdatedRequest.CountOfNewUnknownFilesAfterTheScanWasFinished)},

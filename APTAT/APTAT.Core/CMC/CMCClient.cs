@@ -121,7 +121,7 @@ namespace APTAT.Core.CMC
             {
                 EventParamValue = "eh_ad_adf",
                 EventId = "ei_rp_ad",
-                 EventGroupId = "eg_da",
+                EventGroupId = "eg_da",
                 AdditionalParameters = new List<IParameter>() { }
             };
             SendData(request, eventParams);
@@ -129,7 +129,14 @@ namespace APTAT.Core.CMC
 
         public void EmailAction(IEmailActionRequest request)
         {
-
+            EventParams eventParams = new EventParams()
+            {
+                EventParamValue = "eh_em_ee",
+                EventId = "ei_rp_em",
+                EventGroupId = "eg_da",
+                AdditionalParameters = new List<IParameter>() { }
+            };
+            SendData(request, eventParams);
         }
 
         public void ScanStarted(IScanStartedRequest request)
