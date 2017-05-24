@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26430.6
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FAT.Application", "FAT.Application\FAT.Application.csproj", "{89CDF93E-B252-47A9-BB69-4E11D89DA35F}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -42,8 +42,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.Valkyrie.Tests", "APTAT.Valkyrie.Tests\APTAT.Valkyrie.Tests.csproj", "{A81DB5F8-8EB7-4F29-95B2-2C040AB29F49}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FAT.Extractor", "FAT.Extractor\FAT.Extractor.vcxproj", "{2F8EEE56-2DA6-4F0E-8F83-C55520779F55}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "APTAT.DescentCopyHelper", "..\APTAT\APTAT.CopyHelper\AgnDescentHelper.vcxproj", "{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -944,112 +942,6 @@ Global
 		{2F8EEE56-2DA6-4F0E-8F83-C55520779F55}.Template|x64.Build.0 = Release|x64
 		{2F8EEE56-2DA6-4F0E-8F83-C55520779F55}.Template|x86.ActiveCfg = Release|Win32
 		{2F8EEE56-2DA6-4F0E-8F83-C55520779F55}.Template|x86.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Debug No Xalan|Any CPU.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Debug No Xalan|Any CPU.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Debug No Xalan|Mixed Platforms.ActiveCfg = Debug|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Debug No Xalan|Mixed Platforms.Build.0 = Debug|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Debug No Xalan|Win32.ActiveCfg = Debug|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Debug No Xalan|Win32.Build.0 = Debug|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Debug No Xalan|x64.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Debug No Xalan|x64.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Debug No Xalan|x86.ActiveCfg = Debug|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Debug No Xalan|x86.Build.0 = Debug|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Debug|Win32.ActiveCfg = Debug|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Debug|Win32.Build.0 = Debug|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Debug|x64.ActiveCfg = Debug|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Debug|x86.ActiveCfg = Debug|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Debug|x86.Build.0 = Debug|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Debug64|Any CPU.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Debug64|Any CPU.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Debug64|Mixed Platforms.ActiveCfg = Debug|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Debug64|Mixed Platforms.Build.0 = Debug|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Debug64|Win32.ActiveCfg = Debug|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Debug64|Win32.Build.0 = Debug|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Debug64|x64.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Debug64|x64.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Debug64|x86.ActiveCfg = Debug|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Debug64|x86.Build.0 = Debug|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.InstallerRelease|Any CPU.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.InstallerRelease|Any CPU.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.InstallerRelease|Mixed Platforms.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.InstallerRelease|Mixed Platforms.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.InstallerRelease|Win32.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.InstallerRelease|Win32.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.InstallerRelease|x64.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.InstallerRelease|x64.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.InstallerRelease|x86.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.InstallerRelease|x86.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.IntegrationTestingDebug|Any CPU.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.IntegrationTestingDebug|Any CPU.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.IntegrationTestingDebug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.IntegrationTestingDebug|Mixed Platforms.Build.0 = Debug|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.IntegrationTestingDebug|Win32.ActiveCfg = Debug|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.IntegrationTestingDebug|Win32.Build.0 = Debug|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.IntegrationTestingDebug|x64.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.IntegrationTestingDebug|x64.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.IntegrationTestingDebug|x86.ActiveCfg = Debug|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.IntegrationTestingDebug|x86.Build.0 = Debug|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Release No Xalan|Any CPU.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Release No Xalan|Any CPU.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Release No Xalan|Mixed Platforms.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Release No Xalan|Mixed Platforms.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Release No Xalan|Win32.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Release No Xalan|Win32.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Release No Xalan|x64.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Release No Xalan|x64.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Release No Xalan|x86.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Release No Xalan|x86.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Release|Any CPU.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Release|Win32.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Release|Win32.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Release|x64.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Release|x86.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Release|x86.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Release64|Any CPU.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Release64|Any CPU.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Release64|Mixed Platforms.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Release64|Mixed Platforms.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Release64|Win32.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Release64|Win32.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Release64|x64.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Release64|x64.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Release64|x86.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Release64|x86.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.SignedRelease 1 1 All Bins MixedPlatform|Any CPU.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.SignedRelease 1 1 All Bins MixedPlatform|Any CPU.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.SignedRelease 1 1 All Bins MixedPlatform|Mixed Platforms.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.SignedRelease 1 1 All Bins MixedPlatform|Mixed Platforms.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.SignedRelease 1 1 All Bins MixedPlatform|Win32.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.SignedRelease 1 1 All Bins MixedPlatform|Win32.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.SignedRelease 1 1 All Bins MixedPlatform|x64.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.SignedRelease 1 1 All Bins MixedPlatform|x64.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.SignedRelease 1 1 All Bins MixedPlatform|x86.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.SignedRelease 1 1 All Bins MixedPlatform|x86.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.SignedRelease 1 2 Agent Bins x64 MixedPlatform|Any CPU.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.SignedRelease 1 2 Agent Bins x64 MixedPlatform|Any CPU.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.SignedRelease 1 2 Agent Bins x64 MixedPlatform|Mixed Platforms.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.SignedRelease 1 2 Agent Bins x64 MixedPlatform|Mixed Platforms.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.SignedRelease 1 2 Agent Bins x64 MixedPlatform|Win32.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.SignedRelease 1 2 Agent Bins x64 MixedPlatform|Win32.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.SignedRelease 1 2 Agent Bins x64 MixedPlatform|x64.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.SignedRelease 1 2 Agent Bins x64 MixedPlatform|x64.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.SignedRelease 1 2 Agent Bins x64 MixedPlatform|x86.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.SignedRelease 1 2 Agent Bins x64 MixedPlatform|x86.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Template|Any CPU.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Template|Any CPU.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Template|Mixed Platforms.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Template|Mixed Platforms.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Template|Win32.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Template|Win32.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Template|x64.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Template|x64.Build.0 = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Template|x86.ActiveCfg = Release|Win32
-		{98A5BDFE-3A1A-4CBA-B27A-0A35ACAF3656}.Template|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1061,7 +953,7 @@ Global
 		{A81DB5F8-8EB7-4F29-95B2-2C040AB29F49} = {FCF45CEC-6094-4BFE-92CF-3817333D43E5}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 15
+		SccNumberOfProjects = 14
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://pss05v:8080/tfs/defaultcollection
 		SccLocalPath0 = .
@@ -1108,8 +1000,5 @@ Global
 		SccProjectUniqueName13 = FAT.Extractor\\FAT.Extractor.vcxproj
 		SccProjectName13 = FAT.Extractor
 		SccLocalPath13 = FAT.Extractor
-		SccProjectUniqueName14 = ..\\APTAT\\APTAT.CopyHelper\\AgnDescentHelper.vcxproj
-		SccProjectName14 = ../APTAT/APTAT.CopyHelper
-		SccLocalPath14 = ..\\APTAT\\APTAT.CopyHelper
 	EndGlobalSection
 EndGlobal
