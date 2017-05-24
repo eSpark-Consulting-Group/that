@@ -37,7 +37,7 @@ void Extractor::ExtractId()
 	{
 		extractedDirectory = directory.substr(0, last_slash_idx);
 	}
-	auto regex = std::wregex{ L"ForensicAnalysisTool_[a-zA-Z0-9]{32}" };
+	auto regex = std::wregex{ L"ForensicAnalysisTool_[a-zA-Z0-9]*" };
 	if (std::regex_search(processName, m, regex))
 	{
 		WriteAllTextUtf8((directory + L"\\originalfile").c_str(), m[0].str());
