@@ -252,36 +252,50 @@ namespace FAT.Application.Services
         {
             Action action = () =>
             {
-                if (Assembly.GetEntryAssembly() != null)
-                {   
-                    var folderPath = new DirectoryInfo(Assembly.GetEntryAssembly().Location).Parent.FullName;
-                    var filePath = $"{folderPath}\\originalfile";
-
-                    if (File.Exists(filePath))
-                    {
-                        string input = File.ReadAllText(filePath);
-                        string pattern = @"ForensicAnalysisTool_\w{32}$";
-                        Regex rgx = new Regex(pattern, RegexOptions.IgnoreCase);
-                        var matches = rgx.Matches(input);
-                        if (matches.Count == 1)
-                        {
-                            var result = matches[0].Value.Split(new[] { '_' })[1].Split(new[] { '.' })[0];
-                            var id = Encoding.Default.GetString(Convert.FromBase64String(result));
-                            rgx = new Regex(@"[0-9a-zA-Z]{24}");
-                            if (rgx.IsMatch(id))
-                            {
-                                request.AcId = id;
-                            }
-                        }
-                    }
-                }
+                request.AcId = ExtractIdFromFile();
                 request.ProductIdentifier = "enp.c1.fat";
                 request.ProductVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
                 _client.ApplicationLaunched(request);
             };
             ProduceRequest(action);
         }
-        
+
+        public static string ExtractIdFromFile()
+        {
+            string id = null;
+            if (Assembly.GetEntryAssembly() != null)
+            {
+                var folderPath = new DirectoryInfo(Assembly.GetEntryAssembly().Location).Parent.FullName;
+                var filePath = $"{folderPath}\\originalfile";
+
+                if (File.Exists(filePath))
+                {
+                    string input = File.ReadAllText(filePath);
+                    string pattern = @"ForensicAnalysisTool_\w*$";
+                    Regex rgx = new Regex(pattern, RegexOptions.IgnoreCase);
+                    var matches = rgx.Matches(input);
+                    if (matches.Count == 1)
+                    {
+                        var result = matches[0].Value.Split(new[] { '_' })[1].Split(new[] { '.' })[0];
+                        try
+                        {
+                            var possibleId = Encoding.Default.GetString(Convert.FromBase64String(result));
+                            rgx = new Regex(@"[0-9a-zA-Z]*");
+                            if (rgx.IsMatch(possibleId))
+                            {
+                                id = possibleId;
+                            }
+                        }
+                        catch(FormatException)
+                        {
+
+                        }
+                    }
+                }
+            }
+
+            return id;
+        }
 
         public void AutoDiscoveryFinishedAsync(IAutoDiscoveryFinishedRequest request)
         {
