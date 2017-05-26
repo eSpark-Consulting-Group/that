@@ -546,7 +546,7 @@ namespace APTAT.Core.Valkyrie
                             paths.Add(new FilePath()
                             {
                                 MachineName = uri.Host,
-                                Path = uri.LocalPath.Substring(uri.Host.Length + 3)
+                                Path = uri.LocalPath.Substring(uri.Host.Length + 3).Replace(@"\\", @"\")
                             });
                         }
 
