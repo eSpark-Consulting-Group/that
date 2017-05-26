@@ -546,7 +546,7 @@ namespace APTAT.Core.Valkyrie
                             paths.Add(new FilePath()
                             {
                                 MachineName = uri.Host,
-                                Path = uri.LocalPath.Substring(uri.Host.Length + 3).Replace(@"\\", @"\")
+                                Path = FormatPath(uri.LocalPath.Substring(uri.Host.Length + 3))
                             });
                         }
 
@@ -593,6 +593,14 @@ namespace APTAT.Core.Valkyrie
             }
 
             return result;
+        }
+
+        private string FormatPath(string path)
+        {
+            if (path.Contains(@"\\") && (!path.StartsWith(@"\\") || path.StartsWith(@"\\\\")))
+                return path.Replace(@"\\", @"\");
+
+            return path;
         }
 
         private static ValkyrieAnalysisResult CancelOperation(string originalFilePath, string sha1)
