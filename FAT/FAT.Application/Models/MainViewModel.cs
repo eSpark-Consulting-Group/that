@@ -1682,11 +1682,16 @@ namespace FAT.Application.Models
 
             if (result.IsSucceeded)
             {
-                var editAvailable = _hasEmail;
-                CMCStatisticsMessages<IEmailActionRequest>.Send(request =>
-                {
-                    request.EmailAction = _hasEmail ? EmailAction.Edit : EmailAction.Save;
-                });
+                if (_hasEmail)
+                    CMCStatisticsMessages<IEmailActionRequest>.Send(request =>
+                    {
+                        request.EmailAction = EmailAction.Edit;
+                    });
+                else
+                    CMCStatisticsMessages<IEmailActionRequest>.Send(request =>
+                    {
+                        request.EmailAction = EmailAction.Save;
+                    });
                 Set(() => HideSubmitEmail, true);
                 _hasEmail = true;
             }
