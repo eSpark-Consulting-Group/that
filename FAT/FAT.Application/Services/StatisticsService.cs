@@ -271,7 +271,7 @@ namespace FAT.Application.Services
                 if (File.Exists(filePath))
                 {
                     string input = File.ReadAllText(filePath);
-                    string pattern = @"ForensicAnalysisTool_\w*$";
+                    string pattern = @"ForensicAnalysisTool_\w+$";
                     Regex rgx = new Regex(pattern, RegexOptions.IgnoreCase);
                     var matches = rgx.Matches(input);
                     if (matches.Count == 1)
@@ -280,7 +280,7 @@ namespace FAT.Application.Services
                         try
                         {
                             var possibleId = Encoding.Default.GetString(Convert.FromBase64String(result));
-                            rgx = new Regex(@"[0-9a-zA-Z]*");
+                            rgx = new Regex(@"[0-9a-zA-Z]+");
                             if (rgx.IsMatch(possibleId))
                             {
                                 id = possibleId;
