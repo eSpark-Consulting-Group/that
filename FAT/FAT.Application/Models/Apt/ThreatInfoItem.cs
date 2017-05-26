@@ -939,9 +939,12 @@ namespace FAT.Application.Models
             if (ValkyrieProgressPercentage != 100)
             {
                 ScanStage = ScanStage.OperationCancelling;
+                if (isValkyrieError)
+                {
+                    FilesToCheckOnValkyrieCount = new IThreatInfoItem[0];
+                    ReCalculateValkyriePercentage();
+                }
             }
-            FilesToCheckOnValkyrieCount = new IThreatInfoItem[0];
-            ReCalculateValkyriePercentage();
         }
     }
 }

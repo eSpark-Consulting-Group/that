@@ -379,10 +379,11 @@ namespace APTAT.Core.Apt
             lock (_flsHashResults)
             {
                 if (!fromRemoteScanner)
-                    _filesWithFlsErrorCount -= _filesWithFlsErrorCount;
+                    _filesWithFlsErrorCount -= resultsFiles.Length;
                 foreach (var r in resultsFiles)
                 {
-                    if (!_flsHashResults.ContainsKey(r.Sha1))
+                    IAptVerdictContext item;
+                    if (!_flsHashResults.TryGetValue(r.Sha1, out item))
                     {
                         var verdictContext = new AptVerdictContext(r.Sha1, r.Cloud);
                         _flsHashResults[r.Sha1] = verdictContext;
@@ -391,24 +392,27 @@ namespace APTAT.Core.Apt
                         if (r.IsNotAnalyzed())
                             addToAnalyze.Add(verdictContext);
                     }
-                    else
+                    else if (item.Cloud != r.Cloud)
                     {
-                        var item = _flsHashResults[r.Sha1];
-                        if (r.IsNotAnalyzed())
+                        if ((r.IsNotAnalyzed() || r.IsUnknown()) 
+                            && ! item.IsNotAnalyzed())
                         {
-                            if (item.Cloud != CloudVerdict.FailedToAnalyze &&
-                                item.Cloud != CloudVerdict.NoVerdict)
-                            {
-                                r.Cloud = item.Cloud;
-                                resultsUpdated = true;
-                            }
+                            r.Cloud = item.Cloud;
+                            resultsUpdated = true;
                         }
-                        else if (item.Cloud != r.Cloud && item.IsNotAnalyzed())
+                        else if (item.IsNotAnalyzed())
                         {
                             item.Cloud = r.Cloud;
                             var clone = item.Clone();
                             verdictUpdated.Add(clone);
                             addToAnalyze.Remove(item);
+                        }
+                        else if (item.IsUnknown())
+                        {
+                            item.Cloud = r.Cloud;
+                            var clone = item.Clone();
+                            verdictUpdated.Add(clone);
+                            newUnknownFiles.Remove(item);
                         }
                     }
                 }
