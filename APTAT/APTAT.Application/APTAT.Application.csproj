@@ -529,9 +529,9 @@ xcopy "$(SolutionDir)$(ConfigurationName)\APTAT.Bootstrapper.exe" "$(TargetDir)"
 copy /b "$(ProjectDir)SfxPackage\7zSD.sfx" + "$(ProjectDir)SfxPackage\config.txt" + "$(TargetDir)archive.7z" "$(TargetDir)ValkyrieHunter.exe" || goto :error
 del  "$(TargetDir)archive.7z"
     if not exist "$(TargetDir)x86" md "$(TargetDir)x86"
-    xcopy /s /y "$(SolutionDir)packages\Microsoft.SqlServer.Compact.4.0.8876.1\NativeBinaries\x86\*.*" "$(TargetDir)x86"
+    xcopy /s /y "$(SolutionDir)..\packages\Microsoft.SqlServer.Compact.4.0.8876.1\NativeBinaries\x86\*.*" "$(TargetDir)x86"
     if not exist "$(TargetDir)amd64" md "$(TargetDir)amd64"
-    xcopy /s /y "$(SolutionDir)packages\Microsoft.SqlServer.Compact.4.0.8876.1\NativeBinaries\amd64\*.*" "$(TargetDir)amd64"</PostBuildEvent>
+    xcopy /s /y "$(SolutionDir)..\packages\Microsoft.SqlServer.Compact.4.0.8876.1\NativeBinaries\amd64\*.*" "$(TargetDir)amd64"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
