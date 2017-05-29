@@ -14,7 +14,8 @@ namespace Valkyrie.WebApiProvider.Extensions
         public static NameValueCollection ToNameValueCollection(this Object obj)
         {
             var jsonText = JsonConvert.SerializeObject(obj);
-            var objects = (Dictionary<string, object>)JTokenToObject(JToken.Parse(jsonText));
+            //var objects = (Dictionary<string, object>)JTokenToObject(JToken.Parse(jsonText));
+            var objects = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonText);
 
             var nameValueCollection = new NameValueCollection(objects.Count);
             foreach (var kvp in objects)
@@ -22,7 +23,7 @@ namespace Valkyrie.WebApiProvider.Extensions
                 string value = String.Empty;
                 if (kvp.Value != null)
                 {
-                    var list = kvp.Value as List<Object>;
+                    /*var list = kvp.Value as List<Object>;
                     if (list != null)
                     {
                         JArray jArray = new JArray();
@@ -51,7 +52,7 @@ namespace Valkyrie.WebApiProvider.Extensions
                         value = sb.ToString();
                         sb.Clear();
                     }
-                    else
+                    else*/
                         value = kvp.Value.ToString();
                 }
                 nameValueCollection.Add(kvp.Key, value);
@@ -75,7 +76,7 @@ namespace Valkyrie.WebApiProvider.Extensions
                         prop => prop.Name,
                         prop => JTokenToObject(prop.Value));
                 case JTokenType.Array:
-                    return token.ToString();// token.Select(JTokenToObject).ToList();
+                    return token.Select(JTokenToObject).ToList();
                 default:
                     return ((JValue)token).Value;
             }
