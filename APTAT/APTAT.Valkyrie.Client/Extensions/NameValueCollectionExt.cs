@@ -38,17 +38,19 @@ namespace Valkyrie.WebApiProvider.Extensions
                                     if (d != null)
                                     {
                                         JObject jObject = new JObject();
+
                                         foreach (var key in d.Keys)
                                             jObject.Add(new JProperty(key, d[key]));
                                         jArray.Add(jObject);
                                     }
+
                                 }
                                 jArray.WriteTo(jsonWriter);
                             }
                         }
 
                         sb.Replace(@"\\", @"\");
-                        value = "{" + sb + "}";
+                        value = sb.ToString();
                         sb.Clear();
                     }
                     else
