@@ -645,12 +645,12 @@ namespace APTAT.Core.Valkyrie
             _filesCount = 0;
             string apiKeyInternal = null;
             string scanIdInternal = null;
+            _cancellationTokenSource?.Cancel();
             Task.Factory.StartNew(t =>
             {
                 _isMainScanFinished = false;
                 _apiKey = null;
                 _aptScanId = null;
-                _cancellationTokenSource?.Cancel();
 
                 _submitAllowed = false;
                 _filesToSubmit = new Dictionary<string, IValkyrieFileInfo>();

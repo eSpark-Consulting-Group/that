@@ -271,7 +271,7 @@ namespace FAT.Application.Services
                 if (File.Exists(filePath))
                 {
                     string input = File.ReadAllText(filePath);
-                    string pattern = @"ForensicAnalysisTool_\w+$";
+                    string pattern = @"ForensicAnalysisTool_\w+[=]{0,2}$";
                     Regex rgx = new Regex(pattern, RegexOptions.IgnoreCase);
                     var matches = rgx.Matches(input);
                     if (matches.Count == 1)
@@ -286,7 +286,7 @@ namespace FAT.Application.Services
                                 id = possibleId;
                             }
                         }
-                        catch(FormatException)
+                        catch(FormatException ex)
                         {
 
                         }
