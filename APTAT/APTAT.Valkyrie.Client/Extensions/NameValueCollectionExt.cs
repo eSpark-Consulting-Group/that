@@ -8,8 +8,7 @@ using System.Text;
 using System.IO;
 
 namespace Valkyrie.WebApiProvider.Extensions
-{
-    
+{   
     public static class NameValueCollectionExt
     {
         public static NameValueCollection ToNameValueCollection(this Object obj)
@@ -43,7 +42,6 @@ namespace Valkyrie.WebApiProvider.Extensions
                                             jObject.Add(new JProperty(key, d[key]));
                                         jArray.Add(jObject);
                                     }
-
                                 }
                                 jArray.WriteTo(jsonWriter);
                             }
@@ -77,7 +75,7 @@ namespace Valkyrie.WebApiProvider.Extensions
                         prop => prop.Name,
                         prop => JTokenToObject(prop.Value));
                 case JTokenType.Array:
-                    return token.Select(JTokenToObject).ToList();
+                    return token.ToString();// token.Select(JTokenToObject).ToList();
                 default:
                     return ((JValue)token).Value;
             }
