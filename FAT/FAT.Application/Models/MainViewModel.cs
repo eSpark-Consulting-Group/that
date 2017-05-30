@@ -723,9 +723,11 @@ namespace FAT.Application.Models
         private async void OnLoaded(object o)
         {
             Set(() => Loaded, true);
-            
-            InvokeStartAutoDiscovery(null);
+
+            CMCStatisticsMessages<IApplicationLaunchedRequest>.Send();
+
             InvokeLoadInitialData();
+            InvokeStartAutoDiscovery(null);
             
             var name = await TryAction(GetCurrentDomainName());
 
@@ -733,8 +735,6 @@ namespace FAT.Application.Models
             CurrentDomainName = name?.Replace("DC=", "").Replace(",", ".");
             RaisePropertyChanged(nameof(CurrentDomainNameContent));
             RaisePropertyChanged(nameof(HasCurrentDomainName));
-
-            CMCStatisticsMessages<IApplicationLaunchedRequest>.Send();
         }
 
         private void InvokeLoadInitialData()
