@@ -59,5 +59,10 @@ namespace CodedUITestFAT
         private string _name;
         private string _rowName;
         private IPAddress _ipAddress;
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

@@ -142,10 +142,19 @@ namespace CodedUITestFAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("300000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("600000")]
         public int LookupInProgressWaitTime {
             get {
                 return ((int)(this["LookupInProgressWaitTime"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3000")]
+        public int ExistCheckTimeout {
+            get {
+                return ((int)(this["ExistCheckTimeout"]));
             }
         }
     }

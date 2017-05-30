@@ -16,7 +16,7 @@ namespace CodedUITestFAT
         internal const int LongTestTimeout = 3600000; // Milliseconds
 
         /// <summary> Timeout for very long-lasting tests. </summary>
-        internal const int LongestTestTimeout = 10800000; // Milliseconds
+        internal const int LongestTestTimeout = 14400000; // Milliseconds
 
         #endregion
 
@@ -59,7 +59,7 @@ namespace CodedUITestFAT
             EncryptedPassword = Playback.EncryptText(Password);
             ProductExeName = Environment.GetEnvironmentVariable("_ProductExeName", EnvironmentVariableTarget.Machine);
             WorkingFolder = Environment.GetEnvironmentVariable("_TargetDir", EnvironmentVariableTarget.Machine);
-            ExtractedProductPath = Path.Combine(WorkingFolder, ProductExeName.WithoutExtension());
+            ExtractedProductPath = Path.Combine(WorkingFolder, ProductExeName.WithoutExtension());            
         }
         /// <summary> Determines whether the autotests will run using FLS staging server. Gets the data from a local environment variable. </summary>
         internal static bool IsFlsStaging()

@@ -304,7 +304,7 @@ namespace CodedUITestFAT
         /// <param name="expectedMalwareCount">Set an expected Malicious file counter value.</param>
         /// <param name="expectedInAnalysisCount">Set an expected In Analysis files counter value.</param>
         /// <param name="testContext">Set a current TestContext.</param>
-        internal void AssertPanelCountersData(int expectedUnknownCount, int expectedMalwareCount, int expectedInAnalysisCount, TestContext testContext)
+        internal void AssertPanelCountersData(int expectedUnknownCount, int expectedMalwareCount, int expectedInAnalysisCount)
         {
             UIMapMain.AssertUnknownFilesCounterTextBlockTextExpectedValues.UIItem0TextDisplayText = expectedUnknownCount.ToString();
             UIMapMain.AssertUnknownFilesCounterTextBlockText();
@@ -313,13 +313,13 @@ namespace CodedUITestFAT
 
             if (expectedInAnalysisCount == 0)
             {
-                testContext.WriteLine(String.Format("The bottom panel shows '{0}' unknown and '{1}' malicious files.", expectedUnknownCount, expectedMalwareCount));
+                TestContext.WriteLine(String.Format("The bottom panel shows '{0}' unknown and '{1}' malicious files.", expectedUnknownCount, expectedMalwareCount));
             }
             else
             {
                 UIMapMain.AssertInAnalysisCounterTextBlockTextExpectedValues.UIItem1TextDisplayText = expectedInAnalysisCount.ToString();
                 UIMapMain.AssertInAnalysisCounterTextBlockText();
-                testContext.WriteLine(String.Format("The bottom panel shows '{0}' Unknown, '{1}' Malicious and '{2}' In Analysis files.", expectedUnknownCount, expectedMalwareCount, expectedInAnalysisCount));
+                TestContext.WriteLine(String.Format("The bottom panel shows '{0}' Unknown, '{1}' Malicious and '{2}' In Analysis files.", expectedUnknownCount, expectedMalwareCount, expectedInAnalysisCount));
             }
         }
 
@@ -348,12 +348,12 @@ namespace CodedUITestFAT
 
         /// <summary> Waits until the Valkyrie results are received. </summary>
         /// <param name="testContext">Set a current TestContext.</param>
-        internal void WaitForValkyrieResults(TestContext testContext)
+        internal void WaitForValkyrieResults()
         {
             int waitTime = Settings.WaitingTime.Default.ValkyrieAnalysisWaitTime;
             UIHelper.WaitForControl(ValkyrieAnalysisResultsTab(), waitTime);
             UIHelper.WaitForControlIsEnabled(ValkyrieAnalysisResultsTab(), waitTime);
-            testContext.WriteLine("'Valkyrie analysis results' tab is enabled...");
+            TestContext.WriteLine("'Valkyrie analysis results' tab is enabled...");
 
             // Waits until the Valkyrie upload progress is completed
             UIHelper.WaitForControlIsClickable(SendingFilesTextBlock(), waitTime, false);
@@ -363,7 +363,7 @@ namespace CodedUITestFAT
                 Playback.Wait(2000);
                 if (!MainWindowTitleTextBlock().DisplayText.Contains("%"))
                 {
-                    testContext.WriteLine("Valkyrie upload progress is completed...");
+                    TestContext.WriteLine("Valkyrie upload progress is completed...");
                     break;
                 }
                 if ((int) timer.ElapsedMilliseconds > waitTime) throw new Exception(String.Format("Valkyrie upload progress is not completed after {0} minutes!", waitTime / 60000));
@@ -384,7 +384,7 @@ namespace CodedUITestFAT
                 try
                 {
                     ValkyrieAnalysisResultsTab().GetRows();
-                    testContext.WriteLine("Valkyrie results now can be obtained from UI.");
+                    TestContext.WriteLine("Valkyrie results now can be obtained from UI.");
                     break;
                 }
                 catch (Exception) { }

@@ -13,12 +13,31 @@ using CodedUITestAT.UIMaps.Details.UIMapValkyrieDetailsWindowClasses;
 using CodedUITestFAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses;
 using CodedUITestFAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses;
 using CodedUITestFAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses;
+using CodedUITestFAT.BusinessObjects.Reports;
+using CodedUITestFAT.Helpers;
+
 namespace CodedUITestFAT
 {
     /// <summary> A common part for scan-related CodedUI classes. </summary>
     [CodedUITest]
     public abstract class CodedUITestCommon
     {
+        //TODO remove to base test class
+        #region 
+        //internal CodedUITestFAT.Helpers.Assert Assert
+        //{
+        //    get
+        //    {
+        //        if ((this.assert == null))
+        //        {
+        //            this.assert = new CodedUITestFAT.Helpers.Assert();
+        //        }
+        //        return this.assert;
+        //    }
+        //}
+        //private CodedUITestFAT.Helpers.Assert assert;
+        #endregion
+
         public CodedUITestCommon()
         {
         }
@@ -174,6 +193,19 @@ namespace CodedUITestFAT
         }
         private UIMapAggregatedPanel mapAggregatedPanel;
 
+        internal Log Log
+        {
+            get
+            {
+                if ((this.log == null))
+                {
+                    this.log = new Log(TestContext);
+                }
+                return this.log;
+            }
+        }
+        private Log log;
+
 
         #endregion
 
@@ -182,23 +214,23 @@ namespace CodedUITestFAT
         #region Results panel
 
         internal WpfText CleanFilesCounterTextBlock()
-        {            
+        {
             return UIMapAggregatedPanel.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIAggregatedPanelListBList.UICleanCounterListItemListItem.UIItem120100Text;
         }
 
         internal WpfText InAnalysisFilesCounterTextBlock()
-        {            
+        {
             return UIMapAggregatedPanel.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIAggregatedPanelListBList.UIInAnalysisCounterLisListItem.UIItem1021Text;
         }
 
         internal WpfText UnknownFilesCounterTextBlock()
         {
-            return UIMapAggregatedPanel.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIAggregatedPanelListBList.UIUnknownCounterListItListItem.UIItem1009Text;            
+            return UIMapAggregatedPanel.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIAggregatedPanelListBList.UIUnknownCounterListItListItem.UIItem1009Text;
         }
 
         internal WpfText MaliciousFilesCounterTextBlock()
         {
-            return UIMapAggregatedPanel.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIAggregatedPanelListBList.UIMalwareCounterListItListItem.UIItem3028Text;            
+            return UIMapAggregatedPanel.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIAggregatedPanelListBList.UIMalwareCounterListItListItem.UIItem3028Text;
         }
 
         #endregion
@@ -276,6 +308,32 @@ namespace CodedUITestFAT
 
         #region Helper methods
 
+        internal WpfText GetResultTileTextControl(TileType type)
+        {
+            WpfText control = null;
+            switch (type)
+            {
+                case TileType.Clean:
+                    control = UIMapAggregatedPanel.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIAggregatedPanelListBList.UICleanCounterListItemListItem.UIItem120100Text;
+                    break;
+                case TileType.InAnalysis:
+                    control = UIMapAggregatedPanel.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIAggregatedPanelListBList.UIInAnalysisCounterLisListItem.UIItem1021Text;
+                    break;
+                case TileType.Malware:
+                    control = UIMapAggregatedPanel.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIAggregatedPanelListBList.UIMalwareCounterListItListItem.UIItem3028Text;
+                    break;
+                case TileType.NotAnalyzed:
+                    control = UIMapAggregatedPanel.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIAggregatedPanelListBList.UINotAnalyzedCounterLiListItem.UIItem3017Text;
+                    break;
+                case TileType.Unknown:
+                    control = UIMapAggregatedPanel.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIAggregatedPanelListBList.UIUnknownCounterListItListItem.UIItem1009Text;
+                    break;
+                default:
+                    throw new ArgumentException("Unknown tile type");                    
+            }
+            return control;
+        }
+
         /// <summary> Waits for Scan Completed window. </summary>
         /// <param name="scanType">Set a scan type.</param>
         internal void WaitForScanCompleted(ScanType scanType)
@@ -292,7 +350,7 @@ namespace CodedUITestFAT
                     break;
                 default: throw new Exception(String.Format("Unexpected scan type '{0}'!", scanType));
             }
-                        
+
             UIHelper.WaitForControl(CloseSummaryWindowButton());
             UIHelper.WaitForControlIsClickable(CloseSummaryWindowButton(), waitTime);
             UIMapResultsWindow.ClickCloseSummaryWindowButton();
@@ -304,14 +362,13 @@ namespace CodedUITestFAT
             int waitTime = Settings.WaitingTime.Default.LookupInProgressWaitTime;
 
             var timer = Stopwatch.StartNew();
-            for (;;)
+            do
             {
+                if (InAnalysisFilesCounterTextBlock().DisplayText == "0 (0%)") return;
+                //if (!InAnalysisFilesCounterTextBlock().IsVisible()) return;
                 Playback.Wait(1000);
-                if (InAnalysisFilesCounterTextBlock().DisplayText == "0") break;
-                if ((int) timer.ElapsedMilliseconds > waitTime)
-                            throw new Exception(String.Format("Results panel shows 'Lookup in Progress' {0} after {1} seconds!", InAnalysisFilesCounterTextBlock().DisplayText, waitTime / 1000));
-            }
-            timer.Stop();
+            } while ((int)timer.ElapsedMilliseconds < waitTime);
+            throw new Exception(String.Format("Results panel shows 'Lookup in Progress' {0} after {1} seconds!", InAnalysisFilesCounterTextBlock().DisplayText, waitTime / 1000));
         }
 
         /// <summary> Refreshes the results screen using Search box. </summary>
@@ -370,8 +427,7 @@ namespace CodedUITestFAT
                 testContextInstance = value;
             }
         }
-        private TestContext testContextInstance;
-
+        private TestContext testContextInstance;      
         #endregion    
     }
 }

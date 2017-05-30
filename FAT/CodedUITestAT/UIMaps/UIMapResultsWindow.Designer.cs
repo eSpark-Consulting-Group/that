@@ -2441,6 +2441,18 @@ namespace CodedUITestFAT.UIMaps.UIMapResultsWindowClasses
                 return this.mUICloseCrossButtonButton;
             }
         }
+        
+        public UIViewsScanPreviousScaPane UIViewsScanPreviousScaPane
+        {
+            get
+            {
+                if ((this.mUIViewsScanPreviousScaPane == null))
+                {
+                    this.mUIViewsScanPreviousScaPane = new UIViewsScanPreviousScaPane(this);
+                }
+                return this.mUIViewsScanPreviousScaPane;
+            }
+        }
         #endregion
         
         #region Fields
@@ -2453,6 +2465,8 @@ namespace CodedUITestFAT.UIMaps.UIMapResultsWindowClasses
         private WpfWindow mUIWpfWindow;
         
         private WpfButton mUICloseCrossButtonButton;
+        
+        private UIViewsScanPreviousScaPane mUIViewsScanPreviousScaPane;
         #endregion
     }
     
@@ -2718,6 +2732,44 @@ namespace CodedUITestFAT.UIMaps.UIMapResultsWindowClasses
         
         #region Fields
         private WpfTable mUIRadTreeListViewTable;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIViewsScanPreviousScaPane : WpfPane
+    {
+        
+        public UIViewsScanPreviousScaPane(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfPane.PropertyNames.ClassName] = "Uia.Frame";
+            this.SearchProperties[WpfPane.PropertyNames.Name] = "Views/Scan/PreviousScanResults.xaml";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfCustom UIPreviousScansScreenCustom
+        {
+            get
+            {
+                if ((this.mUIPreviousScansScreenCustom == null))
+                {
+                    this.mUIPreviousScansScreenCustom = new WpfCustom(this);
+                    #region Search Criteria
+                    this.mUIPreviousScansScreenCustom.SearchProperties[WpfControl.PropertyNames.ClassName] = "Uia.PreviousScanResults";
+                    this.mUIPreviousScansScreenCustom.SearchProperties[WpfControl.PropertyNames.AutomationId] = "PreviousScansScreen";
+                    this.mUIPreviousScansScreenCustom.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIPreviousScansScreenCustom;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfCustom mUIPreviousScansScreenCustom;
         #endregion
     }
 }

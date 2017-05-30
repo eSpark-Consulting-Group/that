@@ -3,11 +3,15 @@ using System.IO;
 using System.Net;
 using System.Linq;
 using System.Diagnostics;
+using CodedUITestFAT.Helpers;
+using CodedUITestFAT.BusinessObjects.Reports;
+using CodedUITestFAT.BusinessObjects.Results;
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UITest.Extension;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
 using CodedUITestFAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses;
+
 
 namespace CodedUITestFAT
 {
@@ -17,7 +21,7 @@ namespace CodedUITestFAT
     {
         public CodedUITestNetworkAddresses()
         {
-        }       
+        }
         #region Initialize and cleanup
 
         [TestInitialize]
@@ -76,7 +80,7 @@ namespace CodedUITestFAT
         {
             return UIMapMain.UIForensicAnalysisToolWindow.UISearchControlCustom.UISearchWatermarkTextBEdit;
         }
-     
+
         #endregion
 
         #endregion
@@ -91,7 +95,7 @@ namespace CodedUITestFAT
         /// <param name="endpoints">Set endpoints.</param>
         private void StartEndpointScan(ScanType scanType, string username, string password, TestContext testContext, params Computer[] endpoints)
         {
-            CleanNetworkAddressesList();            
+            CleanNetworkAddressesList();
 
             foreach (var endpoint in endpoints)
             {
@@ -99,7 +103,7 @@ namespace CodedUITestFAT
                 UIMapNetworkAddresses.InputNetworkAddress();
                 UIMapNetworkAddresses.ClickAddButton();
             }
-            UIMapStartScanWizard.ClickNextButton();            
+            UIMapStartScanWizard.ClickNextButton();
             InputScanLogin(username);
             InputPassword(password);
 
@@ -151,14 +155,13 @@ namespace CodedUITestFAT
                  select new UITestControl()).Any())
                 TestContext.WriteLine(String.Format("Endpoint name '{0}' is still present in Network Addresses list.", endpointName));
             else
-                Assert.Fail(String.Format("Endpoint name '{0}' is no longer present in Network Addresses list!", endpointName));
+                Assert.Fail(string.Format("Endpoint name '{0}' is no longer present in Network Addresses list!", endpointName));
         }
 
         #endregion
 
         #region Test methods
 
-        //TODO need to repair
         [TestMethod, Timeout(DataHelper.LongTestTimeout)]
         public void EndpointQuickScanAndValkyrieUriCheckTest()
         {
@@ -179,15 +182,14 @@ namespace CodedUITestFAT
             TestContext.WriteLine("Detailed Scan Results button clicked...");
             UIHelper.AssertBrowserUri(expectedValkyrieUri, TestContext);
         }
-
-        //TODO need to repair
+        
         [TestMethod, Timeout(DataHelper.LongTestTimeout)]
         public void QuickScanOfIpRangeTest()
         {
             Computer endpoint = DataHelper.GetEndpoint();
-            Computer server = new Computer();                   
+            Computer server = new Computer();
             IPAddress internalAddress = SysHelper.GetLocalIpAddress(true);
-            string ipRange = String.Format("{0}-{1}", internalAddress.ChangeLastByte(0), internalAddress.ChangeLastByte(255));           
+            string ipRange = String.Format("{0}-{1}", internalAddress.ChangeLastByte(0), internalAddress.ChangeLastByte(255));
             UnknownFile unknownFile = SysHelper.AddUnknownFileForScan(endpoint);
             Malware malware = SysHelper.InfectForScan(endpoint);
 
@@ -273,38 +275,38 @@ namespace CodedUITestFAT
             UIMapStopScanWindow.ClickNoButton();
 
             ScanStatus endpointStatus = endpoint.GetScanStatus();
-            if (endpointStatus != ScanStatus.InProgress) Assert.Fail(String.Format("Computer '{0}' scan status is '{1}' after the scan stop is not confirmed!", endpoint.Name, endpointStatus));
+            if (endpointStatus != ScanStatus.InProgress) Assert.Fail(string.Format("Computer '{0}' scan status is '{1}' after the scan stop is not confirmed!", endpoint.Name, endpointStatus));
             else TestContext.WriteLine(String.Format("Computer '{0}' scan status is '{1}' after the scan stop is not confirmed.", endpoint.Name, endpointStatus));
 
             if (SysHelper.IsThereService(scannerServiceName, endpoint))
                 TestContext.WriteLine(String.Format("Service '{0}' is still present at endpoint '{1}' after a scan stop is not confirmed.", scannerServiceName, endpoint.Name));
-            else Assert.Fail(String.Format("Service '{0}' is no longer present at endpoint '{1}' after a scan stop is not confirmed!", scannerServiceName, endpoint.Name));
+            else Assert.Fail(string.Format("Service '{0}' is no longer present at endpoint '{1}' after a scan stop is not confirmed!", scannerServiceName, endpoint.Name));
 
             // Confirms the stop and checks the result
             StopScanning(TestContext);
 
             endpointStatus = endpoint.GetScanStatus();
-            if (endpointStatus != ScanStatus.Canceled) Assert.Fail(String.Format("Computer '{0}' scan status is '{1}' after the scan stop is confirmed!", endpoint.Name, endpointStatus));
+            if (endpointStatus != ScanStatus.Canceled) Assert.Fail(string.Format("Computer '{0}' scan status is '{1}' after the scan stop is confirmed!", endpoint.Name, endpointStatus));
             else TestContext.WriteLine(String.Format("Computer '{0}' scan status is '{1}' after the scan stop is confirmed.", endpoint.Name, endpointStatus));
 
             if (!SysHelper.IsThereService(scannerServiceName, endpoint))
                 TestContext.WriteLine(String.Format("Service '{0}' is no longer present at endpoint '{1}' after a scan stop is confirmed.", scannerServiceName, endpoint.Name));
-            else Assert.Fail(String.Format("Service '{0}' is still present at endpoint '{1}' after a scan stop is confirmed!", scannerServiceName, endpoint.Name));
+            else Assert.Fail(string.Format("Service '{0}' is still present at endpoint '{1}' after a scan stop is confirmed!", scannerServiceName, endpoint.Name));
 
             if (!Directory.Exists(scannerPath))
                 TestContext.WriteLine(String.Format("Directory '{0}' is no longer present at endpoint '{1}' after a scan stop is confirmed.", scannerPath, endpoint.Name));
-            else Assert.Fail(String.Format("Directory '{0}' is still present at endpoint '{1}' after a scan stop is confirmed!", scannerPath, endpoint.Name));
+            else Assert.Fail(string.Format("Directory '{0}' is still present at endpoint '{1}' after a scan stop is confirmed!", scannerPath, endpoint.Name));
 
             // Checks whether a scan can be started after the stop
             StartEndpointScan(endpoint, ScanType.Full, TestContext);
 
             endpointStatus = endpoint.GetScanStatus();
-            if (endpointStatus != ScanStatus.InProgress) Assert.Fail(String.Format("Computer '{0}' scan status is '{1}' after another scan start!", endpoint.Name, endpointStatus));
+            if (endpointStatus != ScanStatus.InProgress) Assert.Fail(string.Format("Computer '{0}' scan status is '{1}' after another scan start!", endpoint.Name, endpointStatus));
             else TestContext.WriteLine(String.Format("Computer '{0}' scan status is '{1}' after another scan start.", endpoint.Name, endpointStatus));
 
             if (SysHelper.IsThereService(scannerServiceName, endpoint))
                 TestContext.WriteLine(String.Format("Service '{0}' is present at endpoint '{1}' after another scan start.", scannerServiceName, endpoint.Name));
-            else Assert.Fail(String.Format("Service '{0}' is not present at endpoint '{1}' after another scan start!", scannerServiceName, endpoint.Name));
+            else Assert.Fail(string.Format("Service '{0}' is not present at endpoint '{1}' after another scan start!", scannerServiceName, endpoint.Name));
 
             // A cleanup
             StopScanning(TestContext);
@@ -327,13 +329,13 @@ namespace CodedUITestFAT
             // Checks whether the scanner process is running
             if (SysHelper.IsThereProcess(procName, endpoint))
                 TestContext.WriteLine(String.Format("Process '{0}' is running at endpoint '{1}'.", procName, endpoint.Name));
-            else Assert.Fail(String.Format("Process '{0}' is not running at endpoint '{1}'!", procName, endpoint.Name));
+            else Assert.Fail(string.Format("Process '{0}' is not running at endpoint '{1}'!", procName, endpoint.Name));
 
             // Checks whether there is only one scanner process
             Process[] processes = SysHelper.GetProcess(procName, endpoint);
             if (processes.Length == 1) TestContext.WriteLine(String.Format("There is only one process '{0}' at endpoint '{1}'.", procName, endpoint.Name));
-            else if (processes.Length == 0) Assert.Fail(String.Format("There are no processes '{0}' at endpoint '{1}'.", procName, endpoint.Name));
-            else Assert.Fail(String.Format("There is more than one process '{0}' at endpoint '{1}'!", procName, endpoint.Name));
+            else if (processes.Length == 0) Assert.Fail(string.Format("There are no processes '{0}' at endpoint '{1}'.", procName, endpoint.Name));
+            else Assert.Fail(string.Format("There is more than one process '{0}' at endpoint '{1}'!", procName, endpoint.Name));
 
             // Checks scanner files at the endpoint
             string scannerDir = String.Format(@"\\{0}\{1}\{2}", endpoint.Name, DataHelper.GetEndpointRoot(true), Settings.Scanner.Default.Directory);
@@ -343,7 +345,7 @@ namespace CodedUITestFAT
             {
                 string filePath = String.Format(@"{0}\{1}", scannerDir, file);
                 if (File.Exists(filePath)) TestContext.WriteLine(String.Format("File '{0}' exists.", filePath));
-                else Assert.Fail(String.Format("File '{0}' does not exist!", filePath));
+                else Assert.Fail(string.Format("File '{0}' does not exist!", filePath));
             }
 
             WaitForScanCompleted(ScanType.Quick);
@@ -351,11 +353,11 @@ namespace CodedUITestFAT
             // Checks whether the scanner process is not running any longer
             if (!SysHelper.IsThereProcess(procName, endpoint))
                 TestContext.WriteLine(String.Format("Process '{0}' is not running at endpoint '{1}' after the scan has been completed.", procName, endpoint.Name));
-            else Assert.Fail(String.Format("Process '{0}' is still running at endpoint '{1}' after the scan has been completed!", procName, endpoint.Name));
+            else Assert.Fail(string.Format("Process '{0}' is still running at endpoint '{1}' after the scan has been completed!", procName, endpoint.Name));
 
             if (!Directory.Exists(scannerDir))
                 TestContext.WriteLine(String.Format("Directory '{0}' does not exist at endpoint '{1}' after the scan has been completed.", scannerDir, endpoint.Name));
-            else Assert.Fail(String.Format("Directory '{0}' still exists at endpoint '{1}' after the scan has been completed!", scannerDir, endpoint.Name));
+            else Assert.Fail(string.Format("Directory '{0}' still exists at endpoint '{1}' after the scan has been completed!", scannerDir, endpoint.Name));
         }
 
         //TODO need to repair
@@ -374,7 +376,7 @@ namespace CodedUITestFAT
             UIHelper.WaitForScanStatus(endpoint, ScanStatus.Failed, TestContext, failedStatusWaitTime);
             ScanStatus actualScanStatus = UIHelper.GetScanStatus(endpoint);
             if (actualScanStatus != ScanStatus.Failed)
-                Assert.Fail(String.Format("Scan is not '{0}' with a correct Username and invalid Password! Actual status is '{1}'!", ScanStatus.Failed, actualScanStatus));
+                Assert.Fail(string.Format("Scan is not '{0}' with a correct Username and invalid Password! Actual status is '{1}'!", ScanStatus.Failed, actualScanStatus));
             else TestContext.WriteLine(String.Format("Scan with a correct Username and invalid Password has '{0}' status.", actualScanStatus));
 
             // Scan with an invalid login and correct password
@@ -382,7 +384,7 @@ namespace CodedUITestFAT
             UIHelper.WaitForScanStatus(endpoint, ScanStatus.Failed, TestContext, failedStatusWaitTime);
             actualScanStatus = UIHelper.GetScanStatus(endpoint);
             if (actualScanStatus != ScanStatus.Failed)
-                Assert.Fail(String.Format("Scan is not '{0}' with an invalid Username and correct Password! Actual status is '{1}'!", ScanStatus.Failed, actualScanStatus));
+                Assert.Fail(string.Format("Scan is not '{0}' with an invalid Username and correct Password! Actual status is '{1}'!", ScanStatus.Failed, actualScanStatus));
             else TestContext.WriteLine(String.Format("Scan with an invalid Username and correct Password has '{0}' status.", actualScanStatus));
 
             // Scan with an invalid login and invalid password
@@ -390,7 +392,7 @@ namespace CodedUITestFAT
             UIHelper.WaitForScanStatus(endpoint, ScanStatus.Failed, TestContext, failedStatusWaitTime);
             actualScanStatus = UIHelper.GetScanStatus(endpoint);
             if (actualScanStatus != ScanStatus.Failed)
-                Assert.Fail(String.Format("Scan is not '{0}' with an invalid Username and invalid Password! Actual status is '{1}'!", ScanStatus.Failed, actualScanStatus));
+                Assert.Fail(string.Format("Scan is not '{0}' with an invalid Username and invalid Password! Actual status is '{1}'!", ScanStatus.Failed, actualScanStatus));
             else TestContext.WriteLine(String.Format("Scan with an invalid Username and invalid Password has '{0}' status.", actualScanStatus));
         }
 
@@ -425,7 +427,7 @@ namespace CodedUITestFAT
             try
             {
                 UIHelper.WaitForResultsRow(endpoint, TestContext);
-                Assert.Fail(String.Format("Endpoint '{0}' is shown at 'Valkyrie analysis results' tab after an incorrect search query!", endpoint.Name));
+                Assert.Fail(string.Format("Endpoint '{0}' is shown at 'Valkyrie analysis results' tab after an incorrect search query!", endpoint.Name));
             }
             catch (UITestControlNotFoundException)
             {
@@ -451,7 +453,7 @@ namespace CodedUITestFAT
             try
             {
                 UIHelper.WaitForResultsRow(endpoint, TestContext);
-                Assert.Fail(String.Format("Endpoint '{0}' is shown on 'Scan results' tab after an incorrect search query!", endpoint.Name));
+                Assert.Fail(string.Format("Endpoint '{0}' is shown on 'Scan results' tab after an incorrect search query!", endpoint.Name));
             }
             catch (UITestControlNotFoundException)
             {
@@ -553,7 +555,7 @@ namespace CodedUITestFAT
             WaitForScanCompleted(ScanType.Quick);
             WaitForNoInAnalysis();
             //UIMapScanCompletedWindow.ClickCloseCrossButton();
-            useMain.AssertPanelCountersData(0, 1, 0, TestContext);
+            useMain.AssertPanelCountersData(0, 1, 0);
 
             SysHelper.DisinfectForQuickScan(endpoint, TestContext);
             UnknownFile unknown = SysHelper.AddUnknownFileForScan(endpoint);
@@ -562,7 +564,7 @@ namespace CodedUITestFAT
             WaitForScanCompleted(ScanType.Quick);
             WaitForNoInAnalysis();
             //UIMapScanCompletedWindow.ClickCloseCrossButton();
-            useMain.AssertPanelCountersData(1, 0, 0, TestContext);
+            useMain.AssertPanelCountersData(1, 0, 0);
 
             malware = SysHelper.InfectForScan(endpoint);
             TestContext.WriteLine(String.Format("Malware '{0}' is copied to the endpoint '{1}'.", malware.Name, endpoint.Name));
@@ -570,14 +572,14 @@ namespace CodedUITestFAT
             WaitForScanCompleted(ScanType.Quick);
             WaitForNoInAnalysis();
             //UIMapScanCompletedWindow.ClickCloseCrossButton();
-            useMain.AssertPanelCountersData(1, 1, 0, TestContext);
+            useMain.AssertPanelCountersData(1, 1, 0);
 
             SysHelper.DisinfectForQuickScan(endpoint, TestContext);
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
             WaitForNoInAnalysis();
             //UIMapScanCompletedWindow.ClickCloseCrossButton();
-            useMain.AssertPanelCountersData(0, 0, 0, TestContext);
+            useMain.AssertPanelCountersData(0, 0, 0);
         }
 
         //TODO need to repair
@@ -683,64 +685,70 @@ namespace CodedUITestFAT
             UIMapValkyrieDetailsWindow.ClickCloseButton();
             //UIHelper.WaitForControlIsClickable(StartScanButton());
         }
-
-        //TODO need to repair
+        
         [TestMethod, Timeout(DataHelper.LongTestTimeout)]
         public void CheckValkyrieAnalysisResultsPanelTest()
         {
             CodedUITestMain useMain = new CodedUITestMain();
-            Computer endpoint = DataHelper.GetEndpoint();
+            Computer scanningEndpoint = DataHelper.GetEndpoint();
+            var Results = new ScanResultPage();
 
-            SysHelper.DisinfectForQuickScan(endpoint, TestContext);
-            UnknownFile unknown = SysHelper.AddUnknownFileForScan(endpoint);
-            TestContext.WriteLine(String.Format("Unknown file '{0}' is copied to the endpoint '{1}'.", unknown.Name, endpoint.Name));
-            StartEndpointScan(endpoint, ScanType.Quick, TestContext);
+            SysHelper.DisinfectForQuickScan(scanningEndpoint, TestContext);
+            UnknownFile unknownFile = SysHelper.AddUnknownFileForScan(scanningEndpoint);
+            Log.Success(String.Format("Unknown file '{0}' is copied to the endpoint '{1}'", unknownFile, scanningEndpoint));
+            //Log.Success($"Unknown file '{unknownFile}' is copied to the endpoint '{scanningEndpoint}'");          
+
+
+            StartEndpointScan(scanningEndpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
             WaitForNoInAnalysis();
-            //UIMapScanCompletedWindow.ClickYesButton();
-            //InputCamCredentials(TestContext);
-            useMain.WaitForValkyrieResults(TestContext);
-            UIHelper.ClickRow(endpoint);
-            useMain.AssertPanelCountersData(0, 0, 1, TestContext);
-            UIHelper.WaitForCellContent(ResultsScreen.ValkyrieAnalysis, unknown, Settings.ResultsValkyrie.Default.VerdictCellNumber, ValkyrieVerdict.NoThreatFound.ToUi(),
-                                                                                                                TestContext, Settings.WaitingTime.Default.NoThreatFoundVerdictWaitTime);
-            useMain.AssertPanelCountersData(1, 0, 0, TestContext);
 
-            SysHelper.DisinfectForQuickScan(endpoint, TestContext);
-            unknown = SysHelper.AddUnknownFileForScan(endpoint);
-            TestContext.WriteLine(String.Format("Unknown file '{0}' is copied to the endpoint '{1}'.", unknown.Name, endpoint.Name));
-            Malware malware = SysHelper.InfectForScan(endpoint);
-            TestContext.WriteLine(String.Format("Malware '{0}' is copied to the endpoint '{1}'.", malware.Name, endpoint.Name));
-            StartEndpointScan(endpoint, ScanType.Quick, TestContext);
+            Results.CheckThatTileVisible(TileType.Unknown).
+                CheckThatTileNotVisible(TileType.Malware).
+                ExpandRowWith(scanningEndpoint).
+                CheckThatVerdictFor(unknownFile, Const.isNoThreatFound);
+
+            SysHelper.DisinfectForQuickScan(scanningEndpoint, TestContext);
+            unknownFile = SysHelper.AddUnknownFileForScan(scanningEndpoint);
+            Log.Success(String.Format("Unknown file '{0}' is copied to the endpoint '{1}'", unknownFile, scanningEndpoint));
+            //Log.Success($"Unknown file '{unknownFile}' is copied to the endpoint '{scanningEndpoint}'");
+            Malware malwareFile = SysHelper.InfectForScan(scanningEndpoint);
+            Log.Success(String.Format("Malware file '{0}' is copied to the endpoint '{1}'", malwareFile, scanningEndpoint));
+            //Log.Success($"Malware file '{malwareFile}' is copied to the endpoint '{scanningEndpoint}'");
+          
+            Results.StartNewCustomScan();
+
+            UIMapStartScanWizard.ClickNetworkAddressButton();
+
+            StartEndpointScan(scanningEndpoint, ScanType.Quick, TestContext);
+
             WaitForScanCompleted(ScanType.Quick);
             WaitForNoInAnalysis();
-            //UIMapScanCompletedWindow.ClickYesButton();
-            //InputCamCredentials(TestContext);
-            useMain.WaitForValkyrieResults(TestContext);
-            UIHelper.ClickRow(endpoint);
-            useMain.AssertPanelCountersData(0, 1, 1, TestContext);
-            UIHelper.WaitForCellContent(ResultsScreen.ValkyrieAnalysis, unknown, Settings.ResultsValkyrie.Default.VerdictCellNumber, ValkyrieVerdict.NoThreatFound.ToUi(),
-                                                                                                                TestContext, Settings.WaitingTime.Default.NoThreatFoundVerdictWaitTime);
-            useMain.AssertPanelCountersData(1, 1, 0, TestContext);
+
+            Results.CheckThatTileVisible(TileType.Malware).
+                CheckThatTileVisible(TileType.Unknown).
+                ExpandRowWith(scanningEndpoint).
+                CheckThatVerdictFor(malwareFile, Const.isMalware).
+                CheckThatVerdictFor(unknownFile, Const.isNoThreatFound);
         }
-       
+
         [TestMethod, Timeout(DataHelper.LongTestTimeout)]
         public void CheckAllScanResultsTest()
         {
             Computer endpoint = DataHelper.GetEndpoint();
             SysHelper.DisinfectForQuickScan(endpoint, TestContext);
-            int ResolveEndpointTime = Settings.WaitingTime.Default.EndpointResolvingWaitTime;            
+            int ResolveEndpointTime = Settings.WaitingTime.Default.EndpointResolvingWaitTime;
 
             // Offline endpoint
-            IPAddress offlineIp = SysHelper.FindOfflineIp();            
+            IPAddress offlineIp = SysHelper.FindOfflineIp();
             Computer offlineComputer = new Computer(offlineIp);
 
-            StartEndpointScan(offlineComputer, ScanType.Quick, TestContext);            
+            StartEndpointScan(offlineComputer, ScanType.Quick, TestContext);
             UIHelper.WaitForControlIsEnabled(SearchField(), ResolveEndpointTime);
             UIHelper.WaitForScanStatus(offlineComputer, ScanStatus.NotAccessible, TestContext);
 
-            UIMapResultsWindow.ClickNewCustomScanButton();            
-            UIMapStartScanWizard.ClickNetworkAddressButton();            
+            UIMapResultsWindow.ClickNewCustomScanButton();
+            UIMapStartScanWizard.ClickNetworkAddressButton();
 
             // Failed scan
             StartEndpointScan(ScanType.Quick, DataHelper.Username + "error", DataHelper.Password, TestContext, endpoint);
@@ -748,12 +756,12 @@ namespace CodedUITestFAT
             UIHelper.WaitForScanStatus(endpoint, ScanStatus.Failed, TestContext, ResolveEndpointTime);
 
             UIMapResultsWindow.ClickNewCustomScanButton();
-            UIMapStartScanWizard.ClickNetworkAddressButton();            
+            UIMapStartScanWizard.ClickNetworkAddressButton();
 
             // Completed scan
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
-            UIHelper.WaitForControlIsEnabled(SearchField(), Settings.WaitingTime.Default.QuickScanWaitTime);            
+            UIHelper.WaitForControlIsEnabled(SearchField(), Settings.WaitingTime.Default.QuickScanWaitTime);
             UIHelper.WaitForScanStatus(endpoint, ScanStatus.Completed, TestContext);
         }
 
@@ -774,7 +782,7 @@ namespace CodedUITestFAT
             TestContext.WriteLine("Back to Start Scan Wizard...");
             UIMapStartScanWizard.ClickNetworkAddressButton();
             TestContext.WriteLine("Returned to Network Addresses step...");
-            VerifyAdressListContainsHost(endpoint.Name);           
+            VerifyAdressListContainsHost(endpoint.Name);
             UIMapStartScanWizard.ClickNextButton();
             // Scan Credentials step
             UIHelper.WaitForControl(QuickScanButton());
@@ -791,7 +799,7 @@ namespace CodedUITestFAT
             TestContext.WriteLine(String.Format("Login '{0}' is stored in the respective text box.", DataHelper.Username));
             UIMapStartScanWizard.ClickQuickScanButton();
             TestContext.WriteLine("Quick Scan button clicked...");
-            WaitForScanCompleted(ScanType.Quick);            
+            WaitForScanCompleted(ScanType.Quick);
             UIMapResultsWindow.ClickNewCustomScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanWizard.ClickNetworkAddressButton();
@@ -809,7 +817,7 @@ namespace CodedUITestFAT
             TestContext.WriteLine("Quick Scan button clicked...");
             AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
         }
-        
+
         [TestMethod]
         public void InvalidInputHandlingInNetworkAddressesTest()
         {
@@ -824,7 +832,7 @@ namespace CodedUITestFAT
             UIMapStartScanWizard.ClickNextButton();
             AssertErrorText(Settings.Errors.Default.SpecifyNetworkAddress, TestContext);
             UIMapNetworkAddresses.ClickAddButton();
-            UIMapStartScanWizard.ClickNextButton();           
+            UIMapStartScanWizard.ClickNextButton();
 
             // Login
             UIMapStartScanWizard.ClickQuickScanButton();
@@ -836,6 +844,6 @@ namespace CodedUITestFAT
             UIMapStartScanWizard.ClickQuickScanButton();
             AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
         }
-        #endregion
+        #endregion        
     }
 }

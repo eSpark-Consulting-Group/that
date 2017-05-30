@@ -523,7 +523,19 @@ namespace CodedUITestFAT
         /// <param name="control">Given UI control.</param>        
         internal static bool IsVisible(this UITestControl control)
         {
-            return control.State != ControlStates.Offscreen;
+            //return control.State != ControlStates.Offscreen;
+            return control.TryFind();
+        }
+
+        /// <summary>Checks that control exists for default wit time</summary>
+        /// <param name="control">Given UI control.</param>        
+        internal static bool Exists(this UITestControl control)
+        {
+            int defaultTimeout = Playback.PlaybackSettings.SearchTimeout;
+            Playback.PlaybackSettings.SearchTimeout = Settings.WaitingTime.Default.ExistCheckTimeout;
+            var isExists = control.Exists;
+            Playback.PlaybackSettings.SearchTimeout = defaultTimeout;
+            return isExists;
         }
     }
 }

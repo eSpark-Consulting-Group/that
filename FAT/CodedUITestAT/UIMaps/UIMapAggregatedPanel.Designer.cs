@@ -241,10 +241,28 @@ namespace CodedUITestFAT.UIMaps.UIMapAggregatedPanelClasses
                 return this.mUIViewsMainViewxamlPane;
             }
         }
+        
+        public WpfButton UIIACCEPTButton
+        {
+            get
+            {
+                if ((this.mUIIACCEPTButton == null))
+                {
+                    this.mUIIACCEPTButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIIACCEPTButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "IAcceptButton";
+                    this.mUIIACCEPTButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIIACCEPTButton;
+            }
+        }
         #endregion
         
         #region Fields
         private UIViewsMainViewxamlPane mUIViewsMainViewxamlPane;
+        
+        private WpfButton mUIIACCEPTButton;
         #endregion
     }
     
@@ -342,6 +360,18 @@ namespace CodedUITestFAT.UIMaps.UIMapAggregatedPanelClasses
                 return this.mUIUnknownCounterListItListItem;
             }
         }
+        
+        public UINotAnalyzedCounterLiListItem UINotAnalyzedCounterLiListItem
+        {
+            get
+            {
+                if ((this.mUINotAnalyzedCounterLiListItem == null))
+                {
+                    this.mUINotAnalyzedCounterLiListItem = new UINotAnalyzedCounterLiListItem(this);
+                }
+                return this.mUINotAnalyzedCounterLiListItem;
+            }
+        }
         #endregion
         
         #region Fields
@@ -352,6 +382,8 @@ namespace CodedUITestFAT.UIMaps.UIMapAggregatedPanelClasses
         private UIMalwareCounterListItListItem mUIMalwareCounterListItListItem;
         
         private UIUnknownCounterListItListItem mUIUnknownCounterListItListItem;
+        
+        private UINotAnalyzedCounterLiListItem mUINotAnalyzedCounterLiListItem;
         #endregion
     }
     
@@ -496,6 +528,42 @@ namespace CodedUITestFAT.UIMaps.UIMapAggregatedPanelClasses
         
         #region Fields
         private WpfText mUIItem1009Text;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UINotAnalyzedCounterLiListItem : WpfListItem
+    {
+        
+        public UINotAnalyzedCounterLiListItem(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfListItem.PropertyNames.Name] = "NotAnalyzedCounterListItem";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfText UIItem3017Text
+        {
+            get
+            {
+                if ((this.mUIItem3017Text == null))
+                {
+                    this.mUIItem3017Text = new WpfText(this);
+                    #region Search Criteria
+                    this.mUIItem3017Text.SearchProperties[WpfText.PropertyNames.AutomationId] = "NotAnalyzedFilesCounterTextBlock";
+                    this.mUIItem3017Text.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIItem3017Text;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfText mUIItem3017Text;
         #endregion
     }
 }

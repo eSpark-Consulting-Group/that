@@ -46,6 +46,11 @@ namespace CodedUITestFAT
         /// <summary> A threat Valkyrie verdict. </summary>
         internal abstract ValkyrieVerdict FileValkyrieVerdict { get; }
 
+        public override string ToString()
+        {
+            return Name;
+        }
+
         /// <summary> Represents a general threat. </summary>
         /// <param name="fileLocation">Set a threat location.</param>
         /// <param name="machine">Set a machine, containing the threat. Set null for a computer running the test.</param>

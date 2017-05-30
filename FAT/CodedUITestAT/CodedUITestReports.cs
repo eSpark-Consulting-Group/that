@@ -130,7 +130,7 @@ namespace CodedUITestFAT
         private void CheckReportFile(Report report, TestContext testContext)
         {
             if (report.IsThereReportFile()) testContext.WriteLine(String.Format("Report file '{0}' created after '{1}' exists.", report.FileNamePattern, report.ExpectedCreationTime));
-            else Assert.Fail(String.Format("Report file '{0}' created after '{1}' does not exist!", report.FileNamePattern, report.ExpectedCreationTime));        
+            else Assert.Fail(string.Format("Report file '{0}' created after '{1}' does not exist!", report.FileNamePattern, report.ExpectedCreationTime));        
         }
         
         /// <summary> Generates a report at Main screen and performs a basic report test. After all closes the report. </summary>
@@ -180,7 +180,7 @@ namespace CodedUITestFAT
             
             useMain.UIMapMain.ClickAnalyseWithValkyrieButton();
             //useMain.InputCamCredentials(TestContext);
-            useMain.WaitForValkyrieResults(TestContext);
+            useMain.WaitForValkyrieResults();
 
             BasicReportTest(ReportType.ExecutiveValkyrie, TestContext);
 
@@ -209,7 +209,7 @@ namespace CodedUITestFAT
 
             useMain.UIMapMain.ClickAnalyseWithValkyrieButton();
             //useMain.InputCamCredentials(TestContext);
-            useMain.WaitForValkyrieResults(TestContext);
+            useMain.WaitForValkyrieResults();
             
             BasicReportTest(ReportType.PerDeviceValkyrie, TestContext);
             
@@ -238,7 +238,7 @@ namespace CodedUITestFAT
 
             useMain.UIMapMain.ClickAnalyseWithValkyrieButton();
             //useMain.InputCamCredentials(TestContext);
-            useMain.WaitForValkyrieResults(TestContext);
+            useMain.WaitForValkyrieResults();
 
             BasicReportTest(ReportType.PerProgramValkyrie, TestContext);
 

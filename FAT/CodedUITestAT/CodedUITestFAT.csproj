@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="BusinessObjects\Computers\Computer.cs" />
     <Compile Include="BusinessObjects\Computers\ScanStatus.cs" />
+    <Compile Include="BusinessObjects\Computers\ResultColumns.cs" />
     <Compile Include="BusinessObjects\Files\ValkyrieVerdict.cs" />
     <Compile Include="BusinessObjects\Files\Verdict.cs" />
     <Compile Include="BusinessObjects\Files\Malware.cs" />
@@ -84,6 +85,13 @@
     <Compile Include="BusinessObjects\PortType.cs" />
     <Compile Include="BusinessObjects\Reports\Report.cs" />
     <Compile Include="BusinessObjects\Reports\ReportType.cs" />
+    <Compile Include="PageObjects\DiscoveryPage.cs" />
+    <Compile Include="PageObjects\Grid.cs" />
+    <Compile Include="PageObjects\PreviousScansPage.cs" />
+    <Compile Include="PageObjects\ScanResultPage.cs" />
+    <Compile Include="PageObjects\ScanWizardPage.cs" />
+    <Compile Include="BusinessObjects\Tile.cs" />
+    <Compile Include="BusinessObjects\TileType.cs" />
     <Compile Include="BusinessObjects\ResultsScreen.cs" />
     <Compile Include="BusinessObjects\Computers\ScanType.cs" />
     <Compile Include="BusinessObjects\UIAction.cs" />
@@ -94,7 +102,11 @@
     <Compile Include="CodedUITestNetworkAddresses.cs" />
     <Compile Include="CodedUITestReports.cs" />
     <Compile Include="CodedUITestThisComputer.cs" />
+    <Compile Include="Helpers\Const.cs" />
     <Compile Include="Helpers\DataHelper.cs" />
+    <Compile Include="Helpers\DatagridWrapper.cs" />
+    <Compile Include="Helpers\IDs.cs" />
+    <Compile Include="Helpers\Log.cs" />
     <Compile Include="Helpers\SysHelper.cs" />
     <Compile Include="Helpers\TextHelper.cs" />
     <Compile Include="Helpers\UIHelper.cs" />
@@ -302,7 +314,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="BusinessObjects\Results\" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="7z\7z1604-x64.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
