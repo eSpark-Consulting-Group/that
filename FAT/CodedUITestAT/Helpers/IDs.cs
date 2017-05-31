@@ -13,5 +13,7 @@ namespace CodedUITestFAT.Helpers
         internal const string gridViewID = "PART_GridViewVirtualizingPanel";
         internal const string mainWindowTitle = "Forensic Analysis Tool";
         internal const string mainFrame = "MainFrame";
+        internal const string fullFilePath = "FullFilePath";
+        internal const string computerScanStatus = "ComputerScanStatus";
     }
 }

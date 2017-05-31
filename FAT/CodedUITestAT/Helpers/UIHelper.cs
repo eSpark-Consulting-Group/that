@@ -2,12 +2,14 @@
 using System.IO;
 using System.Linq;
 using System.Drawing;
-using System.Windows.Forms;
 using System.Diagnostics;
+using System.Windows.Forms;
+using CodedUITestFAT.Helpers;
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UITest.Extension;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
+
 
 namespace CodedUITestFAT
 {
@@ -171,16 +173,26 @@ namespace CodedUITestFAT
         /// <param name="row">Set a row.</param>
         internal static string GetRowStatus(this UITestControl row)
         {
-            int statusShift = 1;
-            if (IsGroupedByFiles()) statusShift = 0;
+            string desiredAutomationID;
+            if (IsGroupedByFiles())
+            {
+                desiredAutomationID = IDs.fullFilePath;
+            }
+            else {
+                desiredAutomationID = IDs.computerScanStatus;
+            }
+            var desiredCellElement = new WpfText(row);
+            desiredCellElement.SearchProperties[WpfText.PropertyNames.AutomationId] = desiredAutomationID;
 
-            var cell = row.GetChildren()[1];
-            var cellElement = cell.GetChildren()[0];
-            var text = cellElement.GetChildren()[statusShift];
-
-            return text.Name;
+            UITestControlCollection itemCollection = desiredCellElement.FindMatchingControls();
+                        
+            if (itemCollection.Any())
+            {
+                return itemCollection.First().Name;
+            }
+            return string.Empty;           
         }
-
+              
         /// <summary> Gets a content of given cell in a provided row. </summary>
         /// <param name="row">Set a row.</param>
         /// <param name="cellNumber">Set a cell number.</param>
@@ -518,14 +530,7 @@ namespace CodedUITestFAT
             webPage.Close();
             if (!String.IsNullOrEmpty(error)) Assert.Fail(error);
         }
-
-        /// <summary>Checks whether control is present on UI</summary>
-        /// <param name="control">Given UI control.</param>        
-        internal static bool IsVisible(this UITestControl control)
-        {
-            //return control.State != ControlStates.Offscreen;
-            return control.TryFind();
-        }
+       
 
         /// <summary>Checks that control exists for default wit time</summary>
         /// <param name="control">Given UI control.</param>        

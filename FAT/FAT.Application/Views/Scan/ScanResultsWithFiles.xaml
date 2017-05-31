@@ -67,7 +67,7 @@
                         </Canvas>
 
                         <TextBlock Margin="8,0,0,0" Grid.Column="1" x:Name="txt" Text="{Binding NameAndIpAddress}" FontSize="14"  HorizontalAlignment="Left"/>
-                        <TextBlock Margin="8,0" Text="{Binding ShortName}"  FontSize="13" Grid.Column="2" HorizontalAlignment="Left" TextTrimming="CharacterEllipsis" ToolTip="{Binding ShortName}" />
+                        <TextBlock AutomationProperties.AutomationId="FullFilePath" Margin="8,0" Text="{Binding ShortName}"  FontSize="13" Grid.Column="2" HorizontalAlignment="Left" TextTrimming="CharacterEllipsis" ToolTip="{Binding ShortName}" />
                     </Grid>
                 </DataTemplate>
                 

@@ -121,7 +121,7 @@
 
                         <TextBlock Margin="8,5,0,0" Text="{Binding NameAndIpAddress}" Grid.Column="1" FontSize="14" Foreground="{Binding ElementName=txt, Path=Foreground, Converter={converters:ColorToWhiteConverter}}"/>
 
-                        <TextBlock Margin="8,6,0,8" x:Name="txt" ToolTip="{Binding StatusMessage}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" Grid.Column="2" Text="{Binding StatusMessage}" FontSize="13" />
+                        <TextBlock AutomationProperties.AutomationId="ComputerScanStatus" Margin="8,6,0,8" x:Name="txt" ToolTip="{Binding StatusMessage}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" Grid.Column="2" Text="{Binding StatusMessage}" FontSize="13" />
                     </Grid>
                 </DataTemplate>
                 
