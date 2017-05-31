@@ -74,7 +74,6 @@
   <ItemGroup>
     <Compile Include="BusinessObjects\Computers\Computer.cs" />
     <Compile Include="BusinessObjects\Computers\ScanStatus.cs" />
-    <Compile Include="BusinessObjects\Computers\ResultColumns.cs" />
     <Compile Include="BusinessObjects\Files\ValkyrieVerdict.cs" />
     <Compile Include="BusinessObjects\Files\Verdict.cs" />
     <Compile Include="BusinessObjects\Files\Malware.cs" />
@@ -90,7 +89,6 @@
     <Compile Include="PageObjects\PreviousScansPage.cs" />
     <Compile Include="PageObjects\ScanResultPage.cs" />
     <Compile Include="PageObjects\ScanWizardPage.cs" />
-    <Compile Include="BusinessObjects\Tile.cs" />
     <Compile Include="BusinessObjects\TileType.cs" />
     <Compile Include="BusinessObjects\ResultsScreen.cs" />
     <Compile Include="BusinessObjects\Computers\ScanType.cs" />
@@ -104,7 +102,6 @@
     <Compile Include="CodedUITestThisComputer.cs" />
     <Compile Include="Helpers\Const.cs" />
     <Compile Include="Helpers\DataHelper.cs" />
-    <Compile Include="Helpers\DatagridWrapper.cs" />
     <Compile Include="Helpers\IDs.cs" />
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Helpers\SysHelper.cs" />
