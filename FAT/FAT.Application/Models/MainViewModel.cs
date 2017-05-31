@@ -1569,7 +1569,7 @@ namespace FAT.Application.Models
                 CMCStatisticsMessages<IScanUpdatedRequest>.Send(request =>
                 {
                     request.CountOfNewMaliciousFilesAfterTheScanWasFinished = counterDiff.MalwareDiff;
-                    request.CountOfNewUnknownFilesAfterTheScanWasFinished = counterDiff.UnknownDiff;
+                    request.CountOfNewUnknownFilesAfterTheScanWasFinished = counterDiff.NewUnknownFilesCount;
                 });
             }
 

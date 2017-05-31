@@ -827,7 +827,8 @@ namespace FAT.Application.Models
                                 cleanDiff--;
                                 break;
                         }
-                        anyUpdated = anyUpdated | item.UpdateFileVerdict(verdictContext);
+                        var verdictUpdated = item.UpdateFileVerdict(verdictContext);
+                        anyUpdated = anyUpdated | verdictUpdated;
                         switch (item.FinalVerdict)
                         {
                             case UiFinalVerdict.Clean:
@@ -837,6 +838,8 @@ namespace FAT.Application.Models
                                 inAnalysizDiff++;
                                 break;
                             case UiFinalVerdict.Unknown:
+                                if (verdictUpdated)
+                                    scanCounterDiff.NewUnknownFilesCount++;
                                 unknownDiff++;
                                 break;
                             case UiFinalVerdict.Malware:
