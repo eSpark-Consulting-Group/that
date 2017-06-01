@@ -1564,7 +1564,7 @@ namespace FAT.Application.Models
             }
 
             _scanCounterManager.UpdateCounters(counterDiff);
-            if (IsScanInProgress == false && (counterDiff.MalwareDiff > 0 || counterDiff.UnknownDiff > 0))
+            if (IsScanInProgress == false && (counterDiff.MalwareDiff > 0 || counterDiff.NewUnknownFilesCount > 0))
             {
                 CMCStatisticsMessages<IScanUpdatedRequest>.Send(request =>
                 {

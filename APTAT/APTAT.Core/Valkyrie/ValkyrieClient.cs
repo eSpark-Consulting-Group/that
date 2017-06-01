@@ -699,6 +699,7 @@ namespace APTAT.Core.Valkyrie
                     var ex = new ValkyrieRegistrationFailedException(resp);
                     throw ex;
                 }
+                //Don't remove, This sleep was requested by Fatih
                 using (ManualResetEventSlim manualResetEvent = new ManualResetEventSlim(false))
                 {
                     EventHandler callback = (o, ea) => manualResetEvent?.Set();
