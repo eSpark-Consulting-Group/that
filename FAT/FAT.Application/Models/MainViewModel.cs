@@ -790,6 +790,7 @@ namespace FAT.Application.Models
             GroupEnabled = false;
             IsScanCancelled = false;
             IsScanFailed = false;
+            _IsCustomScan = false;
             IsReportEnabled = false;
             RaisedHasUnknowns = false;
             RaisedHasMalwares = false;
