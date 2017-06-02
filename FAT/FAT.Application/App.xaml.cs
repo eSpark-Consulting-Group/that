@@ -6,6 +6,10 @@ using System.Windows;
 using System.Windows.Threading;
 using APTAT.Common;
 using FAT.Application.Helpers;
+using Microsoft.Win32;
+using System.Reflection;
+using FAT.Application.Attributes;
+using System.Linq;
 
 namespace FAT.Application
 {
@@ -15,6 +19,8 @@ namespace FAT.Application
         private SplashWindow _splash;
         private EULAWindow _eula;
         private bool _initialized;
+        private string _eulaVersion;
+        private string _eulaCurrentVersion;
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -30,7 +36,7 @@ namespace FAT.Application
             {
                 ThreadHelper.Instance.RunOnThread(delegate { (_splash = new SplashWindow()).Show(); });
 
-                var op = ThreadHelper.Instance.RunOnThreadDelayed(delegate 
+                ThreadHelper.Instance.RunOnThread(delegate
                 {
                     Current.Resources.MergedDictionaries.Add(new ResourceDictionary()
                     {
@@ -45,15 +51,26 @@ namespace FAT.Application
                         typeof(DependencyLocator)
                     });
                     CompositionHelper.Instance.Verify();
+                    _initialized = true;
+                });
+
+                ThreadHelper.Instance.RunOnThread(delegate
+                {
+                    _eulaCurrentVersion = typeof(EULAVersionAttribute).Assembly.GetEULAVersionAttribute();
+
+                    using (var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\COMODO\FAT"))
+                    {
+                        if (key != null)
+                            _eulaVersion = key.GetValue("EULAVersion") as string;
+                        else
+                            _eulaVersion = string.Empty;
+                    }
                 });
 
                 var timer = new DispatcherTimer(DispatcherPriority.Normal, Current.Dispatcher);
                 timer.Interval = TimeSpan.FromMilliseconds(1500);
                 timer.Tick += TimerTick;
                 timer.Start();
-
-                op.Completed += DispatcherOperationCompleted;
-                op.Priority = DispatcherPriority.Normal;
 
                 Current.DispatcherUnhandledException += AppDispatcherUnhandledException;
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
@@ -65,7 +82,7 @@ namespace FAT.Application
 
         private void TimerTick(object sender, EventArgs e)
         {
-            if (_initialized)
+            if (_initialized && _eulaVersion != null)
             {
                 if (_eula != null)
                 {
@@ -78,17 +95,22 @@ namespace FAT.Application
                 var window = new MainWindow();
                 window.Loaded += (s, a) =>
                 {
-                    _eula = new EULAWindow();
-                    _eula.Owner = window;
+                    if (!string.Equals(_eulaCurrentVersion, _eulaVersion))
+                    {
+                        _eula = new EULAWindow();
+                        _eula.Owner = window;
+                    }
+                    else
+                    {
+                        (sender as DispatcherTimer).Stop();
+                        _splash?.Dispatcher.Invoke(_splash.Close);
+                        Dispatcher.Yield();
+                        window.CallOnLoaded();
+                    }
                 };
                 window.Show();
                 window.Activate();
             }
-        }
-
-        private void DispatcherOperationCompleted(object sender, EventArgs e)
-        {
-            _initialized = true;
         }
 
         protected override void OnExit(ExitEventArgs e)

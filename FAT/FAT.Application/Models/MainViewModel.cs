@@ -26,6 +26,9 @@ using APTAT.Core.CMC.Request;
 using FAT.Application.Helpers;
 using ReportKind = FAT.Application.Services.ReportKind;
 using static FAT.Application.Messages.AppMessages;
+using Microsoft.Win32;
+using System.Reflection;
+using FAT.Application.Attributes;
 
 namespace FAT.Application.Models
 {
@@ -726,7 +729,7 @@ namespace FAT.Application.Models
 
             CMCStatisticsMessages<IApplicationLaunchedRequest>.Send();
 
-            InvokeLoadInitialData();
+            InvokeLoadInitialData(o == null);
             InvokeStartAutoDiscovery(null);
             
             var name = await TryAction(GetCurrentDomainName());
@@ -737,7 +740,7 @@ namespace FAT.Application.Models
             RaisePropertyChanged(nameof(HasCurrentDomainName));
         }
 
-        private void InvokeLoadInitialData()
+        private void InvokeLoadInitialData(bool saveRegistry)
         {
             ThreadHelper.Instance.RunOnThread(() =>
             {
@@ -758,6 +761,17 @@ namespace FAT.Application.Models
             {
                 _previousScansAvailable = _scanOperationsManager.HasPreviousScans();
                 App.Current?.Dispatcher.Invoke(() => OpenPreviousScansCommand.InvalidateCanExecute());
+            });
+
+            if (saveRegistry)
+            ThreadHelper.Instance.RunOnThread(() =>
+            {
+                using (var key = Registry.LocalMachine.CreateSubKey(@"SOFTWARE\COMODO\FAT"))
+                {
+                    var version = typeof(EULAVersionAttribute).Assembly.GetEULAVersionAttribute();
+                    if (version != null)
+                        key.SetValue("EULAVersion", version);
+                }
             });
         }
 

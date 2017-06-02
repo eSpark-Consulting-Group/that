@@ -135,6 +135,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Attributes\EULAVersionAttribute.cs" />
     <Compile Include="Converters\ColorToWhiteConverter.cs" />
     <Compile Include="Converters\ProgressBarHighlightConverter.cs" />
     <Compile Include="EULAFullWindow.xaml.cs">

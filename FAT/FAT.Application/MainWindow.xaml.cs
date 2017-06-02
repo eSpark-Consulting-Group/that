@@ -12,13 +12,20 @@ namespace FAT.Application
     /// </summary>
     public partial class MainWindow
     {
+        private MainViewModel _model;
+
         public MainWindow()
         {
             InitializeComponent();
 
-            DataContext = CompositionHelper.Instance.Resolve<MainViewModel>();
+            DataContext = _model = CompositionHelper.Instance.Resolve<MainViewModel>();
 
             MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+        }
+
+        public void CallOnLoaded()
+        {
+            _model.OnLoadedCommand.Execute(true);
         }
 
         private void OnCloseClick(object sender, RoutedEventArgs e)
