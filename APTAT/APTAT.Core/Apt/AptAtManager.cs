@@ -400,7 +400,7 @@ namespace APTAT.Core.Apt
                             r.Cloud = item.Cloud;
                             resultsUpdated = true;
                         }
-                        else if (item.IsNotAnalyzed())
+                        else if (item.IsNotAnalyzed() && !r.IsNotAnalyzed())
                         {
                             item.Cloud = r.Cloud;
                             var clone = item.Clone();
