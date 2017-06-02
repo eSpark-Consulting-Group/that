@@ -218,7 +218,7 @@ namespace CodedUITestFAT
             procStartInfo.Arguments = arguments;
             Process proc = Process.Start(procStartInfo);
 
-            Playback.Wait(2000);
+            Playback.Wait(10000);
             if (proc == null) Assert.Fail(String.Format("Process '{0}' was not started!", exeName));
         }
 
