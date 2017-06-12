@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Drawing;
 using System.Diagnostics;
@@ -16,6 +15,21 @@ namespace CodedUITestFAT
     /// <summary> Contains common methods for work with UI. </summary>
     internal static class UIHelper
     {
+        private static CodedUITestCommon uiCommon;
+        internal static CodedUITestCommon UiCommon {
+            get {
+                if (uiCommon != null)
+                {
+                    return uiCommon;
+                }
+                else
+                {
+                    uiCommon = new CodedUITestCommon();
+                    return uiCommon;
+                }
+            }
+        }
+
         /// <summary> Waits for a specific UI control appearance. </summary>
         /// <param name="control">Set a UI control.</param>
         /// <param name="waitForMilliseconds">Set the waiting time in milliseconds or keep default.</param>
@@ -47,7 +61,7 @@ namespace CodedUITestFAT
                 Playback.Wait(500);
             }
             timer.Stop();
-        }
+        }   
 
         /// <summary>Waits for a specified row at a given results screen.</summary>
         /// <param name="rowName">Set a row name.</param>
@@ -55,15 +69,14 @@ namespace CodedUITestFAT
         /// <param name="waitForMilliseconds">Set wait time in milliseconds.</param>
         private static void WaitForResultsRow(string rowName, TestContext testContext, int waitForMilliseconds)
         {
-            UITestControl row = null;
-            CodedUITestMain useMain = new CodedUITestMain();
+            UITestControl row = null;            
             var timer = Stopwatch.StartNew();
             for (;;)
             {
                 Playback.Wait(1000);
 
-                if (IsGroupedByFiles()) row = useMain.ScanResultsByFilesTable().GetRow(rowName);
-                else row = useMain.ScanResultsByComputersTable().GetRow(rowName);
+                if (IsGroupedByFiles()) row = uiCommon.ScanResultsByFilesTable().GetRow(rowName);
+                else row = uiCommon.ScanResultsByComputersTable().GetRow(rowName);
 
                 if (row != null)
                 {
@@ -85,6 +98,12 @@ namespace CodedUITestFAT
             WaitForResultsRow(row.RowName, testContext, waitForMilliseconds);
         }
 
+        /// <summary>Waits for a specified row at a given results screen.</summary>      
+        internal static bool isEulaWasAccepted()
+        {
+            return SysHelper.registryValueExists(Settings.General.Default.RegistryKeyEula, Settings.General.Default.RegistryValueIDEula);
+        }
+
         /// <summary>Waits for a specified row to be absent at a given results screen.</summary>
         /// <param name="rowName">Set a row name.</param>
         /// <param name="resultsScreen">Set results screen.</param>
@@ -92,8 +111,7 @@ namespace CodedUITestFAT
         /// <param name="waitForMilliseconds">Set wait time in milliseconds.</param>
         internal static void WaitForAbsentResultsRow(IRow row, ResultsScreen resultsScreen, TestContext testContext, int waitForMilliseconds = DataHelper.DefaultWaitTime)
         {
-            UITestControl expectedRow = null;
-            CodedUITestMain useMain = new CodedUITestMain();
+            UITestControl expectedRow = null;            
 
             var timer = Stopwatch.StartNew();
             for (;;)
@@ -103,12 +121,12 @@ namespace CodedUITestFAT
                 {
                     case ResultsScreen.ScanResults:
                         {
-                            expectedRow = useMain.ScanResultsTab().GetRow(row.RowName);
+                            expectedRow = uiCommon.ScanResultsTab().GetRow(row.RowName);
                             break;
                         }
                     case ResultsScreen.ValkyrieAnalysis:
                         {
-                            expectedRow = useMain.ValkyrieAnalysisResultsTab().GetRow(row.RowName);
+                            expectedRow = uiCommon.ValkyrieAnalysisResultsTab().GetRow(row.RowName);
                             break;
                         }
                 }
@@ -222,17 +240,16 @@ namespace CodedUITestFAT
         /// <param name="row">Set a row.</param>
         /// <param name="cellNumber">Set a cell number.</param>
         internal static string GetCellContent(ResultsScreen resultsScreen, IRow row, int cellNumber)
-        {
-            CodedUITestMain useMain = new CodedUITestMain();
+        {            
             UITestControl rowControl;
 
             switch (resultsScreen)
             {
                 case ResultsScreen.ScanResults:
-                    rowControl = useMain.ScanResultsTab().GetRow(row.RowName);
+                    rowControl = uiCommon.ScanResultsTab().GetRow(row.RowName);
                     break;
                 case ResultsScreen.ValkyrieAnalysis:
-                    rowControl = useMain.ValkyrieAnalysisResultsTab().GetRow(row.RowName);
+                    rowControl = uiCommon.ValkyrieAnalysisResultsTab().GetRow(row.RowName);
                     break;
                 default: throw new Exception(String.Format("Unexpected results screen '{0}'!", resultsScreen));
             }
@@ -298,16 +315,15 @@ namespace CodedUITestFAT
         /// <param name="endpoint">Set an endpoint.</param>
         internal static ScanStatus GetScanStatus(this Computer endpoint)
         {
-            UITestControl row;
-            CodedUITestMain useMain = new CodedUITestMain();
+            UITestControl row;            
 
             int defaultTimeOut = Playback.PlaybackSettings.SearchTimeout;
             Playback.PlaybackSettings.SearchTimeout = 1000;
 
-            if (useMain.ScanResultsTab().Exists)
-                row = useMain.ScanResultsTab().GetRow(endpoint.RowName);
+            if (uiCommon.ScanResultsTab().Exists)
+                row = uiCommon.ScanResultsTab().GetRow(endpoint.RowName);
             else
-                row = useMain.ScanResultsByComputersTable().GetRow(endpoint.RowName);
+                row = uiCommon.ScanResultsByComputersTable().GetRow(endpoint.RowName);
 
             Playback.PlaybackSettings.SearchTimeout = defaultTimeOut;
             return row.GetScanStatus();
@@ -317,10 +333,9 @@ namespace CodedUITestFAT
         /// <param name="endpoint">Set an endpoint.</param>
         internal static string GetFullScanStatusMessage(this Computer endpoint)
         {
-            UITestControl row;
-            CodedUITestMain useMain = new CodedUITestMain();
-            if (useMain.ScanResultsTab().Exists) row = useMain.ScanResultsTab().GetRow(endpoint.RowName);
-            else row = useMain.ScanResultsByComputersTable().GetRow(endpoint.RowName);
+            UITestControl row;            
+            if (uiCommon.ScanResultsTab().Exists) row = uiCommon.ScanResultsTab().GetRow(endpoint.RowName);
+            else row = uiCommon.ScanResultsByComputersTable().GetRow(endpoint.RowName);
 
             return row.GetRowStatus();
         }
@@ -376,11 +391,10 @@ namespace CodedUITestFAT
         private static void ClickRow(string rowName, MouseClick click)
         {
             WpfText wpfText;
-            UITestControl[] rows;
-            CodedUITestMain useMain = new CodedUITestMain();
+            UITestControl[] rows;            
 
-            if (IsGroupedByFiles()) rows = useMain.ScanResultsByFilesTable().GetRows();
-            else rows = useMain.ScanResultsByComputersTable().GetRows();
+            if (IsGroupedByFiles()) rows = uiCommon.ScanResultsByFilesTable().GetRows();
+            else rows = uiCommon.ScanResultsByComputersTable().GetRows();
 
             foreach (var row in rows)
             {
@@ -412,21 +426,19 @@ namespace CodedUITestFAT
         /// <param name="testContext">Set a current TestContext.</param>
         internal static void FindThreat(Threat threat, TestContext testContext)
         {
-            CodedUITestMain useMain = new CodedUITestMain();
-
             GroupByFiles();
-            useMain.UIMapMain.InputTextToSearchBoxParams.UISearchWatermarkTextBEditSendKeys = threat.Name;
-            useMain.UIMapMain.InputTextToSearchBox();
+            uiCommon.UIMapMain.InputTextToSearchBoxParams.UISearchWatermarkTextBEditSendKeys = threat.Name;
+            uiCommon.UIMapMain.InputTextToSearchBox();
 
             try
             {
                 WaitForResultsRow(threat, testContext);
-                useMain.UIMapMain.ClickClearSearchTextButton();
+                uiCommon.UIMapMain.ClickClearSearchTextButton();
                 GroupByComputers();
             }
             catch (UITestControlNotFoundException)
             {
-                useMain.UIMapMain.ClickClearSearchTextButton();
+                uiCommon.UIMapMain.ClickClearSearchTextButton();
                 GroupByComputers();
                 Assert.Fail(String.Format("Row '{0}' not found at the results screen!", threat.RowName));
             }
@@ -436,23 +448,22 @@ namespace CodedUITestFAT
         /// <param name="row">Set a threat.</param>        
         /// <param name="testContext">Set a current TestContext.</param>
         internal static void VerifyAbsentThreat(Threat threat, TestContext testContext)
-        {
-            CodedUITestMain useMain = new CodedUITestMain();
+        {            
 
             GroupByFiles();
-            useMain.UIMapMain.InputTextToSearchBoxParams.UISearchWatermarkTextBEditSendKeys = threat.Name;
-            useMain.UIMapMain.InputTextToSearchBox();
+            uiCommon.UIMapMain.InputTextToSearchBoxParams.UISearchWatermarkTextBEditSendKeys = threat.Name;
+            uiCommon.UIMapMain.InputTextToSearchBox();
 
             try
             {
                 WaitForResultsRow(threat, testContext);
-                useMain.UIMapMain.ClickClearSearchTextButton();
+                uiCommon.UIMapMain.ClickClearSearchTextButton();
                 GroupByComputers();
                 Assert.Fail(String.Format("Row '{0}' found at the results screen, not expected!", threat.RowName));
             }
             catch (UITestControlNotFoundException)
             {
-                useMain.UIMapMain.ClickClearSearchTextButton();
+                uiCommon.UIMapMain.ClickClearSearchTextButton();
                 GroupByComputers();
                 testContext.WriteLine(String.Format("Row '{0}' not found at the results screen as expected.", threat.RowName));
             }
@@ -461,16 +472,15 @@ namespace CodedUITestFAT
         /// <summary> Determines whether there is a given threat instance at a defined results screen. </summary>
         /// <param name="threat">Set a threat.</param>
         internal static bool IsThereThreatInstance(Threat threat)
-        {
-            CodedUITestMain useMain = new CodedUITestMain();
+        {            
             UITestControl[] rows = null;
 
             GroupByFiles();
-            useMain.UIMapMain.InputTextToSearchBoxParams.UISearchWatermarkTextBEditSendKeys = threat.Name;
-            useMain.UIMapMain.InputTextToSearchBox();
+            uiCommon.UIMapMain.InputTextToSearchBoxParams.UISearchWatermarkTextBEditSendKeys = threat.Name;
+            uiCommon.UIMapMain.InputTextToSearchBox();
 
-            if (IsGroupedByFiles()) rows = useMain.ScanResultsByFilesTable().GetRows();
-            else rows = useMain.ScanResultsByComputersTable().GetRows();
+            if (IsGroupedByFiles()) rows = uiCommon.ScanResultsByFilesTable().GetRows();
+            else rows = uiCommon.ScanResultsByComputersTable().GetRows();
 
             foreach (var row in rows)
             {
@@ -479,14 +489,14 @@ namespace CodedUITestFAT
                     string instanceName = row.GetRowStatus();
                     if (instanceName.ContainsIgnoringCase(threat.Location))
                     {
-                        useMain.UIMapMain.ClickClearSearchTextButton();
+                        uiCommon.UIMapMain.ClickClearSearchTextButton();
                         GroupByComputers();
                         return true;
                     }
                 }
             }
 
-            useMain.UIMapMain.ClickClearSearchTextButton();
+            uiCommon.UIMapMain.ClickClearSearchTextButton();
             GroupByComputers();
             return false;
         }
@@ -494,22 +504,22 @@ namespace CodedUITestFAT
         /// <summary> Switches the results screens to 'Group by Files' view. Starts at Main screen. </summary>
         internal static void GroupByFiles()
         {
-            CodedUITestMain useMain = new CodedUITestMain();
-            useMain.UIMapResultsWindow.ClickGroupByFilesToggleButton();
+            
+            uiCommon.UIMapResultsWindow.ClickGroupByFilesToggleButton();
         }
 
         /// <summary> Switches the results screens to 'Group by Computers' view. Starts at Main screen. </summary>
         internal static void GroupByComputers()
         {
-            CodedUITestMain useMain = new CodedUITestMain();
-            useMain.UIMapResultsWindow.ClickGroupByComputersToggleButton();
+            
+            uiCommon.UIMapResultsWindow.ClickGroupByComputersToggleButton();
         }
 
         /// <summary> Determines whether the results screen data are grouped by files. Starts at the results screen. </summary>        
         internal static bool IsGroupedByFiles()
         {
-            CodedUITestMain useMain = new CodedUITestMain();
-            return useMain.GroupByFilesToggleButton().Pressed;
+            
+            return uiCommon.GroupByFilesToggleButton().Pressed;
         }
 
         /// <summary> Asserts whether a browser window is opened with a given URI and closes the respective window. </summary>

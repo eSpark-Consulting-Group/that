@@ -1,4 +1,4 @@
-﻿namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapActiveDirectoryClasses
+﻿namespace CodedUITestFAT.UIMaps.StartScanningWizard.UIMapActiveDirectoryClasses
 {
     using System;
     using System.Collections.Generic;

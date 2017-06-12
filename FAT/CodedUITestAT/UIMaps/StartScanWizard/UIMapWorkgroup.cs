@@ -1,4 +1,4 @@
-﻿namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapWorkgroupClasses
+﻿namespace CodedUITestFAT.UIMaps.StartScanningWizard.UIMapWorkgroupClasses
 {
     using System;
     using System.Collections.Generic;

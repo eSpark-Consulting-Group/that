@@ -42,7 +42,7 @@
       <Value Profile="(Default)">60000</Value>
     </Setting>
     <Setting Name="LookupInProgressWaitTime" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">600000</Value>
+      <Value Profile="(Default)">1200000</Value>
     </Setting>
     <Setting Name="ExistCheckTimeout" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">3000</Value>

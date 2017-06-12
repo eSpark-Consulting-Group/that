@@ -12,30 +12,30 @@ namespace CodedUITestFAT.BusinessObjects.Results
 
         private Grid grid;
         private WpfCustom screenControl;
-
+        /// <summary>
+        /// Represents a previous scans page
+        /// </summary>
         internal PreviousScansPage()
         {
             this.screenControl = UIMapResultsWindow.UIForensicAnalysisToolWindow.UIViewsScanPreviousScaPane.UIPreviousScansScreenCustom;
             this.grid = new Grid(screenControl);
         }
 
-        internal void ClickRow(int row) {
-            Mouse.Click(grid.GetCellUiControl(row, 0));
+        /// <summary> Clicks the row with specified row id. </summary>
+        /// <param name="rowId">Row id. Part of Automaition id: Row_N</param>        
+        
+        internal void ClickRow(int rowId) {
+            Mouse.Click(grid.GetCellUiControl(rowId, 0));
         }
 
-        internal bool OpenDetailedResult(int row){
-            return grid.ClickCell(row, (int)collumns.Link);
+        /// <summary>
+        /// Clicks on the link in the specific row.
+        /// </summary>
+        /// <param name="rowId">Row id. Part of Automaition id: Row_N</param>
+        /// <returns>Returns true if click was successfull</returns>
+        internal bool OpenDetailedResult(int rowID){
+            return grid.ClickCell(rowID, (int)collumns.Link);
         }
-
-        internal DateTime ScanDate(int row)
-        {
-            string rawDate = grid.GetCellText(row, (int)collumns.Date);
-            return DateTime.Now;
-        }
-        internal string ScanDateString(int row)
-        {
-            string rawDate = grid.GetCellText(row, (int)collumns.Date);
-            return rawDate;
-        }
+        
     }
 }

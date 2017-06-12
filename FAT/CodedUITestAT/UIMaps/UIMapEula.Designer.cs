@@ -8,7 +8,7 @@
 //  </auto-generated>
 // ------------------------------------------------------------------------------
 
-namespace CodedUITestAT.UIMaps.UIMapEulaClasses
+namespace CodedUITestFAT.UIMaps.UIMapEulaClasses
 {
     using System;
     using System.CodeDom.Compiler;

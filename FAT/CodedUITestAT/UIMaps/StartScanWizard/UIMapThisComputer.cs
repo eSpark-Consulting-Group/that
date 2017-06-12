@@ -1,4 +1,4 @@
-﻿namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapThisComputerClasses
+﻿namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapThisComputerClasses
 {
     using System;
     using System.Collections.Generic;

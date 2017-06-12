@@ -14,6 +14,7 @@ using System.DirectoryServices.ActiveDirectory;
 using Microsoft.Win32;
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using CodedUITestFAT._7z;
 
 namespace CodedUITestFAT
 {
@@ -24,26 +25,8 @@ namespace CodedUITestFAT
 
         /// <summary> Starts the application under test. </summary>
         /// <param name="endpoint">Set an endpoint.</param>
-        internal static void StartProduct(Computer endpoint)
+        internal static void StartProduct()
         {
-            if (!DataHelper.IsProductExtracted)
-            {
-                ExtractProduct();
-                DataHelper.IsProductExtracted = true;
-            }
-
-            if (DataHelper.IsFlsStaging() && !DataHelper.IsRedirectedToFlsStaging)
-            {
-                RedirectToFlsStaging(endpoint);
-                DataHelper.IsRedirectedToFlsStaging = true;
-            }
-
-            if (DataHelper.IsValkyrieStaging() && !DataHelper.IsRedirectedToValkyrieStaging)
-            {
-                RedirectToValkyrieStaging();
-                DataHelper.IsRedirectedToValkyrieStaging = true;
-            }
-
             StartProcess(DataHelper.ExtractedProductPath, DataHelper.ProductExeName, String.Empty);
 
             CodedUITestEula useEula = new CodedUITestEula();
@@ -63,34 +46,37 @@ namespace CodedUITestFAT
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary> Check that specific value exist in registry
+        /// <param name="hive_HKLM_or_HKCU"></param>
+        /// <param name="registryRoot"></param>
+        /// <param name="valueName"></param>
+        /// <returns></returns>
+        public static bool registryValueExists(string keyName, string valueName)
+        {            
+            RegistryKey localKey =  RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64);
+            localKey = localKey.OpenSubKey(keyName);
+            return localKey.GetValue(valueName) != null;         
+        }
+
         /// <summary> Extracts the product archive for further testing. </summary>
-        private static void ExtractProduct()
+        internal static void ExtractProduct()
         {
             string pathToZippedFat = Path.Combine(DataHelper.WorkingFolder, DataHelper.ProductExeName);            
             string pathToExtracetdFat = DataHelper.ExtractedProductPath;
-
-            string sevenZArgument = String.Format(@"x {0} -o{1}", pathToZippedFat, pathToExtracetdFat);
-            string sevenZPath;
-
-            // Installs 7z
-            Install7z();
-
-            // Uses 7z to extract the product archive           
-            sevenZPath = Path.Combine(Environment.ExpandEnvironmentVariables("%ProgramFiles%"), Settings.General.Default.SevenZFolder);
-            StartProcess(sevenZPath, Settings.General.Default.SevenZExeName, sevenZArgument);
+            
+            SevenZip.extract(pathToZippedFat, pathToExtracetdFat);
         }
 
         /// <summary> Installs 7-zip at the local machine. </summary>
-        private static void Install7z()
+        internal static void Install7Zip()
         {
-            string workingFolder = DataHelper.WorkingFolder;
-            string argument = @"/S";
-            
-            StartProcess(workingFolder, Settings.General.Default.SevenZInstallerNameX32, argument);
+            SevenZip.install(DataHelper.WorkingFolder, Settings.General.Default.SevenZInstallerNameX32);
         }
 
         /// <summary> Edits the product configuration file and adds Valkyrie and CAM staging servers addresses. </summary>
-        private static void RedirectToValkyrieStaging()
+        internal static void RedirectToValkyrieStaging()
         {
             string configPath = Path.Combine(DataHelper.ExtractedProductPath, Settings.General.Default.ApplicationBinFolder);
 
@@ -100,7 +86,7 @@ namespace CodedUITestFAT
 
         /// <summary> Edits hosts file on the given endpoint and adds FLS staging server address. </summary>
         /// <param name="endpoint">Set an endpoint.</param>
-        private static void RedirectToFlsStaging(Computer endpoint)
+        internal static void RedirectToFlsStaging(Computer endpoint)
         {
             string hostsFilePath = String.Format(@"\\{0}\{1}\{2}", endpoint.Name, DataHelper.GetEndpointRoot(true), Settings.Staging.Default.HostsFile);
             string address = String.Format("{0} {1}", Settings.Staging.Default.FlsStagingIpAddress, Settings.Staging.Default.FlsProductionServerAddress);
@@ -216,10 +202,9 @@ namespace CodedUITestFAT
             var procStartInfo = new ProcessStartInfo(processPath);
             procStartInfo.WorkingDirectory = path;
             procStartInfo.Arguments = arguments;
-            Process proc = Process.Start(procStartInfo);
-
+            Process proc = Process.Start(procStartInfo);            
+            if (proc == null) Assert.Fail(String.Format("Process '{0}' was not started!", exeName));            
             Playback.Wait(10000);
-            if (proc == null) Assert.Fail(String.Format("Process '{0}' was not started!", exeName));
         }
 
         /// <summary> Ends all local processes with a given name. </summary>

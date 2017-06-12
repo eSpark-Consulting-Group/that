@@ -72,6 +72,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="7z\SevenZip.cs" />
     <Compile Include="BusinessObjects\Computers\Computer.cs" />
     <Compile Include="BusinessObjects\Computers\ScanStatus.cs" />
     <Compile Include="BusinessObjects\Files\ValkyrieVerdict.cs" />
@@ -84,6 +85,9 @@
     <Compile Include="BusinessObjects\PortType.cs" />
     <Compile Include="BusinessObjects\Reports\Report.cs" />
     <Compile Include="BusinessObjects\Reports\ReportType.cs" />
+    <Compile Include="CodedUITestActiveDirectory.cs" />
+    <Compile Include="CodedUITestWorkgroup.cs" />
+    <Compile Include="Helpers\Application.cs" />
     <Compile Include="PageObjects\DiscoveryPage.cs" />
     <Compile Include="PageObjects\Grid.cs" />
     <Compile Include="PageObjects\PreviousScansPage.cs" />

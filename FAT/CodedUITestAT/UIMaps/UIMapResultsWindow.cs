@@ -1,4 +1,4 @@
-﻿namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
+﻿namespace CodedUITestFAT.UIMaps.UIMapResultsWindowClasses
 {
     using System;
     using System.Collections.Generic;

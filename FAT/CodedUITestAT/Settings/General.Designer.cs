@@ -204,5 +204,23 @@ namespace CodedUITestFAT.Settings {
                 return ((string)(this["ApplicationBinFolder"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("SOFTWARE\\COMODO\\FAT")]
+        public string RegistryKeyEula {
+            get {
+                return ((string)(this["RegistryKeyEula"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("EULAVersion")]
+        public string RegistryValueIDEula {
+            get {
+                return ((string)(this["RegistryValueIDEula"]));
+            }
+        }
     }
 }

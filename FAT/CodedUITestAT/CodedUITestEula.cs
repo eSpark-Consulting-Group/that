@@ -1,7 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UITesting;
+﻿using CodedUITestFAT.Helpers;
+using CodedUITestFAT.UIMaps.UIMapEulaClasses;
+using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
-using CodedUITestAT.UIMaps.UIMapEulaClasses;
+
 
 namespace CodedUITestFAT
 {
@@ -11,33 +13,15 @@ namespace CodedUITestFAT
     {
         public CodedUITestEula()
         {
-        }
-
-        #region UIMap properties
-
-        /// <summary> UIMap for EULA screen, UIMapEula.uitest. </summary>
-        public UIMapEula UIMapEula
-        {
-            get
-            {
-                if ((this.mapEula == null))
-                {
-                    this.mapEula = new UIMapEula();
-                }
-
-                return this.mapEula;
-            }
-        }
-        private UIMapEula mapEula;
-
-        #endregion
+        }       
 
         #region Initialize and cleanup
 
         [TestInitialize]
         public void ATTestInitialize()
-        {            
-            SysHelper.StartProduct(DataHelper.GetEndpoint());
+        {
+            app = app.Start();
+            WaitForAppIsRunning(app);            
         }
 
         [TestCleanup]
@@ -48,12 +32,7 @@ namespace CodedUITestFAT
 
         #endregion
 
-        #region Control methods
-
-        internal WpfButton IAcceptButton()
-        {
-            return UIMapEula.UIForensicAnalysisToolWindow.UIIACCEPTButton;
-        }
+        #region Control methods              
 
         private WpfControl EulaDocument()
         {
@@ -65,33 +44,33 @@ namespace CodedUITestFAT
         #region Test methods
         
         [TestMethod]
+        [TestCategory("Smoke"), TestCategory("UiDefaults")]
         public void VerifyEulaDefaultsTest()
         {
-            CodedUITestMain useMain = new CodedUITestMain();
-            CodedUITestHelp useHelp = new CodedUITestHelp();
-            Computer endpoint = DataHelper.GetEndpoint();
+            //CodedUITestMain useMain = new CodedUITestMain();
+            CodedUITestHelp useHelp = new CodedUITestHelp();            
                         
             UIMapEula.ClickCancelButton();
-            if (!useMain.MainWindow().Exists) TestContext.WriteLine("The main application window is closed after clicking Cancel button.");
+            if (!MainWindow().Exists) TestContext.WriteLine("The main application window is closed after clicking Cancel button.");
             else Assert.Fail("The main application window is not closed after clicking Cancel button!");
 
-            SysHelper.StartProduct(endpoint);
+            SysHelper.StartProduct();
             UIMapEula.ClickIAcceptButton();
             if (useHelp.HelpButton().IsClickable()) TestContext.WriteLine("The main application window is available after clicking I Accept button.");
             else Assert.Fail("The main application window is not available after clicking I Accept button!");
 
             UIMapMain.ClickCloseButton();
             if (YesDialogButton().IsClickable()) UIMapStopScanWindow.ClickYesButton();
-            SysHelper.StartProduct(endpoint);
+            SysHelper.StartProduct();
             UIMapEula.ClickLicenseAgreementLink();
             UIMapEula.AssertEulaDocument();
             TestContext.WriteLine("EULA document is shown after clicking License Agreement link.");
 
             UIMapEula.ClickCancelButton();
-            if (!useMain.MainWindow().Exists) TestContext.WriteLine("The main application window is closed after clicking Cancel button.");
+            if (!MainWindow().Exists) TestContext.WriteLine("The main application window is closed after clicking Cancel button.");
             else Assert.Fail("The main application window is not closed after clicking Cancel button!");
 
-            SysHelper.StartProduct(endpoint);
+            SysHelper.StartProduct();
             UIMapEula.ClickLicenseAgreementLink();
             UIMapEula.ClickIAcceptButton();
             if (useHelp.HelpButton().IsClickable()) TestContext.WriteLine("The main application window is available after clicking I Accept button.");

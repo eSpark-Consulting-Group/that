@@ -62,5 +62,11 @@
     <Setting Name="ApplicationBinFolder" Type="System.String" Scope="Application">
       <Value Profile="(Default)">bin</Value>
     </Setting>
+    <Setting Name="RegistryKeyEula" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">SOFTWARE\COMODO\FAT</Value>
+    </Setting>
+    <Setting Name="RegistryValueIDEula" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">EULAVersion</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

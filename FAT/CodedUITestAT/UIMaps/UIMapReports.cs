@@ -1,4 +1,4 @@
-﻿namespace CodedUITestAT.UIMaps.UIMapReportsClasses
+﻿namespace CodedUITestFAT.UIMaps.UIMapReportsClasses
 {
     using System;
     using System.Collections.Generic;

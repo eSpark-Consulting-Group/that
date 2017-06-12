@@ -1,4 +1,4 @@
-﻿namespace CodedUITestAT.UIMaps.UIMapDiscoveryClasses
+﻿namespace CodedUITestFAT.UIMaps.UIMapDiscoveryClasses
 {
     using System;
     using System.Collections.Generic;

@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Linq;
-using System.Diagnostics;
+using CodedUITestFAT.Helpers;
 using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
-using CodedUITestFAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses;
-using CodedUITestFAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses;
-
 
 namespace CodedUITestFAT
 {
@@ -17,35 +13,20 @@ namespace CodedUITestFAT
     {
         public CodedUITestMain()
         {
-        }
-
-        #region UIMap properties
-        
-        /// <summary> UIMap for Workgroup Scanning Wizard screen branch, UIMapWorkgroup.uitest. </summary>
-        public UIMapWorkgroup UIMapWorkgroup
-        {
-            get
-            {
-                if ((this.mapWorkgroup == null))
-                {
-                    this.mapWorkgroup = new UIMapWorkgroup();
-                }
-
-                return this.mapWorkgroup;
-            }
-        }
-        private UIMapWorkgroup mapWorkgroup;        
-        #endregion
+        }       
 
         #region Initialize and cleanup
 
         [TestInitialize]
         public void ATTestInitialize()
         {
-            SysHelper.StartProduct(DataHelper.GetEndpoint());
-            
-            CodedUITestEula useEula = new CodedUITestEula();            
-            useEula.UIMapEula.ClickIAcceptButton();            
+            app = app.Start();
+            WaitForAppIsRunning(app);
+
+            if (!UIHelper.isEulaWasAccepted())
+            {
+                UIMapEula.ClickIAcceptButton();
+            }            
         }
         
         [TestCleanup]
@@ -60,39 +41,14 @@ namespace CodedUITestFAT
 
         #endregion
 
-        #region Control methods
+        #region Control methods        
 
-        #region Discovery
-
-        private WpfButton ScanNowButton()
-        {
-            return UIMapDiscovery.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIPleaseWaitProgressBar.UIScanNowButtonButton;
-        }
-
-        private WpfButton CustomScanButton()
-        {
-            return UIMapDiscovery.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UICustomScanButtonButton;
-        }
-
-        private WpfButton StartAutoDiscoveryButton()
-        {
-            return UIMapDiscovery.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIPleaseWaitProgressBar.UIStartAutoDiscoveryBuButton;
-        }
-
-        #endregion
-
-        #region Main screen
-
-        internal WpfWindow MainWindow()
-        {
-            return UIMapMain.UIForensicAnalysisToolWindow;
-        }
+        #region Main screen      
         
         internal WpfButton PreviousScansButton()
         {
             return UIMapMain.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIMainToolBarToolBar.UIPreviousScansButtonButton;
-        }
-       
+        }       
         
         private WpfButton CreateReportDropDownButton()
         {
@@ -102,27 +58,7 @@ namespace CodedUITestFAT
         private WpfButton OptionsButton()
         {
             return UIMapMain.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIMainToolBarToolBar.UICreateReportButton;
-        }
-
-        private WpfButton AnalyzeWithValkyrieButton()
-        {
-            return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIAnalyseWithValkyrieBButton;
-        }
-
-        private WpfButton ReportsDropDownButton()
-        {
-            return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIReportButtonButton;
-        }
-
-        private WpfText MainWindowTitleTextBlock()
-        {
-            return UIMapMain.UIUnknownFileHunterWindow1.UIUnknownFileHunterText;
-        }
-
-        private WpfEdit SearchBox()
-        {
-          return UIMapMain.UIUnknownFileHunterWindow1.UISearchControlCustom.UISearchWatermarkTextBEdit;
-        }
+        }          
 
         private WpfText ComodoOneReferalTextPart1()
         {
@@ -137,73 +73,7 @@ namespace CodedUITestFAT
             return UIMapMain.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIPleaseWaitProgressBar.UITolearnhowComodocanhText;
         }
 
-        #endregion
-
-        #region Start Scan Wizard                
-
-        #region Active Directory
-
-        private WpfTree AdTree()
-        {
-           return UIMapActiveDirectory.UIForensicAnalysisToolWindow.UIActiveDirectoryViewCustom.UIAdTreeTree;
-        }
-
-        private WpfEdit DomainNameTextBox()
-        {
-            return UIMapActiveDirectory.UIForensicAnalysisToolWindow.UIThisCustom.UIDomainNameWatermarkTEdit;
-        }
-
-        #endregion
-
-        #region Network Addresses        
-      
-        #endregion
-
-        #region Workgroup
-
-        private WpfTreeItem WorkgroupTreeItem(string workgroupName)
-        {
-            UIMapWorkgroup.UIForensicAnalysisToolWindow.UIWorkgroupViewCustom.UIWorkgroupTreeTree.UIWorkgroupTreeItem.SearchProperties[WpfTreeItem.PropertyNames.Name]
-                        = workgroupName;
-            return UIMapWorkgroup.UIForensicAnalysisToolWindow.UIWorkgroupViewCustom.UIWorkgroupTreeTree.UIWorkgroupTreeItem;
-        }
-
-        #endregion
-
-        #endregion
-        
-        #region Results window
-
-        internal WpfTabPage ScanResultsTab()
-        {     
-            return UIMapResultsWindow.UIUnknownFileHunterWindow.UIResultsScreenCustom.UIResultsTabControlTabList.UIUnknownfilesTabPage;
-        }
-
-        internal WpfTabPage ValkyrieAnalysisResultsTab()
-        {
-            return UIMapResultsWindow.UIUnknownFileHunterWindow1.UIResultsScreenCustom.UIResultsTabControlTabList.UIValkyrieanalysisresuTabPage;
-        }
-        
-        internal WpfTable ScanResultsByComputersTable()
-        {            
-            return UIMapResultsWindow.UIForensicAnalysisToolWindow.UIScanResultsByComputeCustom.UIRadTreeListViewTable;
-        }
-
-        internal WpfTable ScanResultsByFilesTable()
-        {
-            return UIMapResultsWindow.UIForensicAnalysisToolWindow.UIScanResultsByFilesScCustom.UIRadTreeListViewTable;
-        }
-
-        private WpfText SendingFilesTextBlock()
-        {
-            return UIMapResultsWindow.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UISendingFilesforAnalyProgressBar.UISendingFilesforAnalyText;
-        }
-        private WpfText ResolvingComputersTextBlock()
-        {
-            return UIMapResultsWindow.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UIResolvingComputersProgressBar.UIResolvingComputersText;
-        }
-
-        #endregion
+        #endregion      
 
         #region Details window
 
@@ -299,29 +169,7 @@ namespace CodedUITestFAT
             return unknownFilesNumber + malwaresNumber;
         }
 
-        /// <summary> Asserts the counters values for the bottom panel. </summary>
-        /// <param name="expectedUnknownCount">Set an expected Unknown files counter value.</param>
-        /// <param name="expectedMalwareCount">Set an expected Malicious file counter value.</param>
-        /// <param name="expectedInAnalysisCount">Set an expected In Analysis files counter value.</param>
-        /// <param name="testContext">Set a current TestContext.</param>
-        internal void AssertPanelCountersData(int expectedUnknownCount, int expectedMalwareCount, int expectedInAnalysisCount)
-        {
-            UIMapMain.AssertUnknownFilesCounterTextBlockTextExpectedValues.UIItem0TextDisplayText = expectedUnknownCount.ToString();
-            UIMapMain.AssertUnknownFilesCounterTextBlockText();
-            UIMapMain.AssertMalwaresCounterTextBlockTextExpectedValues.UIItem0Text1DisplayText = expectedMalwareCount.ToString();
-            UIMapMain.AssertMalwaresCounterTextBlockText();
-
-            if (expectedInAnalysisCount == 0)
-            {
-                TestContext.WriteLine(String.Format("The bottom panel shows '{0}' unknown and '{1}' malicious files.", expectedUnknownCount, expectedMalwareCount));
-            }
-            else
-            {
-                UIMapMain.AssertInAnalysisCounterTextBlockTextExpectedValues.UIItem1TextDisplayText = expectedInAnalysisCount.ToString();
-                UIMapMain.AssertInAnalysisCounterTextBlockText();
-                TestContext.WriteLine(String.Format("The bottom panel shows '{0}' Unknown, '{1}' Malicious and '{2}' In Analysis files.", expectedUnknownCount, expectedMalwareCount, expectedInAnalysisCount));
-            }
-        }
+       
 
         /// <summary> Asserts the number of analyzed files at 'Valkyrie analysis results' screen. Starts at the mentioned screen. </summary>
         /// <param name="expectedFilesNumber">Set an expected files number.</param>
@@ -346,128 +194,7 @@ namespace CodedUITestFAT
             else Assert.Fail(String.Format("Actual referral text: \"{0}\" are not equal to expected: \"{1}\"", actualReferaraltext, expectedReferralText));
         }
 
-        /// <summary> Waits until the Valkyrie results are received. </summary>
-        /// <param name="testContext">Set a current TestContext.</param>
-        internal void WaitForValkyrieResults()
-        {
-            int waitTime = Settings.WaitingTime.Default.ValkyrieAnalysisWaitTime;
-            UIHelper.WaitForControl(ValkyrieAnalysisResultsTab(), waitTime);
-            UIHelper.WaitForControlIsEnabled(ValkyrieAnalysisResultsTab(), waitTime);
-            TestContext.WriteLine("'Valkyrie analysis results' tab is enabled...");
-
-            // Waits until the Valkyrie upload progress is completed
-            UIHelper.WaitForControlIsClickable(SendingFilesTextBlock(), waitTime, false);
-            var timer = Stopwatch.StartNew();
-            for (; ; )
-            {
-                Playback.Wait(2000);
-                if (!MainWindowTitleTextBlock().DisplayText.Contains("%"))
-                {
-                    TestContext.WriteLine("Valkyrie upload progress is completed...");
-                    break;
-                }
-                if ((int) timer.ElapsedMilliseconds > waitTime) throw new Exception(String.Format("Valkyrie upload progress is not completed after {0} minutes!", waitTime / 60000));
-            }
-            timer.Stop();
-
-            // CodedUI for some reasons does not detect a tab content without switching/refreshing the tabs
-            UIHelper.GroupByFiles();
-            Playback.Wait(1000);
-            UIHelper.GroupByComputers();
-            
-            // Waits until the results are actually available at UI
-            int treeWaitTime = Settings.WaitingTime.Default.WpfTreeWaitTime;
-            timer.Restart();
-            for (; ; )
-            {
-                Playback.Wait(2000);
-                try
-                {
-                    ValkyrieAnalysisResultsTab().GetRows();
-                    TestContext.WriteLine("Valkyrie results now can be obtained from UI.");
-                    break;
-                }
-                catch (Exception) { }
-                if ((int) timer.ElapsedMilliseconds > treeWaitTime) throw new Exception(String.Format("Valkyrie results cannot be obtained from UI after {0} seconds!", treeWaitTime / 1000));
-            }
-            timer.Stop();
-        }
-               
-        /// <summary> Expands a given row in Active Directory tree. In accordance with DeploymentItem.cs. </summary>
-        /// <param name="rowName">Set a unique row name.</param>
-        private void ExpandAdRow(string rowName)
-        {
-            //UIMapActiveDirectory.UIUnknownFileHunterWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDCdevTreeItem.SearchProperties[WpfTreeItem.PropertyNames.Name] = SysHelper.GetDomainName(true);
-            //UIMapActiveDirectory.UIUnknownFileHunterWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDCdevTreeItem.UIComputersTreeItem.SearchProperties[WpfTreeItem.PropertyNames.Name] = rowName;
-            UIMapActiveDirectory.UIForensicAnalysisToolWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDevTreeItem.SearchProperties[WpfTreeItem.PropertyNames.Name] = SysHelper.GetDomainName(true);
-            UIMapActiveDirectory.UIForensicAnalysisToolWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDevTreeItem.UIComputersTreeItem.SearchProperties[WpfTreeItem.PropertyNames.Name] = rowName;
-
-            UIMapActiveDirectory.ExpandAdRow();            
-        }
-
-        /// <summary> Checks a given row in Active Directory tree. In accordance with DeploymentItem.cs. </summary>
-        /// <param name="rowName">Set a unique row name.</param>
-        private void CheckAdRow(string rowName)
-        {
-            UIMapActiveDirectory.UIForensicAnalysisToolWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDevTreeItem.
-                                                                                            SearchProperties[WpfTreeItem.PropertyNames.Name] = SysHelper.GetDomainName(true);
-            UIMapActiveDirectory.UIForensicAnalysisToolWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDevTreeItem.UIComputersTreeItem.UIALEXCHEWIN7PROTreeItem.
-                                                                                            SearchProperties[WpfTreeItem.PropertyNames.Name] = rowName;           
-            UIMapActiveDirectory.CheckAdRow();
-        }
-
-        private bool IsDomainComputerChecked(Computer endpoint)
-        {            
-            WpfTreeItem domainTreeItem = UIMapActiveDirectory.UIForensicAnalysisToolWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDevTreeItem;            
-            domainTreeItem.SearchProperties[WpfTreeItem.PropertyNames.Name] = SysHelper.GetDomainName(true);
-
-            WpfTreeItem computersTreeItem = domainTreeItem.GetChildren().FirstOrDefault(i => i is WpfTreeItem && i.Name == Settings.General.Default.AdTreeComputersElement) as WpfTreeItem;
-            if (computersTreeItem == null) throw new Exception(String.Format("Tree item '{0}' not found!", Settings.General.Default.AdTreeComputersElement));
-            WpfTreeItem endpointTreeItem = computersTreeItem.GetChildren().FirstOrDefault(i => i is WpfTreeItem && i.Name == endpoint.Name.ToUpper()) as WpfTreeItem;
-            if (endpointTreeItem == null) throw new Exception(String.Format("Tree item '{0}' not found!", endpoint.Name.ToUpper()));
-            WpfCheckBox endpointCheckBox = endpointTreeItem.GetChildren().FirstOrDefault(i => i is WpfCheckBox) as WpfCheckBox;
-
-            return endpointCheckBox.Checked;
-        }
-
-        /// <summary> Waits for a domain computer item in AD tree. </summary>
-        /// <param name="endpoint">Set a computer name.</param>
-        private void WaitForDomainComputer(Computer endpoint)
-        {
-            int waitTime = Settings.WaitingTime.Default.DomainTreeItemExpansionWaitTime;
-
-            var timer = Stopwatch.StartNew();
-            for (;;)
-            {
-                Playback.Wait(2000);
-                try
-                {
-                    IsDomainComputerChecked(endpoint);
-                    break;
-                } catch (Exception){ }
-                if ((int) timer.ElapsedMilliseconds > waitTime)
-                            throw new Exception(String.Format("Domain computer '{0}' is not available at AD tree after {1} seconds!", endpoint.Name, waitTime / 1000));
-            }
-            timer.Stop();
-        }
-
-        /// <summary> Checks a given workgroup in the workgroups tree. </summary>
-        /// <param name="workgroupName">Set a workgroup name.</param>
-        private void CheckWorkgroup(string workgroupName)
-        {
-            UIMapWorkgroup.UIForensicAnalysisToolWindow.UIWorkgroupViewCustom.UIWorkgroupTreeTree.UIWorkgroupTreeItem.SearchProperties[WpfTreeItem.PropertyNames.Name] 
-                        = workgroupName;
-            UIMapWorkgroup.CheckWorkgroup();
-        }
-
-        /// <summary> Determines whether a given workgroup tree item is checked.  </summary>
-        /// <param name="workgroupName">Set a workgroup name.</param>
-        private bool IsWorkgroupChecked(string workgroupName)
-        {
-            WpfTreeItem workgroupItem = WorkgroupTreeItem(workgroupName);
-            WpfCheckBox workgroupCheckBox = workgroupItem.GetChildren().FirstOrDefault(e => e is WpfCheckBox) as WpfCheckBox; // Gets the workgroup tree item checkbox
-            return workgroupCheckBox.Checked;
-        }
+       
        
         /// <summary> Sets a given scan status to the results screen filter. </summary>
         /// <param name="scanStatus">Set scan status.</param>
@@ -497,93 +224,19 @@ namespace CodedUITestFAT
             }
 
             testContext.WriteLine(String.Format("Scan status '{0}' checked at the results screen filter.", scanStatus));
-        }
-        
-        /// <summary> Inputs Domain Name, if necessary. </summary>
-        /// <param name="domainName">Set a domain name to input.</param>
-        private void InputDomainName(string domainName)
-        {
-            WpfEdit domainNameEdit = UIMapActiveDirectory.UIForensicAnalysisToolWindow.UIThisCustom.UIDomainNameWatermarkTEdit;
-            if (domainNameEdit.Text == Settings.General.Default.EmptyWatermarkTextBoxText || domainNameEdit.Text != domainName) domainNameEdit.Text = domainName;
-        }
-
-        /// <summary> Inputs Domain Administrator, if necessary. </summary>
-        /// <param name="domainAdministrator">Set a domain administrator to input.</param>
-        private void InputDomainAdministrator(string domainAdministrator)
-        {
-            WpfEdit domainAdministratorEdit = UIMapActiveDirectory.UIForensicAnalysisToolWindow.UIThisCustom.UIDomainAdministratorWEdit;
-            if (domainAdministratorEdit.Text == Settings.General.Default.EmptyWatermarkTextBoxText || domainAdministratorEdit.Text != domainAdministrator) domainAdministratorEdit.Text = domainAdministrator;
-        }
-
-        /// <summary> Inputs Workgroup, if necessary. </summary>
-        /// <param name="workgroupName">Set a workgroup name to input.</param>
-        private void InputWorkgroup(string workgroupName)
-        {
-            WpfEdit workgroupEdit = UIMapWorkgroup.UIForensicAnalysisToolWindow.UIWorkgroupViewCustom.UIWorkgroupWatermarkTeEdit;            
-            if (workgroupEdit.Text == Settings.General.Default.EmptyWatermarkTextBoxText || workgroupEdit.Text != workgroupName) workgroupEdit.Text = workgroupName;
-        }       
+        }      
+       
+       
+       
 
         #endregion
 
-        #region Test methods        
-
-        [TestMethod, Timeout(DataHelper.LongTestTimeout)]
-        public void WorkgroupQuickScanAndThreatDetailsCheckTest()
-        {
-
-            UIHelper.WaitForControlIsEnabled(SkipDiscoveryButton());
-            UIMapDiscovery.ClickSkipDiscoveryButton();
-
-            UIHelper.WaitForControlIsEnabled(CustomScanButton());
-
-            Computer endpoint = DataHelper.GetEndpoint();
-            string workgroupName = SysHelper.GetWorkgroupName();
-
-            Malware malware = SysHelper.InfectForScan(endpoint);
-            UnknownFile unknownFile = SysHelper.AddUnknownFileForScan(endpoint);
-
-            UIHelper.WaitForControlIsClickable(CustomScanButton());
-            UIMapDiscovery.ClickCustomScanButton();
-
-            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            UIMapStartScanWizard.ClickWorkgroupButton();
-            UIHelper.WaitForControlIsEnabled(NextButton());
-            UIMapWorkgroup.SelectUseKnownWorkgroupRadioButton();            
-            UIMapStartScanWizard.ClickNextButton();
-            UIHelper.WaitForControl(WorkgroupTreeItem(workgroupName), Settings.WaitingTime.Default.WorkgroupDiscoveryWaitTime);
-            UIHelper.WaitForControlIsEnabled(WorkgroupTreeItem(workgroupName));
-            CheckWorkgroup(workgroupName);
-            UIMapStartScanWizard.ClickNextButton();
-            InputScanLogin(DataHelper.Username);
-            InputPassword(DataHelper.Password);
-            UIMapStartScanWizard.ClickQuickScanButton();
-            TestContext.WriteLine(String.Format("Quick Scan started in Workgroup '{0}'...", workgroupName));
-
-            WaitForScanCompleted(ScanType.Quick);
-
-            UIHelper.GroupByFiles();
-            UIHelper.ClickRow(malware);
-            TestContext.WriteLine(String.Format("Malicious file {0} found at the results screen.", malware));
-            UIHelper.ClickRow(unknownFile);
-            TestContext.WriteLine(String.Format("Unknown file {0} found at the results screen.", unknownFile));
-
-            UIHelper.ClickRow(malware, MouseClick.DoubleLeft);
-            UIMapDetailsWindow.AssertThreatNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = malware.Name;
-            UIMapDetailsWindow.AssertThreatNameTextBlockText();
-            TestContext.WriteLine(String.Format("Malicious file name {0} found at threat Details screen.", malware.Name));
-            UIMapDetailsWindow.ClickCloseButton();
-
-            UIHelper.ClickRow(unknownFile, MouseClick.DoubleLeft);
-            UIMapDetailsWindow.AssertThreatNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = unknownFile.Name;
-            UIMapDetailsWindow.AssertThreatNameTextBlockText();
-            TestContext.WriteLine(String.Format("Unknown file name {0} found at threat Details screen.", unknownFile.Name));
-            UIMapDetailsWindow.ClickCloseButton();
-        }
+        #region Test methods 
        
         [TestMethod]
+        [TestCategory("Smoke"), TestCategory("UiDefaults")]
         public void VerifyMainScreenDefaultsTest()
         {
-            CodedUITestHelp useHelp = new CodedUITestHelp();
 
             UIMapMain.ClickResizeButton();
             if (MainWindow().Maximized) TestContext.WriteLine("Main window was successfully maximized using Resize button.");
@@ -610,7 +263,7 @@ namespace CodedUITestFAT
             if (!OptionsButton().Enabled) TestContext.WriteLine("Options button is disabled by default.");
             else Assert.Fail("Options button is enabled by default!");
 
-            if (useHelp.HelpButton().Enabled) TestContext.WriteLine("Help button is enabled by default.");
+            if (HelpButton().Enabled) TestContext.WriteLine("Help button is enabled by default.");
             else Assert.Fail("Help button is disabled by default!");
 
             UIHelper.WaitForControlIsEnabled(SkipDiscoveryButton());
@@ -636,373 +289,8 @@ namespace CodedUITestFAT
             UIMapMain.ClickCloseButton();
             if (!MainWindow().Exists) TestContext.WriteLine("Main window was successfully closed using Close button.");
             else Assert.Fail("Main window was not closed after clicking Close button!");
-        }              
-        
-        [TestMethod, Timeout(DataHelper.LongTestTimeout)]
-        public void AdQuickScanTest()
-        {
-            UIHelper.WaitForControlIsClickable(SkipDiscoveryButton());
-            UIMapDiscovery.ClickSkipDiscoveryButton();
-
-            Computer endpoint = DataHelper.GetEndpoint();
-            string domainName = SysHelper.GetDomainName();
-            Malware malware = SysHelper.InfectForScan(endpoint);
-            UnknownFile unknownFile = SysHelper.AddUnknownFileForScan(endpoint);                     
-
-            UIHelper.WaitForControlIsClickable(CustomScanButton());
-            UIMapDiscovery.ClickCustomScanButton();
-
-            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-
-            UIMapStartScanWizard.ClickActiveDirectoryButton();
-            UIHelper.WaitForControlIsEnabled(NextButton());            
-                                    
-            InputDomainName(domainName);
-            InputDomainAdministrator(DataHelper.Username);
-            InputPassword(DataHelper.Password);
-
-            UIMapStartScanWizard.ClickNextButton();
-
-            UIHelper.WaitForControl(AdTree());
-
-            ExpandAdRow(Settings.General.Default.AdTreeComputersElement);
-            CheckAdRow(endpoint.Name);
-            UIMapStartScanWizard.ClickNextButton();
-
-            UIHelper.WaitForControl(QuickScanButton());
-            UIMapStartScanWizard.ClickQuickScanButton();
-
-            TestContext.WriteLine(String.Format("Quick Scan started at endpoint '{0}' from domain '{1}'...", endpoint.Name, domainName));
-
-            WaitForScanCompleted(ScanType.Quick);
-
-            UIHelper.GroupByFiles();
-            UIHelper.ClickRow(malware);
-            TestContext.WriteLine(String.Format("Malicious file {0} found at the results screen.", malware));
-            UIHelper.ClickRow(unknownFile);
-            TestContext.WriteLine(String.Format("Unknown file {0} found at the results screen.", unknownFile));
-
-            UIHelper.ClickRow(malware, MouseClick.DoubleLeft);
-            UIMapDetailsWindow.AssertThreatNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = malware.Name;
-            UIMapDetailsWindow.AssertThreatNameTextBlockText();
-            TestContext.WriteLine(String.Format("Malicious file name {0} found at threat Details screen.", malware.Name));
-            UIMapDetailsWindow.ClickCloseButton();
-
-            UIHelper.ClickRow(unknownFile, MouseClick.DoubleLeft);
-            UIMapDetailsWindow.AssertThreatNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = unknownFile.Name;
-            UIMapDetailsWindow.AssertThreatNameTextBlockText();
-            TestContext.WriteLine(String.Format("Unknown file name {0} found at threat Details screen.", unknownFile.Name));
-            UIMapDetailsWindow.ClickCloseButton();
         }
-        
-        [TestMethod, Timeout(DataHelper.LongTestTimeout)]
-        public void ScanningWizardNavigationWorkgroupTest()
-        {
-            string workgroupName = SysHelper.GetWorkgroupName();
-
-            UIHelper.WaitForControlIsClickable(SkipDiscoveryButton());
-            UIMapDiscovery.ClickSkipDiscoveryButton();
-
-            SysHelper.DisinfectForQuickScan(DataHelper.GetEndpoint(), TestContext);
-
-            UIHelper.WaitForControlIsClickable(CustomScanButton());
-            UIMapDiscovery.ClickCustomScanButton();
-
-            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            UIMapStartScanWizard.ClickWorkgroupButton();
-            UIHelper.WaitForControlIsEnabled(NextButton());
-
-            // Specify Workgroup step
-            UIMapWorkgroup.SelectUseKnownWorkgroupRadioButton();            
-            UIMapStartScanWizard.ClickBackButton();
-            TestContext.WriteLine("Back to Start Scan Wizard...");
-            UIHelper.WaitForControl(NetworkAddressButton());
-            UIMapStartScanWizard.ClickWorkgroupButton();
-            UIHelper.WaitForControl(NextButton());
-            TestContext.WriteLine("Returned to Specify Workgroup step...");
-            UIMapWorkgroup.AssertWorkgroupTextBoxTextExpectedValues.UIWorkgroupWatermarkTeEditText = workgroupName;
-            UIMapWorkgroup.AssertWorkgroupTextBoxText();
-            TestContext.WriteLine(String.Format("Workgroup name '{0}' is preserved at Specify Workgroup step.", workgroupName));
-            UIMapStartScanWizard.ClickNextButton();
-
-            // Select Computers step
-            UIHelper.WaitForControl(WorkgroupTreeItem(workgroupName), Settings.WaitingTime.Default.WorkgroupDiscoveryWaitTime);
-            UIHelper.WaitForControlIsEnabled(WorkgroupTreeItem(workgroupName));
-            CheckWorkgroup(workgroupName);
-            UIMapStartScanWizard.ClickBackButton();
-            TestContext.WriteLine("Back to Specify Workgroup step...");
-            UIMapStartScanWizard.ClickNextButton();
-            TestContext.WriteLine("Returned to Select Computers step...");
-            UIHelper.WaitForControl(WorkgroupTreeItem(workgroupName));
-            if (IsWorkgroupChecked(workgroupName)) TestContext.WriteLine(String.Format("Workgroup '{0}' is still selected at Select Computers step.", workgroupName));
-            else Assert.Fail(String.Format("Workgroup '{0}' is not selected at Select Computers step!", workgroupName));
-            UIMapStartScanWizard.ClickNextButton();
-
-            // Scan Credentials step
-            UIHelper.WaitForControlIsEnabled(QuickScanButton());
-            InputScanLogin(DataHelper.Username);
-            InputPassword(DataHelper.Password);
-            UIMapStartScanWizard.ClickBackButton();
-            TestContext.WriteLine("Back to Select Computers step...");
-            UIHelper.WaitForControl(NextButton());
-            UIMapStartScanWizard.ClickNextButton();
-            TestContext.WriteLine("Returned to Scan Credentials step...");
-            UIMapWorkgroup.AssertLoginTextBoxTextExpectedValues.UILoginWatermarkTextBoEditText = DataHelper.Username;
-            UIMapWorkgroup.AssertLoginTextBoxText();
-            TestContext.WriteLine(String.Format("Login '{0}' is preserved.", DataHelper.Username));
-            UIMapStartScanWizard.ClickQuickScanButton();
-            TestContext.WriteLine("Quick Scan button clicked...");
-
-            WaitForScanCompleted(ScanType.Quick);
-
-
-            UIMapResultsWindow.ClickNewCustomScanButton();
-            
-            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            UIMapStartScanWizard.ClickWorkgroupButton();
-            UIHelper.WaitForControl(NextButton());
-
-            // Specify Workgroup step after scan
-            TestContext.WriteLine("Returned to Specify Workgroup step after scan...");
-            UIMapWorkgroup.AssertWorkgroupTextBoxTextExpectedValues.UIWorkgroupWatermarkTeEditText = workgroupName;
-            UIMapWorkgroup.AssertWorkgroupTextBoxText();
-            TestContext.WriteLine(String.Format("Workgroup name '{0}' is preserved at Specify Workgroup step.", workgroupName));
-            UIMapStartScanWizard.ClickNextButton();
-
-            // Select Computers step after scan
-            TestContext.WriteLine("Returned to Select Computers step after scan...");
-            UIHelper.WaitForControl(WorkgroupTreeItem(workgroupName), Settings.WaitingTime.Default.WorkgroupDiscoveryWaitTime);
-            UIHelper.WaitForControlIsEnabled(WorkgroupTreeItem(workgroupName));
-            if (!IsWorkgroupChecked(workgroupName)) TestContext.WriteLine(String.Format("Workgroup '{0}' is not selected at Select Computers step.", workgroupName));
-            else Assert.Fail(String.Format("Workgroup '{0}' is still selected at Select Computers step!", workgroupName));
-            CheckWorkgroup(workgroupName);
-            UIMapStartScanWizard.ClickNextButton();
-
-            // Scan Credentials step after scan            
-            TestContext.WriteLine("Returned to Scan Credentials step after scan...");
-            UIMapWorkgroup.AssertLoginTextBoxTextExpectedValues.UILoginWatermarkTextBoEditText = DataHelper.Username;
-            UIMapWorkgroup.AssertLoginTextBoxText();
-            TestContext.WriteLine(String.Format("Login '{0}' is preserved.", DataHelper.Username));
-            UIMapStartScanWizard.ClickQuickScanButton();
-            TestContext.WriteLine("Quick Scan button clicked...");
-            AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
-            UIMapStartScanWizard.ClickCloseScanWizardButton();
-        }
-
-        [TestMethod, Timeout(DataHelper.LongTestTimeout)]
-        public void ScanningWizardNavigationActiveDirectoryTest()
-        {
-            string domainName = SysHelper.GetDomainName();
-            Computer endpoint = DataHelper.GetEndpoint();
-
-            UIHelper.WaitForControlIsClickable(SkipDiscoveryButton());
-            UIMapDiscovery.ClickSkipDiscoveryButton();
-
-            SysHelper.DisinfectForQuickScan(endpoint, TestContext);
-
-            UIHelper.WaitForControlIsClickable(CustomScanButton());
-            UIMapDiscovery.ClickCustomScanButton();
-
-            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            UIMapStartScanWizard.ClickActiveDirectoryButton();
-            UIHelper.WaitForControlIsEnabled(NextButton());
-           
-
-            // Active Directory Credentials step
-            InputDomainName(domainName);
-            InputDomainAdministrator(DataHelper.Username);
-            InputPassword(DataHelper.Password);
-
-            UIMapStartScanWizard.ClickBackButton();
-            TestContext.WriteLine("Back to Start Scan Wizard...");
-            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            UIMapStartScanWizard.ClickActiveDirectoryButton();
-            TestContext.WriteLine("Returned to Active Directory Credentials step...");
-            UIHelper.WaitForControlIsEnabled(NextButton());
-            UIMapActiveDirectory.AssertDomainNameTextBoxTextExpectedValues.UIDomainNameWatermarkTEditText = domainName;
-            UIMapActiveDirectory.AssertDomainNameTextBoxText();
-            TestContext.WriteLine(String.Format("Domain Name '{0}' preserved.", domainName));
-            UIMapActiveDirectory.AssertDomainAdministratorTextBoxTextExpectedValues.UIDomainAdministratorWEditText = DataHelper.Username;
-            UIMapActiveDirectory.AssertDomainAdministratorTextBoxText();
-            TestContext.WriteLine(String.Format("Domain Administrator '{0}' preserved.", DataHelper.Username));
-            UIMapStartScanWizard.ClickNextButton();
-            AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
-            InputPassword(DataHelper.Password);
-            UIMapStartScanWizard.ClickNextButton();
-
-            // Select Computers step
-            UIHelper.WaitForControl(AdTree());
-            ExpandAdRow(Settings.General.Default.AdTreeComputersElement);
-            WaitForDomainComputer(endpoint);
-            CheckAdRow(endpoint.Name);
-            UIMapStartScanWizard.ClickBackButton();
-            TestContext.WriteLine("Back to Active Directory Credentials step...");
-            UIHelper.WaitForControl(DomainNameTextBox());
-            UIMapStartScanWizard.ClickNextButton();
-            TestContext.WriteLine("Returned to Select Computers step...");
-            UIHelper.WaitForControl(AdTree());
-            WaitForDomainComputer(endpoint);
-            if (IsDomainComputerChecked(endpoint)) TestContext.WriteLine(String.Format("Endpoint '{0}' remains checked in AD tree.", endpoint.Name));
-            else Assert.Fail(String.Format("Endpoint '{0}' is no longer checked in AD tree!", endpoint.Name));
-            UIMapStartScanWizard.ClickNextButton();
-
-            // Scan Credentials step
-            UIHelper.WaitForControl(QuickScanButton());
-            UIMapActiveDirectory.AssertLoginTextBoxTextExpectedValues.UILoginWatermarkTextBoEditText = DataHelper.Username;
-            UIMapActiveDirectory.AssertLoginTextBoxText();
-            TestContext.WriteLine(String.Format("Login '{0}' is shown correctly.", DataHelper.Username));
-            UIMapStartScanWizard.ClickBackButton();
-            TestContext.WriteLine("Back to Select Computers step...");
-            UIHelper.WaitForControl(AdTree());
-            UIMapStartScanWizard.ClickNextButton();
-            TestContext.WriteLine("Returned to Scan Credentials step...");
-            UIMapActiveDirectory.AssertLoginTextBoxTextExpectedValues.UILoginWatermarkTextBoEditText = DataHelper.Username;
-            UIMapActiveDirectory.AssertLoginTextBoxText();
-            TestContext.WriteLine(String.Format("Login '{0}' is shown correctly.", DataHelper.Username));
-            UIMapStartScanWizard.ClickQuickScanButton();
-            TestContext.WriteLine("Quick Scan button clicked...");
-
-            WaitForScanCompleted(ScanType.Quick);            
-            TestContext.WriteLine("Scan completed...");            
-
-            UIMapResultsWindow.ClickNewCustomScanButton();
-            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            UIMapStartScanWizard.ClickActiveDirectoryButton();
-            UIHelper.WaitForControlIsClickable(NextButton());
-
-            // Active Directory Credentials step after scan
-            TestContext.WriteLine("Returned to Active Directory Credentials step after scan...");
-            UIMapActiveDirectory.AssertDomainNameTextBoxTextExpectedValues.UIDomainNameWatermarkTEditText = domainName;
-            UIMapActiveDirectory.AssertDomainNameTextBoxText();
-            TestContext.WriteLine(String.Format("Domain Name '{0}' preserved.", domainName));
-            UIMapActiveDirectory.AssertDomainAdministratorTextBoxTextExpectedValues.UIDomainAdministratorWEditText = DataHelper.Username;
-            UIMapActiveDirectory.AssertDomainAdministratorTextBoxText();
-            TestContext.WriteLine(String.Format("Domain Administrator '{0}' preserved.", DataHelper.Username));
-            UIMapStartScanWizard.ClickNextButton();
-            AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
-            InputPassword(DataHelper.Password);
-            UIMapStartScanWizard.ClickNextButton();
-
-            // Select Computers step after scan
-            UIHelper.WaitForControl(AdTree());
-            TestContext.WriteLine("Returned to Select Computers step after scan...");
-            ExpandAdRow(Settings.General.Default.AdTreeComputersElement);
-            WaitForDomainComputer(endpoint);
-            if (!IsDomainComputerChecked(endpoint)) TestContext.WriteLine(String.Format("Endpoint '{0}' is not checked in AD tree.", endpoint.Name));
-            else Assert.Fail(String.Format("Endpoint '{0}' remains checked in AD tree!", endpoint.Name));
-            CheckAdRow(endpoint.Name);
-            UIMapStartScanWizard.ClickNextButton();
-
-            // Scan Credentials step after scan
-            UIHelper.WaitForControl(QuickScanButton());
-            TestContext.WriteLine("Returned to Scan Credentials step after scan...");
-            UIMapActiveDirectory.AssertLoginTextBoxTextExpectedValues.UILoginWatermarkTextBoEditText = DataHelper.Username;
-            UIMapActiveDirectory.AssertLoginTextBoxText();
-            TestContext.WriteLine(String.Format("Login '{0}' is shown correctly.", DataHelper.Username));
-            UIMapStartScanWizard.ClickQuickScanButton();
-            TestContext.WriteLine("Quick Scan button clicked...");
-            WaitForScanCompleted(ScanType.Quick);            
-            TestContext.WriteLine("Scan completed...");
-        }
-        
-        [TestMethod]
-        public void InvalidInputHandlingInWorkgroupTest()
-        {
-            string workgroup = SysHelper.GetWorkgroupName();
-
-            UIHelper.WaitForControlIsClickable(SkipDiscoveryButton());
-            UIMapDiscovery.ClickSkipDiscoveryButton();
-            UIHelper.WaitForControlIsClickable(CustomScanButton());
-            UIMapDiscovery.ClickCustomScanButton();
-            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            UIMapStartScanWizard.ClickWorkgroupButton();
-            UIHelper.WaitForControlIsClickable(NextButton());
-
-            // Workgroup
-            UIMapWorkgroup.SelectUseKnownWorkgroupRadioButton();
-            UIMapWorkgroup.DeleteWorkgroupName();
-            UIMapStartScanWizard.ClickNextButton();
-            AssertErrorText(Settings.Errors.Default.SpecifyWorkgroup, TestContext); 
-            InputWorkgroup(workgroup);
-            UIMapStartScanWizard.ClickNextButton();
-
-            // Workgroup computer
-            UIHelper.WaitForControl(WorkgroupTreeItem(workgroup), Settings.WaitingTime.Default.WorkgroupDiscoveryWaitTime);
-            UIMapStartScanWizard.ClickNextButton();
-            AssertErrorText(Settings.Errors.Default.SpecifyComputer, TestContext);
-            CheckWorkgroup(workgroup);
-            UIMapStartScanWizard.ClickNextButton();
-
-            // Login
-            UIMapStartScanWizard.ClickQuickScanButton();
-            AssertErrorText(Settings.Errors.Default.SpecifyLogin, TestContext);
-            InputScanLogin(DataHelper.Username);
-
-            // Password
-            UIMapStartScanWizard.ClickQuickScanButton();
-            AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
-            InputPassword(DataHelper.Password);
-            UIMapStartScanWizard.ClickBackButton();
-            UIHelper.WaitForControl(NextButton());
-            UIMapStartScanWizard.ClickBackButton();
-
-            // Non-existent workgroup
-            string error = "error";
-            InputWorkgroup(workgroup.Remove(workgroup.Length - error.Length) + error);
-            UIMapStartScanWizard.ClickNextButton();
-            UIHelper.WaitForControlIsClickable(ErrorTextBlock(), Settings.WaitingTime.Default.WorkgroupDiscoveryWaitTime);
-            AssertErrorText(Settings.Errors.Default.WorkgroupNotFound, TestContext);
-        }
-
-        [TestMethod]
-        public void InvalidInputHandlingInActiveDirectoryTest()
-        {
-            string domainName = SysHelper.GetDomainName();
-            Computer endpoint = DataHelper.GetEndpoint();
-
-            UIHelper.WaitForControlIsClickable(SkipDiscoveryButton());
-            UIMapDiscovery.ClickSkipDiscoveryButton();
-            UIHelper.WaitForControlIsClickable(CustomScanButton());
-            UIMapDiscovery.ClickCustomScanButton();
-            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            UIMapStartScanWizard.ClickActiveDirectoryButton();
-            UIHelper.WaitForControlIsClickable(NextButton());
-           
-            // Domain Name
-            UIMapStartScanWizard.ClickNextButton();
-            AssertErrorText(Settings.Errors.Default.SpecifyDomainName, TestContext);            
-            InputDomainName(domainName);
-
-            // Domain Administrator
-            UIMapStartScanWizard.ClickNextButton();
-            AssertErrorText(Settings.Errors.Default.SpecifyDomainAdministrator, TestContext);            
-            InputDomainAdministrator(DataHelper.Username);
-
-            // Password
-            UIMapStartScanWizard.ClickNextButton();
-            AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
-            InputPassword(DataHelper.Password);
-            UIMapStartScanWizard.ClickNextButton();
-
-            // Domain computer
-            UIHelper.WaitForControl(AdTree());
-            UIMapStartScanWizard.ClickNextButton();
-            AssertErrorText(Settings.Errors.Default.SpecifyComputer, TestContext);
-            ExpandAdRow(Settings.General.Default.AdTreeComputersElement);           
-            CheckAdRow(endpoint.Name);
-            UIMapStartScanWizard.ClickNextButton();
-            UIHelper.WaitForControl(QuickScanButton());          
-            UIMapStartScanWizard.ClickBackButton();
-            UIHelper.WaitForControl(NextButton());
-            UIMapStartScanWizard.ClickBackButton();
-
-            // Non-existent domain
-            string nonExistentDomainName = domainName + ".error";
-            InputDomainName(nonExistentDomainName);
-            UIMapStartScanWizard.ClickNextButton();
-            UIHelper.WaitForControlIsClickable(ErrorTextBlock(), Settings.WaitingTime.Default.DomainDiscoveryWaitTime);
-            AssertErrorText(String.Format(Settings.Errors.Default.DomainNotFound, nonExistentDomainName), TestContext);
-        }
+      
         #endregion      
     }
 }

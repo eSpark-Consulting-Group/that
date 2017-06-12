@@ -1,46 +1,90 @@
 ﻿using System;
+using System.Drawing;
 using System.Diagnostics;
-using Microsoft.VisualStudio.TestTools.UITesting;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
+using CodedUITestFAT._7z;
+using CodedUITestFAT.Helpers;
+using CodedUITestFAT.UIMaps.UIMapEulaClasses;
+using CodedUITestFAT.BusinessObjects.Reports;
+using CodedUITestFAT.UIMaps.UIMapHelpClasses;
 using CodedUITestFAT.UIMaps.UIMapMainClasses;
+using CodedUITestFAT.UIMaps.UIMapReportsClasses;
+using Microsoft.VisualStudio.TestTools.UITesting;
 using CodedUITestFAT.UIMaps.UIMapDiscoveryClasses;
-using CodedUITestAT.UIMaps.UIMapStopScanWindowClasses;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CodedUITestFAT.UIMaps.UIMapResultsWindowClasses;
+using CodedUITestFAT.UIMaps.UIMapStopScanWindowClasses;
 using CodedUITestFAT.UIMaps.UIMapAggregatedPanelClasses;
+using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
 using CodedUITestFAT.UIMaps.Details.UIMapDetailsWindowClasses;
-using CodedUITestAT.UIMaps.Details.UIMapValkyrieDetailsWindowClasses;
+using CodedUITestFAT.UIMaps.Details.UIMapValkyrieDetailsWindowClasses;
 using CodedUITestFAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses;
 using CodedUITestFAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses;
 using CodedUITestFAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses;
-using CodedUITestFAT.BusinessObjects.Reports;
-using CodedUITestFAT.Helpers;
 
 namespace CodedUITestFAT
 {
     /// <summary> A common part for scan-related CodedUI classes. </summary>
     [CodedUITest]
-    public abstract class CodedUITestCommon
+    public class CodedUITestCommon
     {
-        //TODO remove to base test class
-        #region 
-        //internal CodedUITestFAT.Helpers.Assert Assert
-        //{
-        //    get
-        //    {
-        //        if ((this.assert == null))
-        //        {
-        //            this.assert = new CodedUITestFAT.Helpers.Assert();
-        //        }
-        //        return this.assert;
-        //    }
-        //}
-        //private CodedUITestFAT.Helpers.Assert assert;
-        #endregion
-
         public CodedUITestCommon()
         {
         }
+
+        public static ApplicationUnderTest app;
+
+        private static CodedUITestCommon instance;
+
+        internal static CodedUITestCommon Instance
+        {
+            get
+            {
+                if (instance != null)
+                {
+                    return instance;
+                }
+                else
+                {
+                    instance = new CodedUITestCommon();
+                    return instance;
+                }
+            }
+        }
+
+        [AssemblyInitialize]
+        public static void AssemblyInit(TestContext testContext)
+        {
+            
+            DataHelper.IsProductExtracted = true;
+
+            if (!SevenZip.isInstalled())
+            {
+                SysHelper.Install7Zip();
+            }
+
+            if (!DataHelper.IsProductExtracted)
+            {
+                SysHelper.ExtractProduct();
+                DataHelper.IsProductExtracted = true;
+            }
+
+            if (DataHelper.IsFlsStaging() && !DataHelper.IsRedirectedToFlsStaging)
+            {
+                SysHelper.RedirectToFlsStaging(DataHelper.GetEndpoint());
+                DataHelper.IsRedirectedToFlsStaging = true;
+            }
+
+            if (DataHelper.IsValkyrieStaging() && !DataHelper.IsRedirectedToValkyrieStaging)
+            {
+                SysHelper.RedirectToValkyrieStaging();
+                DataHelper.IsRedirectedToValkyrieStaging = true;
+            }
+
+            Application.Init(DataHelper.ExtractedProductPath, DataHelper.ProductExeName, DataHelper.ProductProcessName, Settings.General.Default.FATApplicationName,false);
+            
+        }
+
+
 
         #region UIMap properties
 
@@ -58,6 +102,50 @@ namespace CodedUITestFAT
             }
         }
         private UIMapMain mapMain;
+
+        /// <summary> UIMap for EULA screen, UIMapEula.uitest. </summary>
+        public UIMapEula UIMapEula
+        {
+            get
+            {
+                if ((this.mapEula == null))
+                {
+                    this.mapEula = new UIMapEula();
+                }
+
+                return this.mapEula;
+            }
+        }
+        private UIMapEula mapEula;
+
+        /// <summary> UIMap for Help screen, UIMapHelp.uitest. </summary>
+        public UIMapHelp UIMapHelp
+        {
+            get
+            {
+                if ((this.mapHelp == null))
+                {
+                    this.mapHelp = new UIMapHelp();
+                }
+
+                return this.mapHelp;
+            }
+        }
+        private UIMapHelp mapHelp;
+
+        public UIMapReports UIMapReports
+        {
+            get
+            {
+                if ((this.mapReports == null))
+                {
+                    this.mapReports = new UIMapReports();
+                }
+
+                return this.mapReports;
+            }
+        }
+        private UIMapReports mapReports;
 
         /// <summary> UIMap for Network Addresses Scanning Wizard screen branch, UIMapNetworkAddresses.uitest. </summary>
         public UIMapNetworkAddresses UIMapNetworkAddresses
@@ -211,6 +299,21 @@ namespace CodedUITestFAT
 
         #region Control methods
 
+        internal WpfWindow MainWindow()
+        {
+            return UIMapMain.UIForensicAnalysisToolWindow;
+        }
+
+        internal WpfButton HelpButton()
+        {
+            return UIMapHelp.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIMainToolBarToolBar.UIHelpButton;
+        }
+
+        internal WpfButton IAcceptButton()
+        {
+            return UIMapEula.UIForensicAnalysisToolWindow.UIIACCEPTButton;
+        }
+
         #region Results panel
 
         internal WpfText CleanFilesCounterTextBlock()
@@ -235,6 +338,26 @@ namespace CodedUITestFAT
 
         #endregion
 
+        #region Discovery
+
+        internal WpfButton ScanNowButton()
+        {
+            return UIMapDiscovery.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIPleaseWaitProgressBar.UIScanNowButtonButton;
+        }
+
+        internal WpfButton CustomScanButton()
+        {
+            return UIMapDiscovery.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UICustomScanButtonButton;
+        }
+
+        internal WpfButton StartAutoDiscoveryButton()
+        {
+            return UIMapDiscovery.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIPleaseWaitProgressBar.UIStartAutoDiscoveryBuButton;
+        }
+
+
+        #endregion
+
         #region Results screen
 
         internal WpfButton CloseSummaryWindowButton()
@@ -247,9 +370,29 @@ namespace CodedUITestFAT
             return UIMapResultsWindow.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIGroupByFilesToggleBuToggleButton;
         }
 
+        internal WpfTabPage ValkyrieAnalysisResultsTab()
+        {
+            return UIMapResultsWindow.UIUnknownFileHunterWindow1.UIResultsScreenCustom.UIResultsTabControlTabList.UIValkyrieanalysisresuTabPage;
+        }
+
         internal WpfButton DetailedScanResultsButton()
         {
             return UIMapResultsWindow.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIPleaseWaitProgressBar.UIDetailedScanResultsBButton;
+        }
+
+        internal WpfTabPage ScanResultsTab()
+        {
+            return UIMapResultsWindow.UIUnknownFileHunterWindow.UIResultsScreenCustom.UIResultsTabControlTabList.UIUnknownfilesTabPage;
+        }
+
+        internal WpfTable ScanResultsByComputersTable()
+        {
+            return UIMapResultsWindow.UIForensicAnalysisToolWindow.UIScanResultsByComputeCustom.UIRadTreeListViewTable;
+        }
+
+        internal WpfTable ScanResultsByFilesTable()
+        {
+            return UIMapResultsWindow.UIForensicAnalysisToolWindow.UIScanResultsByFilesScCustom.UIRadTreeListViewTable;
         }
 
         #endregion
@@ -277,6 +420,22 @@ namespace CodedUITestFAT
         internal WpfButton ReportsButton()
         {
             return UIMapMain.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIMainToolBarToolBar.UIReportsButton;
+        }
+
+
+        /// <summary>Waits for application starts and UI are interactable.</summary>       
+        internal void WaitForAppIsRunning(ApplicationUnderTest app)
+        {
+            app.WaitForControlCondition((t) =>
+            {
+                var a = t.FriendlyName;
+                Point point;
+                int defaultTime = Playback.PlaybackSettings.WaitForReadyTimeout;
+                Playback.PlaybackSettings.WaitForReadyTimeout = 3000;
+                bool result = IAcceptButton().TryGetClickablePoint(out point) || HelpButton().TryGetClickablePoint(out point);
+                Playback.PlaybackSettings.WaitForReadyTimeout = defaultTime;
+                return result;
+            });
         }
 
         #endregion
@@ -329,7 +488,7 @@ namespace CodedUITestFAT
                     control = UIMapAggregatedPanel.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIAggregatedPanelListBList.UIUnknownCounterListItListItem.UIItem1009Text;
                     break;
                 default:
-                    throw new ArgumentException("Unknown tile type");                    
+                    throw new ArgumentException("Unknown tile type");
             }
             return control;
         }
@@ -427,7 +586,7 @@ namespace CodedUITestFAT
                 testContextInstance = value;
             }
         }
-        private TestContext testContextInstance;      
-        #endregion    
+        private TestContext testContextInstance;
+        #endregion
     }
 }

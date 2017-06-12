@@ -8,7 +8,7 @@
 //  </auto-generated>
 // ------------------------------------------------------------------------------
 
-namespace CodedUITestAT.UIMaps.UIMapReportsClasses
+namespace CodedUITestFAT.UIMaps.UIMapReportsClasses
 {
     using System;
     using System.CodeDom.Compiler;

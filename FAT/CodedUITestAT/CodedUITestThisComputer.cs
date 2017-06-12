@@ -1,12 +1,14 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using CodedUITestFAT.Helpers;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
+using CodedUITestFAT.UIMaps.StartScanWizard.UIMapThisComputerClasses;
 using CodedUITestFAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses;
-using CodedUITestAT.UIMaps.StartScanWizard.UIMapThisComputerClasses;
+
 
 namespace CodedUITestFAT
 {
@@ -42,11 +44,14 @@ namespace CodedUITestFAT
         [TestInitialize]
         public void ATTestInitialize()
         {
-            SysHelper.StartProduct(DataHelper.GetEndpoint());
+            app = app.Start();
+            WaitForAppIsRunning(app);
 
-            CodedUITestEula useEula = new CodedUITestEula();
-            useEula.UIMapEula.ClickIAcceptButton();
-            
+            if (!UIHelper.isEulaWasAccepted())
+            {
+                UIMapEula.ClickIAcceptButton();
+            }
+
             UIHelper.WaitForControlIsEnabled(SkipDiscoveryButton());
             UIMapDiscovery.ClickSkipDiscoveryButton();
             UIMapDiscovery.ClickCustomScanButton();
@@ -179,6 +184,7 @@ namespace CodedUITestFAT
         #region Test methods
 
         [TestMethod]
+        [TestCategory("Smoke")]
         public void ScanDirectoriesHierarchyTest()
         {            
             string fullPath1 = String.Format(@"{0}1\1.1\1.2\1.3\1.4\", DataHelper.GetServerRoot());
@@ -299,6 +305,8 @@ namespace CodedUITestFAT
 
             uncheckedItems.Add(Path.GetDirectoryName(unknown.Location) + @"\"); // Adds an instance from Quick Scan scope
 
+            ApplicationUnderTest test = new ApplicationUnderTest();
+
             // Verifies the expected and unexpected files at 'Scan results' screen            
             foreach (var path in checkedItems)
             {
@@ -323,6 +331,7 @@ namespace CodedUITestFAT
         }
 
         [TestMethod]
+        [TestCategory("Smoke")]
         public void QuickScanOfThisComputerTest()
         {
             Computer endpoint = new Computer();            
@@ -344,6 +353,7 @@ namespace CodedUITestFAT
         }
 
         [TestMethod, Timeout(DataHelper.LongestTestTimeout)]
+        [TestCategory("Full")]
         public void FullScanOfThisComputerTest()
         {
             Computer endpoint = new Computer();

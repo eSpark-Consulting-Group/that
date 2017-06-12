@@ -19,6 +19,9 @@ namespace CodedUITestFAT
     [CodedUITest]
     public sealed class CodedUITestNetworkAddresses : CodedUITestCommon
     {
+
+        
+
         public CodedUITestNetworkAddresses()
         {
         }
@@ -26,19 +29,20 @@ namespace CodedUITestFAT
 
         [TestInitialize]
         public void ATTestInitialize()
-        {
-            SysHelper.StartProduct(DataHelper.GetEndpoint());
+        {           
 
-            CodedUITestEula useEula = new CodedUITestEula();
-            useEula.UIMapEula.ClickIAcceptButton();
+            app = app.Start();
+            WaitForAppIsRunning(app);
+
+            if (!UIHelper.isEulaWasAccepted())
+            {
+                UIMapEula.ClickIAcceptButton();
+            }
 
             UIHelper.WaitForControlIsEnabled(SkipDiscoveryButton());
             UIMapDiscovery.ClickSkipDiscoveryButton();
-            UIMapDiscovery.ClickCustomScanButton();
-            //UIHelper.WaitForControl(NetworkAddressButton());
-            UIMapStartScanWizard.ClickNetworkAddressButton();
-            //UIHelper.WaitForControl(NextButton());
-            //UIHelper.WaitForControlIsEnabled(NextButton());            
+            UIMapDiscovery.ClickCustomScanButton();            
+            UIMapStartScanWizard.ClickNetworkAddressButton();            
         }
 
         [TestCleanup]
@@ -47,6 +51,7 @@ namespace CodedUITestFAT
             Computer endpoint = DataHelper.GetEndpoint();
 
             SysHelper.StopProduct();
+            
             SysHelper.DisinfectForQuickScan(endpoint, TestContext);
             SysHelper.StopScanner(endpoint);
         }
@@ -86,6 +91,30 @@ namespace CodedUITestFAT
         #endregion
 
         #region Local helper methods
+
+        /// <summary> Asserts the counters values for the bottom panel. </summary>
+        /// <param name="expectedUnknownCount">Set an expected Unknown files counter value.</param>
+        /// <param name="expectedMalwareCount">Set an expected Malicious file counter value.</param>
+        /// <param name="expectedInAnalysisCount">Set an expected In Analysis files counter value.</param>
+        /// <param name="testContext">Set a current TestContext.</param>
+        internal void AssertPanelCountersData(int expectedUnknownCount, int expectedMalwareCount, int expectedInAnalysisCount)
+        {
+            UIMapMain.AssertUnknownFilesCounterTextBlockTextExpectedValues.UIItem0TextDisplayText = expectedUnknownCount.ToString();
+            UIMapMain.AssertUnknownFilesCounterTextBlockText();
+            UIMapMain.AssertMalwaresCounterTextBlockTextExpectedValues.UIItem0Text1DisplayText = expectedMalwareCount.ToString();
+            UIMapMain.AssertMalwaresCounterTextBlockText();
+
+            if (expectedInAnalysisCount == 0)
+            {
+                TestContext.WriteLine(String.Format("The bottom panel shows '{0}' unknown and '{1}' malicious files.", expectedUnknownCount, expectedMalwareCount));
+            }
+            else
+            {
+                UIMapMain.AssertInAnalysisCounterTextBlockTextExpectedValues.UIItem1TextDisplayText = expectedInAnalysisCount.ToString();
+                UIMapMain.AssertInAnalysisCounterTextBlockText();
+                TestContext.WriteLine(String.Format("The bottom panel shows '{0}' Unknown, '{1}' Malicious and '{2}' In Analysis files.", expectedUnknownCount, expectedMalwareCount, expectedInAnalysisCount));
+            }
+        }
 
         /// <summary> Starts a scan of a given type at indicated endpoints via Network Addresses branch using set credentials. Starts at Network Addresses. </summary>
         /// <param name="scanType">Set a scan type.</param>
@@ -163,6 +192,7 @@ namespace CodedUITestFAT
         #region Test methods
 
         [TestMethod, Timeout(DataHelper.LongTestTimeout)]
+        [TestCategory("Smoke")]
         public void EndpointQuickScanAndValkyrieUriCheckTest()
         {
             Computer endpoint = DataHelper.GetEndpoint();
@@ -184,6 +214,7 @@ namespace CodedUITestFAT
         }
         
         [TestMethod, Timeout(DataHelper.LongTestTimeout)]
+        [TestCategory("Smoke")]
         public void QuickScanOfIpRangeTest()
         {
             Computer endpoint = DataHelper.GetEndpoint();
@@ -545,7 +576,7 @@ namespace CodedUITestFAT
         [TestMethod]
         public void CheckScanResultPanelTest()
         {
-            CodedUITestMain useMain = new CodedUITestMain();
+            //CodedUITestMain useMain = new CodedUITestMain();
             Computer endpoint = DataHelper.GetEndpoint();
 
             SysHelper.DisinfectForQuickScan(endpoint, TestContext);
@@ -555,7 +586,7 @@ namespace CodedUITestFAT
             WaitForScanCompleted(ScanType.Quick);
             WaitForNoInAnalysis();
             //UIMapScanCompletedWindow.ClickCloseCrossButton();
-            useMain.AssertPanelCountersData(0, 1, 0);
+            AssertPanelCountersData(0, 1, 0);
 
             SysHelper.DisinfectForQuickScan(endpoint, TestContext);
             UnknownFile unknown = SysHelper.AddUnknownFileForScan(endpoint);
@@ -564,7 +595,7 @@ namespace CodedUITestFAT
             WaitForScanCompleted(ScanType.Quick);
             WaitForNoInAnalysis();
             //UIMapScanCompletedWindow.ClickCloseCrossButton();
-            useMain.AssertPanelCountersData(1, 0, 0);
+            AssertPanelCountersData(1, 0, 0);
 
             malware = SysHelper.InfectForScan(endpoint);
             TestContext.WriteLine(String.Format("Malware '{0}' is copied to the endpoint '{1}'.", malware.Name, endpoint.Name));
@@ -572,14 +603,14 @@ namespace CodedUITestFAT
             WaitForScanCompleted(ScanType.Quick);
             WaitForNoInAnalysis();
             //UIMapScanCompletedWindow.ClickCloseCrossButton();
-            useMain.AssertPanelCountersData(1, 1, 0);
+            AssertPanelCountersData(1, 1, 0);
 
             SysHelper.DisinfectForQuickScan(endpoint, TestContext);
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
             WaitForNoInAnalysis();
             //UIMapScanCompletedWindow.ClickCloseCrossButton();
-            useMain.AssertPanelCountersData(0, 0, 0);
+            AssertPanelCountersData(0, 0, 0);
         }
 
         //TODO need to repair
@@ -688,8 +719,7 @@ namespace CodedUITestFAT
         
         [TestMethod, Timeout(DataHelper.LongTestTimeout)]
         public void CheckValkyrieAnalysisResultsPanelTest()
-        {
-            CodedUITestMain useMain = new CodedUITestMain();
+        {            
             Computer scanningEndpoint = DataHelper.GetEndpoint();
             var Results = new ScanResultPage();
 
@@ -703,7 +733,8 @@ namespace CodedUITestFAT
             WaitForScanCompleted(ScanType.Quick);
             WaitForNoInAnalysis();
 
-            Results.CheckThatTileVisible(TileType.Unknown).
+            Results.
+                CheckThatTileVisible(TileType.Unknown).
                 CheckThatTileNotVisible(TileType.Malware).
                 ExpandRowWith(scanningEndpoint).
                 CheckThatVerdictFor(unknownFile, Const.isNoThreatFound);
@@ -725,7 +756,8 @@ namespace CodedUITestFAT
             WaitForScanCompleted(ScanType.Quick);
             WaitForNoInAnalysis();
 
-            Results.CheckThatTileVisible(TileType.Malware).
+            Results.
+                CheckThatTileVisible(TileType.Malware).
                 CheckThatTileVisible(TileType.Unknown).
                 ExpandRowWith(scanningEndpoint).
                 CheckThatVerdictFor(malwareFile, Const.isMalware).
@@ -733,6 +765,7 @@ namespace CodedUITestFAT
         }
 
         [TestMethod, Timeout(DataHelper.LongTestTimeout)]
+        [TestCategory("Smoke")]
         public void CheckAllScanResultsTest()
         {
             Computer endpoint = DataHelper.GetEndpoint();
@@ -766,6 +799,7 @@ namespace CodedUITestFAT
         }
 
         [TestMethod, Timeout(DataHelper.LongTestTimeout)]
+        [TestCategory("Smoke"), TestCategory("UiDefaults")]
         public void ScanningWizardNavigationNetworkAddressesTest()
         {
             Computer endpoint = DataHelper.GetEndpoint();
@@ -819,6 +853,7 @@ namespace CodedUITestFAT
         }
 
         [TestMethod]
+        [TestCategory("Smoke"), TestCategory("UiDefaults")]
         public void InvalidInputHandlingInNetworkAddressesTest()
         {
             Computer endpoint = DataHelper.GetEndpoint();

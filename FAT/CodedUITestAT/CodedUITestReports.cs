@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
+using CodedUITestFAT.Helpers;
+using CodedUITestFAT.UIMaps.UIMapReportsClasses;
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
-using CodedUITestAT.UIMaps.UIMapReportsClasses;
+
 
 namespace CodedUITestFAT
 {
@@ -13,36 +15,20 @@ namespace CodedUITestFAT
     {
         public CodedUITestReports()
         {
-        }
-
-        #region UIMap properties
-
-        public UIMapReports UIMapReports
-        {
-            get
-            {
-                if ((this.mapReports == null))
-                {
-                    this.mapReports = new UIMapReports();
-                }
-
-                return this.mapReports;
-            }
-        }
-        private UIMapReports mapReports;
-
-        #endregion
+        }        
 
         #region Initialize and cleanup
 
         [TestInitialize]
         public void ATTestInitialize()
         {
-            SysHelper.StartProduct(DataHelper.GetEndpoint());
+            app = app.Start();
+            WaitForAppIsRunning(app);
 
-            CodedUITestEula useEula = new CodedUITestEula();
-            CodedUITestMain useMain = new CodedUITestMain();
-            useEula.UIMapEula.ClickIAcceptButton();
+            if (!UIHelper.isEulaWasAccepted())
+            {
+                UIMapEula.ClickIAcceptButton();
+            }           
 
             UIHelper.WaitForControlIsEnabled(SkipDiscoveryButton());
             UIMapDiscovery.ClickSkipDiscoveryButton();
@@ -65,7 +51,17 @@ namespace CodedUITestFAT
         private WpfButton ShowInFolderButton()
         {
             return UIMapReports.UIUnknownFileHunterWindow.UIReportWindowCustom.UIRadToolBarToolBar1.UISystemWindowsControlButton;
-        }        
+        }
+
+        private WpfText SendingFilesTextBlock()
+        {
+            return UIMapResultsWindow.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UISendingFilesforAnalyProgressBar.UISendingFilesforAnalyText;
+        }
+
+        private WpfText MainWindowTitleTextBlock()
+        {
+            return UIMapMain.UIUnknownFileHunterWindow1.UIUnknownFileHunterText;
+        }
 
         #endregion
 
@@ -153,7 +149,54 @@ namespace CodedUITestFAT
             */
             UIMapReports.ClickCloseReportButton();
         }
-        
+
+        /// <summary> Waits until the Valkyrie results are received. </summary>
+        /// <param name="testContext">Set a current TestContext.</param>
+        internal void WaitForValkyrieResults()
+        {
+            int waitTime = Settings.WaitingTime.Default.ValkyrieAnalysisWaitTime;
+            UIHelper.WaitForControl(ValkyrieAnalysisResultsTab(), waitTime);
+            UIHelper.WaitForControlIsEnabled(ValkyrieAnalysisResultsTab(), waitTime);
+            TestContext.WriteLine("'Valkyrie analysis results' tab is enabled...");
+
+            // Waits until the Valkyrie upload progress is completed
+            UIHelper.WaitForControlIsClickable(SendingFilesTextBlock(), waitTime, false);
+            var timer = Stopwatch.StartNew();
+            for (;;)
+            {
+                Playback.Wait(2000);
+                if (!MainWindowTitleTextBlock().DisplayText.Contains("%"))
+                {
+                    TestContext.WriteLine("Valkyrie upload progress is completed...");
+                    break;
+                }
+                if ((int)timer.ElapsedMilliseconds > waitTime) throw new Exception(String.Format("Valkyrie upload progress is not completed after {0} minutes!", waitTime / 60000));
+            }
+            timer.Stop();
+
+            // CodedUI for some reasons does not detect a tab content without switching/refreshing the tabs
+            UIHelper.GroupByFiles();
+            Playback.Wait(1000);
+            UIHelper.GroupByComputers();
+
+            // Waits until the results are actually available at UI
+            int treeWaitTime = Settings.WaitingTime.Default.WpfTreeWaitTime;
+            timer.Restart();
+            for (;;)
+            {
+                Playback.Wait(2000);
+                try
+                {
+                    ValkyrieAnalysisResultsTab().GetRows();
+                    TestContext.WriteLine("Valkyrie results now can be obtained from UI.");
+                    break;
+                }
+                catch (Exception) { }
+                if ((int)timer.ElapsedMilliseconds > treeWaitTime) throw new Exception(String.Format("Valkyrie results cannot be obtained from UI after {0} seconds!", treeWaitTime / 1000));
+            }
+            timer.Stop();
+        }
+
         #endregion
 
         #region Test methods
@@ -163,8 +206,7 @@ namespace CodedUITestFAT
         {
             Computer endpoint = DataHelper.GetEndpoint();
             SysHelper.InfectForScan(endpoint);
-            SysHelper.AddUnknownFileForScan(endpoint);
-            CodedUITestMain useMain = new CodedUITestMain();
+            SysHelper.AddUnknownFileForScan(endpoint);            
             CodedUITestNetworkAddresses useNetworkAddresses = new CodedUITestNetworkAddresses();
 
             UIMapDiscovery.ClickCustomScanButton();
@@ -174,13 +216,13 @@ namespace CodedUITestFAT
 
             useNetworkAddresses.StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
-            //useMain.UIMapScanCompletedWindow.ClickNoButton();
+            //UIMapScanCompletedWindow.ClickNoButton();
 
             BasicReportTest(ReportType.Executive, TestContext);
             
-            useMain.UIMapMain.ClickAnalyseWithValkyrieButton();
-            //useMain.InputCamCredentials(TestContext);
-            useMain.WaitForValkyrieResults();
+            UIMapMain.ClickAnalyseWithValkyrieButton();
+            //InputCamCredentials(TestContext);
+            WaitForValkyrieResults();
 
             BasicReportTest(ReportType.ExecutiveValkyrie, TestContext);
 
@@ -192,8 +234,7 @@ namespace CodedUITestFAT
         {
             Computer endpoint = DataHelper.GetEndpoint();
             SysHelper.InfectForScan(endpoint);
-            SysHelper.AddUnknownFileForScan(endpoint);
-            CodedUITestMain useMain = new CodedUITestMain();
+            SysHelper.AddUnknownFileForScan(endpoint);            
             CodedUITestNetworkAddresses useNetworkAddresses = new CodedUITestNetworkAddresses();
 
             UIMapDiscovery.ClickCustomScanButton();
@@ -202,14 +243,14 @@ namespace CodedUITestFAT
             UIHelper.WaitForControlIsEnabled(NextButton());
 
             useNetworkAddresses.StartEndpointScan(endpoint, ScanType.Quick, TestContext);
-            useMain.WaitForScanCompleted(ScanType.Quick);
+            WaitForScanCompleted(ScanType.Quick);
             //useMain.UIMapScanCompletedWindow.ClickNoButton();
 
             BasicReportTest(ReportType.PerDevice, TestContext);
 
-            useMain.UIMapMain.ClickAnalyseWithValkyrieButton();
+            UIMapMain.ClickAnalyseWithValkyrieButton();
             //useMain.InputCamCredentials(TestContext);
-            useMain.WaitForValkyrieResults();
+            WaitForValkyrieResults();
             
             BasicReportTest(ReportType.PerDeviceValkyrie, TestContext);
             
@@ -221,8 +262,7 @@ namespace CodedUITestFAT
         {
             Computer endpoint = DataHelper.GetEndpoint();
             SysHelper.InfectForScan(endpoint);
-            SysHelper.AddUnknownFileForScan(endpoint);
-            CodedUITestMain useMain = new CodedUITestMain();
+            SysHelper.AddUnknownFileForScan(endpoint);            
             CodedUITestNetworkAddresses useNetworkAddresses = new CodedUITestNetworkAddresses();
 
             UIMapDiscovery.ClickCustomScanButton();
@@ -231,14 +271,14 @@ namespace CodedUITestFAT
             UIHelper.WaitForControlIsEnabled(NextButton());
 
             useNetworkAddresses.StartEndpointScan(endpoint, ScanType.Quick, TestContext);
-            useMain.WaitForScanCompleted(ScanType.Quick);
+            WaitForScanCompleted(ScanType.Quick);
             //useMain.UIMapScanCompletedWindow.ClickNoButton();
 
             BasicReportTest(ReportType.PerProgram, TestContext);
 
-            useMain.UIMapMain.ClickAnalyseWithValkyrieButton();
+            UIMapMain.ClickAnalyseWithValkyrieButton();
             //useMain.InputCamCredentials(TestContext);
-            useMain.WaitForValkyrieResults();
+            WaitForValkyrieResults();
 
             BasicReportTest(ReportType.PerProgramValkyrie, TestContext);
 

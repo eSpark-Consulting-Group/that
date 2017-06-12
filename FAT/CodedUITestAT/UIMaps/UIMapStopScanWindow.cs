@@ -1,4 +1,4 @@
-﻿namespace CodedUITestAT.UIMaps.UIMapStopScanWindowClasses
+﻿namespace CodedUITestFAT.UIMaps.UIMapStopScanWindowClasses
 {
     using System;
     using System.Collections.Generic;

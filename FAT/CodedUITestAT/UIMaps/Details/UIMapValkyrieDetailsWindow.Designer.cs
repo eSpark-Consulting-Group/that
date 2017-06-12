@@ -8,7 +8,7 @@
 //  </auto-generated>
 // ------------------------------------------------------------------------------
 
-namespace CodedUITestAT.UIMaps.Details.UIMapValkyrieDetailsWindowClasses
+namespace CodedUITestFAT.UIMaps.Details.UIMapValkyrieDetailsWindowClasses
 {
     using System;
     using System.CodeDom.Compiler;

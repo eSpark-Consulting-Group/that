@@ -1,4 +1,4 @@
-﻿namespace CodedUITestAT.UIMaps.UIMapStartScanningWizardClasses
+﻿namespace CodedUITestFAT.UIMaps.UIMapStartScanningWizardClasses
 {
     using System;
     using System.Collections.Generic;

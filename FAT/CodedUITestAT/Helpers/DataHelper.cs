@@ -46,6 +46,9 @@ namespace CodedUITestFAT
         /// <summary> The product executable name. </summary>
         internal static readonly string ProductExeName;
 
+        /// <summary> The product process name. </summary>
+        internal static readonly string ProductProcessName;
+
         /// <summary> Working folder. </summary>
         internal static readonly string WorkingFolder;
 
@@ -59,7 +62,8 @@ namespace CodedUITestFAT
             EncryptedPassword = Playback.EncryptText(Password);
             ProductExeName = Environment.GetEnvironmentVariable("_ProductExeName", EnvironmentVariableTarget.Machine);
             WorkingFolder = Environment.GetEnvironmentVariable("_TargetDir", EnvironmentVariableTarget.Machine);
-            ExtractedProductPath = Path.Combine(WorkingFolder, ProductExeName.WithoutExtension());            
+            ExtractedProductPath = Path.Combine(WorkingFolder, ProductExeName.WithoutExtension());
+            ProductProcessName = ProductExeName.WithoutExtension();
         }
         /// <summary> Determines whether the autotests will run using FLS staging server. Gets the data from a local environment variable. </summary>
         internal static bool IsFlsStaging()

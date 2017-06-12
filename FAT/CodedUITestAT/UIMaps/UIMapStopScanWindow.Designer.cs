@@ -8,7 +8,7 @@
 //  </auto-generated>
 // ------------------------------------------------------------------------------
 
-namespace CodedUITestAT.UIMaps.UIMapStopScanWindowClasses
+namespace CodedUITestFAT.UIMaps.UIMapStopScanWindowClasses
 {
     using System;
     using System.CodeDom.Compiler;

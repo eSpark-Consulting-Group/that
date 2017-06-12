@@ -1,8 +1,9 @@
 ﻿using System;
+using CodedUITestFAT.Helpers;
+using CodedUITestFAT.UIMaps.UIMapHelpClasses;
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
-using CodedUITestAT.UIMaps.UIMapHelpClasses;
 
 namespace CodedUITestFAT
 {
@@ -12,36 +13,20 @@ namespace CodedUITestFAT
     {
         public CodedUITestHelp()
         {
-        }
-
-        #region UIMap properties
-
-        /// <summary> UIMap for Help screen, UIMapHelp.uitest. </summary>
-        public UIMapHelp UIMapHelp
-        {
-            get
-            {
-                if ((this.mapHelp == null))
-                {
-                    this.mapHelp = new UIMapHelp();
-                }
-
-                return this.mapHelp;
-            }
-        }
-        private UIMapHelp mapHelp;
-
-        #endregion
+        }     
 
         #region Initialize and cleanup
 
         [TestInitialize]
         public void ATTestInitialize()
         {
-            SysHelper.StartProduct(DataHelper.GetEndpoint());
+            app = app.Start();
+            WaitForAppIsRunning(app);
 
-            CodedUITestEula useEula = new CodedUITestEula();            
-            useEula.UIMapEula.ClickIAcceptButton();
+            if (!UIHelper.isEulaWasAccepted())
+            {
+                UIMapEula.ClickIAcceptButton();
+            }           
 
             UIHelper.WaitForControl(HelpButton());
             UIHelper.WaitForControlIsEnabled(HelpButton());
@@ -54,15 +39,7 @@ namespace CodedUITestFAT
         }
 
         #endregion
-
-        #region Control methods
-
-        internal WpfButton HelpButton()
-        {
-            return UIMapHelp.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIMainToolBarToolBar.UIHelpButton;
-        }
-
-        #endregion
+        
 
         #region
         /// <summary> Asserts whether 'Agent requirements' window exists. </summary>
