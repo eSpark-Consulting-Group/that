@@ -1,0 +1,181 @@
+﻿<Models:BaseView  AutomationProperties.AutomationId="ThreatDetailsWindow"
+                  x:Class="UFH.Application.ThreatDetailsView"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:Models="clr-namespace:UFH.Application.Models" mc:Ignorable="d" 
+                  FontSize="14"
+                  Foreground="#555"
+                  SnapsToDevicePixels="True">
+
+    <Grid Background="White">
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid Margin="30,0,0,0" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+ 
+            <Canvas Margin="4, 0, 0, 0" Height="20" Opacity="{Binding Clean, Converter={StaticResource BoolToOpacityConverter}}" Width="18" RenderTransformOrigin="0.5,0.5">
+                <Canvas.RenderTransform>
+                    <ScaleTransform ScaleX="2" ScaleY="2" />
+                </Canvas.RenderTransform>
+                <Path SnapsToDevicePixels="True" Data="M10,0 L13,3 10,3 z M0,0 L9.0000001,0 9.0000001,3 9.0000001,4 13,4 13,7.0799999 C12.672,7.033 12.34,7 12,7 L12,5 8,5 8,0.99999994 1,0.99999994 1,17 5.6830001,17 C5.849,17.35 6.04,17.686001 6.26,18 L0,18 z" Fill="#FF457FAD" Height="18" Stretch="Fill" Width="13"/>
+                <Path SnapsToDevicePixels="True" Data="M0,8.0000001 L4,8.0000001 4,9 0,9 z M0,6 L5,6 5,7 0,7 z M0,4 L9,4 9,5 0,5 z M0,2 L5,2 5,3 0,3 z M0,0 L5,0 5,1 0,1 z" Fill="#FF457FAD" Height="9" Canvas.Left="2" Opacity="0.3" Stretch="Fill" Canvas.Top="2" Width="9"/>
+                <Path SnapsToDevicePixels="True" Data="M10,8.9720001 C9.994,8.98 9.987,8.987 9.9809999,8.9949999 L10,9 z M2,8.9720001 L2,9 2.0190001,8.9949999 C2.013,8.987 2.006,8.98 2,8.9720001 z M6,3.0000053 L8,4.0000052 C8,4.0000052 8,7.0000052 6,9.0000052 z M10,3.0000001 L9.984,3.0070001 C9.9890001,3.0140001 9.9949999,3.0200001 10,3.0270001 z M2,3.0000001 L2,3.0270001 C2.0050001,3.0200001 2.0109999,3.0140001 2.016,3.0070001 z M6,2.0000001 L3,3.0000001 C3,5.0000001 2.826,8.0950003 6,10 9,8 9,5.0000001 9,3.0000001 z M6,0 C9.313,0 12,2.6860001 12,6 12,9.3130002 9.313,12 6,12 2.687,12 0,9.3130002 0,6 0,2.6860001 2.687,0 6,0 z" Fill="#FF19C3A5" Height="12" Canvas.Left="6" Stretch="Fill" Canvas.Top="8" Width="12"/>
+            </Canvas>
+
+            <Canvas Margin="4, 0, 0, 0" Height="20" Opacity="{Binding IsMalware, Converter={StaticResource BoolToOpacityConverter}}" Width="18" RenderTransformOrigin="0.5,0.5">
+                <Canvas.RenderTransform>
+                    <ScaleTransform ScaleX="2" ScaleY="2" />
+                </Canvas.RenderTransform>
+                <Path SnapsToDevicePixels="True" Data="M6,3 C6.5529938,3 7,3.446991 7,3.9999999 L7,5.2770081 C7.5950012,5.6239929 8,6.2609863 8,7 8,8.1040039 7.1049957,9 6,9 4.8950043,9 4,8.1040039 3.9999999,7 4,6.2609863 4.4049988,5.6239929 5,5.2770081 L5,3.9999999 C5,3.446991 5.4470062,3 6,3 z M6,2.0000001 C4.896,2 4,2.896 3.9999999,3.9999999 L2,3 2,3.9999999 3.8669999,4.934 C3.571,5.2360001 3.342,5.596 3.195,6 L2,6 2,7 3,7 C3,7.2509999 3.04,7.4920001 3.099,7.7259998 L2,8 2,9 3.486,8.6279998 C4.021,9.4520001 4.944,10 6,10 7.056,10 7.9790001,9.4520001 8.5139999,8.6279998 L10,9 10,8 8.901,7.7259998 C8.96,7.4920001 9,7.2509999 9,7 L10,7 10,6 8.8049998,6 C8.658,5.596 8.4289999,5.2360001 8.1329999,4.934 L10,3.9999999 10,3 8,3.9999999 C8,2.896 7.1040001,2 6,2.0000001 z M6,0 C9.3130002,0 12,2.687 12,6 12,9.3130002 9.3130002,12 6,12 2.687,12 0,9.3130002 0,6 0,2.687 2.687,0 6,0 z" Fill="#FFD64332" Height="12" Canvas.Left="6" Stretch="Fill" Canvas.Top="8" Width="12"/>
+                <Path SnapsToDevicePixels="True" Data="M9.9999999,0 L13,3 9.9999999,3 z M0,0 L8.9999999,0 8.9999999,3 8.9999999,4 13,4 13,7.0799866 C12.671997,7.0329895 12.339996,7 12,7 L12,5 7.9999999,5 7.9999999,0.99999994 0.99999988,0.99999994 0.99999988,17 5.6829985,17 C5.8489989,17.350006 6.0399932,17.684998 6.2599944,18 L0,18 z" Fill="#FF457FAD" Height="18" Stretch="Fill" Width="13"/>
+                <Path SnapsToDevicePixels="True" Data="M0,8 L4,8 4,9 0,9 z M0,6 L5,6 5,7 0,7 z M0,4 L9,4 9,5.0000001 0,5.0000001 z M0,2 L5,2 5,3 0,3 z M0,0 L5,0 5,1 0,1 z" Fill="#FF457FAD" Height="9" Canvas.Left="2" Opacity="0.3" Stretch="Fill" Canvas.Top="2" Width="9"/>
+            </Canvas>
+
+            <Canvas Margin="4, 0, 0, 0" Height="20" Opacity="{Binding IsUnknown, Converter={StaticResource BoolToOpacityConverter}}" Width="18" RenderTransformOrigin="0.5,0.5">
+                <Canvas.RenderTransform>
+                    <ScaleTransform ScaleX="2" ScaleY="2" />
+                </Canvas.RenderTransform>
+                <Path SnapsToDevicePixels="True" Data="M5.9990001,8.8330135 C5.6310024,8.8330135 5.333004,9.1320105 5.333004,9.5000067 5.333004,9.8680029 5.6310024,10.167 5.9990001,10.167 6.3679981,10.167 6.6659961,9.8680029 6.6659961,9.5000067 6.6659961,9.1320105 6.3679981,8.8330135 5.9990001,8.8330135 z M6.0009999,2.8329999 C4.8519979,2.8329999 4.0009999,3.9220026 4.0009999,4.8329964 L4.0009999,5.5000029 5.3339925,5.5000029 5.3339925,4.8329964 C5.3339925,4.4259996 5.6249928,4.1670127 6.0009999,4.1670127 6.3759999,4.1670127 6.6670003,4.4259996 6.6670003,4.8329964 6.6670003,6.2489948 5.3339925,6.2550068 5.3339925,7.499999 5.3339925,7.6459956 5.2909932,8.0689983 5.3339925,8.1670055 L6.6670003,8.1670055 C6.6350026,8.0610027 6.6670003,7.6049953 6.6670003,7.499999 6.6670003,6.457994 8.0010004,6.3139968 8.0010004,4.8329964 8.0010004,3.9220026 7.1489949,2.8329999 6.0009999,2.8329999 z M5.75,0 L6.25,0 C9.4259949,0 12,2.5740051 12,5.75 L12,6.25 C12,9.4259949 9.4259949,12 6.25,12 L5.75,12 C2.5740051,12 0,9.4259949 0,6.25 L0,5.75 C0,2.5740051 2.5740051,0 5.75,0 z" Fill="#FFFAAE17" Height="12" Canvas.Left="6" Stretch="Fill" Canvas.Top="8" Width="12"/>
+                <Path SnapsToDevicePixels="True" Data="M10,0 L13,3 10,3 z M0,0 L9.0000001,0 9.0000001,4 13,4 13,7.0799999 C12.672,7.033 12.34,7 12,7 L12,5 8,5 8,0.99999994 1,0.99999994 1,17 5.6830001,17 C5.849,17.35 6.04,17.684999 6.26,18 L0,18 z" Fill="#FF457FAD" Height="18" Stretch="Fill" Width="13"/>
+                <Path SnapsToDevicePixels="True" Data="M0,8 L4,8 4,9 0,9 z M0,6 L5,6 5,7 0,7 z M0,4.0000002 L9,4.0000002 9,5 0,5 z M0,2 L5,2 5,3 0,3 z M0,0 L5,0 5,1 0,1 z" Fill="#FF457FAD" Height="9" Canvas.Left="2" Opacity="0.3" Stretch="Fill" Canvas.Top="2" Width="9"/>
+            </Canvas>
+
+            <Canvas Margin="4, 0, 0, 0" Height="20" Opacity="{Binding Failed, Converter={StaticResource BoolToOpacityConverter}}" Width="20" RenderTransformOrigin="0.5,0.5">
+                <Canvas.RenderTransform>
+                    <ScaleTransform ScaleX="2" ScaleY="2" />
+                </Canvas.RenderTransform>
+                <Path SnapsToDevicePixels="True" Data="M9.9999999,0 L13,3 9.9999999,3 z M0,0 L8.9999999,0 8.9999999,3 8.9999999,4 13,4 13,7.0800018 C12.671997,7.0330048 12.339996,7 12,7 L12,5 7.9999999,5 7.9999999,0.99999994 0.99999988,0.99999994 0.99999988,17 5.6829985,17 C5.8489989,17.350006 6.0399932,17.684998 6.2599944,18 L0,18 z" Fill="#FF457FAD" Height="18" Stretch="Fill" Width="13"/>
+                <Path SnapsToDevicePixels="True" Data="M0,8.0000001 L4,8.0000001 4,9 0,9 z M0,6 L5,6 5,7 0,7 z M0,4 L9,4 9,5 0,5 z M0,2 L5,2 5,3 0,3 z M0,0 L5,0 5,1 0,1 z" Fill="#FF457FAD" Height="9" Canvas.Left="2" Opacity="0.3" Stretch="Fill" Canvas.Top="2" Width="9"/>
+                <Path SnapsToDevicePixels="True" Data="F1M174.9355,244.189C175.2945,244.549,175.2945,245.132,174.9355,245.494L173.4655,246.962L174.8795,248.376C175.2715,248.767,175.2695,249.4,174.8795,249.791C174.4895,250.181,173.8565,250.182,173.4645,249.791L172.0505,248.376L170.5815,249.846C170.2215,250.207,169.6385,250.207,169.2785,249.846L169.1675,249.736C168.8085,249.376,168.8065,248.793,169.1675,248.431L170.6365,246.962L169.2225,245.548C168.8315,245.158,168.8315,244.525,169.2225,244.134C169.6135,243.744,170.2465,243.744,170.6365,244.134L172.0505,245.548L173.5205,244.079C173.8805,243.718,174.4645,243.719,174.8245,244.079z M167.7575,242.757C165.4145,245.1,165.4145,248.9,167.7575,251.242C170.1015,253.585,173.9005,253.585,176.2425,251.242C178.5855,248.9,178.5855,245.101,176.2425,242.757C173.9005,240.414,170.1005,240.415,167.7575,242.757" Fill="#FFFAAE17" Height="12" Canvas.Left="6" Stretch="Fill" Canvas.Top="8" Width="12"/>
+            </Canvas>
+
+            <Canvas Margin="4, 0, 0, 0" Height="20" Opacity="{Binding Pending, Converter={StaticResource BoolToOpacityConverter}}" Width="20" RenderTransformOrigin="0.5,0.5">
+                <Canvas.RenderTransform>
+                    <ScaleTransform ScaleX="2" ScaleY="2" />
+                </Canvas.RenderTransform>
+                <Path SnapsToDevicePixels="True" Data="M5.9680035,4.0129937 C7.0720074,4.0129938 7.9680035,4.9089899 7.9680035,6.0129938 7.9680035,7.1169977 7.0720074,8.0129938 5.9680035,8.0129938 4.8639996,8.0129938 3.9680035,7.1169977 3.9680035,6.0129938 3.9680035,4.9089899 4.8639996,4.0129938 5.9680035,4.0129937 z M5.9996803,0 C7.5351622,0.00024986267 9.0706446,0.58623433 10.242131,1.7577028 12.344106,3.8586464 12.554104,7.1285584 10.886123,9.4714956 L9.4181406,8.0035348 C9.7591364,7.4145508 9.9681342,6.7415688 9.9681342,6.0125886 9.9681342,3.8036479 8.1771548,2.012696 5.9681807,2.012696 3.7592063,2.012696 1.968227,3.8036479 1.968227,6.0125886 1.968227,8.221529 3.7592063,10.012481 5.9681807,10.012481 6.7201717,10.012481 7.4151638,9.7924867 8.0161569,9.4314966 L9.4711397,10.886457 C7.1291671,12.554413 3.8592051,12.343418 1.7572296,10.242475 -0.58574319,7.8995378 -0.58574319,4.0996399 1.7572296,1.7567029 2.9287159,0.5852344 4.464198,-0.00024986267 5.9996803,0 z" Fill="#FFFAAE17" Height="12" Canvas.Left="6" Stretch="Fill" Canvas.Top="9" Width="12"/>
+                <Path SnapsToDevicePixels="True" Data="M9.9999999,0 L13,3 9.9999999,3 z M0,0 L8.9999999,0 8.9999999,3 8.9999999,4 13,4 13,7.0800018 C12.671997,7.0330048 12.339996,7 12,7 L12,5 7.9999999,5 7.9999999,0.99999994 0.99999988,0.99999994 0.99999988,17 5.6829985,17 C5.8489989,17.350006 6.0399932,17.684998 6.2599944,18 L0,18 z" Fill="#FF457FAD" Height="18" Stretch="Fill" Width="13"/>
+                <Path SnapsToDevicePixels="True" Data="M0,8.0000001 L4,8.0000001 4,9 0,9 z M0,6 L5,6 5,7 0,7 z M0,4 L9,4 9,5 0,5 z M0,2 L5,2 5,3 0,3 z M0,0 L5,0 5,1 0,1 z" Fill="#FF457FAD" Height="9" Canvas.Left="2" Opacity="0.3" Stretch="Fill" Canvas.Top="2" Width="9"/>
+            </Canvas>
+
+            <TextBlock AutomationProperties.AutomationId="MalwareNameTextBlock" Style="{StaticResource HeaderTextBlock}"  VerticalAlignment="Center" Text="{Binding FileName}" FontSize="22" Margin="27,8,20,8" Grid.Column="1" MaxWidth="750" ToolTipService.ToolTip="{Binding FileName}" HorizontalAlignment="Left" TextTrimming="WordEllipsis"/>
+        </Grid>
+        
+        <Grid Background="White" Grid.Row="1" Margin="65,0,0,0">
+            
+              <Grid AutomationProperties.AutomationId="DetailsGrid" x:Name="gridProperties" Margin="5, 0"  VerticalAlignment="Top" HorizontalAlignment="Left"  >
+                <Grid.Resources>
+                    <Style TargetType="TextBlock" >
+                        <Setter Property="Margin" Value="7"/>
+                    </Style>
+                  
+       <Style x:Key="SelectTextStyle" TargetType="TextBox">
+        <Setter Property="IsReadOnly" Value="True"/>
+        <Setter Property="Margin" Value="4 7 0 0"/>
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate>
+              <ScrollViewer x:Name="PART_ContentHost" MaxWidth="{TemplateBinding MaxWidth}" BorderThickness="0" Padding="0"/>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+                </Grid.Resources>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                    <Grid x:Name="GeneralCol1" Margin="20, 0,20,20 " MinWidth="370">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock AutomationProperties.AutomationId="FileNameTextBlock" Text="File Name:"  Grid.Column="0" Grid.Row="0" />
+                    <TextBlock AutomationProperties.AutomationId="VerdictTextBlock" Text="Verdict:" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" Margin="7,7,0,7" Width="65"/>
+                    <TextBlock AutomationProperties.AutomationId="SizeTextBlock" Text="Size:" Grid.Column="0" Grid.Row="2"/>
+                    <TextBlock AutomationProperties.AutomationId="CreatedTextBlock" Text="Created:" Grid.Column="0" Grid.Row="3"/>
+                    <TextBlock AutomationProperties.AutomationId="ModifiedTextBlock" Text="Modified:" Grid.Column="0" Grid.Row="4"/>
+                    <TextBlock AutomationProperties.AutomationId="AccessedTextBlock" Text="Accessed:" Grid.Column="0" Grid.Row="5"/>
+
+                    <TextBox AutomationProperties.AutomationId="FileNameValueTextBox"
+                               Text="{Binding FileName}" Grid.Column="1" Grid.Row="0" MaxWidth="220" ToolTipService.ToolTip="{Binding FileName}" HorizontalAlignment="Left"
+                               Style="{StaticResource SelectTextStyle}"/>
+                    <TextBox AutomationProperties.AutomationId="VerdictValueTextBox"
+                               Text="{Binding Verdict}" Grid.Column="1" Grid.Row="1" MaxWidth="220" ToolTipService.ToolTip="{Binding Verdict}" HorizontalAlignment="Left"
+                               Style="{StaticResource SelectTextStyle}"/>
+                    <TextBox AutomationProperties.AutomationId="SizeValueTextBox" Text="{Binding Size}" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left"
+                               Style="{StaticResource SelectTextStyle}"/>
+                    <TextBox AutomationProperties.AutomationId="CreatedValueTextBox" Text="{Binding Created}" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left"
+                               Style="{StaticResource SelectTextStyle}"/>
+                    <TextBox AutomationProperties.AutomationId="ModifiedValueTextBox" Text="{Binding Modified}" Grid.Column="1" Grid.Row="4" HorizontalAlignment="Left"
+                               Style="{StaticResource SelectTextStyle}"/>
+                    <TextBox AutomationProperties.AutomationId="AccessedValueTextBox" Text="{Binding Accessed}" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left"
+                               Style="{StaticResource SelectTextStyle}"/>
+                </Grid>
+                    <Grid x:Name="GeneralCol2" Grid.Column="1" Margin="20, 0,20,20" MinWidth="250">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                        
+                    <TextBlock AutomationProperties.AutomationId="HashTextBlock" Text="Hash (SHA1):" Grid.Column="0" Grid.Row="0"/>
+                    <TextBlock AutomationProperties.AutomationId="SignerTextBlock" Text="Signer:" Grid.Column="0" Grid.Row="1"/>
+                    <TextBlock AutomationProperties.AutomationId="DescriptionTextBlock" Text="Description:" Grid.Column="0" Grid.Row="2"/>
+                    <TextBlock AutomationProperties.AutomationId="VersionTextBlock" Text="Version:" Grid.Column="0" Grid.Row="3"/>
+                    <TextBlock AutomationProperties.AutomationId="CopyrightTextBlock" Text="Copyright:" Grid.Column="0" Grid.Row="4"/>
+                    <TextBlock AutomationProperties.AutomationId="ProductTextBlock" Text="Product:" Grid.Column="0" Grid.Row="5"/>
+
+                    <TextBox AutomationProperties.AutomationId="HashValueTextBox"
+                               Text="{Binding Hash}" Grid.Column="1" Grid.Row="0" MaxWidth="220" ToolTipService.ToolTip="{Binding Hash}" HorizontalAlignment="Left" 
+                               Style="{StaticResource SelectTextStyle}"/>
+                    <TextBox AutomationProperties.AutomationId="SignerValueTextBox"
+                               Text="{Binding Signer}" Grid.Column="1" Grid.Row="1" MaxWidth="220" ToolTipService.ToolTip="{Binding Signer}" HorizontalAlignment="Left"
+                               Style="{StaticResource SelectTextStyle}"/>
+                    <TextBox AutomationProperties.AutomationId="DescriptionValueTextBox"
+                               Text="{Binding Description}" Grid.Column="1" Grid.Row="2" MaxWidth="220" ToolTipService.ToolTip="{Binding Description}" HorizontalAlignment="Left"
+                               Style="{StaticResource SelectTextStyle}"/>
+                    <TextBox AutomationProperties.AutomationId="VersionValueTextBox" Text="{Binding Version}" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left"
+                               Style="{StaticResource SelectTextStyle}"/>
+                    <TextBox AutomationProperties.AutomationId="CopyrightValueTextBox"
+                               Text="{Binding Copyright}" Grid.Column="1" Grid.Row="4" MaxWidth="220" ToolTipService.ToolTip="{Binding Copyright}" HorizontalAlignment="Left" 
+                               Style="{StaticResource SelectTextStyle}"/>
+                    <TextBox AutomationProperties.AutomationId="ProductValueTextBox"
+                               Text="{Binding Product}" Grid.Column="1" Grid.Row="5" MaxWidth="220" ToolTipService.ToolTip="{Binding Product}" HorizontalAlignment="Left"
+                               Style="{StaticResource SelectTextStyle}"/>
+                </Grid>
+            </Grid>
+            
+        </Grid>
+        
+        <StackPanel Orientation="Horizontal" Grid.Row="3"   Margin="0,0,10,10" HorizontalAlignment="Right" >
+            <Button AutomationProperties.AutomationId="CloseButton" Content="Close" Margin="5" Click="OnBackClick" Height="32"/>
+        </StackPanel>
+    </Grid>
+</Models:BaseView>

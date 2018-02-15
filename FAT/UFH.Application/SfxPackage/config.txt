@@ -1,0 +1,13 @@
+﻿;!@Install@!UTF-8!
+InstallPath="%ProgramFiles%\\Comodo\\UnknownFileHunter"
+Title="Comodo Unknown File Hunter Setup"
+ExtractPathText="Destination path (will be created if does not exist)"
+ExtractDialogText="Starting..."
+GUIFlags="1+32+128"
+ExtractPathTitle="Comodo Unknown File Hunter"
+ExtractTitle="Comodo Unknown File Hunter"
+ErrorTitle="Comodo Unknown File Hunter Setup"
+WarningTitle="Comodo Unknown File Hunter Setup"
+ExtractCancelText="Cancel"
+RunProgram="\"%%T\\bin\\FAT.Extractor.exe\""                                                                    
+;!@InstallEnd@!

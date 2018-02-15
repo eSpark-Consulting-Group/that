@@ -1,0 +1,104 @@
+﻿using System.Windows;
+using System.Windows.Automation;
+using System.Windows.Controls;
+using System.Windows.Input;
+using UFH.Application.Models;
+using Telerik.Windows.Controls;
+using Telerik.Windows.Controls.GridView;
+using UFH.Application.Extensions;
+using UFH.Application.Messages;
+using System.Linq;
+
+namespace UFH.Application
+{
+    public partial class ScanResultsWithFiles : UserControl
+    {
+        public ScanResultsWithFiles()
+        {
+            InitializeComponent();
+
+            DataContext = App.Current.MainWindow.DataContext;
+        }
+
+        private MainViewModel ViewModel
+        {
+            get { return DataContext as MainViewModel; }
+        }
+
+        private void treeList_SelectionChanged(object sender, SelectionChangeEventArgs e)
+        {
+            foreach (IThreatInfoItem item in e.AddedItems)
+                ViewModel.SelectedItems.Add(item);
+            foreach (IThreatInfoItem item in e.RemovedItems)
+                ViewModel.SelectedItems.Remove(item);
+            ViewModel.SelectedItems = ViewModel.SelectedItems;
+        }
+
+        private void treeList_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var element = e.OriginalSource as FrameworkElement;
+
+            var item = element?.DataContext as IThreatInfoItem;
+            if (item != null)
+            {
+                treeList.SelectedItem = null;
+                ViewModel.SelectedItems.Clear();
+                treeList.SelectedItem = item;
+            }
+        }
+
+        private void menu_Opened(object sender, RoutedEventArgs e)
+        {
+            var menu = sender as RadContextMenu;
+            if (!menu.Items.OfType<RadMenuItem>().Any(_ => _.Command.CanExecute(null)))
+                menu.IsOpen = false;
+        }
+
+        private void treeList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var element = e.OriginalSource as FrameworkElement;
+
+            var chk = element?.GetVisualParent<CheckBox>();
+
+            var item = element?.DataContext as IThreatInfoItem;
+            if (item != null && !item.IsComputer && chk == null)
+                item_Click(sender, e);
+        }
+
+        private void item_Click(object sender, RoutedEventArgs e)
+        {
+            var details = new ThreatDetailsWindow();
+            details.Owner = App.Current.MainWindow;
+            details.ShowDialog();
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (RadContextMenu.GetContextMenu(treeList) != null)
+                return;
+
+            var menu = new RadContextMenu();
+            menu.IconColumnWidth = 0;
+            menu.Width = 160;
+            menu.Opened += menu_Opened;
+            AutomationProperties.SetAutomationId(menu, "ScanResultsContextMenu");
+
+            var item = new RadMenuItem();
+            item.CreateDetailsHeader();
+            item.Command = ViewModel.SelectCommand;
+            item.Click += item_Click;
+            AutomationProperties.SetAutomationId(item, "DetailsContextMenuItem");
+            item.SetVisibilityBinding();
+            menu.Items.Add(item);
+
+            RadContextMenu.SetContextMenu(treeList, menu);
+
+            AppMessages.FilterMessages.Send(_ => _.Target = treeList);
+        }
+
+        private void treeList_RowIsExpandedChanged(object sender, RowEventArgs e)
+        {
+            treeList.ScrollIntoView(e.Row.DataContext);
+        }
+    }
+}

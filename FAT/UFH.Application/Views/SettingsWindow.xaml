@@ -1,0 +1,176 @@
+﻿<Window x:Class="UFH.Application.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+              xmlns:local="clr-namespace:UFH.Application.Views"
+         xmlns:converters="clr-namespace:UFH.Application.Converters"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        Title="Options"   Width="600"   WindowStartupLocation="CenterOwner" ShowInTaskbar="False" ResizeMode="NoResize"
+        AllowsTransparency="True" Background="Transparent" WindowStyle="None"
+        SizeToContent="Height" MouseLeftButtonDown="Window_MouseLeftButtonDown" x:Name="this"  >
+    <Border x:Name="Shadow" CornerRadius="4" BorderBrush="#11000000" BorderThickness="1" Margin="0">
+        <Border CornerRadius="3" BorderBrush="#22000000" BorderThickness="1">
+            <Border CornerRadius="2" BorderBrush="#33000000" BorderThickness="1">
+                <Border CornerRadius="1" BorderBrush="#44000000" BorderThickness="1">
+                    <Border x:Name="Border" BorderThickness="0" BorderBrush="{DynamicResource StrongBrush}" Background="#FFFAF9F9">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource StrongBrush}" Grid.ColumnSpan="2">
+                                <Grid>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 15 20 0">
+                                        <Button AutomationProperties.AutomationId="CloseAgentRequirementsCrossButton"
+                                                Style="{StaticResource CloseButton}" Click="OnCloseClick" Width="18" Height="18" Margin="20 0 0 0" ToolTip="Close"/>
+                                    </StackPanel>
+
+                                    <TextBlock Text="{Binding ElementName=this, Path=Header}" Foreground="White" FontFamily="{StaticResource myriadpro}"  FontSize="19" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20 0 0 0"  SnapsToDevicePixels="True"/>
+                                </Grid>
+                            </Border>
+
+                            <Grid Grid.Row="2" Background="#FCFCFC" >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="*"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                </Grid.RowDefinitions>
+
+                                <Grid Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0 20 20 20">
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="22" />
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Width="570" Margin="0 10 0 10" Grid.Row="1" Grid.ColumnSpan="3" Visibility="{Binding ElementName=this, Path=ShowProxyCredentials, Converter={converters:BoolToVisibilityConverter2}}">
+                                        <local:LoginPasswordUserControl Margin="0" Login="{Binding ProxyLogin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"   
+                                                    Password="{Binding ProxyPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  />
+                                    </Grid>
+
+
+                                    <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Width="570" Margin="0 10 0 10" Grid.Row="1" Grid.ColumnSpan="3" Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}}">
+                                        <local:LoginPasswordUserControl Margin="0" Login="{Binding Login, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                                    ShowCurrentDomain="{Binding UseCurrentCredentials, UpdateSourceTrigger=PropertyChanged}"  UseCurrentDomain="{Binding UseCurrentDomainForDeploy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                    Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  />
+                                    </Grid>
+
+                                    <Grid Grid.Row="3" Visibility="{Binding ElementName=this, Path=ShowProxyCredentials, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}">
+                                        <TextBlock Text="FLS TCP Port" Style="{DynamicResource SubTitleTextStyle}"   Margin="0 24 0 0" HorizontalAlignment="Right" Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"/>
+
+                                    </Grid>
+                                    <Grid Grid.Row="3" Grid.Column="2" Visibility="{Binding ElementName=this, Path=ShowProxyCredentials, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}">
+                                        <telerik:RadWatermarkTextBox AutomationProperties.AutomationId="FlsTcpPortWatermarkTextBox" Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"
+                                              Margin="0 17 0 17" HorizontalAlignment="Left"  Width="275" x:Name="tcp" MaxLength="5"
+                                             Text="{Binding  TcpPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="PortKeyDown">
+                                            <telerik:RadWatermarkTextBox.WatermarkContent>
+                                                <TextBlock Margin="0 1 0 0" Text="Enter FLS Port" Foreground="{DynamicResource TextBrush2}" />
+                                            </telerik:RadWatermarkTextBox.WatermarkContent>
+                                        </telerik:RadWatermarkTextBox>
+                                    </Grid>
+
+
+                                    <Grid Grid.Row="4"  Visibility="{Binding ElementName=this, Path=ShowProxyCredentials, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}">
+                                        <TextBlock Text="FLS UDP Port" Style="{DynamicResource SubTitleTextStyle}"  Margin="0 7 0 0" HorizontalAlignment="Right" Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"/>
+
+                                    </Grid>
+                                    <Grid Grid.Row="4" Grid.Column="2" Visibility="{Binding ElementName=this, Path=ShowProxyCredentials, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}">
+                                        <telerik:RadWatermarkTextBox AutomationProperties.AutomationId="FlsUdpPortWatermarkTextBox" Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"
+                                              Margin="0 0 0 17" HorizontalAlignment="Left"  Width="275" x:Name="udp" MaxLength="5"
+                                             Text="{Binding  UdpPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="PortKeyDown" Loaded="this_Loaded">
+                                            <telerik:RadWatermarkTextBox.WatermarkContent>
+                                                <TextBlock Margin="0 1 0 0" Text="Enter FLS Port" Foreground="{DynamicResource TextBrush2}" />
+                                            </telerik:RadWatermarkTextBox.WatermarkContent>
+                                        </telerik:RadWatermarkTextBox>
+                                    </Grid>
+
+                                </Grid>
+
+                                <Border Grid.Row="2" Margin="0 -15 0 0" x:Name="bord" Height="0" Visibility="Collapsed" Background="#FFFFFBE7" BorderBrush="#FFFFAE10" BorderThickness="0 1">
+                                    <Grid >
+                                        <Grid.RenderTransform>
+                                            <TranslateTransform x:Name="translate1" X="1000" />
+                                        </Grid.RenderTransform>
+                                        <Grid.Triggers>
+                                            <EventTrigger RoutedEvent="FrameworkElement.SizeChanged">
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate1" Storyboard.TargetProperty="X" BeginTime="0:0:0.0">
+                                                            <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0" >
+                                                                <EasingDoubleKeyFrame.EasingFunction>
+                                                                    <CubicEase/>
+                                                                </EasingDoubleKeyFrame.EasingFunction>
+                                                            </EasingDoubleKeyFrame>
+                                                        </DoubleAnimationUsingKeyFrames>
+                                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="bord" Storyboard.TargetProperty="Height" BeginTime="0:0:0.0">
+                                                            <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="90" >
+                                                                <EasingDoubleKeyFrame.EasingFunction>
+                                                                    <CubicEase/>
+                                                                </EasingDoubleKeyFrame.EasingFunction>
+                                                            </EasingDoubleKeyFrame>
+                                                        </DoubleAnimationUsingKeyFrames>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger>
+                                        </Grid.Triggers>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Path Grid.RowSpan="2" VerticalAlignment="Top" Margin="20" SnapsToDevicePixels="True" Data="F1M53.129,62.4846C52.579,63.0346,51.819,63.3496,51.038,63.3496C50.256,63.3496,49.496,63.0346,48.94,62.4846C48.389,61.9346,48.075,61.1696,48.075,60.3876C48.075,59.6116,48.389,58.8476,48.94,58.2946C49.496,57.7446,50.261,57.4246,51.038,57.4246C51.815,57.4246,52.578,57.7446,53.129,58.2946C53.686,58.8466,54,59.6116,54,60.3876C54,61.1696,53.686,61.9336,53.129,62.4846 M51.038,37.6106C52.317,37.6106,53.355,38.6476,53.355,39.9276L52.763,53.7506C52.704,55.0006,51.732,55.4766,51.038,55.4766C50.26,55.4766,49.38,55.0656,49.312,53.7506L48.719,39.9276C48.72,38.6476,49.758,37.6106,51.038,37.6106 M72.544,58.1066L57.528,32.0976C56.192,29.7846,53.703,28.3466,51.032,28.3466C48.361,28.3466,45.873,29.7836,44.536,32.0966L29.347,58.4046C28.012,60.7166,28.013,63.5916,29.347,65.9026C30.684,68.2146,33.172,69.6536,35.843,69.6536L66.228,69.6536L66.292,69.6536C70.399,69.6206,73.729,66.2676,73.729,62.1556C73.73,60.7106,73.32,59.3156,72.544,58.1066" Fill="#FFFEAD48" Height="41.307" Canvas.Left="0" Stretch="Fill" Canvas.Top="0" Width="45.383"/>
+
+                                        
+                                        <TextBlock x:Name="txt" Grid.Column="1" Grid.Row="1" TextAlignment="Left" Text="Please enter valid proxy login and password." TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0 5 65 10" FontSize="13"/>
+                                    </Grid>
+                                </Border>
+                                
+                                <Border Background="White" Grid.Row="3" >
+                                    <StackPanel HorizontalAlignment="Right"  Margin="0,10,10,0" Orientation="Horizontal">
+                                        <Button Content="Cancel" Visibility="{Binding ElementName=this, Path=ShowScanModes, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}" Height="32" Margin="5,5,5,15" Click="Button_CancelClick" Template="{StaticResource BackButton}" Foreground="Black"/>
+                                        <Button Content="Close" Visibility="{Binding ElementName=this, Path=ShowScanModes, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Margin="5,5,5,15" Click="Button_CancelClick" Template="{StaticResource BackButton}" Foreground="Black"/>
+
+                                        <Button Content="Save" Height="32"  Margin="5,5,5,15"  Click="Button_Click"  Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"/>
+                                        
+                                        <Grid Visibility="{Binding ElementName=this, Path=ShowScanModes, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}">
+                                            <Button Content="Scan" Height="32"  Margin="5,5,5,15"  Click="Button_Click"  Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}}"/>
+                                        </Grid>
+                                        <Grid Visibility="{Binding ElementName=this, Path=ShowScanModes, Converter={converters:BoolToVisibilityConverter2}}">
+                                            <Button Content="Start Scan" Height="32"  Margin="5,5,5,15"  Click="ButtonQuick_Click"   Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}}"/>
+                                        </Grid>
+                                        <Grid Visibility="Collapsed">
+                                            <Button Content="Full Scan" Height="32"  Margin="5,5,5,15"  Click="ButtonFull_Click"   Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}}"/>
+                                        </Grid>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+
+                            <Border Grid.Row="1" BorderThickness="0" Background="{DynamicResource ErrorBrush2}" BorderBrush="#FF6A0101" VerticalAlignment="Top" CornerRadius="0" Visibility="{Binding HasErrors, Converter={converters:BoolToVisibilityConverter2}, FallbackValue=Collapsed}">
+                                <Grid>
+                                    <TextBlock AutomationProperties.AutomationId="ErrorTextBlock" Foreground="White" Text="{Binding Error}" Style="{DynamicResource SubTitleTextStyle}" Margin="20 10"   FontSize="13"/>
+                                    <Button Style="{StaticResource CloseButton}" Background="White" Command="{Binding ClearErrorMessageCommand}" Margin="0 0 20 0" Width="12" Height="12" HorizontalAlignment="Right"  ToolTip="Hide" />
+                                </Grid>
+
+                            </Border>
+                        </Grid>
+                    </Border>
+                </Border>
+            </Border>
+        </Border>
+    </Border>
+</Window>

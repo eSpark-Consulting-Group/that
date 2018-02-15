@@ -18,7 +18,7 @@ namespace APTAT.Application
         protected override void OnStartup(StartupEventArgs e)
         {
             bool createdNew;
-            _event = new EventWaitHandle(false, EventResetMode.ManualReset, "Global\\8F24B2C3-13A4-490A-ACD5-0D68C7BAEA81", out createdNew);
+            _event = new EventWaitHandle(false, EventResetMode.ManualReset, "Global\\8F24B2C3-13A4-490A-ACD5-0D68C7BAEA81_", out createdNew);
 
             if (!createdNew)
             {
