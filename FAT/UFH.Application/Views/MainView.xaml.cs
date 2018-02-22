@@ -53,6 +53,7 @@ namespace UFH.Application
                     _confirmation.Owner = App.Current.MainWindow;
                     if (_confirmation.ShowDialog() == true && message.Action != null)
                         message.Action(null);
+                    //ShowReport(new RadMenuItem { Tag = "Executive Report" });
                     break;
             }
         }

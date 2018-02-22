@@ -194,10 +194,10 @@ namespace UFH.Application.Models
             }
         }
 
-        public Boolean IsScanCancelled { get; set; }
+        public Boolean IsScanCancelled { get { return false; } set { } }
         public Boolean IsValkyrieError { get; set; }
 
-        public Boolean IsScanFailed { get; set; }
+        public Boolean IsScanFailed { get { return false; } set { } }
 
         public Boolean? IsScanInProgress
         {
@@ -1282,7 +1282,7 @@ namespace UFH.Application.Models
                     RaisePropertyChanged(nameof(ComputersHeader));
                 }
 
-                IsReportEnabled = (!IsScanCancelled || Computers.Any(_ => _.ScanStage == ScanStage.OperationCompleted)) && !IsScanFailed;
+                IsReportEnabled = Computers.Any(_ => _.ScanStage == ScanStage.OperationCompleted || _.ScanStage == ScanStage.OperationCanceled);
 
                 ValkyrieDetailsLinkAvailable = _aptService.GetValkyrieDetailsLink() != null;
 
