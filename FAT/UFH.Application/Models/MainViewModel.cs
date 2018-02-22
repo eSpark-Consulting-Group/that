@@ -194,10 +194,10 @@ namespace UFH.Application.Models
             }
         }
 
-        public Boolean IsScanCancelled { get { return false; } set { } }
+        public Boolean IsScanCancelled { get; set; }
         public Boolean IsValkyrieError { get; set; }
 
-        public Boolean IsScanFailed { get { return false; } set { } }
+        public Boolean IsScanFailed { get; set; }
 
         public Boolean? IsScanInProgress
         {
