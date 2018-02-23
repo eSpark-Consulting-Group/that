@@ -448,12 +448,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Resource Include="UFH.ico" />
-    <None Include="buildScript.bat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config" />
-    <None Include="SfxPackage\7zSD.sfx" />
-    <None Include="SfxPackage\CreateSfx.bat" />
     <Resource Include="EULA.pdf" />
     <Resource Include="Assets\checkmark.png" />
     <Resource Include="Assets\splash.png" />
@@ -467,8 +462,6 @@
     <Content Include="ResourceCopy.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SfxPackage\7za.exe" />
-    <Resource Include="SfxPackage\config.txt" />
     <Content Include="trl.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
