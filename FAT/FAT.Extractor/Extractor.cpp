@@ -18,7 +18,7 @@ void Extractor::ExtractId()
 
 	auto ppid = getParentPID(pid);
 	DWORD size = MAX_PATH;
-	WCHAR processName[MAX_PATH];// = L"c:\\ForensicAnalysisTool_MQ==.exe";
+	WCHAR processName[MAX_PATH];// = L"c:\\UnknownFileHunter_MQ==.exe";
 	auto m = std::wcmatch{};
 	getProcessName(ppid, processName, size);
 	wchar_t buf[MAX_PATH];
@@ -37,7 +37,7 @@ void Extractor::ExtractId()
 	{
 		extractedDirectory = directory.substr(0, last_slash_idx);
 	}
-	auto regex = std::wregex{ L"ForensicAnalysisTool_[a-zA-Z0-9]+[=]{0,2}" };
+	auto regex = std::wregex{ L"UnknownFileHunter_[a-zA-Z0-9]+[=]{0,2}" };
 	if (std::regex_search(processName, m, regex))
 	{
 		WriteAllTextUtf8((directory + L"\\originalfile").c_str(), m[0].str());
