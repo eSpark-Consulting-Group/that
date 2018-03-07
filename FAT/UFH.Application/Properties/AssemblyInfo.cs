@@ -8,6 +8,8 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
+[assembly: AssemblyVersion("5.0.0.0")]
+[assembly: AssemblyFileVersion("5.0.0.0")]
 [assembly: AssemblyTitle("Unknown File Hunter")]
 [assembly: AssemblyDescription("Unknown File Hunter")]
 [assembly: AssemblyConfiguration("")]
