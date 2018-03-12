@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FAT.Application", "FAT.Application\FAT.Application.csproj", "{89CDF93E-B252-47A9-BB69-4E11D89DA35F}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -21,6 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		CommonAssemblyInfo.cs = CommonAssemblyInfo.cs
 		CommonVersionInfo.h = CommonVersionInfo.h
+		..\Common\COT_Rules.ruleset = ..\Common\COT_Rules.ruleset
 		FAT.runsettings = FAT.runsettings
 		nuget.config = nuget.config
 	EndProjectSection
@@ -952,53 +953,7 @@ Global
 		{6FE8C46F-D0F2-4313-8F84-070FDCC2DFB0} = {FCF45CEC-6094-4BFE-92CF-3817333D43E5}
 		{A81DB5F8-8EB7-4F29-95B2-2C040AB29F49} = {FCF45CEC-6094-4BFE-92CF-3817333D43E5}
 	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 14
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://pss05v:8080/tfs/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = ..\\Common\\APTAT.Common\\APTAT.Common.csproj
-		SccProjectName1 = ../Common/APTAT.Common
-		SccLocalPath1 = ..\\Common\\APTAT.Common
-		SccProjectUniqueName2 = ..\\Common\\APTAT.DeploymentCore\\APTAT.DeploymentCore.csproj
-		SccProjectName2 = ../Common/APTAT.DeploymentCore
-		SccLocalPath2 = ..\\Common\\APTAT.DeploymentCore
-		SccProjectUniqueName3 = ..\\APTAT\\APTAT.Valkyrie.Client\\Valkyrie.WebApiProvider.csproj
-		SccProjectName3 = ../APTAT/APTAT.Valkyrie.Client
-		SccLocalPath3 = ..\\APTAT\\APTAT.Valkyrie.Client
-		SccProjectUniqueName4 = ..\\APTAT\\APTAT.Core\\APTAT.Core.csproj
-		SccProjectName4 = ../APTAT/APTAT.Core
-		SccLocalPath4 = ..\\APTAT\\APTAT.Core
-		SccProjectUniqueName5 = FAT.Bootstrapper\\FAT.Bootstrapper.vcxproj
-		SccProjectName5 = FAT.Bootstrapper
-		SccLocalPath5 = FAT.Bootstrapper
-		SccProjectUniqueName6 = FAT.Application\\FAT.Application.csproj
-		SccProjectName6 = FAT.Application
-		SccLocalPath6 = FAT.Application
-		SccProjectUniqueName7 = CodedUITestAT\\CodedUITestFAT.csproj
-		SccProjectName7 = CodedUITestAT
-		SccLocalPath7 = CodedUITestAT
-		SccProjectUniqueName8 = FAT.Application.Tests\\FAT.Application.Tests.csproj
-		SccProjectTopLevelParentUniqueName8 = FAT.sln
-		SccProjectName8 = FAT.Application.Tests
-		SccLocalPath8 = FAT.Application.Tests
-		SccProjectUniqueName9 = ..\\Common\\APTAT.DeploymentCore.UnitTests\\APTAT.DeploymentCore.UnitTests.csproj
-		SccProjectTopLevelParentUniqueName9 = FAT.sln
-		SccProjectName9 = ../Common/APTAT.DeploymentCore.UnitTests
-		SccLocalPath9 = ..\\Common\\APTAT.DeploymentCore.UnitTests
-		SccProjectUniqueName10 = ..\\APTAT\\APTAT.Core.UnitTests\\APTAT.Core.UnitTests.csproj
-		SccProjectTopLevelParentUniqueName10 = FAT.sln
-		SccProjectName10 = ../APTAT/APTAT.Core.UnitTests
-		SccLocalPath10 = ..\\APTAT\\APTAT.Core.UnitTests
-		SccProjectUniqueName11 = ..\\APTAT\\APTAT.DAL\\APTAT.DAL.csproj
-		SccProjectName11 = ../APTAT/APTAT.DAL
-		SccLocalPath11 = ..\\APTAT\\APTAT.DAL
-		SccProjectUniqueName12 = APTAT.Valkyrie.Tests\\APTAT.Valkyrie.Tests.csproj
-		SccProjectTopLevelParentUniqueName12 = FAT.sln
-		SccProjectName12 = APTAT.Valkyrie.Tests
-		SccLocalPath12 = APTAT.Valkyrie.Tests
-		SccProjectUniqueName13 = FAT.Extractor\\FAT.Extractor.vcxproj
-		SccProjectName13 = FAT.Extractor
-		SccLocalPath13 = FAT.Extractor
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {384F10A7-DBCF-4DD3-8D28-F1AED24B6B9B}
 	EndGlobalSection
 EndGlobal
