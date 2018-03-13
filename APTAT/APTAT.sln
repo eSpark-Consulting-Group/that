@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.Core", "APTAT.Core\APTAT.Core.csproj", "{9E80A126-241C-4079-8975-E16204D03E8D}"
 EndProject
@@ -20,6 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 	ProjectSection(SolutionItems) = preProject
 		CommonAssemblyInfo.cs = CommonAssemblyInfo.cs
 		CommonVersionInfo.h = CommonVersionInfo.h
+		..\Common\COT_Rules.ruleset = ..\Common\COT_Rules.ruleset
 		nuget.config = nuget.config
 	EndProjectSection
 EndProject
@@ -222,46 +223,8 @@ Global
 		{1B82F3A7-5887-4C48-9CE4-D5C6A70EEE49} = {49414CD5-5F5C-43FC-91C7-10263B37F0E7}
 		{6FE8C46F-D0F2-4313-8F84-070FDCC2DFB0} = {49414CD5-5F5C-43FC-91C7-10263B37F0E7}
 	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 12
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://pss05v:8080/tfs/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = APTAT.Application\\APTAT.Application.csproj
-		SccProjectName1 = APTAT.Application
-		SccLocalPath1 = APTAT.Application
-		SccProjectUniqueName2 = APTAT.Bootstrapper\\APTAT.Bootstrapper.vcxproj
-		SccProjectName2 = APTAT.Bootstrapper
-		SccLocalPath2 = APTAT.Bootstrapper
-		SccProjectUniqueName3 = APTAT.Valkyrie.ClientTest\\APTAT.Valkyrie.ClientTest.csproj
-		SccProjectName3 = APTAT.Valkyrie.ClientTest
-		SccLocalPath3 = APTAT.Valkyrie.ClientTest
-		SccProjectUniqueName4 = APTAT.Valkyrie.Client\\Valkyrie.WebApiProvider.csproj
-		SccProjectName4 = APTAT.Valkyrie.Client
-		SccLocalPath4 = APTAT.Valkyrie.Client
-		SccProjectUniqueName5 = CodedUITestAT\\CodedUITestAT.csproj
-		SccProjectName5 = CodedUITestAT
-		SccLocalPath5 = CodedUITestAT
-		SccProjectUniqueName6 = APTAT.Core\\APTAT.Core.csproj
-		SccProjectName6 = APTAT.Core
-		SccLocalPath6 = APTAT.Core
-		SccProjectUniqueName7 = ..\\Common\\APTAT.DeploymentCore\\APTAT.DeploymentCore.csproj
-		SccProjectName7 = ../Common/APTAT.DeploymentCore
-		SccLocalPath7 = ..\\Common\\APTAT.DeploymentCore
-		SccProjectUniqueName8 = ..\\Common\\APTAT.Common\\APTAT.Common.csproj
-		SccProjectName8 = ../Common/APTAT.Common
-		SccLocalPath8 = ..\\Common\\APTAT.Common
-		SccProjectUniqueName9 = ..\\Common\\APTAT.DeploymentCore.UnitTests\\APTAT.DeploymentCore.UnitTests.csproj
-		SccProjectTopLevelParentUniqueName9 = APTAT.sln
-		SccProjectName9 = ../Common/APTAT.DeploymentCore.UnitTests
-		SccLocalPath9 = ..\\Common\\APTAT.DeploymentCore.UnitTests
-		SccProjectUniqueName10 = APTAT.Core.UnitTests\\APTAT.Core.UnitTests.csproj
-		SccProjectTopLevelParentUniqueName10 = APTAT.sln
-		SccProjectName10 = APTAT.Core.UnitTests
-		SccLocalPath10 = APTAT.Core.UnitTests
-		SccProjectUniqueName11 = APTAT.DAL\\APTAT.DAL.csproj
-		SccProjectName11 = APTAT.DAL
-		SccLocalPath11 = APTAT.DAL
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {821C2A07-B8DA-4B94-8E6F-4FF3EC75D312}
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true

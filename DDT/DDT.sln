@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDT.Application", "DDT.Application\DDT.Application.csproj", "{3B4CE4E0-1899-459C-BB42-34A52B74260B}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -19,6 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 	ProjectSection(SolutionItems) = preProject
 		CommonAssemblyInfo.cs = CommonAssemblyInfo.cs
 		CommonVersionInfo.h = CommonVersionInfo.h
+		..\Common\COT_Rules.ruleset = ..\Common\COT_Rules.ruleset
 		nuget.config = nuget.config
 	EndProjectSection
 EndProject
@@ -89,43 +90,7 @@ Global
 		{3BF26740-64CC-47B8-BCB6-041316E21D76} = {EB243CAC-FB62-4AB6-9647-90F37DBD2748}
 		{B458A66E-D8B5-4E93-B45F-9F6268634CB4} = {EB243CAC-FB62-4AB6-9647-90F37DBD2748}
 	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 11
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://pss05v:8080/tfs/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = DDT.Application\\DDT.Application.csproj
-		SccProjectName1 = DDT.Application
-		SccLocalPath1 = DDT.Application
-		SccProjectUniqueName2 = ..\\Common\\APTAT.DeploymentCore\\APTAT.DeploymentCore.csproj
-		SccProjectName2 = ../Common/APTAT.DeploymentCore
-		SccLocalPath2 = ..\\Common\\APTAT.DeploymentCore
-		SccProjectUniqueName3 = ..\\Common\\APTAT.Common\\APTAT.Common.csproj
-		SccProjectName3 = ../Common/APTAT.Common
-		SccLocalPath3 = ..\\Common\\APTAT.Common
-		SccProjectUniqueName4 = DDT.Bootstrapper\\DDT.Bootstrapper.vcxproj
-		SccProjectName4 = DDT.Bootstrapper
-		SccLocalPath4 = DDT.Bootstrapper
-		SccProjectUniqueName5 = DDT.DescentHelper\\AgnDescentHelper.vcxproj
-		SccProjectName5 = DDT.DescentHelper
-		SccLocalPath5 = DDT.DescentHelper
-		SccProjectUniqueName6 = DDT.Core\\DDT.Core.csproj
-		SccProjectName6 = DDT.Core
-		SccLocalPath6 = DDT.Core
-		SccProjectUniqueName7 = ..\\Common\\APTAT.DeploymentCore.UnitTests\\APTAT.DeploymentCore.UnitTests.csproj
-		SccProjectTopLevelParentUniqueName7 = DDT.sln
-		SccProjectName7 = ../Common/APTAT.DeploymentCore.UnitTests
-		SccLocalPath7 = ..\\Common\\APTAT.DeploymentCore.UnitTests
-		SccProjectUniqueName8 = DDT.ApplicationTests\\DDT.ApplicationTests.csproj
-		SccProjectTopLevelParentUniqueName8 = DDT.sln
-		SccProjectName8 = DDT.ApplicationTests
-		SccLocalPath8 = DDT.ApplicationTests
-		SccProjectUniqueName9 = DDT.CoreTests\\DDT.CoreTests.csproj
-		SccProjectTopLevelParentUniqueName9 = DDT.sln
-		SccProjectName9 = DDT.CoreTests
-		SccLocalPath9 = DDT.CoreTests
-		SccProjectUniqueName10 = ..\\Common\\ResourceCopyTool\\ResourceCopyTool.csproj
-		SccProjectName10 = ../Common/ResourceCopyTool
-		SccLocalPath10 = ..\\Common\\ResourceCopyTool
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0AA63867-45BC-4C2D-BF29-931F944DF734}
 	EndGlobalSection
 EndGlobal
