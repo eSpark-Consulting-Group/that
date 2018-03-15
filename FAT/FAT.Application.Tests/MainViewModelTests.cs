@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Telerik.JustMock;
 using Xunit;
 
+
 namespace FAT.Application.Tests
 {
     public class MainViewModelTests
