@@ -183,6 +183,7 @@
     <Compile Include="Models\Apt\DalMapper.cs" />
     <Compile Include="Models\IScanTimer.cs" />
     <Compile Include="Models\ScanTimer.cs" />
+    <Compile Include="Models\ValkyrieRegistrationModel.cs" />
     <Compile Include="Models\Wizard\StartScanCredentialsViewModel.cs" />
     <Compile Include="Models\Counter\IScanCounter.cs" />
     <Compile Include="Models\Counter\IScanCounterCollection.cs" />
@@ -234,6 +235,9 @@
     <Compile Include="Extensions\PortValidationExtensions.cs" />
     <Compile Include="EULAWindow.xaml.cs">
       <DependentUpon>EULAWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CamCredentialsWindow.xaml.cs">
+      <DependentUpon>CamCredentialsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ConfirmationWindow.xaml.cs">
       <DependentUpon>ConfirmationWindow.xaml</DependentUpon>
@@ -348,6 +352,10 @@
     <Page Include="EULAWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CamCredentialsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ConfirmationWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

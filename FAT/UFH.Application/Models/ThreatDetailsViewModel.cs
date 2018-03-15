@@ -2,8 +2,6 @@
 using System;
 using System.IO;
 using UFH.Application.Services;
-using APTAT.Core;
-using APTAT.Core.Descent.Apt;
 
 namespace UFH.Application.Models
 {

@@ -14,6 +14,7 @@ using Telerik.Windows.Controls;
 using UFH.Application.Views;
 using static UFH.Application.Messages.AppMessages;
 using UFH.Application.Extensions;
+using APTAT.Application;
 
 namespace UFH.Application
 {
@@ -70,7 +71,7 @@ namespace UFH.Application
         {
             ErrorWindow error = new ErrorWindow
             {
-                Text = {Text = e.Exception.Message},
+                Text = { Text = e.Exception.Message },
                 Owner = App.Current.MainWindow
             };
             error.ShowDialog();
@@ -155,6 +156,14 @@ namespace UFH.Application
             }
         }
 
+        public bool IsLogOnPossible
+        {
+            get
+            {
+                return true;
+            }
+        }
+
         public bool IsDiscoveryInProgress
         {
             get
@@ -177,7 +186,7 @@ namespace UFH.Application
             int.TryParse(this._viewModel.TcpPort, out tcpShort);
             int.TryParse(this._viewModel.UdpPort, out udpShort);
 
-            SettingsWindow options = new SettingsWindow { Owner = System.Windows.Application.Current.MainWindow, DataContext = DataContext};
+            SettingsWindow options = new SettingsWindow { Owner = System.Windows.Application.Current.MainWindow, DataContext = DataContext };
             if (options.ShowDialog() == true)
             {
                 short tcpShortNew;
@@ -189,6 +198,12 @@ namespace UFH.Application
                     _viewModel.OnPortChanged(udpShortNew, tcpShortNew);
                 }
             }
+        }
+
+        private void LogOnClick(object sender, RoutedEventArgs e)
+        {
+            CamCredentialsWindow credWindow = new CamCredentialsWindow { Owner = App.Current.MainWindow };
+            credWindow.ShowDialog();
         }
 
         private void AboutClick(Object sender, RoutedEventArgs e)
