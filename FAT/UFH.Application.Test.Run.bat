@@ -8,7 +8,7 @@ set msBuildDir="..\packages\xunit.runner.console.2.2.0\tools"
 echo %cd%
 call %msBuildDir%\xunit.console.exe APTAT.Valkyrie.Tests\bin\UFHRelease\APTAT.Valkyrie.Tests.dll^
 								    UFH.Application.Tests\bin\UFHRelease\UFH.Application.Tests.dll^
-							        -xml results.xml
+							        -xml UFH.Application.Tests.Run.Results.xml
 									
 set msBuildDir=
 
