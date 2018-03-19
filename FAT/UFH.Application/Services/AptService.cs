@@ -47,6 +47,14 @@ namespace UFH.Application.Services
             _manager.ValkyrieAnalyzeCompleted += OnValkyrieAnalyzeCompleted;
             #endregion
         }
+        public void BeginValkyrieAnalysis(string systemLogin, string systemPassword
+           , string camLicenseId, string camUserName, string camPassword,
+           NetworkCredential networkCredential)
+        {            
+            _manager.StartValkyrieAnalysis(systemLogin, systemPassword, camLicenseId, camUserName,
+                camPassword, networkCredential, Settings.Default.applicationName);
+        }
+
         #region reporting
         public async Task<BuildReportResult> BuildReportAsync(ReportKind reportKind)
         {

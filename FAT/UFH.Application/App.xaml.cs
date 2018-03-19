@@ -161,7 +161,8 @@ namespace UFH.Application
             e.Handled = false;
 #else
             e.Handled = true;
-            //LogHelper.Trace(TraceEventType.Error, e.Exception + (e.Exception.InnerException != null ? "\n InnerException :" + (e.Exception).InnerException : null));
+            //LogHelper.Trace(TraceEventType.Error, e.Exception + (e.Exception.InnerException != null ? "\n InnerException :" + (e.Exception).InnerException : null));            
+            MessageBox.Show(e.Exception.GetFullMessage());
             LogHelper.Trace(TraceEventType.Error, e.Exception.GetFullMessage());
 #endif
         }

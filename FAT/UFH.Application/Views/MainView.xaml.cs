@@ -15,6 +15,9 @@ using UFH.Application.Views;
 using static UFH.Application.Messages.AppMessages;
 using UFH.Application.Extensions;
 using APTAT.Application;
+using System.Net;
+using APTAT.Common;
+using APTAT.Application.Models;
 
 namespace UFH.Application
 {
@@ -36,6 +39,34 @@ namespace UFH.Application
 
             _viewModel.ScanProcessCompleted += OnScanCompleted;
             _viewModel.ErrorOccurred += OnErrorOccurred;
+        }
+
+        private void LogOnClick(object sender, RoutedEventArgs e)
+        {
+            ShowRegisterToValkyrieWindow();
+        }
+
+        private void ShowRegisterToValkyrieWindow()
+        {
+            var _dialog = new CamCredentialsWindow
+            {
+                Owner = System.Windows.Application.Current.MainWindow
+            };
+            _dialog.OkClick += (sender, args) =>
+            {
+                if (_viewModel.BeginValkyrieAnalysis())
+                    Dispatcher.Invoke(() =>
+                    {
+                        _dialog.loading.IsBusy = true;
+                        _dialog.ok.Visibility = Visibility.Collapsed;
+                    });
+            };
+            _dialog.CancelClick += (sender, args) =>
+            {
+                // _viewModel.IsAnalyseWithValkyrieEnabled = true;
+            };
+
+            _dialog.ShowDialog();
         }
 
         [MessageReceiver]
@@ -198,12 +229,6 @@ namespace UFH.Application
                     _viewModel.OnPortChanged(udpShortNew, tcpShortNew);
                 }
             }
-        }
-
-        private void LogOnClick(object sender, RoutedEventArgs e)
-        {
-            CamCredentialsWindow credWindow = new CamCredentialsWindow { Owner = App.Current.MainWindow };
-            credWindow.ShowDialog();
         }
 
         private void AboutClick(Object sender, RoutedEventArgs e)

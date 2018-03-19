@@ -29,6 +29,8 @@ using static UFH.Application.Messages.AppMessages;
 using Microsoft.Win32;
 using System.Reflection;
 using UFH.Application.Attributes;
+using System.Net;
+using APTAT.Application.Models;
 
 namespace UFH.Application.Models
 {
@@ -82,6 +84,9 @@ namespace UFH.Application.Models
         private string _scanKeyword;
         private string _valkyrieDetailsLink;
 
+        private string _camLicenseId;
+        private string _camUserLogin;
+        private string _camUserPassword;
 
         #region Props
 
@@ -595,7 +600,7 @@ namespace UFH.Application.Models
             }
         }
 
-        
+
         public bool HideSubmitEmail { get; set; }
 
         public string ScanKeyword
@@ -641,9 +646,9 @@ namespace UFH.Application.Models
 
         public MainViewModel(
             ITargetsDiscoveryService targetsDiscoveryService,
-            IAptService aptService, 
-            IStorageService storage, 
-            IScanCounterManager scanCounterManager, 
+            IAptService aptService,
+            IStorageService storage,
+            IScanCounterManager scanCounterManager,
             IScanOperationsManager scanOperationsManager,
             IScanTimer scanTimer,
             IStatisticsService statisticsService)
@@ -657,6 +662,21 @@ namespace UFH.Application.Models
             _statisticsService = statisticsService;
 
             InitCommands();
+        }
+
+        public bool BeginValkyrieAnalysis(NetworkCredential networkCredential = null)
+        {
+            var model = CompositionHelper.Instance.Resolve<ValkyrieRegistrationModel>();
+            if (model.ValidateModel())
+            {
+                _camLicenseId = model.LicenseId;
+                _camUserLogin = model.UserName;
+                _camUserPassword = model.Password;
+
+                _aptService.BeginValkyrieAnalysis(Login, Password, _camLicenseId, _camUserLogin, _camUserPassword, networkCredential);
+                return true;
+            }
+            return false;
         }
 
         private void InitCommands()
@@ -731,7 +751,7 @@ namespace UFH.Application.Models
 
             InvokeLoadInitialData(o == null);
             InvokeStartAutoDiscovery(null);
-            
+
             var name = await TryAction(GetCurrentDomainName());
 
             CurrentUser = _targetsDiscoveryService.GetLoggedInUser();
@@ -764,15 +784,15 @@ namespace UFH.Application.Models
             });
 
             if (saveRegistry)
-            ThreadHelper.Instance.RunOnThread(() =>
-            {
-                using (var key = Registry.LocalMachine.CreateSubKey(@"SOFTWARE\COMODO\UFH"))
+                ThreadHelper.Instance.RunOnThread(() =>
                 {
-                    var version = typeof(EULAVersionAttribute).Assembly.GetEULAVersionAttribute();
-                    if (version != null)
-                        key.SetValue("EULAVersion", version);
-                }
-            });
+                    using (var key = Registry.LocalMachine.CreateSubKey(@"SOFTWARE\COMODO\UFH"))
+                    {
+                        var version = typeof(EULAVersionAttribute).Assembly.GetEULAVersionAttribute();
+                        if (version != null)
+                            key.SetValue("EULAVersion", version);
+                    }
+                });
         }
 
         private async Task<string> GetCurrentDomainName()
@@ -863,7 +883,7 @@ namespace UFH.Application.Models
             {
                 ScanKind scanKind = ScanKind.Quick;
                 IsQuickScan = true;
-                ScanOptions options = new ScanOptions(_tcpPort, _udpPort, scanKind, Login, Password, true);  
+                ScanOptions options = new ScanOptions(_tcpPort, _udpPort, scanKind, Login, Password, true);
 
                 var ipAddressesString = DiscoveryResults.Where(_ => _.IsSelected).Select(_ => _.IPAddress).ToArray();
                 _storage.SetValue(KnownKeys.DevicesSourceDescription,
@@ -875,8 +895,8 @@ namespace UFH.Application.Models
                 _lastModifiesComputerDate = null;
                 options = new ScanOptions(_tcpPort, _udpPort, scanKind, Login, Password, true);
 
-             _aptService.BeginScan(DiscoveryResults.Where(_ => _.IsSelected).ToArray(),
-                    _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
+                _aptService.BeginScan(DiscoveryResults.Where(_ => _.IsSelected).ToArray(),
+                       _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
 
                 if (!IsScanInProgress.GetValueOrDefault())
                 {
@@ -1403,7 +1423,7 @@ namespace UFH.Application.Models
                 request.CountOfScannedComputers = _onlineItems?.Length ?? 0;
                 var targetsDiscovererType = _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false);
                 ETargetsDiscovererTypeRequest targetDiscoverTypeMapped;
-                
+
                 switch (targetsDiscovererType.Type)
                 {
                     case ETargetsDiscovererType.NetworkAddresses:
@@ -1425,19 +1445,19 @@ namespace UFH.Application.Models
                     case ETargetsDiscovererType.AutoDiscovery:
                         targetDiscoverTypeMapped = ETargetsDiscovererTypeRequest.AutoDiscovery;
                         break;
-                    
+
                     default:
                         throw new ArgumentOutOfRangeException(nameof(targetsDiscovererType));
-                        
+
                 }
                 request.ScanTarget = targetDiscoverTypeMapped;
                 ScanType scanType = IsQuickScan ? ScanType.Quick : ScanType.Full;
                 if (_IsCustomScan)
                     scanType = ScanType.Custom;
 
-                request.ScanType = scanType;                
-                request.ScanTriggerType = targetsDiscovererType.Type == ETargetsDiscovererType.AutoDiscovery ? ScanTriggerType.ScanNow : ScanTriggerType.CustomScan;            
-            
+                request.ScanType = scanType;
+                request.ScanTriggerType = targetsDiscovererType.Type == ETargetsDiscovererType.AutoDiscovery ? ScanTriggerType.ScanNow : ScanTriggerType.CustomScan;
+
             });
         }
 
@@ -1554,7 +1574,7 @@ namespace UFH.Application.Models
                     _scanCounterManager.UpdateCounters(counterDiff);
                     RaisedHasMalwares = _scanCounterManager.HasMalwares;
 
-                    counterDiff = new ScanCounterDiff();       
+                    counterDiff = new ScanCounterDiff();
                 }
                 if (_isFailed && localPercentage < 100)
                 {

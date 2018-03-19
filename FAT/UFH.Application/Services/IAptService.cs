@@ -115,5 +115,8 @@ namespace UFH.Application.Services
         event EventHandler<ScanStartedEventArgs> FatScanStarted;
         event EventHandler<ErrorEventArgs> FatScanCompleted;
         event EventHandler<CancelEventArgs> CancelScanStarted;
+
+        void BeginValkyrieAnalysis(string login, string password, string camLicenseId, string camUserName,
+           string camPassword, NetworkCredential networkCredential);
     }
 }

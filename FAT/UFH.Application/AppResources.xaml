@@ -11,6 +11,7 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <FontFamily x:Key="myriadpro">/UFH.Application;component/Fonts/myriadproregular-webfont.ttf#Myriad Pro</FontFamily>
+    <sys:String x:Key="GETValkyrieLink">https://accounts.comodo.com/valkyrie/management/signup</sys:String>
 
     <SolidColorBrush x:Key="StrongBrush" Color="#FF2A80B9" />
     <SolidColorBrush x:Key="StrongBrush2" Color="#FF62B2E3" />
