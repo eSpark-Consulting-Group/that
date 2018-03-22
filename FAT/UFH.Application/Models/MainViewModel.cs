@@ -664,6 +664,11 @@ namespace UFH.Application.Models
             InitCommands();
         }
 
+        public string LoggedUserName
+        {
+            get { return _camUserLogin; }
+        }
+
         public bool BeginValkyrieAnalysis(NetworkCredential networkCredential = null)
         {
             var model = CompositionHelper.Instance.Resolve<ValkyrieRegistrationModel>();

@@ -46,6 +46,11 @@ namespace UFH.Application
             ShowRegisterToValkyrieWindow();
         }
 
+        public string LoggedUserName
+        {
+            get { return _viewModel.LoggedUserName; }
+        }
+
         private void ShowRegisterToValkyrieWindow()
         {
             var _dialog = new CamCredentialsWindow
