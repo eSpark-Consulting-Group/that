@@ -790,12 +790,16 @@ namespace UFH.Application.Models
 
             if (saveRegistry)
                 ThreadHelper.Instance.RunOnThread(() =>
-                {
-                    using (var key = Registry.LocalMachine.CreateSubKey(@"SOFTWARE\COMODO\UFH"))
+                {                    
+                    using (var view64 = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine,
+                                                               Environment.Is64BitOperatingSystem ? RegistryView.Registry64 : RegistryView.Registry32))
                     {
-                        var version = typeof(EULAVersionAttribute).Assembly.GetEULAVersionAttribute();
-                        if (version != null)
-                            key.SetValue("EULAVersion", version);
+                        using (var key = view64.CreateSubKey(@"SOFTWARE\COMODO\UFH"))
+                        {
+                            var version = typeof(EULAVersionAttribute).Assembly.GetEULAVersionAttribute();
+                            if (version != null)
+                                key.SetValue("EULAVersion", version);
+                        }
                     }
                 });
         }
