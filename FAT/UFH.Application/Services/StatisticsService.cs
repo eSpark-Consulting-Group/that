@@ -253,7 +253,7 @@ namespace UFH.Application.Services
             Action action = () =>
             {
                 request.AcId = ExtractIdFromFile();
-                request.ProductIdentifier = "enp.c1.fat";
+                request.ProductIdentifier = "enp.c1.ufh";
                 request.ProductVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
                 _client.ApplicationLaunched(request);
             };
