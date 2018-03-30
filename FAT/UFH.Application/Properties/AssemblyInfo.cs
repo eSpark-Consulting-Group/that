@@ -1,4 +1,4 @@
-﻿using UFH.Application.Attributes;
+using UFH.Application.Attributes;
 using System.Reflection;
 using System.Resources;
 using System.Runtime.CompilerServices;
@@ -8,8 +8,8 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyVersion("5.0.0.0")]
-[assembly: AssemblyFileVersion("5.0.0.0")]
+[assembly: AssemblyVersion("1.0.0.34")]
+[assembly: AssemblyFileVersion("1.0.0.34")]
 [assembly: AssemblyTitle("Unknown File Hunter")]
 [assembly: AssemblyDescription("Unknown File Hunter")]
 [assembly: AssemblyConfiguration("")]
