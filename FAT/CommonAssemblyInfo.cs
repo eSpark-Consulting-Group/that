@@ -4,5 +4,5 @@ using System.Runtime.CompilerServices;
 
 
 [assembly: NeutralResourcesLanguage("en-US")]
-[assembly: AssemblyCopyright("Copyright © 2017 Comodo")]
+[assembly: AssemblyCopyright("Copyright © 2018 Comodo")]
 [assembly: AssemblyCompany("Comodo")]
