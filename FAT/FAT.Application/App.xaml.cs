@@ -58,12 +58,16 @@ namespace FAT.Application
                 {
                     _eulaCurrentVersion = typeof(EULAVersionAttribute).Assembly.GetEULAVersionAttribute();
 
-                    using (var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\COMODO\FAT"))
+                    using (var view64 = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine,
+                                                                Environment.Is64BitOperatingSystem ? RegistryView.Registry64 : RegistryView.Registry32))
                     {
-                        if (key != null)
-                            _eulaVersion = key.GetValue("EULAVersion") as string;
-                        else
-                            _eulaVersion = string.Empty;
+                        using (var key = view64.CreateSubKey(@"SOFTWARE\COMODO\FAT"))
+                        {
+                            if (key != null)
+                                _eulaVersion = key.GetValue("EULAVersion") as string;
+                            else
+                                _eulaVersion = string.Empty;
+                        }
                     }
                 });
 
@@ -82,7 +86,7 @@ namespace FAT.Application
 
         private void TimerTick(object sender, EventArgs e)
         {
-            if (_initialized && _eulaVersion != null)
+            if (_initialized)
             {
                 if (_eula != null)
                 {

@@ -10,8 +10,7 @@ namespace APTAT.VersionChanger
 {
     class Program
     {
-        private static readonly string[] ASSEMBLY_INFO_PATTERNS = { "AssemblyInfo.cs", "CommonAssemblyInfo.cs" };
-        private static readonly string[] ASSEMBLY_INFO_VERSION_PATTERNS = { "[assembly: AssemblyVersion", "[assembly: AssemblyFileVersion" };
+        private static readonly string[] ASSEMBLY_INFO_PATTERNS = { "AssemblyInfo.cs", "CommonAssemblyInfo.cs" };        
 
         /// <summary>
 		/// A regex that matches strings like 'AssemblyVersion("1.0.0.1")'
