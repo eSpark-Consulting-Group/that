@@ -9,5 +9,5 @@ ExtractTitle="Comodo Forensic Analysis Tool"
 ErrorTitle="Comodo Forensic Analysis Tool Setup"
 WarningTitle="Comodo Forensic Analysis Tool Setup"
 ExtractCancelText="Cancel"
-RunProgram="\"%%T\\bin\\FAT.Extractor.exe\""                                                                    
+RunProgram="\"%%T\\APTAT.Extractor.exe\" ForensicAnalysisTool"                                                
 ;!@InstallEnd@!

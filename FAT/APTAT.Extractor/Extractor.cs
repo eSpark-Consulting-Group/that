@@ -19,14 +19,16 @@ namespace APTAT.Extractor
             var processPath = process.MainModule.FileName;
             var processFolder = Path.GetDirectoryName(processPath);
 
+            var curPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            
             var reg = new Regex(processName + "_[a-zA-Z0-9]+[=]{0,2}", RegexOptions.Compiled);
             var match = reg.Match(processPath);  //math.Value == Path.GetFileNameWithoutExtension(processPath); //????????????
             if (match.Success)
             {
-                File.WriteAllBytes(Path.Combine(processFolder, "originalfile"), Encoding.UTF8.GetBytes(match.Value));
+                File.WriteAllBytes(Path.Combine(curPath, "originalfile"), Encoding.UTF8.GetBytes(match.Value));
             }
 
-            Process.Start(Path.GetDirectoryName(processFolder));
+            Process.Start(Path.Combine(curPath, processName + ".exe"));
         }
     }
 }

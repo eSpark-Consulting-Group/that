@@ -470,6 +470,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="buildScript.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <Resource Include="EULA.pdf" />
     <Resource Include="Assets\checkmark.png" />
@@ -482,6 +485,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ResourceCopy.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ResourceHacker.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="trl.txt">
@@ -562,7 +568,7 @@
       if not exist "$(TargetDir)amd64" md "$(TargetDir)amd64"
       xcopy /s /y "$(SolutionDir)..\packages\Microsoft.SqlServer.Compact.4.0.8876.1\NativeBinaries\amd64" "$(TargetDir)amd64"
 
-
+call "$(TargetDir)buildScript.bat"
 
 </PostBuildEvent>
   </PropertyGroup>

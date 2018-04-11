@@ -9,5 +9,5 @@ ExtractTitle="Comodo Unknown File Hunter"
 ErrorTitle="Comodo Unknown File Hunter Setup"
 WarningTitle="Comodo Unknown File Hunter Setup"
 ExtractCancelText="Cancel"
-RunProgram="\"%%T\\bin\\FAT.Extractor.exe\""                                                                    
+RunProgram="\"%%T\\APTAT.Extractor.exe\" UnknownFileHunter"                                                                    
 ;!@InstallEnd@!
