@@ -18,5 +18,8 @@ call %msBuildDir%\nuget.exe restore FAT.sln
 call %msBuildDir%\MSBuild.exe FAT.sln /t:rebuild /p:Configuration=UFHRelease /p:Platform="Any CPU" /l:FileLogger,Microsoft.Build.Engine;logfile=UFH.Application.Release.Build_LOG.log
 set msBuildDir=
 
+cd %cd%\UFH.Application\bin\UFHRelease
+call "buildScript.bat"
+
 rem pause > nul
 

@@ -17,4 +17,7 @@ call %msBuildDir%\nuget.exe restore FAT.sln
 call %msBuildDir%\MSBuild.exe FAT.sln /t:rebuild /p:Configuration=FATRelease /p:Platform="Any CPU" /l:FileLogger,Microsoft.Build.Engine;logfile=FAT.Application.Release.Build_LOG.log
 set msBuildDir=
 
+cd %cd%\FAT.Application\bin\FATRelease
+call "buildScript.bat"
+
 pause > nul
