@@ -182,6 +182,8 @@
     <Compile Include="Reports\Data\IAptReportData.cs" />
     <Compile Include="Reports\Data\MergedScanResults.cs" />
     <Compile Include="Reports\DetailedBadFileWithValkyrie.cs" />
+    <Compile Include="Reports\ReportBuilderFactoryUfh.cs" />
+    <Compile Include="Reports\ReportBuilderUFH.cs" />
     <Compile Include="Reports\ResultMergeHelperFat.cs" />
     <Compile Include="Reports\IReportBuilderFactory.cs" />
     <Compile Include="Reports\IReportData.cs" />
@@ -298,6 +300,12 @@
     <Compile Include="TelerikReports\Template\DetailedDevicesReport.Designer.cs">
       <DependentUpon>DetailedDevicesReport.cs</DependentUpon>
     </Compile>
+    <Compile Include="TelerikReports\Template\DetailedDevicesReportUFH.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TelerikReports\Template\DetailedDevicesReportUFH.Designer.cs">
+      <DependentUpon>DetailedDevicesReportUFH.cs</DependentUpon>
+    </Compile>
     <Compile Include="TelerikReports\Template\DetailedDevicesReportFAT.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -316,6 +324,12 @@
     <Compile Include="TelerikReports\Template\DetailedPrograms.Designer.cs">
       <DependentUpon>DetailedPrograms.cs</DependentUpon>
     </Compile>
+    <Compile Include="TelerikReports\Template\DetailedProgramsReportUFH.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TelerikReports\Template\DetailedProgramsReportUFH.Designer.cs">
+      <DependentUpon>DetailedProgramsReportUFH.cs</DependentUpon>
+    </Compile>
     <Compile Include="TelerikReports\Template\DetailedProgramsReportFAT.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -333,6 +347,12 @@
     </Compile>
     <Compile Include="TelerikReports\Template\DeviceDetailsSubReport.Designer.cs">
       <DependentUpon>DeviceDetailsSubReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TelerikReports\Template\ExecutiveReportUFH.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TelerikReports\Template\ExecutiveReportUFH.Designer.cs">
+      <DependentUpon>ExecutiveReportUFH.cs</DependentUpon>
     </Compile>
     <Compile Include="TelerikReports\Template\ProgramDetails.cs">
       <SubType>Component</SubType>
@@ -430,6 +450,9 @@
     <EmbeddedResource Include="TelerikReports\Template\DetailedDevicesReport.resx">
       <DependentUpon>DetailedDevicesReport.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="TelerikReports\Template\DetailedDevicesReportUFH.resx">
+      <DependentUpon>DetailedDevicesReportUFH.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TelerikReports\Template\DetailedDevicesReportFAT.resx">
       <DependentUpon>DetailedDevicesReportFAT.cs</DependentUpon>
     </EmbeddedResource>
@@ -439,6 +462,9 @@
     <EmbeddedResource Include="TelerikReports\Template\DetailedPrograms.resx">
       <DependentUpon>DetailedPrograms.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="TelerikReports\Template\DetailedProgramsReportUFH.resx">
+      <DependentUpon>DetailedProgramsReportUFH.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TelerikReports\Template\DetailedProgramsReportFAT.resx">
       <DependentUpon>DetailedProgramsReportFAT.cs</DependentUpon>
     </EmbeddedResource>
@@ -447,6 +473,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TelerikReports\Template\DeviceDetailsSubReport.resx">
       <DependentUpon>DeviceDetailsSubReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TelerikReports\Template\ExecutiveReportUFH.resx">
+      <DependentUpon>ExecutiveReportUFH.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TelerikReports\Template\ProgramDetails.resx">
       <DependentUpon>ProgramDetails.cs</DependentUpon>

@@ -35,7 +35,7 @@ namespace UFH.Application
             //overriding APTAT.Core registrations 
             resolver.AllowOverridingRegistrations(true);
             resolver.RegisterSingleton<IDistinctFileHelper, FatFileFilter>();
-            resolver.RegisterSingleton<IReportBuilderFactory, ReportBuilderFactoryFat>();
+            resolver.RegisterSingleton<IReportBuilderFactory, ReportBuilderFactoryUfh>();
 
         }
     }
