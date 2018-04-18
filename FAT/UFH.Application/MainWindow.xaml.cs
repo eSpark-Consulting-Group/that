@@ -32,25 +32,25 @@ namespace UFH.Application
 
         private static void TryLogin()
         {
-            APTAT.COT.Login.LoginHelper login = new APTAT.COT.Login.LoginHelper();
-            var res = login.Login(new APTAT.COT.Login.SecurityUserCredentials("", ""));
-            switch (res)
-            {
-                case APTAT.COT.Login.LoginResults.SUCCESS_AUTHENTICATION:
-                    break;
-                case APTAT.COT.Login.LoginResults.ERR_AUTHENTICATION:
-                    break;
-                case APTAT.COT.Login.LoginResults.OTP_REQUIRED:
-                    break;
-                case APTAT.COT.Login.LoginResults.OTP_CONF_REQUIRED:
-                    break;
-                case APTAT.COT.Login.LoginResults.ERR_MISSING_PARAM:
-                    break;
-                case APTAT.COT.Login.LoginResults.ALREADY_LOGGED_IN:
-                    break;
-                default:
-                    break;
-            }
+            //APTAT.COT.Login.LoginHelper login = new APTAT.COT.Login.LoginHelper();
+            //var res = login.Login(new APTAT.COT.Login.SecurityUserCredentials("", ""));
+            //switch (res)
+            //{
+            //    case APTAT.COT.Login.LoginResults.SUCCESS_AUTHENTICATION:
+            //        break;
+            //    case APTAT.COT.Login.LoginResults.ERR_AUTHENTICATION:
+            //        break;
+            //    case APTAT.COT.Login.LoginResults.OTP_REQUIRED:
+            //        break;
+            //    case APTAT.COT.Login.LoginResults.OTP_CONF_REQUIRED:
+            //        break;
+            //    case APTAT.COT.Login.LoginResults.ERR_MISSING_PARAM:
+            //        break;
+            //    case APTAT.COT.Login.LoginResults.ALREADY_LOGGED_IN:
+            //        break;
+            //    default:
+            //        break;
+            //}
         }
 
         private void OnCloseClick(object sender, RoutedEventArgs e)
