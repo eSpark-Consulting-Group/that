@@ -106,8 +106,7 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Telerik.Windows.Controls, Version=2016.2.613.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Telerik.Windows.Controls">
       <HintPath>..\..\APTAT\APTAT.Libraries\Telerik.Windows.Controls.dll</HintPath>
     </Reference>
     <Reference Include="Telerik.Windows.Controls.FixedDocumentViewers, Version=2016.2.613.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
@@ -549,6 +548,10 @@
     <ProjectReference Include="..\..\APTAT\APTAT.Core\APTAT.Core.csproj">
       <Project>{9e80a126-241c-4079-8975-e16204d03e8d}</Project>
       <Name>APTAT.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\APTAT\APTAT.COT.Login\APTAT.COT.Login.csproj">
+      <Project>{bdc29770-8ae9-463a-a497-ff4c1a7a511d}</Project>
+      <Name>APTAT.COT.Login</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\APTAT\APTAT.DAL\APTAT.DAL.csproj">
       <Project>{af4ace83-d560-40ec-aa29-5b962e1d3c5c}</Project>
