@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LoginHelper.cs" />
+    <Compile Include="LoginHelper2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecureStringExtender.cs" />
     <Compile Include="SecurityUserCredentials.cs" />
