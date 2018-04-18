@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.Core", "APTAT.Core\APTAT.Core.csproj", "{9E80A126-241C-4079-8975-E16204D03E8D}"
 EndProject
@@ -36,6 +36,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.Core.UnitTests", "APTAT.Core.UnitTests\APTAT.Core.UnitTests.csproj", "{6FE8C46F-D0F2-4313-8F84-070FDCC2DFB0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.DAL", "APTAT.DAL\APTAT.DAL.csproj", "{AF4ACE83-D560-40EC-AA29-5B962E1D3C5C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.COT.Login", "APTAT.COT.Login\APTAT.COT.Login.csproj", "{EB16081F-814F-494A-B4CD-52C064062F52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -214,6 +216,22 @@ Global
 		{AF4ACE83-D560-40EC-AA29-5B962E1D3C5C}.Release|Win32.Build.0 = Release|Any CPU
 		{AF4ACE83-D560-40EC-AA29-5B962E1D3C5C}.Release|x86.ActiveCfg = Release|Any CPU
 		{AF4ACE83-D560-40EC-AA29-5B962E1D3C5C}.Release|x86.Build.0 = Release|Any CPU
+		{EB16081F-814F-494A-B4CD-52C064062F52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB16081F-814F-494A-B4CD-52C064062F52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB16081F-814F-494A-B4CD-52C064062F52}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{EB16081F-814F-494A-B4CD-52C064062F52}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{EB16081F-814F-494A-B4CD-52C064062F52}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{EB16081F-814F-494A-B4CD-52C064062F52}.Debug|Win32.Build.0 = Debug|Any CPU
+		{EB16081F-814F-494A-B4CD-52C064062F52}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EB16081F-814F-494A-B4CD-52C064062F52}.Debug|x86.Build.0 = Debug|Any CPU
+		{EB16081F-814F-494A-B4CD-52C064062F52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB16081F-814F-494A-B4CD-52C064062F52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB16081F-814F-494A-B4CD-52C064062F52}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{EB16081F-814F-494A-B4CD-52C064062F52}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{EB16081F-814F-494A-B4CD-52C064062F52}.Release|Win32.ActiveCfg = Release|Any CPU
+		{EB16081F-814F-494A-B4CD-52C064062F52}.Release|Win32.Build.0 = Release|Any CPU
+		{EB16081F-814F-494A-B4CD-52C064062F52}.Release|x86.ActiveCfg = Release|Any CPU
+		{EB16081F-814F-494A-B4CD-52C064062F52}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -222,46 +240,8 @@ Global
 		{1B82F3A7-5887-4C48-9CE4-D5C6A70EEE49} = {49414CD5-5F5C-43FC-91C7-10263B37F0E7}
 		{6FE8C46F-D0F2-4313-8F84-070FDCC2DFB0} = {49414CD5-5F5C-43FC-91C7-10263B37F0E7}
 	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 12
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://pss05v:8080/tfs/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = APTAT.Application\\APTAT.Application.csproj
-		SccProjectName1 = APTAT.Application
-		SccLocalPath1 = APTAT.Application
-		SccProjectUniqueName2 = APTAT.Bootstrapper\\APTAT.Bootstrapper.vcxproj
-		SccProjectName2 = APTAT.Bootstrapper
-		SccLocalPath2 = APTAT.Bootstrapper
-		SccProjectUniqueName3 = APTAT.Valkyrie.ClientTest\\APTAT.Valkyrie.ClientTest.csproj
-		SccProjectName3 = APTAT.Valkyrie.ClientTest
-		SccLocalPath3 = APTAT.Valkyrie.ClientTest
-		SccProjectUniqueName4 = APTAT.Valkyrie.Client\\Valkyrie.WebApiProvider.csproj
-		SccProjectName4 = APTAT.Valkyrie.Client
-		SccLocalPath4 = APTAT.Valkyrie.Client
-		SccProjectUniqueName5 = CodedUITestAT\\CodedUITestAT.csproj
-		SccProjectName5 = CodedUITestAT
-		SccLocalPath5 = CodedUITestAT
-		SccProjectUniqueName6 = APTAT.Core\\APTAT.Core.csproj
-		SccProjectName6 = APTAT.Core
-		SccLocalPath6 = APTAT.Core
-		SccProjectUniqueName7 = ..\\Common\\APTAT.DeploymentCore\\APTAT.DeploymentCore.csproj
-		SccProjectName7 = ../Common/APTAT.DeploymentCore
-		SccLocalPath7 = ..\\Common\\APTAT.DeploymentCore
-		SccProjectUniqueName8 = ..\\Common\\APTAT.Common\\APTAT.Common.csproj
-		SccProjectName8 = ../Common/APTAT.Common
-		SccLocalPath8 = ..\\Common\\APTAT.Common
-		SccProjectUniqueName9 = ..\\Common\\APTAT.DeploymentCore.UnitTests\\APTAT.DeploymentCore.UnitTests.csproj
-		SccProjectTopLevelParentUniqueName9 = APTAT.sln
-		SccProjectName9 = ../Common/APTAT.DeploymentCore.UnitTests
-		SccLocalPath9 = ..\\Common\\APTAT.DeploymentCore.UnitTests
-		SccProjectUniqueName10 = APTAT.Core.UnitTests\\APTAT.Core.UnitTests.csproj
-		SccProjectTopLevelParentUniqueName10 = APTAT.sln
-		SccProjectName10 = APTAT.Core.UnitTests
-		SccLocalPath10 = APTAT.Core.UnitTests
-		SccProjectUniqueName11 = APTAT.DAL\\APTAT.DAL.csproj
-		SccProjectName11 = APTAT.DAL
-		SccLocalPath11 = APTAT.DAL
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9122B7E7-2061-4285-853F-6197EE94C4BF}
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true
