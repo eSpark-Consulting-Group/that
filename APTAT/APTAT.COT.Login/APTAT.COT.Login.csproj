@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,8 +43,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LoginHelper.cs" />
-    <Compile Include="LoginHelper2.cs" />
+    <Compile Include="LoginResultsTypes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResultsEnums.cs" />
     <Compile Include="SecureStringExtender.cs" />
     <Compile Include="SecurityUserCredentials.cs" />
   </ItemGroup>

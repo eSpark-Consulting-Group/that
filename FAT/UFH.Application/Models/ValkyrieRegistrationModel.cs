@@ -6,10 +6,16 @@ namespace UFH.Application.Models
     [Composition.CreationPolicy(Composition.CreationPolicy.Singleton)]
     public class ValkyrieRegistrationModel : ViewModel
     {
+        public ValkyrieRegistrationModel()
+        {
+            LoginResult = APTAT.COT.Login.LoginResults.ERR_AUTHENTICATION;
+        }
         private string _licenseId;
         private string _userName;
         private string _passwordBuffer;
         private string _errorMessage;
+
+        public APTAT.COT.Login.LoginResults LoginResult { get; set; }
 
         public string LicenseId
         {

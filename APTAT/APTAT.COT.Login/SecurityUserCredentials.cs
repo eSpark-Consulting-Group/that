@@ -5,33 +5,36 @@ namespace APTAT.COT.Login
 {
     public class SecurityUserCredentials
     {
-        public SecurityUserCredentials(string login, string password)
+        private SecurityUserCredentials()
         {
-            if (string.IsNullOrWhiteSpace(login))
-                throw new ArgumentException("ArgumentException is Invalid", login);
+            Email = string.Empty;
+            Password = string.Empty.ConvertToSecureString();
+            Namespace = string.Empty;
+            LicenseNumber = string.Empty;
+        }
+        public SecurityUserCredentials(string email, string password) : this()
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                throw new ArgumentException("ArgumentException is Invalid", email);
             if (string.IsNullOrWhiteSpace(password))
                 throw new ArgumentException("ArgumentException is Invalid", password);
 
-            Login = login;
+            Email = email;
             Password = password.ConvertToSecureString();
         }
 
-        public SecurityUserCredentials(string login, string password, string namspace) : this(login, password)
+        public SecurityUserCredentials(string email, string password, string licenseID) : this(email, password)
         {
-            if (string.IsNullOrWhiteSpace(namspace))
-                throw new ArgumentException("ArgumentException is Invalid", namspace);
-            Namespace = namspace;
+            LicenseNumber = licenseID;
         }
 
-        public SecurityUserCredentials(string licenseNumber)
+        public SecurityUserCredentials(string licenseNumber) : this()
         {
             if (string.IsNullOrWhiteSpace(licenseNumber))
-                throw new ArgumentException("ArgumentException is Invalid", licenseNumber);
-
-            LicenseNumber = licenseNumber;
+                throw new ArgumentException("ArgumentException is Invalid", licenseNumber);            
         }
 
-        public string Login { get; private set; }
+        public string Email { get; private set; }
         public SecureString Password { get; private set; }
 
         public string Namespace { get; private set; }

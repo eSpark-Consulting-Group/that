@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
@@ -17,6 +18,8 @@ namespace UFH.Application
         private readonly ValkyrieRegistrationModel _model;
         public event EventHandler OkClick;
         public event EventHandler CancelClick;
+        public event EventHandler OnClosedEvent;
+        public event EventHandler OnClosingEvent;
 
         public CamCredentialsWindow()
         {
@@ -25,6 +28,18 @@ namespace UFH.Application
             _model.Password = null;
             _model.PasswordBuffer = null;
             _model.ErrorMessage = null;
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            OnClosedEvent?.Invoke(this, e);
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            OnClosingEvent?.Invoke(this, e);
         }
 
         private void OnCloseClick(object sender, RoutedEventArgs e)

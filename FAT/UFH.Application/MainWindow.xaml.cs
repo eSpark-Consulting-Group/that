@@ -4,6 +4,7 @@ using APTAT.Common;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using APTAT.COT.Login;
 
 namespace UFH.Application
 {
@@ -27,13 +28,14 @@ namespace UFH.Application
         {
             _model.OnLoadedCommand.Execute(true);
 
-            TryLogin();
+            //TryLogin();
         }
 
         private static void TryLogin()
         {
-            APTAT.COT.Login.LoginHelper login = new APTAT.COT.Login.LoginHelper();
-            var res = login.Login(new APTAT.COT.Login.SecurityUserCredentials("", ""));
+            var cred = new SecurityUserCredentials("yuriy.balan@comodo.com", "12345678");
+            var res = APTAT.COT.Login.LoginHelper.Login(cred);
+            
             switch (res)
             {
                 case APTAT.COT.Login.LoginResults.SUCCESS_AUTHENTICATION:
@@ -47,6 +49,20 @@ namespace UFH.Application
                 case APTAT.COT.Login.LoginResults.ERR_MISSING_PARAM:
                     break;
                 case APTAT.COT.Login.LoginResults.ALREADY_LOGGED_IN:
+                    break;
+                default:
+                    break;
+            }
+
+            var check = APTAT.COT.Login.LoginHelper.CheckAuth(cred);
+
+            switch (check)
+            {
+                case CheckAuthResults.ERR_NOT_AUTHENTICATED:
+                    break;
+                case CheckAuthResults.SUCCESS_AUTHENTICATED:
+                    break;
+                case CheckAuthResults.ERR_MISSING_PARAM:
                     break;
                 default:
                     break;

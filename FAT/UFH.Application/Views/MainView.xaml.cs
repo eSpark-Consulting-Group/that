@@ -55,20 +55,53 @@ namespace UFH.Application
         {
             var _dialog = new CamCredentialsWindow
             {
-                Owner = System.Windows.Application.Current.MainWindow
+                Owner = System.Windows.Application.Current.MainWindow,
             };
             _dialog.OkClick += (sender, args) =>
             {
-                if (_viewModel.BeginValkyrieAnalysis())
+                //if (_viewModel.BeginValkyrieAnalysis())
+                if (_dialog.DataContext is ValkyrieRegistrationModel m)
+                {
                     Dispatcher.Invoke(() =>
                     {
                         _dialog.loading.IsBusy = true;
                         _dialog.ok.Visibility = Visibility.Collapsed;
                     });
+
+                    m.LoginResult = APTAT.COT.Login.LoginHelper.Login(new APTAT.COT.Login.SecurityUserCredentials(m.UserName, m.Password, m.LicenseId));
+
+                    Dispatcher.Invoke(() =>
+                    {
+                        _dialog.ok.Visibility = Visibility.Visible;
+                        _dialog.loading.IsBusy = false;
+                    });
+
+                    _dialog.SetErrorMessage(m.LoginResult.ToString());
+                    if (m.LoginResult == APTAT.COT.Login.LoginResults.SUCCESS_AUTHENTICATION)
+                    {
+                        Dispatcher.Invoke(() =>
+                        {
+                            _dialog.Close();
+                            _dialog = null;
+                        });
+                    }
+                }
             };
             _dialog.CancelClick += (sender, args) =>
+            {                
+                LogonText.Text = string.Empty;
+            };
+
+            _dialog.OnClosingEvent += (sender, arg) =>
             {
-                // _viewModel.IsAnalyseWithValkyrieEnabled = true;
+                LogonText.Text = string.Empty;
+                if (_dialog.DataContext is ValkyrieRegistrationModel m)
+                {
+                    if (m.LoginResult == APTAT.COT.Login.LoginResults.SUCCESS_AUTHENTICATION)
+                    {
+                        LogonText.Text = m.UserName;
+                    }
+                }
             };
 
             _dialog.ShowDialog();
