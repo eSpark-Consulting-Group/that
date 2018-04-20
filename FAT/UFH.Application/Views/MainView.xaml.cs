@@ -18,12 +18,15 @@ using APTAT.Application;
 using System.Net;
 using APTAT.Common;
 using APTAT.Application.Models;
+using System.Threading.Tasks;
+using APTAT.COT.Login;
 
 namespace UFH.Application
 {
     public partial class MainView
     {
         private MainViewModel _viewModel;
+        private SecurityUserCredentials Credentials { get; set; }
 
         public MainView()
         {
@@ -68,7 +71,11 @@ namespace UFH.Application
                         _dialog.ok.Visibility = Visibility.Collapsed;
                     });
 
-                    m.LoginResult = APTAT.COT.Login.LoginHelper.Login(new APTAT.COT.Login.SecurityUserCredentials(m.UserName, m.Password, m.LicenseId));
+                    Credentials = new SecurityUserCredentials(m.UserName, m.Password, m.LicenseId);
+                    if (Credentials.CanApplay)
+                    {
+                        Task.Run(() => { m.LoginResult = LoginHelper.Login(Credentials); }).Wait();
+                    }
 
                     Dispatcher.Invoke(() =>
                     {
@@ -77,7 +84,7 @@ namespace UFH.Application
                     });
 
                     _dialog.SetErrorMessage(m.LoginResult.ToString());
-                    if (m.LoginResult == APTAT.COT.Login.LoginResults.SUCCESS_AUTHENTICATION)
+                    if (m.LoginResult == LoginResults.SUCCESS_AUTHENTICATION)
                     {
                         Dispatcher.Invoke(() =>
                         {
@@ -88,21 +95,36 @@ namespace UFH.Application
                 }
             };
             _dialog.CancelClick += (sender, args) =>
-            {                
-                LogonText.Text = string.Empty;
+            {
+                //LogonText.Text = string.Empty;
             };
 
             _dialog.OnClosingEvent += (sender, arg) =>
             {
-                LogonText.Text = string.Empty;
+                //LogonText.Text = string.Empty;
                 if (_dialog.DataContext is ValkyrieRegistrationModel m)
                 {
-                    if (m.LoginResult == APTAT.COT.Login.LoginResults.SUCCESS_AUTHENTICATION)
+                    if (m.LoginResult == LoginResults.SUCCESS_AUTHENTICATION)
                     {
-                        LogonText.Text = m.UserName;
+                        if (Credentials.CanApplay)
+                        {
+                            LogonText.Text = Credentials.Email.Split('@').FirstOrDefault();
+                        }
                     }
                 }
             };
+
+            _dialog.OnGuestButtonClick += (sender, arg) =>
+              {
+                  LoginHelper.Logout();
+                  Credentials = new SecurityUserCredentials(); ;
+                  LogonText.Text = "Guest";
+                  Dispatcher.Invoke(() =>
+                  {
+                      _dialog.Close();
+                      _dialog = null;
+                  });
+              };
 
             _dialog.ShowDialog();
         }

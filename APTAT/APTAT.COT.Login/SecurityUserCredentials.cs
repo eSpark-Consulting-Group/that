@@ -5,40 +5,49 @@ namespace APTAT.COT.Login
 {
     public class SecurityUserCredentials
     {
-        private SecurityUserCredentials()
+        public bool CanApplay { get; private set; } = true;
+        public SecurityUserCredentials()
         {
             Email = string.Empty;
             Password = string.Empty.ConvertToSecureString();
             Namespace = string.Empty;
-            LicenseNumber = string.Empty;
+            LicenseID = string.Empty;
+            CanApplay = false;
         }
         public SecurityUserCredentials(string email, string password) : this()
         {
-            if (string.IsNullOrWhiteSpace(email))
-                throw new ArgumentException("ArgumentException is Invalid", email);
-            if (string.IsNullOrWhiteSpace(password))
-                throw new ArgumentException("ArgumentException is Invalid", password);
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+            {
+                CanApplay = false;
+            }
 
             Email = email;
             Password = password.ConvertToSecureString();
         }
 
-        public SecurityUserCredentials(string email, string password, string licenseID) : this(email, password)
+        public SecurityUserCredentials(string email, string password, string licenseID)
         {
-            LicenseNumber = licenseID;
-        }
-
-        public SecurityUserCredentials(string licenseNumber) : this()
-        {
-            if (string.IsNullOrWhiteSpace(licenseNumber))
-                throw new ArgumentException("ArgumentException is Invalid", licenseNumber);            
-        }
+            if (!string.IsNullOrWhiteSpace(email) && !string.IsNullOrWhiteSpace(password))
+            {
+                Email = email;
+                Password = password.ConvertToSecureString();
+                CanApplay = true;
+            }
+            else
+            {
+                if (string.IsNullOrWhiteSpace(licenseID))
+                {
+                    CanApplay = false;
+                }
+                LicenseID = licenseID;
+            }
+        }        
 
         public string Email { get; private set; }
         public SecureString Password { get; private set; }
 
         public string Namespace { get; private set; }
 
-        public string LicenseNumber { get; private set; }
+        public string LicenseID { get; private set; }
     }
 }

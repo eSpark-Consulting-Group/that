@@ -20,6 +20,7 @@ namespace UFH.Application
         public event EventHandler CancelClick;
         public event EventHandler OnClosedEvent;
         public event EventHandler OnClosingEvent;
+        public event EventHandler OnGuestButtonClick;
 
         public CamCredentialsWindow()
         {
@@ -87,7 +88,8 @@ namespace UFH.Application
 
         private void Guest_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            
+            _model.ErrorMessage = String.Empty;
+            OnGuestButtonClick?.Invoke(this, e);
         }
 
         private void CamCredentialsWindow_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

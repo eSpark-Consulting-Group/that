@@ -10,13 +10,16 @@ namespace APTAT.COT.Login
     {
         public static SecureString ConvertToSecureString(this string password)
         {
-            //return new NetworkCredential(string.Empty, password).SecurePassword;
-            var res = new SecureString();            
-            foreach (char c in password)
-                res.AppendChar(c);
+            var res = new SecureString();
+            if (!string.IsNullOrEmpty(password))
+            {
+                //return new NetworkCredential(string.Empty, password).SecurePassword;
+                
+                foreach (char c in password)
+                    res.AppendChar(c);
 
-            res.MakeReadOnly();
-
+                res.MakeReadOnly();
+            }
             return res;
         }
 

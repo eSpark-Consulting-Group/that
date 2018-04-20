@@ -193,7 +193,7 @@ namespace APTAT.COT.Login
         }
 
 
-        public bool Logout()
+        public static bool Logout()
         {
             //TODO: Implement Logout
             return true;
