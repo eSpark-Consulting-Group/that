@@ -3,10 +3,12 @@ using System.Security;
 
 namespace APTAT.COT.Login
 {
-    public class SecurityUserCredentials
+    public sealed class SecurityUserCredentials
     {
         public bool CanApplay { get; private set; } = true;
-        public SecurityUserCredentials()
+
+        public static SecurityUserCredentials Empty { get; } = new SecurityUserCredentials();
+        private SecurityUserCredentials()
         {
             Email = string.Empty;
             Password = string.Empty.ConvertToSecureString();

@@ -57,6 +57,7 @@ namespace UFH.Application
         private void LogoutMenuItemClick(object sender, RoutedEventArgs e)
         {
             //TODO:
+            Credentials = SecurityUserCredentials.Empty;
         }
 
         public string LoggedUserName
@@ -137,7 +138,7 @@ namespace UFH.Application
                 _dialog.OnGuestButtonClick += (sender, arg) =>
                  {
                      LoginHelper.Logout();
-                     Credentials = new SecurityUserCredentials();
+                     Credentials = SecurityUserCredentials.Empty;
                      _viewModel.LogInTxt = "Guest";
                      Dispatcher.Invoke(() =>
                      {
