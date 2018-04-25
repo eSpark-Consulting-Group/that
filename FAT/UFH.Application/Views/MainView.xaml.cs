@@ -43,21 +43,34 @@ namespace UFH.Application
 
             _viewModel.ScanProcessCompleted += OnScanCompleted;
             _viewModel.ErrorOccurred += OnErrorOccurred;
+
+            LogOnButton.DropDownOpening += LogOnButton_DropDownOpening;
+        }
+
+        private bool _hideDropDownOnLogonButton;
+        private void LogOnButton_DropDownOpening(object sender, RoutedEventArgs e)
+        {
+            if (!_viewModel.LogedIn || _hideDropDownOnLogonButton)
+            {
+                e.Handled = true;
+                _hideDropDownOnLogonButton = false;
+            }
         }
 
         private void LogOnClick(object sender, RoutedEventArgs e)
         {
-            //_viewModel.LogInTxt = "LogOn";
-            _viewModel.LogedIn = !_viewModel.LogedIn;
-            LogOnButton.IsOpen = !_viewModel.LogedIn;
-            //LogonText.Foreground = 
-            ShowRegisterToValkyrieWindow();
+            if (!_viewModel.LogedIn)
+            {
+                _hideDropDownOnLogonButton = true;
+                ShowRegisterToValkyrieWindow();
+            }
         }
 
         private void LogoutMenuItemClick(object sender, RoutedEventArgs e)
         {
-            //TODO:
             Credentials = SecurityUserCredentials.Empty;
+            _viewModel.LogInTxt = "Login";
+            _viewModel.LogedIn = false;
         }
 
         public string LoggedUserName
@@ -121,6 +134,7 @@ namespace UFH.Application
                             if (Credentials.CanApplay)
                             {
                                 _viewModel.LogInTxt = Credentials.Email.Split('@').FirstOrDefault();
+                                _viewModel.LogedIn = true;
                             }
                         }
                     }
@@ -140,6 +154,7 @@ namespace UFH.Application
                      LoginHelper.Logout();
                      Credentials = SecurityUserCredentials.Empty;
                      _viewModel.LogInTxt = "Guest";
+                     _viewModel.LogedIn = false;
                      Dispatcher.Invoke(() =>
                      {
                          _dialog.Close();
