@@ -277,7 +277,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Path x:Name="path" Data="M9,9.0000021 L14,9.0000021 13,17.000001 C13,17.000001 13,18.000001 15,17.000001 12,21 10,18.000001 10,18.000001 L11,10.000002 9,10.000002 z M12.5,5.0000005 C13.329,5.0000005 14,5.6720004 14,6.5000005 14,7.3280004 13.329,8.0000004 12.5,8.0000002 11.671,8.0000004 11,7.3280004 11,6.5000005 11,5.6720004 11.671,5.0000005 12.5,5.0000005 z M12,2.0000005 C6.4780004,2.0000005 2.0000005,6.4780004 2.0000005,12 2.0000005,17.522 6.4780004,22 12,22 17.522,22 22,17.522 22,12 22,6.4780004 17.522,2.0000005 12,2.0000005 z M12,0 C18.627001,0 24,5.3730004 24,12 24,18.627001 18.627001,24 12,24 5.3730004,24 0,18.627001 0,12 0,5.3730004 5.3730004,0 12,0 z"
-                              Fill="{DynamicResource StrongBrush}" Height="24" SnapsToDevicePixels="True" Stretch="Fill" Margin="0,0,10,0" Width="24"/>
+                          Fill="{DynamicResource StrongBrush}" Height="24" SnapsToDevicePixels="True" Stretch="Fill" Margin="0,0,10,0" Width="24"/>
                     <TextBlock x:Name="text" Text="{Binding}" Grid.Column="1" Style="{StaticResource HeaderTextBlock}" FontSize="15" Margin="0 2 0 0"/>
                 </Grid>
                 <DataTemplate.Triggers>
@@ -287,20 +287,32 @@
                     </DataTrigger>
                 </DataTemplate.Triggers>
             </DataTemplate>
-            
+           
+
             <DataTemplate x:Key="ReportButtonListBoxItemTemplate">
                 <TextBlock Text="{Binding}" Style="{StaticResource HeaderTextBlock}" Margin="0 5" FontSize="15"/>
             </DataTemplate>
 
             <SolidColorBrush x:Key="TextBrushLogin" Color="#FF2A80B9" />
 
+            <Style TargetType="TextBlock" x:Key="LoginMenuTextBlock">
+                <Setter Property="FontFamily" Value="{DynamicResource myriadpro}" />
+                <Setter Property="Foreground" Value="{DynamicResource TextBrushLogin}"/>
+
+            </Style>
+
             <Style TargetType="TextBlock" x:Key="LoginTextBlock">
                 <Setter Property="FontFamily" Value="{DynamicResource myriadpro}" />
                 <Setter Property="Foreground" Value="{DynamicResource TextBrushLogin}"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Path=IsOpen,ElementName=LogOnButton}" Value="true">
+                        <Setter Property="Foreground" Value="White"/>
+                    </DataTrigger>
+                </Style.Triggers>
             </Style>
 
             <DataTemplate x:Key="LoginButtonListBoxItemTemplate">
-                <TextBlock Text="{Binding}" Style="{DynamicResource LoginTextBlock}" Margin="0 5" FontSize="15"/>
+                <TextBlock Text="{Binding}" Style="{DynamicResource LoginMenuTextBlock}" Margin="0 5" FontSize="15"/>
             </DataTemplate>
 
             <CollectionViewSource x:Key="SortedCounters" Source="{Binding ScanCounters}">
@@ -759,7 +771,7 @@
                                   FocusVisualStyle="{x:Null}" 
                                   IsEnabled="{Binding IsAnyScanInProgress, Converter={StaticResource InverseBooleanConverter}}"
                                   Click="LogOnClick"
-                                  Name="LogOnButton"
+                                  x:Name="LogOnButton"
                                   DropDownIndicatorVisibility="Collapsed"
                                   AutoOpenDelay="0:0:0.0" IsOpen="False"  Foreground="#FF2A80B9">
                             <telerik:RadDropDownButton.Content>
@@ -768,7 +780,7 @@
                                         <ColumnDefinition/>
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Name="LogonText" Text="{Binding LogInTxt}" Style="{StaticResource LoginTextBlock}" Margin="0 2 0 0" Grid.Column="0" FontSize="15" />
+                                    <TextBlock x:Name="LogonText" Text="{Binding LogInTxt}" Style="{StaticResource LoginTextBlock}" Margin="0 2 0 0" Grid.Column="0" FontSize="15" />
                                     <Image 
                                         Grid.Column="1" 
                                         HorizontalAlignment="Left" 
