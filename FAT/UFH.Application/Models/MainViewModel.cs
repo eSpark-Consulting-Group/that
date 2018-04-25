@@ -30,6 +30,7 @@ using Microsoft.Win32;
 using System.Reflection;
 using UFH.Application.Attributes;
 using System.Net;
+using System.Windows;
 using APTAT.Application.Models;
 
 namespace UFH.Application.Models
@@ -622,6 +623,39 @@ namespace UFH.Application.Models
             }
         }
 
+        private bool _logedIn;
+        public bool LogedIn
+        {
+            get => _logedIn;
+            set
+            {
+                _logedIn = value;
+                RaisePropertyChanged(nameof(LogOutImageVisibility));
+                RaisePropertyChanged(nameof(LogInTxt));
+                RaisePropertyChanged(nameof(LoginStyle));
+            }
+        }
+
+        public string LogInTxt { get; set; }
+
+        public Visibility LogOutImageVisibility
+        {
+            get
+            {
+                if (LogedIn) return Visibility.Visible;
+                return Visibility.Collapsed;
+            }
+        }
+        
+        public string LoginStyle
+        {
+            get
+            {
+                if (LogedIn) return "HeaderTextBlock";
+                return "LoginTextBlock";
+            }
+        }
+
         #endregion
 
         #region Commands
@@ -660,6 +694,8 @@ namespace UFH.Application.Models
             _scanOperationsManager = scanOperationsManager;
             _scanTimer = scanTimer;
             _statisticsService = statisticsService;
+
+            LogInTxt = "Login";
 
             InitCommands();
         }

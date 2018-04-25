@@ -19,6 +19,7 @@ using System.Net;
 using APTAT.Common;
 using APTAT.Application.Models;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using APTAT.COT.Login;
 
 namespace UFH.Application
@@ -46,7 +47,16 @@ namespace UFH.Application
 
         private void LogOnClick(object sender, RoutedEventArgs e)
         {
-            ShowRegisterToValkyrieWindow();
+            _viewModel.LogInTxt = "UserTest UserTes";
+            _viewModel.LogedIn = !_viewModel.LogedIn;
+            LogOnButton.IsOpen = !_viewModel.LogedIn;
+            //LogonText.Foreground = 
+            //ShowRegisterToValkyrieWindow();
+        }
+
+        private void LogoutMenuItemClick(object sender, RoutedEventArgs e)
+        {
+            //TODO:
         }
 
         public string LoggedUserName

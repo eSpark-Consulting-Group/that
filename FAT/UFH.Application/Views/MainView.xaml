@@ -292,6 +292,17 @@
                 <TextBlock Text="{Binding}" Style="{StaticResource HeaderTextBlock}" Margin="0 5" FontSize="15"/>
             </DataTemplate>
 
+            <SolidColorBrush x:Key="TextBrushLogin" Color="#FF2A80B9" />
+
+            <Style TargetType="TextBlock" x:Key="LoginTextBlock">
+                <Setter Property="FontFamily" Value="{DynamicResource myriadpro}" />
+                <Setter Property="Foreground" Value="{DynamicResource TextBrushLogin}"/>
+            </Style>
+
+            <DataTemplate x:Key="LoginButtonListBoxItemTemplate">
+                <TextBlock Text="{Binding}" Style="{DynamicResource LoginTextBlock}" Margin="0 5" FontSize="15"/>
+            </DataTemplate>
+
             <CollectionViewSource x:Key="SortedCounters" Source="{Binding ScanCounters}">
                 <CollectionViewSource.SortDescriptions>
                     <scm:SortDescription PropertyName="Order"/>
@@ -740,30 +751,47 @@
                             </telerik:RadDropDownButton.DropDownContent>
                         </telerik:RadDropDownButton>
 
-                        <telerik:RadButton AutomationProperties.AutomationId="LogOnButton"
-                                  Margin="0,-2,0,-3"  
+                        <telerik:RadDropDownButton AutomationProperties.AutomationId="LogOnButton"
+                                  Margin="20,-2,20,-3"  
                                   Padding="10,20,10,20"
                                   FontSize="16"
                                   BorderThickness="0"
                                   FocusVisualStyle="{x:Null}" 
-                                  IsEnabled="{Binding IsLogOnPossible, Converter={StaticResource InverseBooleanConverter}}"
                                   Click="LogOnClick"
-                                  Name="LogOnButton">
-                            <telerik:RadButton.Content>
+                                  Name="LogOnButton"
+                                  DropDownIndicatorVisibility="Collapsed"
+                                  AutoOpenDelay="0:0:0.0" IsOpen="False"  Foreground="#FF2A80B9">
+                            <telerik:RadDropDownButton.Content>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition/>
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
-                                    <Path Data="M12.116,9.8839998 C10.959,9.8839998 10.014,10.829 10.014,11.986 10.014,13.145 10.959,14.088 12.116,14.088 13.274,14.088 14.217999,13.145 14.217999,11.986 14.217999,10.829 13.274,9.8839998 12.116,9.8839998 z M12.116,8.8339996 C13.862,8.8339996 15.269,10.240999 15.269,11.986 15.269,13.733 13.862,15.139 12.116,15.139 10.371,15.139 8.9639997,13.733 8.9639997,11.986 8.9639997,10.240999 10.371,8.8339996 12.116,8.8339996 z M11.529,5.8940001 L11.262,7.427 10.942,7.5149999 C10.514,7.6220002 10.122,7.8010001 9.7480001,8.0139999 L9.4449997,8.1920004 8.1990004,7.302 7.3969998,8.1029997 8.2880001,9.3669996 8.1090002,9.6710005 C7.895,10.045 7.7350001,10.437 7.6279998,10.864 L7.539,11.202 6.0250001,11.452 6.0250001,12.574 7.5570002,12.841 7.6459999,13.162 C7.7529998,13.59 7.9309998,13.981 8.1449995,14.355 L8.323,14.658 7.4320002,15.905 8.2340002,16.707001 9.4980001,15.816 9.8009996,15.994 C10.158,16.208 10.549,16.368 10.959,16.511 L11.297,16.599001 11.547,18.113001 12.687,18.113001 12.936,16.599001 13.275,16.511 C13.703,16.403999 14.094,16.225 14.468,16.011999 L14.771,15.834 16.035999,16.724001 16.837,15.923 15.947,14.658 16.124001,14.355 C16.356001,13.981 16.516001,13.572 16.622999,13.162 L16.712,12.824 18.226999,12.574 18.226999,11.434 16.712,11.184 16.622999,10.846 C16.516001,10.419 16.337999,10.027 16.124001,9.6529999 L15.947,9.3500004 16.837,8.085 16.035999,7.283 14.771,8.1739998 14.468,7.9959998 C14.077,7.7820001 13.666,7.6040001 13.239,7.4970002 L12.901,7.408 12.652,5.8940001 z M11.476,4.8790002 L12.705,4.8790002 C13.186,4.8790002 13.595,5.2350001 13.684,5.7160001 L13.827,6.6069999 C14.112,6.6960001 14.397,6.8210001 14.682,6.9629998 L15.43,6.4289999 C15.822,6.1440001 16.374001,6.197 16.712,6.5360003 L17.584999,7.408 C17.924,7.7470002 17.976999,8.2989998 17.691999,8.691 L17.157999,9.4390001 C17.282999,9.7060003 17.407,9.9729996 17.497,10.258 L18.405001,10.419 C18.886,10.49 19.242001,10.917 19.242001,11.398 L19.242001,12.627 C19.242001,13.109 18.886,13.517 18.405001,13.607 L17.497,13.75 C17.407,14.035 17.299999,14.302 17.157999,14.569 L17.691999,15.317 C17.976999,15.709 17.924,16.261999 17.584999,16.599001 L16.712,17.472 C16.374001,17.809999 15.822,17.864 15.43,17.58 L14.682,17.045 C14.414,17.17 14.148,17.295 13.863,17.382999 L13.703,18.292 C13.631,18.773001 13.204,19.129 12.723,19.129 L11.494,19.129 C11.012,19.129 10.585,18.773001 10.532,18.273001 L10.389,17.365 C10.104,17.277 9.8369999,17.17 9.5869999,17.045 L8.8389997,17.58 C8.448,17.864 7.895,17.809999 7.5570002,17.472 L6.684,16.599001 C6.3460002,16.261999 6.2919998,15.709 6.5780001,15.317 L7.0939999,14.587 C6.9520001,14.32 6.8270001,14.053 6.7379999,13.767 L5.8299999,13.607 C5.348,13.536 4.9920001,13.109 4.9920001,12.627 L4.9920001,11.398 C4.9920001,10.917 5.348,10.508 5.8299999,10.419 L6.7199998,10.276 C6.809,9.9910002 6.915,9.7060003 7.0580001,9.4390001 L6.5240002,8.691 C6.2389998,8.2989998 6.2919998,7.7470002 6.6300001,7.408 L7.5029998,6.5360003 C7.842,6.197 8.3940001,6.1440001 8.7860003,6.4289999 L9.5159998,6.9460001 C9.7840004,6.803 10.051,6.678 10.335,6.5890002 L10.497,5.7160001 C10.567,5.2350001 10.995,4.8790002 11.476,4.8790002 z M12.001,1.9999999 C6.4780002,2 2,6.4780002 1.9999999,12 2,17.523001 6.4780002,22 12.001,22 17.523001,22 22,17.523001 22,12 22,6.4780002 17.523001,2 12.001,1.9999999 z M12,0 C18.628,0 24,5.3730001 24,12 24,18.629 18.628,24 12,24 5.3730001,24 0,18.629 0,12 0,5.3730001 5.3730001,0 12,0 z"
-                              Fill="{DynamicResource StrongBrush}" 
-                              Height="24" Stretch="Fill" SnapsToDevicePixels="True"
-                              Width="24" Margin="0,0,10,0"/>
-                                    <TextBlock Name="LogonText" Text="LogOn" Margin="0 2 0 0" Grid.Column="1" Style="{StaticResource HeaderTextBlock}" FontSize="15" />
+                                    <TextBlock Name="LogonText" Text="{Binding LogInTxt}" Style="{StaticResource LoginTextBlock}" Margin="0 2 0 0" Grid.Column="0" FontSize="15" />
+                                    <Image 
+                                        Grid.Column="1" 
+                                        HorizontalAlignment="Left" 
+                                        Margin="10,0,0,0"
+                                        Height="20" 
+                                        Width="20" 
+                                        Stretch="None"
+                                        Source="../Assets/tick.png" Visibility="{Binding LogOutImageVisibility}">
+                                    </Image>
                                 </Grid>
-                            </telerik:RadButton.Content>
-                        </telerik:RadButton>
-
+                                
+                            </telerik:RadDropDownButton.Content>
+                                <telerik:RadDropDownButton.DropDownContent >
+                                <telerik:RadContextMenu AutomationProperties.AutomationId="LogoutContextMenu" BorderThickness="0" IconColumnWidth="40" Width="{Binding ActualWidth, ElementName=LogOnButton}">
+                                    <telerik:RadMenuItem AutomationProperties.AutomationId="LogoutMenuItem" HeaderTemplate="{StaticResource LoginButtonListBoxItemTemplate}" 
+                                                         Header="Logout" Click="LogoutMenuItemClick" Margin="-1" Background="White" Height="{Binding ActualHeight, ElementName=LogOnButton}">
+                                        <telerik:RadMenuItem.Icon>
+                                            <Image Source="../Assets/logout.png" Stretch="None" Margin="10 0 0 0"/>
+                                        </telerik:RadMenuItem.Icon>
+                                    </telerik:RadMenuItem>
+                                </telerik:RadContextMenu>
+                            </telerik:RadDropDownButton.DropDownContent>
+                        </telerik:RadDropDownButton>
+                        
                     </telerik:RadToolBar>
                 </Grid>
 
