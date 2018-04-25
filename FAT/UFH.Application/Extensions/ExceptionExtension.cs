@@ -28,8 +28,8 @@ namespace UFH.Application.Extensions
             {
                 res += offsetCount != 0 ? Environment.NewLine + "\t  InnerException :".Mult(offsetCount) : string.Empty
                     + ex.Message;
-            }
-            GetFullMessage(ex.InnerException, ref res, ++offsetCount);
+                GetFullMessage(ex.InnerException, ref res, ++offsetCount);
+            }            
         }
 
         private static string Mult(this string str, int count)

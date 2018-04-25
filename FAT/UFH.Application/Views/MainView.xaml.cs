@@ -64,79 +64,91 @@ namespace UFH.Application
             get { return _viewModel.LoggedUserName; }
         }
 
-        private void ShowRegisterToValkyrieWindow()
+        private void ShowRegisterToValkyrieWindow(bool isScanCompleted = false)
         {
-            var _dialog = new CamCredentialsWindow
+            //if (!isScanCompleted)
             {
-                Owner = System.Windows.Application.Current.MainWindow,
-            };
-            _dialog.OkClick += (sender, args) =>
-            {
-                //if (_viewModel.BeginValkyrieAnalysis())
-                if (_dialog.DataContext is ValkyrieRegistrationModel m)
+                var _dialog = new CamCredentialsWindow
                 {
-                    Dispatcher.Invoke(() =>
-                    {
-                        _dialog.loading.IsBusy = true;
-                        _dialog.ok.Visibility = Visibility.Collapsed;
-                    });
-
-                    Credentials = new SecurityUserCredentials(m.UserName, m.Password, m.LicenseId);
-                    if (Credentials.CanApplay)
-                    {
-                        Task.Run(() => { m.LoginResult = LoginHelper.Login(Credentials); }).Wait();
-                    }
-
-                    Dispatcher.Invoke(() =>
-                    {
-                        _dialog.ok.Visibility = Visibility.Visible;
-                        _dialog.loading.IsBusy = false;
-                    });
-
-                    _dialog.SetErrorMessage(m.LoginResult.ToString());
-                    if (m.LoginResult == LoginResults.SUCCESS_AUTHENTICATION)
+                    Owner = System.Windows.Application.Current.MainWindow,
+                };
+                _dialog.OkClick += (sender, args) =>
+                {
+                    if (_dialog.DataContext is ValkyrieRegistrationModel m)
                     {
                         Dispatcher.Invoke(() =>
                         {
-                            _dialog.Close();
-                            _dialog = null;
+                            _dialog.loading.IsBusy = true;
+                            _dialog.ok.Visibility = Visibility.Collapsed;
                         });
-                    }
-                }
-            };
-            _dialog.CancelClick += (sender, args) =>
-            {
-                //LogonText.Text = string.Empty;
-            };
 
-            _dialog.OnClosingEvent += (sender, arg) =>
-            {
-                //LogonText.Text = string.Empty;
-                if (_dialog.DataContext is ValkyrieRegistrationModel m)
-                {
-                    if (m.LoginResult == LoginResults.SUCCESS_AUTHENTICATION)
-                    {
+                        Credentials = new SecurityUserCredentials(m.UserName, m.Password, m.LicenseId);
                         if (Credentials.CanApplay)
                         {
-                            LogonText.Text = Credentials.Email.Split('@').FirstOrDefault();
+                            Task.Run(() => { m.LoginResult = LoginHelper.Login(Credentials); }).Wait();
+                        }
+
+                        Dispatcher.Invoke(() =>
+                        {
+                            _dialog.ok.Visibility = Visibility.Visible;
+                            _dialog.loading.IsBusy = false;
+                        });
+
+                        _dialog.SetErrorMessage(m.LoginResult.ToString());
+                        if (m.LoginResult == LoginResults.SUCCESS_AUTHENTICATION)
+                        {
+                            Dispatcher.Invoke(() =>
+                            {
+                                _dialog.Close();
+                                _dialog = null;
+                            });
                         }
                     }
-                }
-            };
+                };
+                _dialog.CancelClick += (sender, args) =>
+                {
+                    //LogonText.Text = string.Empty;
+                };
 
-            _dialog.OnGuestButtonClick += (sender, arg) =>
-              {
-                  LoginHelper.Logout();
-                  Credentials = new SecurityUserCredentials(); ;
-                  LogonText.Text = "Guest";
-                  Dispatcher.Invoke(() =>
-                  {
-                      _dialog.Close();
-                      _dialog = null;
-                  });
-              };
+                _dialog.OnClosingEvent += (sender, arg) =>
+                {
+                    //LogonText.Text = string.Empty;
+                    if (_dialog.DataContext is ValkyrieRegistrationModel m)
+                    {
+                        if (m.LoginResult == LoginResults.SUCCESS_AUTHENTICATION)
+                        {
+                            if (Credentials.CanApplay)
+                            {
+                                LogonText.Text = Credentials.Email.Split('@').FirstOrDefault();
+                            }
+                        }
+                    }
 
-            _dialog.ShowDialog();
+                    if (IsScanCompleted && _viewModel.BeginValkyrieAnalysis())
+                    {
+                        Dispatcher.Invoke(() =>
+                        {
+                            _dialog.loading.IsBusy = true;
+                            _dialog.ok.Visibility = Visibility.Collapsed;
+                        });
+                    }
+                };
+
+                _dialog.OnGuestButtonClick += (sender, arg) =>
+                 {
+                     LoginHelper.Logout();
+                     Credentials = new SecurityUserCredentials();
+                     LogonText.Text = "Guest";
+                     Dispatcher.Invoke(() =>
+                     {
+                         _dialog.Close();
+                         _dialog = null;
+                     });
+                 };
+
+                if (isScanCompleted && Credentials.CanApplay) return;
+                _dialog.ShowDialog();
+            }
         }
 
         [MessageReceiver]
@@ -145,12 +157,14 @@ namespace UFH.Application
             switch (message.Type)
             {
                 case MessageTypes.StartScan:
+                    IsScanCompleted = false;
                     StartScanWindow details = new StartScanWindow();
                     details.Owner = App.Current.MainWindow;
                     if (details.ShowDialog() == true && message.Action != null)
                         message.Action(details.IsQuickScan);
                     break;
                 case MessageTypes.StopScan:
+                    IsScanCompleted = true;
                     _confirmation = new ConfirmationWindow();
                     _confirmation.Owner = App.Current.MainWindow;
                     if (_confirmation.ShowDialog() == true && message.Action != null)
@@ -180,6 +194,7 @@ namespace UFH.Application
 
         private void OnScanCompleted(Object sender, EventArgs e)
         {
+            IsScanCompleted = true;
             if (_onCompletedAction != null)
             {
                 _viewModel.OnAppClose(_onCompletedAction);
@@ -191,12 +206,16 @@ namespace UFH.Application
 
             if (_viewModel.ShowResult)
             {
-                var result = new ScanResultWindow();
-                result.DataContext = _viewModel;
-                result.Owner = App.Current.MainWindow;
-                result.GetVisual = () => searchGrid;
+                var result = new ScanResultWindow
+                {
+                    DataContext = _viewModel,
+                    Owner = App.Current.MainWindow,
+                    GetVisual = () => searchGrid
+                };
                 result.ShowDialog();
             }
+
+            ShowRegisterToValkyrieWindow(true);
         }
 
         private void ViewModelOnValkyrieAnalyzeCompleted(object sender, ErrorEventArgs e)
@@ -257,13 +276,13 @@ namespace UFH.Application
             }
         }
 
-        public bool IsLogOnPossible
-        {
-            get
-            {
-                return true;
-            }
-        }
+        //public bool IsLogOnPossible
+        //{
+        //    get
+        //    {
+        //        return !_viewModel.IsAnyScanInProgress;
+        //    }
+        //}
 
         public bool IsDiscoveryInProgress
         {
@@ -272,6 +291,8 @@ namespace UFH.Application
                 return _viewModel.IsAutoDiscoveryInProgress || _viewModel.IsScanInProgress == null;
             }
         }
+
+        public bool IsScanCompleted { get; private set; }
 
         private Action _onCompletedAction;
         public void OnAppClose(Action action)

@@ -314,11 +314,10 @@ namespace APTAT.Core.Apt
             {
                 foreach (var badFile in scanResult.BadFiles)
                 {
-                    FileResult found;
-                    if (!fileResults.TryGetValue(badFile.Sha1, out found))
+                    if (!fileResults.TryGetValue(badFile.Sha1, out FileResult found))
                     {
                         var vResult =
-                            valkyrieAnalysisResults.FirstOrDefault(v => 
+                            valkyrieAnalysisResults.FirstOrDefault(v =>
                             String.Equals(v.Sha1, badFile.Sha1, StringComparison.OrdinalIgnoreCase));
 
                         if (vResult != null)
@@ -382,8 +381,7 @@ namespace APTAT.Core.Apt
                     _filesWithFlsErrorCount -= resultsFiles.Length;
                 foreach (var r in resultsFiles)
                 {
-                    IAptVerdictContext item;
-                    if (!_flsHashResults.TryGetValue(r.Sha1, out item))
+                    if (!_flsHashResults.TryGetValue(r.Sha1, out IAptVerdictContext item))
                     {
                         var verdictContext = new AptVerdictContext(r.Sha1, r.Cloud);
                         _flsHashResults[r.Sha1] = verdictContext;
@@ -394,8 +392,8 @@ namespace APTAT.Core.Apt
                     }
                     else if (item.Cloud != r.Cloud)
                     {
-                        if ((r.IsNotAnalyzed() || r.IsUnknown()) 
-                            && ! item.IsNotAnalyzed())
+                        if ((r.IsNotAnalyzed() || r.IsUnknown())
+                            && !item.IsNotAnalyzed())
                         {
                             r.Cloud = item.Cloud;
                             resultsUpdated = true;

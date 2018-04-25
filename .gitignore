@@ -36,3 +36,4 @@ packages/
 /FAT/APTAT.Extractor/bin/Debug
 /FAT/APTAT.VersionChanger/bin/Debug
 /FAT/CodedUITestAT/obj/Debug
+/APTAT.Core.Tests.Run.Results.xml
