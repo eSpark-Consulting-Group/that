@@ -19,8 +19,7 @@ namespace APTAT.DAL.Storage.Core
 
         protected StorageContextBase(TDbContext dbContext)
         {
-            if (dbContext == null) throw new ArgumentNullException("dbContext");
-            _dbContext = dbContext;
+            _dbContext = dbContext ?? throw new ArgumentNullException("dbContext");
 
             _disposed = false;
         }
