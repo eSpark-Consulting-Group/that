@@ -47,11 +47,11 @@ namespace UFH.Application
 
         private void LogOnClick(object sender, RoutedEventArgs e)
         {
-            _viewModel.LogInTxt = "UserTest UserTes";
+            //_viewModel.LogInTxt = "LogOn";
             _viewModel.LogedIn = !_viewModel.LogedIn;
             LogOnButton.IsOpen = !_viewModel.LogedIn;
             //LogonText.Foreground = 
-            //ShowRegisterToValkyrieWindow();
+            ShowRegisterToValkyrieWindow();
         }
 
         private void LogoutMenuItemClick(object sender, RoutedEventArgs e)
@@ -119,7 +119,7 @@ namespace UFH.Application
                         {
                             if (Credentials.CanApplay)
                             {
-                                LogonText.Text = Credentials.Email.Split('@').FirstOrDefault();
+                                _viewModel.LogInTxt = Credentials.Email.Split('@').FirstOrDefault();
                             }
                         }
                     }
@@ -138,7 +138,7 @@ namespace UFH.Application
                  {
                      LoginHelper.Logout();
                      Credentials = new SecurityUserCredentials();
-                     LogonText.Text = "Guest";
+                     _viewModel.LogInTxt = "Guest";
                      Dispatcher.Invoke(() =>
                      {
                          _dialog.Close();

@@ -757,11 +757,7 @@
                                   FontSize="16"
                                   BorderThickness="0"
                                   FocusVisualStyle="{x:Null}" 
-<<<<<<< .mine
-
-=======
                                   IsEnabled="{Binding IsAnyScanInProgress, Converter={StaticResource InverseBooleanConverter}}"
->>>>>>> .theirs
                                   Click="LogOnClick"
                                   Name="LogOnButton"
                                   DropDownIndicatorVisibility="Collapsed"
