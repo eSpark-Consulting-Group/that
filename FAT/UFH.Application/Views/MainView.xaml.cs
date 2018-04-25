@@ -27,7 +27,7 @@ namespace UFH.Application
     public partial class MainView
     {
         private MainViewModel _viewModel;
-        private SecurityUserCredentials Credentials { get; set; }
+        private SecurityUserCredentials Credentials { get; set; } = SecurityUserCredentials.Empty;
 
         public MainView()
         {
