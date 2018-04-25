@@ -487,6 +487,8 @@
     <Resource Include="Assets\checkmark.png" />
     <Resource Include="Assets\splash.png" />
     <Resource Include="Assets\eula.png" />
+    <Resource Include="Assets\logout.png" />
+    <Resource Include="Assets\tick.png" />
     <Content Include="cmdapt64.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
