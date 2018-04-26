@@ -22,7 +22,8 @@ namespace APTAT.Core.Valkyrie
     {
         private readonly int _changeTrakingIntervalInMs = (int)TimeSpan.FromMinutes(3).TotalMilliseconds;
         private readonly int _delayAfterStartScanInSeconds = TimeSpan.FromSeconds(2).Seconds;
-        private const Int32 MaxFileLenght = 26214400;
+        public const Int32 MaxFileLengthMb = 150;
+        private const Int32 MaxFileLenght = MaxFileLengthMb * 1048576;
         private string _apiKey;
         private int _fileScanned;
         private int _filesCount;
@@ -466,9 +467,9 @@ namespace APTAT.Core.Valkyrie
                 {
                     if (fileInfo.Size > MaxFileLenght)
                     {
-                        result = ValkyrieAnalysisResult.CreateSkipInfo(sha1, "Maximum file size per upload to 25 MB.",
+                        result = ValkyrieAnalysisResult.CreateSkipInfo(sha1, $"Maximum file size per upload to {MaxFileLengthMb} MB.",
                             SkippReasonEnum.Skipped);
-                        Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : File {originalFilePath} greater than 25 Mb");
+                        Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : File {originalFilePath} greater than {MaxFileLengthMb} Mb");
                         Trace.Flush();
                         return result;
                     }
