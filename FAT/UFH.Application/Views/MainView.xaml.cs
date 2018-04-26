@@ -21,6 +21,7 @@ using APTAT.Application.Models;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using APTAT.COT.Login;
+using System.Net.Mail;
 
 namespace UFH.Application
 {
@@ -137,8 +138,8 @@ namespace UFH.Application
                                 _viewModel.LogedIn = true;
                             }
                         }
-                    }
-
+                    }                    
+                    
                     if (IsScanCompleted && _viewModel.BeginValkyrieAnalysis())
                     {
                         Dispatcher.Invoke(() =>
