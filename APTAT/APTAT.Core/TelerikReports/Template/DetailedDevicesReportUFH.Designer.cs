@@ -30,7 +30,6 @@ namespace APTAT.Core.TelerikReports
             this.textBox34 = new Telerik.Reporting.TextBox();
             this.pictureBox1 = new Telerik.Reporting.PictureBox();
             this.textBox51 = new Telerik.Reporting.TextBox();
-            this.textBox1 = new Telerik.Reporting.TextBox();
             this.detail = new Telerik.Reporting.DetailSection();
             this.panel5 = new Telerik.Reporting.Panel();
             this.textBox59 = new Telerik.Reporting.TextBox();
@@ -106,14 +105,13 @@ namespace APTAT.Core.TelerikReports
             this.pictureBox2,
             this.textBox34,
             this.pictureBox1,
-            this.textBox51,
-            this.textBox1});
+            this.textBox51});
             this.pageHeaderSection1.Name = "pageHeaderSection1";
             // 
             // shape3
             // 
             this.shape3.Anchoring = ((Telerik.Reporting.AnchoringStyles)((Telerik.Reporting.AnchoringStyles.Left | Telerik.Reporting.AnchoringStyles.Right)));
-            this.shape3.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(0D), Telerik.Reporting.Drawing.Unit.Cm(1.2170833349227905D));
+            this.shape3.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(1.7000000476837158D));
             this.shape3.Name = "shape3";
             this.shape3.ShapeType = new Telerik.Reporting.Drawing.Shapes.LineShape(Telerik.Reporting.Drawing.Shapes.LineDirection.EW);
             this.shape3.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.696250915527344D), Telerik.Reporting.Drawing.Unit.Cm(0.10000000149011612D));
@@ -151,7 +149,7 @@ namespace APTAT.Core.TelerikReports
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.099999949336051941D), Telerik.Reporting.Drawing.Unit.Cm(0.42333331704139709D));
+            this.pictureBox1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.099999949336051941D), Telerik.Reporting.Drawing.Unit.Cm(0.5D));
             this.pictureBox1.MimeType = "image/png";
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(3.9000000953674316D), Telerik.Reporting.Drawing.Unit.Cm(0.70000004768371582D));
@@ -163,21 +161,9 @@ namespace APTAT.Core.TelerikReports
             this.textBox51.Name = "textBox51";
             this.textBox51.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(7.8076386451721191D), Telerik.Reporting.Drawing.Unit.Cm(0.600000262260437D));
             this.textBox51.Style.Color = System.Drawing.Color.DimGray;
-            this.textBox51.Style.Font.Name = "Segoe UI";
-            this.textBox51.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(11D);
+            this.textBox51.Style.Font.Name = "Segoe UI Semibold";
+            this.textBox51.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(13.5D);
             this.textBox51.Value = "Per-Device Report";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(-6.3081579959600731E-09D), Telerik.Reporting.Drawing.Unit.Cm(1.3493750095367432D));
-            this.textBox1.Multiline = false;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(5.7000002861022949D), Telerik.Reporting.Drawing.Unit.Cm(0.699999988079071D));
-            this.textBox1.Style.Color = System.Drawing.Color.DimGray;
-            this.textBox1.Style.Font.Name = "Segoe UI Semibold";
-            this.textBox1.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(13.5D);
-            this.textBox1.TextWrap = false;
-            this.textBox1.Value = "Forensic Analysis ";
             // 
             // detail
             // 
@@ -938,7 +924,6 @@ namespace APTAT.Core.TelerikReports
         private Telerik.Reporting.GraphAxis graphAxis1;
         private Telerik.Reporting.GraphAxis graphAxis2;
         private Telerik.Reporting.BarSeries barSeries1;
-        private Telerik.Reporting.TextBox textBox1;
         private Telerik.Reporting.TextBox textBox14;
         private Telerik.Reporting.TextBox textBox31;
         private Telerik.Reporting.TextBox textBox15;
