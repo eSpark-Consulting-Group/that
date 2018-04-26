@@ -21,13 +21,14 @@ using APTAT.Application.Models;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using APTAT.COT.Login;
+using System.Net.Mail;
 
 namespace UFH.Application
 {
     public partial class MainView
     {
         private MainViewModel _viewModel;
-        private SecurityUserCredentials Credentials { get; set; }
+        private SecurityUserCredentials Credentials { get; set; } = SecurityUserCredentials.Empty;
 
         public MainView()
         {
@@ -137,8 +138,8 @@ namespace UFH.Application
                                 _viewModel.LogedIn = true;
                             }
                         }
-                    }
-
+                    }                    
+                    
                     if (IsScanCompleted && _viewModel.BeginValkyrieAnalysis())
                     {
                         Dispatcher.Invoke(() =>

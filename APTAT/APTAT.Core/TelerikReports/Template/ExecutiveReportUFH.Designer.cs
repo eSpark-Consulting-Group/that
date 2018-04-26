@@ -85,7 +85,6 @@ namespace APTAT.Core.TelerikReports
             this.polarCoordinateSystem1 = new Telerik.Reporting.PolarCoordinateSystem();
             this.graphAxis1 = new Telerik.Reporting.GraphAxis();
             this.graphAxis2 = new Telerik.Reporting.GraphAxis();
-            this.objectDataSource1 = new Telerik.Reporting.ObjectDataSource();
             this.barSeries1 = new Telerik.Reporting.BarSeries();
             this.graph2 = new Telerik.Reporting.Graph();
             this.polarCoordinateSystem3 = new Telerik.Reporting.PolarCoordinateSystem();
@@ -106,8 +105,8 @@ namespace APTAT.Core.TelerikReports
             this.textBox34 = new Telerik.Reporting.TextBox();
             this.pictureBox1 = new Telerik.Reporting.PictureBox();
             this.textBox51 = new Telerik.Reporting.TextBox();
-            this.textBox1 = new Telerik.Reporting.TextBox();
             this.dsAptReportData = new Telerik.Reporting.ObjectDataSource();
+            this.objectDataSource1 = new Telerik.Reporting.ObjectDataSource();
             this.dsTargetRatingInfo = new Telerik.Reporting.ObjectDataSource();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             // 
@@ -703,11 +702,6 @@ namespace APTAT.Core.TelerikReports
             this.graphAxis2.Scale = categoryScale1;
             this.graphAxis2.Style.Visible = false;
             // 
-            // objectDataSource1
-            // 
-            this.objectDataSource1.DataSource = typeof(APTAT.Core.Reports.TargetRatingInfo);
-            this.objectDataSource1.Name = "objectDataSource1";
-            // 
             // barSeries1
             // 
             this.barSeries1.ArrangeMode = Telerik.Reporting.GraphSeriesArrangeMode.Stacked100;
@@ -896,17 +890,16 @@ namespace APTAT.Core.TelerikReports
             this.pictureBox2,
             this.textBox34,
             this.pictureBox1,
-            this.textBox51,
-            this.textBox1});
+            this.textBox51});
             this.pageHeaderSection1.Name = "pageHeaderSection1";
             // 
             // shape5
             // 
             this.shape5.Anchoring = ((Telerik.Reporting.AnchoringStyles)((Telerik.Reporting.AnchoringStyles.Left | Telerik.Reporting.AnchoringStyles.Right)));
-            this.shape5.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(1.1999999284744263D));
+            this.shape5.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(1.5000001192092896D));
             this.shape5.Name = "shape5";
             this.shape5.ShapeType = new Telerik.Reporting.Drawing.Shapes.LineShape(Telerik.Reporting.Drawing.Shapes.LineDirection.EW);
-            this.shape5.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.920000076293945D), Telerik.Reporting.Drawing.Unit.Cm(0.10000000149011612D));
+            this.shape5.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.920000076293945D), Telerik.Reporting.Drawing.Unit.Cm(0.50000005960464478D));
             this.shape5.Style.Color = System.Drawing.Color.LightSlateGray;
             this.shape5.Style.LineColor = System.Drawing.Color.LightSlateGray;
             this.shape5.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Point(1D);
@@ -941,7 +934,7 @@ namespace APTAT.Core.TelerikReports
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.099999949336051941D), Telerik.Reporting.Drawing.Unit.Cm(0.40625014901161194D));
+            this.pictureBox1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.099999949336051941D), Telerik.Reporting.Drawing.Unit.Cm(0.50000011920928955D));
             this.pictureBox1.MimeType = "image/png";
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(3.9000000953674316D), Telerik.Reporting.Drawing.Unit.Cm(0.70000004768371582D));
@@ -953,26 +946,20 @@ namespace APTAT.Core.TelerikReports
             this.textBox51.Name = "textBox51";
             this.textBox51.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(7.8076386451721191D), Telerik.Reporting.Drawing.Unit.Cm(0.600000262260437D));
             this.textBox51.Style.Color = System.Drawing.Color.DimGray;
-            this.textBox51.Style.Font.Name = "Segoe UI";
-            this.textBox51.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(11D);
+            this.textBox51.Style.Font.Bold = false;
+            this.textBox51.Style.Font.Name = "Segoe UI Semibold";
+            this.textBox51.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(13.5D);
             this.textBox51.Value = "Executive  Report";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(-6.3081579959600731E-09D), Telerik.Reporting.Drawing.Unit.Cm(1.4022918939590454D));
-            this.textBox1.Multiline = false;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(5.7000002861022949D), Telerik.Reporting.Drawing.Unit.Cm(0.699999988079071D));
-            this.textBox1.Style.Color = System.Drawing.Color.DimGray;
-            this.textBox1.Style.Font.Name = "Segoe UI Semibold";
-            this.textBox1.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(13.5D);
-            this.textBox1.TextWrap = false;
-            this.textBox1.Value = "Forensic Analysis ";
             // 
             // dsAptReportData
             // 
             this.dsAptReportData.DataSource = typeof(APTAT.Core.Reports.AptReportData);
             this.dsAptReportData.Name = "dsAptReportData";
+            // 
+            // objectDataSource1
+            // 
+            this.objectDataSource1.DataSource = typeof(APTAT.Core.Reports.TargetRatingInfo);
+            this.objectDataSource1.Name = "objectDataSource1";
             // 
             // dsTargetRatingInfo
             // 
@@ -1070,7 +1057,6 @@ namespace APTAT.Core.TelerikReports
         private Telerik.Reporting.TextBox textBox29;
         private Telerik.Reporting.Panel panel14;
         private Telerik.Reporting.Panel panel15;
-        private Telerik.Reporting.TextBox textBox1;
         private Telerik.Reporting.Panel panel13;
         private Telerik.Reporting.TextBox textBox14;
         private Telerik.Reporting.TextBox textBox31;

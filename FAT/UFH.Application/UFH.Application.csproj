@@ -489,6 +489,7 @@
     <Resource Include="Assets\eula.png" />
     <Resource Include="Assets\logout.png" />
     <Resource Include="Assets\tick.png" />
+    <Resource Include="Assets\splashUFH.png" />
     <Content Include="cmdapt64.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

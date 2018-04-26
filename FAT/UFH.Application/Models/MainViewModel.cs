@@ -89,7 +89,7 @@ namespace UFH.Application.Models
         private string _camUserLogin;
         private string _camUserPassword;
 
-        #region Props
+        #region Props        
 
         public string Uri { get; set; } = "/Views/StartingPage.xaml";
 
