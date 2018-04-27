@@ -109,7 +109,35 @@ namespace UFH.Application
                             _dialog.loading.IsBusy = false;
                         });
 
-                        _dialog.SetErrorMessage(m.LoginResult.ToString());
+                        
+                        switch (m.LoginResult)
+                        {
+                            case LoginResults.SUCCESS_AUTHENTICATION:
+                                break;
+                            case LoginResults.ERR_AUTHENTICATION:
+                                _dialog.SetErrorMessage("Provided username or password is incorrect.");
+                                break;
+                            case LoginResults.OTP_REQUIRED:
+                                _dialog.SetErrorMessage("You need to enter Verification Code.");
+                                break;
+                            case LoginResults.OTP_CONF_REQUIRED:
+                                _dialog.SetErrorMessage("One-Time Password verification is not configured for your account. Please visit Comodo ONE to configure it.");
+                                break;
+                            case LoginResults.ERR_MISSING_PARAM:
+                                _dialog.SetErrorMessage("Please make sure you fill out all the mandatory fields.");
+                                break;
+                            case LoginResults.ALREADY_LOGGED_IN:
+                                _dialog.SetErrorMessage("You are already logged in. Please log out to log in under different credentials.");
+                                break;
+                            case LoginResults.ERR_USER_NOT_FOUND:
+                                _dialog.SetErrorMessage("User not found.Please make sure you are entering the correct credentials.");
+                                break;
+                            default:
+                                break;
+                        }
+
+
+
                         if (m.LoginResult == LoginResults.SUCCESS_AUTHENTICATION)
                         {
                             Dispatcher.Invoke(() =>
