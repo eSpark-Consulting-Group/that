@@ -51,7 +51,7 @@ namespace UFH.Application
         private bool _hideDropDownOnLogonButton;
         private void LogOnButton_DropDownOpening(object sender, RoutedEventArgs e)
         {
-            if (!_viewModel.LogedIn || _hideDropDownOnLogonButton)
+            if (!_viewModel.LogedIn && !_viewModel.AsGuest || _hideDropDownOnLogonButton )
             {
                 e.Handled = true;
                 _hideDropDownOnLogonButton = false;
@@ -60,7 +60,7 @@ namespace UFH.Application
 
         private void LogOnClick(object sender, RoutedEventArgs e)
         {
-            if (!_viewModel.LogedIn)
+            if (!_viewModel.LogedIn && !_viewModel.AsGuest)
             {
                 _hideDropDownOnLogonButton = true;
                 ShowRegisterToValkyrieWindow();
@@ -72,6 +72,7 @@ namespace UFH.Application
             Credentials = SecurityUserCredentials.Empty;
             _viewModel.LogInTxt = "Login";
             _viewModel.LogedIn = false;
+            _viewModel.AsGuest = false;
         }
 
         public string LoggedUserName
@@ -164,6 +165,7 @@ namespace UFH.Application
                             {
                                 _viewModel.LogInTxt = Credentials.Email.Split('@').FirstOrDefault();
                                 _viewModel.LogedIn = true;
+                                _viewModel.AsGuest = false;
                             }
                         }
                     }                    
@@ -184,6 +186,7 @@ namespace UFH.Application
                      Credentials = SecurityUserCredentials.Empty;
                      _viewModel.LogInTxt = "Guest";
                      _viewModel.LogedIn = false;
+                     _viewModel.AsGuest = true;
                      Dispatcher.Invoke(() =>
                      {
                          _dialog.Close();
