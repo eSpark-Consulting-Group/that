@@ -764,7 +764,7 @@
                         </telerik:RadDropDownButton>
 
                         <telerik:RadDropDownButton AutomationProperties.AutomationId="LogOnButton"
-                                  Margin="20,-2,20,-3"  
+                                  Margin="10,-2,10,-3"  
                                   Padding="10,20,10,20"
                                   FontSize="16"
                                   BorderThickness="0"
@@ -774,14 +774,15 @@
                                   x:Name="LogOnButton"
                                   DropDownIndicatorVisibility="Collapsed"
                                   AutoOpenDelay="0:0:0.0" IsOpen="False"  Foreground="#FF2A80B9"
-                                                   HorizontalContentAlignment="Center">
+                                  MinWidth="120"
+                                  HorizontalContentAlignment="Center">
                             <telerik:RadDropDownButton.Content>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition/>
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock MinWidth="80" x:Name="LogonText" Text="{Binding LogInTxt}" Style="{StaticResource LoginTextBlock}" Margin="0 2 0 0" Grid.Column="0" FontSize="15" />
+                                    <TextBlock x:Name="LogonText" Text="{Binding LogInTxt}" Style="{StaticResource LoginTextBlock}" Margin="0 2 0 0" Grid.Column="0" FontSize="15" />
                                     <Image 
                                         Grid.Column="1" 
                                         HorizontalAlignment="Left" 
