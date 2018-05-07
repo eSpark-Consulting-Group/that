@@ -130,7 +130,7 @@ namespace UFH.Application
                                 _dialog.SetErrorMessage("You are already logged in. Please log out to log in under different credentials.");
                                 break;
                             case LoginResults.ERR_USER_NOT_FOUND:
-                                _dialog.SetErrorMessage("User not found.Please make sure you are entering the correct credentials.");
+                                _dialog.SetErrorMessage("User not found. Please make sure you are entering the correct credentials.");
                                 break;
                             default:
                                 break;
