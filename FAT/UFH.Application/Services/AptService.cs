@@ -298,8 +298,7 @@ namespace UFH.Application.Services
         }
         private void OnScanStarted(Object sender, ScanStartedEventArgs e)
         {
-            var scanner = sender as IAptScanner;
-            if (scanner != null)
+            if (sender is IAptScanner scanner)
             {
                 scanner.ScanStarted -= OnScanStarted;
             }

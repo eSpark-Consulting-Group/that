@@ -32,6 +32,7 @@ using UFH.Application.Attributes;
 using System.Net;
 using System.Windows;
 using APTAT.Application.Models;
+using APTAT.COT.Login;
 
 namespace UFH.Application.Models
 {
@@ -720,12 +721,13 @@ namespace UFH.Application.Models
 
         public bool BeginValkyrieAnalysis(NetworkCredential networkCredential = null)
         {
+
             var model = CompositionHelper.Instance.Resolve<ValkyrieRegistrationModel>();
             if (model.ValidateModel())
             {
-                _camLicenseId = model.LicenseId;
-                _camUserLogin = model.UserName;
-                _camUserPassword = model.Password;
+                _camLicenseId = model.Credentials.LicenseID; //model.LicenseId; 
+                _camUserLogin = model.Credentials.Email; //model.UserName;
+                _camUserPassword = model.Credentials.Password.ConvertToString(); //model.Password;
 
                 _aptService.BeginValkyrieAnalysis(Login, Password, _camLicenseId, _camUserLogin, _camUserPassword, networkCredential);
                 return true;

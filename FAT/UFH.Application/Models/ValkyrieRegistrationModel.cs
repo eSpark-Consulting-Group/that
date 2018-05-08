@@ -1,4 +1,5 @@
 ﻿
+using APTAT.COT.Login;
 using Composition = APTAT.Common.CompositionHelper;
 
 namespace UFH.Application.Models
@@ -6,16 +7,23 @@ namespace UFH.Application.Models
     [Composition.CreationPolicy(Composition.CreationPolicy.Singleton)]
     public class ValkyrieRegistrationModel : ViewModel
     {
+        public SecurityUserCredentials Credentials { get; set; } = SecurityUserCredentials.Empty;
+        public APTAT.COT.Login.LoginResults LoginResult { get; set; } = LoginResults.ERR_MISSING_PARAM;
+
         public ValkyrieRegistrationModel()
         {
-            LoginResult = APTAT.COT.Login.LoginResults.ERR_AUTHENTICATION;
+
         }
         private string _licenseId;
         private string _userName;
         private string _passwordBuffer;
         private string _errorMessage;
 
-        public APTAT.COT.Login.LoginResults LoginResult { get; set; }
+        protected override void RaisePropertyChanged(string name)
+        {
+            Credentials = new SecurityUserCredentials(UserName, Password, LicenseId);
+            base.RaisePropertyChanged(name);
+        }
 
         public string LicenseId
         {

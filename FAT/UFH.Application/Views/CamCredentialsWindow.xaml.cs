@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Windows.Navigation;
 
 using APTAT.Common;
+using APTAT.COT.Login;
 using UFH.Application.Models;
 
 namespace UFH.Application
@@ -26,9 +27,10 @@ namespace UFH.Application
         {
             InitializeComponent();
             DataContext = _model = CompositionHelper.Instance.Resolve<ValkyrieRegistrationModel>();
-            _model.Password = null;
-            _model.PasswordBuffer = null;
-            _model.ErrorMessage = null;
+            //_model.Password = null;
+            //_model.PasswordBuffer = null;
+            //_model.ErrorMessage = null;
+            _model.Credentials = SecurityUserCredentials.Empty;
         }
 
         protected override void OnClosed(EventArgs e)

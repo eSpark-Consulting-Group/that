@@ -28,7 +28,6 @@ namespace UFH.Application
     public partial class MainView
     {
         private MainViewModel _viewModel;
-        private SecurityUserCredentials Credentials { get; set; } = SecurityUserCredentials.Empty;
 
         public MainView()
         {
@@ -51,7 +50,7 @@ namespace UFH.Application
         private bool _hideDropDownOnLogonButton;
         private void LogOnButton_DropDownOpening(object sender, RoutedEventArgs e)
         {
-            if (!_viewModel.LogedIn && !_viewModel.AsGuest || _hideDropDownOnLogonButton )
+            if (!_viewModel.LogedIn && !_viewModel.AsGuest || _hideDropDownOnLogonButton)
             {
                 e.Handled = true;
                 _hideDropDownOnLogonButton = false;
@@ -69,10 +68,13 @@ namespace UFH.Application
 
         private void LogoutMenuItemClick(object sender, RoutedEventArgs e)
         {
-            Credentials = SecurityUserCredentials.Empty;
-            _viewModel.LogInTxt = "Login";
-            _viewModel.LogedIn = false;
-            _viewModel.AsGuest = false;
+            if (_camCredentialsdialog.DataContext is ValkyrieRegistrationModel m)
+            {
+                m.Credentials = SecurityUserCredentials.Empty;
+                _viewModel.LogInTxt = "Login";
+                _viewModel.LogedIn = false;
+                _viewModel.AsGuest = false;
+            }
         }
 
         public string LoggedUserName
@@ -80,122 +82,116 @@ namespace UFH.Application
             get { return _viewModel.LoggedUserName; }
         }
 
+        CamCredentialsWindow _camCredentialsdialog = new CamCredentialsWindow();
         private void ShowRegisterToValkyrieWindow(bool isScanCompleted = false)
         {
-            //if (!isScanCompleted)
+            if (_camCredentialsdialog?.DataContext is ValkyrieRegistrationModel camModel)
             {
-                var _dialog = new CamCredentialsWindow
+                _camCredentialsdialog.Owner = System.Windows.Application.Current.MainWindow;
+                _camCredentialsdialog.OkClick += (sender, args) =>
                 {
-                    Owner = System.Windows.Application.Current.MainWindow,
-                };
-                _dialog.OkClick += (sender, args) =>
-                {
-                    if (_dialog.DataContext is ValkyrieRegistrationModel m)
+                    Dispatcher.Invoke(() =>
                     {
-                        Dispatcher.Invoke(() =>
-                        {
-                            _dialog.loading.IsBusy = true;
-                            _dialog.ok.Visibility = Visibility.Collapsed;
-                        });
+                        _camCredentialsdialog.loading.IsBusy = true;
+                        _camCredentialsdialog.ok.Visibility = Visibility.Collapsed;
+                    });
 
-                        Credentials = new SecurityUserCredentials(m.UserName, m.Password, m.LicenseId);
-                        if (Credentials.CanApplay)
-                        {
-                            Task.Run(() => { m.LoginResult = LoginHelper.Login(Credentials); }).Wait();
-                        }
-
-                        Dispatcher.Invoke(() =>
-                        {
-                            _dialog.ok.Visibility = Visibility.Visible;
-                            _dialog.loading.IsBusy = false;
-                        });
-
-                        
-                        switch (m.LoginResult)
-                        {
-                            case LoginResults.SUCCESS_AUTHENTICATION:
-                                break;
-                            case LoginResults.ERR_AUTHENTICATION:
-                                _dialog.SetErrorMessage("Provided username or password is incorrect.");
-                                break;
-                            case LoginResults.OTP_REQUIRED:
-                                _dialog.SetErrorMessage("You need to enter Verification Code.");
-                                break;
-                            case LoginResults.OTP_CONF_REQUIRED:
-                                _dialog.SetErrorMessage("One-Time Password verification is not configured for your account. Please visit Comodo ONE to configure it.");
-                                break;
-                            case LoginResults.ERR_MISSING_PARAM:
-                                _dialog.SetErrorMessage("Please make sure you fill out all the mandatory fields.");
-                                break;
-                            case LoginResults.ALREADY_LOGGED_IN:
-                                _dialog.SetErrorMessage("You are already logged in. Please log out to log in under different credentials.");
-                                break;
-                            case LoginResults.ERR_USER_NOT_FOUND:
-                                _dialog.SetErrorMessage("User not found. Please make sure you are entering the correct credentials.");
-                                break;
-                            default:
-                                break;
-                        }
-
-
-
-                        if (m.LoginResult == LoginResults.SUCCESS_AUTHENTICATION)
-                        {
-                            Dispatcher.Invoke(() =>
-                            {
-                                _dialog.Close();
-                                _dialog = null;
-                            });
-                        }
+                    //camModel.Credentials = new SecurityUserCredentials(camModel.UserName, camModel.Password, camModel.LicenseId);
+                    if (camModel.Credentials.CanApplay)
+                    {
+                        Task.Run(() => { camModel.LoginResult = LoginHelper.Login(camModel.Credentials); }).Wait();
                     }
+
+                    Dispatcher.Invoke(() =>
+                    {
+                        _camCredentialsdialog.ok.Visibility = Visibility.Visible;
+                        _camCredentialsdialog.loading.IsBusy = false;
+                    });
+
+
+                    switch (camModel.LoginResult)
+                    {
+                        case LoginResults.SUCCESS_AUTHENTICATION:
+                            break;
+                        case LoginResults.ERR_AUTHENTICATION:
+                            _camCredentialsdialog.SetErrorMessage("Provided username or password is incorrect.");
+                            break;
+                        case LoginResults.OTP_REQUIRED:
+                            _camCredentialsdialog.SetErrorMessage("You need to enter Verification Code.");
+                            break;
+                        case LoginResults.OTP_CONF_REQUIRED:
+                            _camCredentialsdialog.SetErrorMessage("One-Time Password verification is not configured for your account. Please visit Comodo ONE to configure it.");
+                            break;
+                        case LoginResults.ERR_MISSING_PARAM:
+                            _camCredentialsdialog.SetErrorMessage("Please make sure you fill out all the mandatory fields.");
+                            break;
+                        case LoginResults.ALREADY_LOGGED_IN:
+                            _camCredentialsdialog.SetErrorMessage("You are already logged in. Please log out to log in under different credentials.");
+                            break;
+                        case LoginResults.ERR_USER_NOT_FOUND:
+                            _camCredentialsdialog.SetErrorMessage("User not found. Please make sure you are entering the correct credentials.");
+                            break;
+                        default:
+                            break;
+                    }
+
+                    if (camModel.LoginResult == LoginResults.SUCCESS_AUTHENTICATION)
+                    {
+                        Dispatcher.Invoke(() =>
+                        {
+                            _camCredentialsdialog.Close();
+                            _camCredentialsdialog = null;
+                        });
+                    }
+
                 };
-                _dialog.CancelClick += (sender, args) =>
+                _camCredentialsdialog.CancelClick += (sender, args) =>
                 {
                     //LogonText.Text = string.Empty;
                 };
 
-                _dialog.OnClosingEvent += (sender, arg) =>
+                _camCredentialsdialog.OnClosingEvent += (sender, arg) =>
                 {
                     //LogonText.Text = string.Empty;
-                    if (_dialog.DataContext is ValkyrieRegistrationModel m)
+                    if (_camCredentialsdialog.DataContext is ValkyrieRegistrationModel m)
                     {
                         if (m.LoginResult == LoginResults.SUCCESS_AUTHENTICATION)
                         {
-                            if (Credentials.CanApplay)
+                            if (m.Credentials.CanApplay)
                             {
-                                _viewModel.LogInTxt = Credentials.Email.Split('@').FirstOrDefault();
+                                _viewModel.LogInTxt = m.Credentials.Email.Split('@').FirstOrDefault();
                                 _viewModel.LogedIn = true;
                                 _viewModel.AsGuest = false;
                             }
                         }
-                    }                    
-                    
+                    }
+
                     if (IsScanCompleted && _viewModel.BeginValkyrieAnalysis())
                     {
                         Dispatcher.Invoke(() =>
                         {
-                            _dialog.loading.IsBusy = true;
-                            _dialog.ok.Visibility = Visibility.Collapsed;
+                            _camCredentialsdialog.loading.IsBusy = true;
+                            _camCredentialsdialog.ok.Visibility = Visibility.Collapsed;
                         });
                     }
                 };
 
-                _dialog.OnGuestButtonClick += (sender, arg) =>
+                _camCredentialsdialog.OnGuestButtonClick += (sender, arg) =>
                  {
                      LoginHelper.Logout();
-                     Credentials = SecurityUserCredentials.Empty;
+                     camModel.Credentials = SecurityUserCredentials.Empty;
                      _viewModel.LogInTxt = "Guest";
                      _viewModel.LogedIn = false;
                      _viewModel.AsGuest = true;
                      Dispatcher.Invoke(() =>
                      {
-                         _dialog.Close();
-                         _dialog = null;
+                         _camCredentialsdialog.Close();
+                         _camCredentialsdialog = null;
                      });
                  };
 
-                if (isScanCompleted && Credentials.CanApplay) return;
-                _dialog.ShowDialog();
+                if (isScanCompleted && camModel.Credentials.CanApplay) return;
+                _camCredentialsdialog.ShowDialog();
             }
         }
 
