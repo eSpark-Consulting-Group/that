@@ -26,7 +26,7 @@ namespace UFH.Application
         protected override void OnStartup(StartupEventArgs e)
         {
             bool createdNew;
-            _event = new EventWaitHandle(false, EventResetMode.ManualReset, "Global\\8F24B2C3-13A4-490A-ACD5-0D68C7BAEA81", out createdNew);
+            _event = new EventWaitHandle(false, EventResetMode.ManualReset, "Global\\E5DFEEDB-14F2-4EE6-9E84-1A21FA6621D2", out createdNew);
 
             if (!createdNew)
             {

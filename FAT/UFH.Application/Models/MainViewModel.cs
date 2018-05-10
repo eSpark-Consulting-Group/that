@@ -636,13 +636,26 @@ namespace UFH.Application.Models
             }
         }
 
+        private bool _asGuest;
+        public bool  AsGuest
+        {
+            get => _asGuest;
+            set
+            {
+                _asGuest = value;
+                RaisePropertyChanged(nameof(LogOutImageVisibility));
+                RaisePropertyChanged(nameof(LogInTxt));
+                RaisePropertyChanged(nameof(LoginStyle));
+            }
+        }
+
         public string LogInTxt { get; set; }
 
         public Visibility LogOutImageVisibility
         {
             get
             {
-                if (LogedIn) return Visibility.Visible;
+                if (LogedIn || AsGuest) return Visibility.Visible;
                 return Visibility.Collapsed;
             }
         }
@@ -651,7 +664,7 @@ namespace UFH.Application.Models
         {
             get
             {
-                if (LogedIn) return "HeaderTextBlock";
+                if (LogedIn || AsGuest) return "HeaderTextBlock";
                 return "LoginTextBlock";
             }
         }

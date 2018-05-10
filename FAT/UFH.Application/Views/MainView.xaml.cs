@@ -51,7 +51,7 @@ namespace UFH.Application
         private bool _hideDropDownOnLogonButton;
         private void LogOnButton_DropDownOpening(object sender, RoutedEventArgs e)
         {
-            if (!_viewModel.LogedIn || _hideDropDownOnLogonButton)
+            if (!_viewModel.LogedIn && !_viewModel.AsGuest || _hideDropDownOnLogonButton )
             {
                 e.Handled = true;
                 _hideDropDownOnLogonButton = false;
@@ -60,7 +60,7 @@ namespace UFH.Application
 
         private void LogOnClick(object sender, RoutedEventArgs e)
         {
-            if (!_viewModel.LogedIn)
+            if (!_viewModel.LogedIn && !_viewModel.AsGuest)
             {
                 _hideDropDownOnLogonButton = true;
                 ShowRegisterToValkyrieWindow();
@@ -72,6 +72,7 @@ namespace UFH.Application
             Credentials = SecurityUserCredentials.Empty;
             _viewModel.LogInTxt = "Login";
             _viewModel.LogedIn = false;
+            _viewModel.AsGuest = false;
         }
 
         public string LoggedUserName
@@ -109,7 +110,35 @@ namespace UFH.Application
                             _dialog.loading.IsBusy = false;
                         });
 
-                        _dialog.SetErrorMessage(m.LoginResult.ToString());
+                        
+                        switch (m.LoginResult)
+                        {
+                            case LoginResults.SUCCESS_AUTHENTICATION:
+                                break;
+                            case LoginResults.ERR_AUTHENTICATION:
+                                _dialog.SetErrorMessage("Provided username or password is incorrect.");
+                                break;
+                            case LoginResults.OTP_REQUIRED:
+                                _dialog.SetErrorMessage("You need to enter Verification Code.");
+                                break;
+                            case LoginResults.OTP_CONF_REQUIRED:
+                                _dialog.SetErrorMessage("One-Time Password verification is not configured for your account. Please visit Comodo ONE to configure it.");
+                                break;
+                            case LoginResults.ERR_MISSING_PARAM:
+                                _dialog.SetErrorMessage("Please make sure you fill out all the mandatory fields.");
+                                break;
+                            case LoginResults.ALREADY_LOGGED_IN:
+                                _dialog.SetErrorMessage("You are already logged in. Please log out to log in under different credentials.");
+                                break;
+                            case LoginResults.ERR_USER_NOT_FOUND:
+                                _dialog.SetErrorMessage("User not found. Please make sure you are entering the correct credentials.");
+                                break;
+                            default:
+                                break;
+                        }
+
+
+
                         if (m.LoginResult == LoginResults.SUCCESS_AUTHENTICATION)
                         {
                             Dispatcher.Invoke(() =>
@@ -136,6 +165,7 @@ namespace UFH.Application
                             {
                                 _viewModel.LogInTxt = Credentials.Email.Split('@').FirstOrDefault();
                                 _viewModel.LogedIn = true;
+                                _viewModel.AsGuest = false;
                             }
                         }
                     }                    
@@ -156,6 +186,7 @@ namespace UFH.Application
                      Credentials = SecurityUserCredentials.Empty;
                      _viewModel.LogInTxt = "Guest";
                      _viewModel.LogedIn = false;
+                     _viewModel.AsGuest = true;
                      Dispatcher.Invoke(() =>
                      {
                          _dialog.Close();
