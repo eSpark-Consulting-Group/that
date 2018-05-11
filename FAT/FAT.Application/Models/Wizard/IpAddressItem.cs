@@ -95,6 +95,40 @@ namespace FAT.Application.Models
             return false;
         }
 
+        public static string RemoveZeros(string addr)
+        {
+            if (string.IsNullOrEmpty(addr))
+                return addr;
+
+            var result = string.Empty;
+
+            var ipRange = new List<string>();
+            foreach (var range in addr.Split('-'))
+            {
+                var ipMask = new List<string>();
+                foreach (var ipAddr in range.Split('/'))
+                {
+                    var numbers = new List<string>();
+                    foreach (var octet in ipAddr.Split('.'))
+                    {
+                        try
+                        {
+                            numbers.Add(Convert.ToInt32(octet).ToString());
+                        }
+                        catch
+                        {
+                            return addr;
+                        }
+                    }
+                    ipMask.Add(string.Join(".", numbers));
+                }
+                ipRange.Add(string.Join("/", ipMask));
+            }
+            result = string.Join("-", ipRange);
+
+            return result;
+        }
+
         public static bool IsValidMask(string addr)
         {
             if (String.IsNullOrWhiteSpace(addr))
@@ -254,10 +288,9 @@ namespace FAT.Application.Models
             set
             {
                 _text = value.Replace(" ", "");
+                _text = IpAddressValidator.RemoveZeros(_text);
                 RaisePropertyChanged("Text");
                 RaisePropertyChanged("FormattedText");
-
-
             }
         }
 

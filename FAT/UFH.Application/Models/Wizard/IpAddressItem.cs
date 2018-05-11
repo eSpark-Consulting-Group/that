@@ -9,7 +9,7 @@ using APTAT.DeploymentCore.Facade.Descent.DataContracts.SearchCriteria.EndpointA
 
 namespace UFH.Application.Models
 {
-    public class IpAddressValidator 
+    public class IpAddressValidator
     {
 
         private const int MaxTargetsNetworkBits = 10;
@@ -32,8 +32,7 @@ namespace UFH.Application.Models
             }
             if (o.IsRange)
             {
-                IPAddress begin, end;
-                o.SplitRange(out begin, out end);
+                o.SplitRange(out IPAddress begin, out IPAddress end);
                 var beginBits = IpAddressWrapper.GetUInt32FromIP(begin);
                 var endBits = IpAddressWrapper.GetUInt32FromIP(end);
                 if (beginBits <= endBits)
@@ -44,8 +43,7 @@ namespace UFH.Application.Models
                 else
                     return false;
             }
-            IPAddress value;
-            if (IsValidIp(o.Text, out value))
+            if (IsValidIp(o.Text, out IPAddress value))
             {
                 o.FormattedText = value.ToString();
                 return true;
@@ -92,7 +90,42 @@ namespace UFH.Application.Models
                 return true;
             }
 
+
             return false;
+        }
+
+        public static string RemoveZeros(string addr)
+        {
+            if (string.IsNullOrEmpty(addr))
+                return addr;
+
+            var result = string.Empty;
+
+            var ipRange = new List<string>();
+            foreach (var range in addr.Split('-'))
+            {
+                var ipMask = new List<string>();
+                foreach (var ipAddr in range.Split('/'))
+                {
+                    var numbers = new List<string>();
+                    foreach (var octet in ipAddr.Split('.'))
+                    {
+                        try
+                        {
+                            numbers.Add(Convert.ToInt32(octet).ToString());
+                        }
+                        catch
+                        {
+                            return addr;
+                        }
+                    }
+                    ipMask.Add(string.Join(".", numbers));
+                }
+                ipRange.Add(string.Join("/", ipMask));
+            }
+            result = string.Join("-", ipRange);
+
+            return result;
         }
 
         public static bool IsValidMask(string addr)
@@ -125,8 +158,7 @@ namespace UFH.Application.Models
             var splits = addr.Split('-');
             if (splits.Length == 2)
             {
-                IPAddress value;
-                return IsValidIp(splits[0], out value) &&
+                return IsValidIp(splits[0], out IPAddress value) &&
                        IsValidIp(splits[1], out value);
             }
             else
@@ -254,10 +286,10 @@ namespace UFH.Application.Models
             set
             {
                 _text = value.Replace(" ", "");
+                _text = IpAddressValidator.RemoveZeros(value);
+
                 RaisePropertyChanged("Text");
                 RaisePropertyChanged("FormattedText");
-
-
             }
         }
 
