@@ -326,7 +326,8 @@ namespace UFH.Application.Models
             {
                 if (!IsAutoDiscoveryInProgress && !CancelInProgress && !IsScanCancelled && !IsScanFailed && Percentage > 0 && Percentage <= 100)
                 {
-                    return $"(Files: {_scanCounterManager.Total} | Computers: {ScannedItemsCount} of {TotalItemsCount})";
+                    
+                    return $"{Environment.NewLine}(Files: {_scanCounterManager.Total} | Computers: {ScannedItemsCount} of {TotalItemsCount})";
                 }
 
                 return string.Empty;
