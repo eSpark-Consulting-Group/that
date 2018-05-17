@@ -46,7 +46,7 @@ namespace UFH.Application.Models
         private String _statusMessageMemento;
 
         private ScanStage _scanStage;
-        private readonly Dictionary<string, List<IThreatInfoItem>> _itemsDict 
+        private readonly Dictionary<string, List<IThreatInfoItem>> _itemsDict
             = new Dictionary<string, List<IThreatInfoItem>>(StringComparer.OrdinalIgnoreCase);
 
         public Collection<IThreatInfoItem> Computers { get; set; }
@@ -115,7 +115,7 @@ namespace UFH.Application.Models
             {
                 if (BadFile.Cloud == CloudVerdict.Malware)
                     return UiFinalVerdict.Malware;
-                if(BadFile.Cloud == CloudVerdict.Safe)
+                if (BadFile.Cloud == CloudVerdict.Safe)
                     return UiFinalVerdict.Clean;
                 switch (ValkyrieVerdict)
                 {
@@ -161,7 +161,9 @@ namespace UFH.Application.Models
             get
             {
                 if (IsComputer)
-                    return string.Empty;
+                {
+                    return "Uploading " + ValkyrieProgressPercentage.ToString("P0:", CultureInfo.InvariantCulture);
+                }
 
                 switch (FinalVerdict)
                 {
@@ -181,7 +183,7 @@ namespace UFH.Application.Models
             }
         }
 
-      
+
         public IThreatInfoItem[] FilesToCheckOnValkyrieCount { get; private set; }
 
         public void RemoteScanCompleted()
@@ -214,10 +216,10 @@ namespace UFH.Application.Models
             {
                 var count = FilesToCheckOnValkyrieCount.Count(f => f.ValkyrieVerdict != ValkyrieVerdict.PendingFls
                                                                    && f.ValkyrieVerdict != ValkyrieVerdict.InQueue);
-                var percentage = count / (double) FilesToCheckOnValkyrieCount.Length * 100;
+                var percentage = count / (double)FilesToCheckOnValkyrieCount.Length * 100;
                 if (Math.Abs(percentage - 100) < 0.0001)
                 {
-                    if( ScanStage == ScanStage.OperationCancelling)
+                    if (ScanStage == ScanStage.OperationCancelling)
                     {
                         ScanStage = ScanStage.OperationCanceled;
                         StatusMessageSystem = "Scan operation was canceled.";
@@ -227,7 +229,7 @@ namespace UFH.Application.Models
 
                 }
                 else
-                   ValkyrieProgressPercentage = percentage;
+                    ValkyrieProgressPercentage = percentage;
             }
 
             var status = ScanStatusAsString;
@@ -253,9 +255,9 @@ namespace UFH.Application.Models
             get
             {
                 return !IsMalware && !IsUnknown && !Clean &&
-                    (ValkyrieVerdict == ValkyrieVerdict.PendingFls || 
+                    (ValkyrieVerdict == ValkyrieVerdict.PendingFls ||
                     ValkyrieVerdict == ValkyrieVerdict.InQueue ||
-                    ValkyrieVerdict == ValkyrieVerdict.FirstSeen || 
+                    ValkyrieVerdict == ValkyrieVerdict.FirstSeen ||
                     ValkyrieVerdict == ValkyrieVerdict.Pending);
             }
         }
@@ -264,7 +266,7 @@ namespace UFH.Application.Models
         {
             get
             {
-                return !IsMalware && 
+                return !IsMalware &&
                     ValkyrieVerdict == ValkyrieVerdict.Undetected;
             }
 
@@ -543,14 +545,14 @@ namespace UFH.Application.Models
             }
 
         }
-        
+
         private string GetStatusMessage()
         {
 
             string errorCounterText = PendingFilesCount > 0 ?
                     $"In Analysis {PendingFilesCount}."
                     : String.Empty;
-            
+
 
 
             if (Math.Abs(TotalProgressPercentage - 100) < 0.0001)
@@ -567,8 +569,8 @@ namespace UFH.Application.Models
                 return message;
             }
             else
-            {        
-                var m =     $"{TotalFilesCount} files scanned ({$"{TotalProgressPercentage:0.00}".Replace(".00", string.Empty)}%). Unknown: {UnknownFilesCount}. Malicious: {MalwareFilesCount}. {errorCounterText}";
+            {
+                var m = $"{TotalFilesCount} files scanned ({$"{TotalProgressPercentage:0.00}".Replace(".00", string.Empty)}%). Unknown: {UnknownFilesCount}. Malicious: {MalwareFilesCount}. {errorCounterText}";
                 return m;
             }
         }
@@ -727,7 +729,7 @@ namespace UFH.Application.Models
                     return 100;
                 var valkyriePercent = ValkyrieProgressPercentage / 2;
                 if (valkyriePercent > 50) valkyriePercent = 50;
-                return RemoteScanningPercentage/2 + valkyriePercent;
+                return RemoteScanningPercentage / 2 + valkyriePercent;
             }
         }
 
@@ -893,7 +895,7 @@ namespace UFH.Application.Models
             counterDiff.InProgressDiff += scanProgress.UnknownFilesCount + scanProgress.FailedToAnalyzeFilesCount +
                                                 scanProgress.NoVerdictFilesCount - PendingFilesCount;
             counterDiff.MalwareDiff += scanProgress.MalwareFilesCount - MalwareFilesCount;
-            
+
             TotalFilesCount = scanProgress.TotalFilesCount;
             CleanFilesCount = scanProgress.CleanFilesCount;
             PendingFilesCount = scanProgress.UnknownFilesCount + scanProgress.NoVerdictFilesCount + scanProgress.FailedToAnalyzeFilesCount;
@@ -909,7 +911,7 @@ namespace UFH.Application.Models
             if (threatInfoItem.IsComputer) throw new ArgumentException();
 
             threatInfoItem.Parent = this;
-            
+
             if (_itemsDict.ContainsKey(threatInfoItem.BadFile.Sha1))
                 _itemsDict[threatInfoItem.BadFile.Sha1].Add(threatInfoItem);
             else

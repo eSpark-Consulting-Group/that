@@ -27,10 +27,9 @@ namespace UFH.Application
         {
             InitializeComponent();
             DataContext = _model = CompositionHelper.Instance.Resolve<ValkyrieRegistrationModel>();
-            //_model.Password = null;
-            //_model.PasswordBuffer = null;
-            //_model.ErrorMessage = null;
-            _model.Credentials = SecurityUserCredentials.Empty;
+            _model.Password = null;
+            _model.PasswordBuffer = null;
+            _model.ErrorMessage = null;            
         }
 
         protected override void OnClosed(EventArgs e)

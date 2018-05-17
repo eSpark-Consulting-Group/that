@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security;
 
 namespace APTAT.Core.Descent.Apt
 {
@@ -11,6 +12,7 @@ namespace APTAT.Core.Descent.Apt
             UdpPort = Int32.Parse(udpPort);
             Login = login;
             Password = password;
+            
             IsRescan = isRescan;
             ScanKind = scanKind;
         }
@@ -43,6 +45,10 @@ namespace APTAT.Core.Descent.Apt
         public bool ScanProcesses { get; private set; }
         public bool ScanDrivers { get; private set; }
         public bool ScanAutoruns { get; private set; }
+
+        public string CamLogin { get; set; }
+        public SecureString CamPassword { get; set; }
+        public string CamLicenseID { get; set; }
 
         //return @"processes|drivers|autoruns"; 
 

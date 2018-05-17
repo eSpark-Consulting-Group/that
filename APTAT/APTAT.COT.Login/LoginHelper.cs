@@ -17,7 +17,7 @@ namespace APTAT.COT.Login
         private const string CHECK_ENDPOINT = "/check-auth";
 
 
-        public static LoginResults Login(SecurityUserCredentials userCredentials)
+        public static LoginResults Login(SecurityCamCredentials userCredentials)
         {
             var jsonString = string.Empty;
 
@@ -41,7 +41,7 @@ namespace APTAT.COT.Login
             return result;
         }
 
-        public static CheckAuthResults CheckAuth(SecurityUserCredentials userCredentials)
+        public static CheckAuthResults CheckAuth(SecurityCamCredentials userCredentials)
         {
             var jsonString = string.Empty;
             using (var resString = CheckAuthAsync(userCredentials))
@@ -85,7 +85,7 @@ namespace APTAT.COT.Login
             return root;
         }
 
-        private static async Task<string> CheckAuthAsync(SecurityUserCredentials userCredentials)
+        private static async Task<string> CheckAuthAsync(SecurityCamCredentials userCredentials)
         {
             string responseText = string.Empty;
             using (var checkHttpClient = new HttpClient())
@@ -108,7 +108,7 @@ namespace APTAT.COT.Login
             return responseText;
         }
 
-        private static async Task<string> LoginAsync(SecurityUserCredentials userCredentials)
+        private static async Task<string> LoginAsync(SecurityCamCredentials userCredentials)
         {
             string responseText = string.Empty;
             using (var loginHttpClient = new HttpClient())
@@ -118,7 +118,7 @@ namespace APTAT.COT.Login
 
                 var pHeaders = GetHeaders(userCredentials);
 
-                var content = string.Format("{{\"email\": \"{0}\",\"password\": \"{1}\",\"nameSpace\": \"{2}\"}}", userCredentials.Email
+                var content = string.Format("{{\"email\": \"{0}\",\"password\": \"{1}\",\"nameSpace\": \"{2}\"}}", userCredentials.Login
                                                                                                                  , userCredentials.Password.ConvertToString()
                                                                                                                  , userCredentials.Namespace);
 
@@ -137,11 +137,11 @@ namespace APTAT.COT.Login
             return responseText;
         }
 
-        private static Dictionary<string, string> GetHeaders(SecurityUserCredentials userCredentials)
+        private static Dictionary<string, string> GetHeaders(SecurityCamCredentials userCredentials)
         {
             return new Dictionary<string, string>
                 {
-                    { "email", userCredentials.Email },
+                    { "email", userCredentials.Login },
                     { "password", userCredentials.Password.ConvertToString() },
                     { "nameSpace", userCredentials.Namespace }
                 };

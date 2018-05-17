@@ -725,9 +725,9 @@ namespace UFH.Application.Models
             var model = CompositionHelper.Instance.Resolve<ValkyrieRegistrationModel>();
             if (model.ValidateModel())
             {
-                _camLicenseId = model.Credentials.LicenseID; //model.LicenseId; 
-                _camUserLogin = model.Credentials.Email; //model.UserName;
-                _camUserPassword = model.Credentials.Password.ConvertToString(); //model.Password;
+                _camLicenseId = SecurityCamCredentials.Instance.LicenseID; //model.LicenseId; 
+                _camUserLogin = SecurityCamCredentials.Instance.Login; //model.UserName;
+                _camUserPassword = SecurityCamCredentials.Instance.Password.ConvertToString(); //model.Password;
 
                 _aptService.BeginValkyrieAnalysis(Login, Password, _camLicenseId, _camUserLogin, _camUserPassword, networkCredential);
                 return true;
@@ -953,7 +953,11 @@ namespace UFH.Application.Models
                     Description = DevicesSourceDescription.GetNetworkDescription(ipAddressesString)
                 });
                 _lastModifiesComputerDate = null;
-                options = new ScanOptions(_tcpPort, _udpPort, scanKind, Login, Password, true);
+                options = new ScanOptions(_tcpPort, _udpPort, scanKind, Login, Password, true);                
+
+                options.CamLogin = SecurityCamCredentials.Instance.Login;
+                options.CamPassword = SecurityCamCredentials.Instance.Password;
+                options.CamLicenseID = SecurityCamCredentials.Instance.LicenseID;
 
                 _aptService.BeginScan(DiscoveryResults.Where(_ => _.IsSelected).ToArray(),
                        _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
@@ -1459,7 +1463,11 @@ namespace UFH.Application.Models
             else
             {
                 options = new ScanOptions(_tcpPort, _udpPort, scanKind, Login, Password);
-            }
+            }            
+
+            options.CamLogin = SecurityCamCredentials.Instance.Login;
+            options.CamPassword = SecurityCamCredentials.Instance.Password;
+            options.CamLicenseID = SecurityCamCredentials.Instance.LicenseID;
 
             _lastModifiesComputerDate = null;
             _aptService.BeginScan(items.Select(item => item.DeploymentTarget).ToArray(), _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);

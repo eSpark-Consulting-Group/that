@@ -25,15 +25,6 @@ namespace UFH.Application.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("FAT")]
-        public string applicationName {
-            get {
-                return ((string)(this["applicationName"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool cmcStatistics {
             get {
@@ -47,6 +38,15 @@ namespace UFH.Application.Properties {
         public int sendUpdateTimerIntervalMs {
             get {
                 return ((int)(this["sendUpdateTimerIntervalMs"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("FAT")]
+        public string applicationName {
+            get {
+                return ((string)(this["applicationName"]));
             }
         }
     }

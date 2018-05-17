@@ -51,7 +51,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResultsEnums.cs" />
     <Compile Include="SecureStringExtender.cs" />
-    <Compile Include="SecurityUserCredentials.cs" />
+    <Compile Include="SecurityCamCredentials.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

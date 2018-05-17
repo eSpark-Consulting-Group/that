@@ -107,7 +107,7 @@ namespace FAT.Application.Services
             scanner.ScanStarted += OnScanStarted;
             scanner.ComputerScanCompleted += OnComputerScanCompleted;
             scanner.ScanCompleted += OnScanCompleted;
-            scanner.BeginScan();
+            scanner.BeginScan(options.CamLogin, options.CamPassword, options.CamLicenseID);
         }
 
         private void OnScanCompleted(Object sender, APTAT.Core.ScanCompletedEventArgs e)

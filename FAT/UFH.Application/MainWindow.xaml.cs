@@ -27,46 +27,6 @@ namespace UFH.Application
         public void CallOnLoaded()
         {
             _model.OnLoadedCommand.Execute(true);
-
-            //TryLogin();
-        }
-
-        private static void TryLogin()
-        {
-            var cred = new SecurityUserCredentials("yuriy.balan@comodo.com", "12345678");
-            var res = APTAT.COT.Login.LoginHelper.Login(cred);
-            
-            switch (res)
-            {
-                case APTAT.COT.Login.LoginResults.SUCCESS_AUTHENTICATION:
-                    break;
-                case APTAT.COT.Login.LoginResults.ERR_AUTHENTICATION:
-                    break;
-                case APTAT.COT.Login.LoginResults.OTP_REQUIRED:
-                    break;
-                case APTAT.COT.Login.LoginResults.OTP_CONF_REQUIRED:
-                    break;
-                case APTAT.COT.Login.LoginResults.ERR_MISSING_PARAM:
-                    break;
-                case APTAT.COT.Login.LoginResults.ALREADY_LOGGED_IN:
-                    break;
-                default:
-                    break;
-            }
-
-            var check = APTAT.COT.Login.LoginHelper.CheckAuth(cred);
-
-            switch (check)
-            {
-                case CheckAuthResults.ERR_NOT_AUTHENTICATED:
-                    break;
-                case CheckAuthResults.SUCCESS_AUTHENTICATED:
-                    break;
-                case CheckAuthResults.ERR_MISSING_PARAM:
-                    break;
-                default:
-                    break;
-            }
         }
 
         private void OnCloseClick(object sender, RoutedEventArgs e)

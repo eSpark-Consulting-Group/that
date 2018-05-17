@@ -6,6 +6,7 @@ using APTAT.Core.Descent.Apt;
 using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore;
+using System.Security;
 
 namespace APTAT.Core.Apt
 {
@@ -62,10 +63,10 @@ namespace APTAT.Core.Apt
             });
         }
 
-        public void BeginScan(object state = null)
+        public void BeginScan(string camLogin, SecureString camPass, string camLicenseID, object state = null)
         {
             Action action = StartScan;
-            Context context = new Context() { Action = action, State = state };
+            Context context = new Context() { Action = action, State = state, CamLogin = camLogin, CamPassword = camPass, CamLicenseID = camLicenseID };
             _descentSubSystem.DescentCompleted += OnDescentCompleted;
             action.BeginInvoke(BeginScanCallback, context);
         }
@@ -110,6 +111,9 @@ namespace APTAT.Core.Apt
             }
             finally
             {
+                args.CamLogin = context.CamLogin;
+                args.CamPassword = context.CamPassword;
+                args.CamLicenceID = context.CamLicenseID;
                 OnScanStarted(args);
             }
         }
@@ -164,6 +168,10 @@ namespace APTAT.Core.Apt
         {
             internal Action Action { get; set; }
             internal object State { get; set; }
+
+            internal string CamLogin { get; set; }
+            internal SecureString CamPassword{ get; set; }
+            internal string CamLicenseID { get; set; }
         }
         internal class ScanContextActionArgs
         {

@@ -116,7 +116,7 @@ namespace APTAT.Application.Services
                 scanner.ScanCompleted += OnScanCompleted;
             }
 
-            scanner.BeginScan(userState);
+            scanner.BeginScan(null, null, null, userState);
         }
 
         private void OnComputerScanCompleted(Object sender, ComputerScanCompletedEventArgs e)

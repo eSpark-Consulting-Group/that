@@ -17,6 +17,8 @@ using UFH.Application.Properties;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 using System.Threading;
 using APTAT.Common;
+using System.Security;
+using APTAT.COT.Login;
 
 namespace UFH.Application.Services
 {
@@ -115,7 +117,7 @@ namespace UFH.Application.Services
             scanner.ScanStarted += OnScanStarted;
             scanner.ComputerScanCompleted += OnComputerScanCompleted;
             scanner.ScanCompleted += OnScanCompleted;
-            scanner.BeginScan();
+            scanner.BeginScan(options.CamLogin, options.CamPassword, options.CamLicenseID);
         }
 
         private void OnScanCompleted(Object sender, APTAT.Core.ScanCompletedEventArgs e)
@@ -152,26 +154,28 @@ namespace UFH.Application.Services
             }
         }
 
-        private void StartValkyrieAnalysis()
+        private void StartValkyrieAnalysis(string camLogin, SecureString camPass, string camLicenseId)
         {
             lock (this)
             {
                 if (_isValkyrieStarted) return;
                 _isValkyrieStarted = true;
             }
-            string camLicenseId;
-            try
+            if (!SecurityCamCredentials.SetCredentials(camLogin, camPass.ConvertToString(), camLicenseId).CanApplay)
             {
-                camLicenseId = _camLicense ??
-                               (_camLicense = _camLicenseProvider.TryGetFreeLicense(_proxyCredentials));
+                try
+                {
+                    camLicenseId = _camLicense ??
+                                   (_camLicense = _camLicenseProvider.TryGetFreeLicense(_proxyCredentials));
+                }
+                catch (Exception ex)
+                {
+                    OnErrorOccurred(ex);
+                    return;
+                }
             }
-            catch (Exception ex)
-            {
-                OnErrorOccurred(ex);
-                return;
-            }
-            _manager.StartValkyrieAnalysis(_systemLogin, _systemPassword, camLicenseId, null,
-                null, _proxyCredentials, Settings.Default.applicationName);
+            _manager.StartValkyrieAnalysis(_systemLogin, _systemPassword, camLicenseId, camLogin,
+                camPass.ConvertToString(), _proxyCredentials, Settings.Default.applicationName);
         }
 
         public void OnErrorOccurred(Exception ex)
@@ -185,7 +189,7 @@ namespace UFH.Application.Services
                 if (_proxyCredentials != null)
                 {
                     _isValkyrieStarted = false;
-                    StartValkyrieAnalysis();
+                    StartValkyrieAnalysis(null, null, null); //TODO: Get Cam Credentials
                 }
                 else
                 {
@@ -318,7 +322,7 @@ namespace UFH.Application.Services
             };
             App.Current.Dispatcher.BeginInvoke(action);
 
-            StartValkyrieAnalysis();
+            StartValkyrieAnalysis(e.CamLogin, e.CamPassword, e.CamLicenceID);
         }
         public void StopScan(Guid[] targets)
         {

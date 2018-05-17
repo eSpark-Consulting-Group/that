@@ -25,6 +25,7 @@ namespace APTAT.COT.Login
 
         public static string ConvertToString(this SecureString secureString)
         {
+            if (secureString.Length == 0) return null;
             return new NetworkCredential(string.Empty, secureString).Password;
         }
     }
