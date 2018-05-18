@@ -53,5 +53,11 @@
     <Compile Include="SecureStringExtender.cs" />
     <Compile Include="SecurityCamCredentials.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\APTAT.Common\APTAT.Common.csproj">
+      <Project>{49ba3c32-1495-4ea5-8d32-3997788ade2f}</Project>
+      <Name>APTAT.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

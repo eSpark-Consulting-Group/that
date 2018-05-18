@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Serialization.Json;
 using System.IO;
+using System.Diagnostics;
+using APTAT.Common;
 
 namespace APTAT.COT.Login
 {
@@ -38,6 +40,8 @@ namespace APTAT.COT.Login
                 }
             }
 
+            LogHelper.Trace(TraceEventType.Information, "Result: {0}, Token: {1}", jsonData.code, jsonData.data.token);
+
             return result;
         }
 
@@ -59,7 +63,7 @@ namespace APTAT.COT.Login
                 {
                     result = CheckAuthResults.ERR_MISSING_PARAM;
                 }
-            }
+            }            
 
             return result;
         }
@@ -79,7 +83,7 @@ namespace APTAT.COT.Login
             }
             catch (Exception ex)
             {
-                return null;
+                Trace.TraceError(ex.Message);
             }
 
             return root;

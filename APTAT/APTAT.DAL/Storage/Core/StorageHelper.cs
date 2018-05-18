@@ -41,6 +41,11 @@ namespace APTAT.DAL.Storage.Core
                         throw;
                     }
                 }
+                catch (DbUpdateException ex)
+                {
+                    LogHelper.Trace(TraceEventType.Error, ex.Message);
+                    return 0;
+                }
                 catch (DbEntityValidationException ex)
                 {
                     foreach (var validationResult in ex.EntityValidationErrors)
@@ -48,7 +53,7 @@ namespace APTAT.DAL.Storage.Core
                         LogValidationError(validationResult);
                     }
                     throw;
-                }
+                }                
             }
         }
 

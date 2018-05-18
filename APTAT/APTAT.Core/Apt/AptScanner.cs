@@ -7,6 +7,7 @@ using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore;
 using System.Security;
+using System.Linq;
 
 namespace APTAT.Core.Apt
 {
@@ -78,6 +79,7 @@ namespace APTAT.Core.Apt
                 _devicesSourceDescription, _options);
 
             _descentSubSystem.StartScan(scanner, out operationUid);
+
             _operationUid = operationUid;
         }
 

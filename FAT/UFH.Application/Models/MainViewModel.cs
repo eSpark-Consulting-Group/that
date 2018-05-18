@@ -731,6 +731,7 @@ namespace UFH.Application.Models
                 _camUserPassword = SecurityCamCredentials.Instance.Password.ConvertToString(); //model.Password;
 
                 _aptService.BeginValkyrieAnalysis(Login, Password, _camLicenseId, _camUserLogin, _camUserPassword, networkCredential);
+                
                 return true;
             }
             return false;

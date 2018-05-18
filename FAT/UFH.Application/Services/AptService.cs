@@ -52,7 +52,7 @@ namespace UFH.Application.Services
         public void BeginValkyrieAnalysis(string systemLogin, string systemPassword
            , string camLicenseId, string camUserName, string camPassword,
            NetworkCredential networkCredential)
-        {            
+        {
             _manager.StartValkyrieAnalysis(systemLogin, systemPassword, camLicenseId, camUserName,
                 camPassword, networkCredential, Settings.Default.applicationName);
         }

@@ -9,6 +9,7 @@ using Valkyrie.WebApiProvider.Enums;
 using Valkyrie.WebApiProvider.Extensions;
 using Valkyrie.WebApiProvider.Helpers;
 using System.Collections.Specialized;
+using System.Linq;
 
 namespace Valkyrie.WebApiProvider
 {
@@ -34,11 +35,11 @@ namespace Valkyrie.WebApiProvider
         private bool IsProduction => _valkyrieBaseUri.ToString().ToUpper().Contains("staging") == false;
 
         #endregion
-        
+
         private Uri _valkyrieBaseUri;
 
 
-        
+
         /// <summary>
         /// This request will be used to get Basic Info of a file that FVS have already analyzed before. 
         /// </summary>             
@@ -66,7 +67,7 @@ namespace Valkyrie.WebApiProvider
             var response = CallValkyrie<RegisterWithResponse>(RegisterWithCamCredentialsUri, request);
             return response;
         }
-        
+
         public StartAndFinalizeScanResponse StartScan(StartScanRequest request)
         {
             var response = CallValkyrie<StartAndFinalizeScanResponse>(StartScanUri, request);
@@ -226,9 +227,9 @@ namespace Valkyrie.WebApiProvider
         private T CallValkyrie<T>(Uri apiUri)
         {
             Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : Call {apiUri}");
-            
+
             using (WebClient client = new WebClient())
-            {                
+            {
 
                 if (ProxySettings.Proxy != null)
                 {
@@ -245,18 +246,22 @@ namespace Valkyrie.WebApiProvider
 
         private T CallValkyrie<T>(Uri apiUri, object request)
         {
-            Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : Call {apiUri}");
             var payload = request.ToNameValueCollection();
+            var values = string.Join(", ", payload.AllKeys.Select(de => de + " : " + payload[de]));
+            var json = payload.ToJson();
+            Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : Call {apiUri} : Values: {values }");
+
             using (WebClient client = new WebClient())
             {
-                
 
-                
+
+
                 if (ProxySettings.Proxy != null)
                 {
                     client.Proxy = ProxySettings.Proxy;
                 }
                 byte[] response = client.UploadValues(apiUri, payload);
+
                 string responseEncoded = System.Text.Encoding.UTF8.GetString(response);
                 Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : Response for {apiUri} {Environment.NewLine}{responseEncoded}");
                 var result = JsonConvert.DeserializeObject<T>(responseEncoded);
@@ -273,9 +278,9 @@ namespace Valkyrie.WebApiProvider
             }
             catch (Exception e)
             {
-                result = new ValkyrieResponse() {ResultMessage = e.Message, Error = e, ReturnCode = ErrorCodesEnum.None};
+                result = new ValkyrieResponse() { ResultMessage = e.Message, Error = e, ReturnCode = ErrorCodesEnum.None };
             }
-            
+
             return result;
         }
 

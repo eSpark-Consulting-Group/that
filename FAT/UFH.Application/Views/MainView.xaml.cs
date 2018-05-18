@@ -138,7 +138,8 @@ namespace UFH.Application
                     }
 
 
-                    if (IsScanCompleted && _viewModel.BeginValkyrieAnalysis())
+                    //if (IsScanCompleted && _viewModel.BeginValkyrieAnalysis())
+                    
                     {
                         Dispatcher.Invoke(() =>
                         {

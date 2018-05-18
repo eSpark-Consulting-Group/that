@@ -590,7 +590,7 @@ namespace APTAT.Core.Apt
                 var results = GetResultsEnumerator();
                 var aptScanResults = results as IAptScanResult[] ?? results.ToArray();
                 _valkyrieClient.StartAnalyze(camRegistration, login, password, aptScanResults.Length,
-                    proxyCredential, productName, AggregatedScanResults.OperationUid);
+                    proxyCredential, productName, AggregatedScanResults.OperationUid);                
             }
         }
 
