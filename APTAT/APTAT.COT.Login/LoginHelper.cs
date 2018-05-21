@@ -37,10 +37,9 @@ namespace APTAT.COT.Login
                 if (!Enum.TryParse(jsonData.code, out result))
                 {
                     result = LoginResults.ERR_AUTHENTICATION;
+                    LogHelper.Trace(TraceEventType.Information, "Result: {0}, Token: {1}", jsonData?.code, jsonData?.data?.token);
                 }
-            }
-
-            LogHelper.Trace(TraceEventType.Information, "Result: {0}, Token: {1}", jsonData.code, jsonData.data.token);
+            }          
 
             return result;
         }
