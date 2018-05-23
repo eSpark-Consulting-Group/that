@@ -53,8 +53,10 @@ namespace UFH.Application.Services
            , string camLicenseId, string camUserName, string camPassword,
            NetworkCredential networkCredential)
         {
+            bool isLoggedIn = SecurityCamCredentials.Instance.CanApplay;
+
             _manager.StartValkyrieAnalysis(systemLogin, systemPassword, camLicenseId, camUserName,
-                camPassword, networkCredential, Settings.Default.applicationName);
+                camPassword, networkCredential, isLoggedIn ? "CDM" : "FAT");//Settings.Default.applicationName);
         }
 
         #region reporting
