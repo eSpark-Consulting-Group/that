@@ -160,11 +160,6 @@ namespace UFH.Application.Models
         {
             get
             {
-                if (IsComputer)
-                {
-                    return "Uploading " + ValkyrieProgressPercentage.ToString("P0:", CultureInfo.InvariantCulture);
-                }
-
                 switch (FinalVerdict)
                 {
                     case UiFinalVerdict.Clean:
@@ -431,6 +426,11 @@ namespace UFH.Application.Models
                     return string.Empty;
 
                 var newValue = ScanStatus.AsString;
+                if (newValue == ScanStatus.InProgessStatusString && Items.Count > 0)
+                {
+                    newValue = $"Uploading       {ValkyrieProgressPercentage}%";
+                }
+                
                 if (!string.IsNullOrEmpty(_previousScanStatusAsString))
                 {
                     if (_previousScanStatusAsString != newValue)
@@ -445,6 +445,8 @@ namespace UFH.Application.Models
                 return newValue;
             }
         }
+
+        
 
         public ScanStage ScanStage
         {

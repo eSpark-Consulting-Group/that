@@ -6,7 +6,6 @@ namespace UFH.Application.Models
     {
         private readonly ScanStatusEnum _value;
 
-
         public ScanStatus(ScanStatusEnum value)
         {
             _value = value;
@@ -16,21 +15,16 @@ namespace UFH.Application.Models
         {
             if (_value == ScanStatusEnum.InProgress)
             {
-                return "In Progress";
+                return InProgessStatusString;
             }
 
 
             return _value.ToString();
         }
 
-        public string AsString
-        {
-            get
-            {
-                return ToString();
-            }
-        }
+        public string AsString => ToString();
 
+        public string InProgessStatusString => "In Progress";
 
         public override int GetHashCode()
         {
