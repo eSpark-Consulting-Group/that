@@ -428,7 +428,7 @@ namespace UFH.Application.Models
                 var newValue = ScanStatus.AsString;
                 if (newValue == ScanStatus.InProgessStatusString && Items.Count > 0)
                 {
-                    newValue = $"Uploading       {ValkyrieProgressPercentage}%";
+                    newValue = $"Uploading       {ValkyrieProgressPercentage.ToString("F0")}%";
                 }
                 
                 if (!string.IsNullOrEmpty(_previousScanStatusAsString))
