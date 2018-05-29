@@ -56,7 +56,7 @@ namespace UFH.Application.Services
             bool isLoggedIn = SecurityCamCredentials.Instance.CanApplay;
 
             _manager.StartValkyrieAnalysis(systemLogin, systemPassword, camLicenseId, camUserName,
-                camPassword, networkCredential, isLoggedIn ? "CDM" : "FAT");//Settings.Default.applicationName);
+                camPassword, networkCredential, Settings.Default.applicationName);
         }
 
         #region reporting

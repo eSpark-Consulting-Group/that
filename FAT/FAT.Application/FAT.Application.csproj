@@ -200,6 +200,7 @@
     <Compile Include="Models\Counter\ScanCounterCollection.cs" />
     <Compile Include="Models\Operation\ScanOperation.cs" />
     <Compile Include="Models\Operation\ScanOperationsManager.cs" />
+    <Compile Include="Providers\CamLicenseProviderFAT.cs" />
     <Compile Include="Services\DataService.cs" />
     <Compile Include="Services\EventArgs\ErrorEventArgs.cs" />
     <Compile Include="Services\EventArgs\GetModifiedResultsForOperationEventArgs.cs" />

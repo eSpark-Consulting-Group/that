@@ -2,9 +2,11 @@
 using UFH.Application.Services;
 using APTAT.Common;
 using APTAT.Core;
+using APTAT.Core.CamLicense;
 using APTAT.Core.CMC;
 using UFH.Application.Models;
 using APTAT.Core.Reports;
+using UFH.Application.Providers;
 
 namespace UFH.Application
 {
@@ -12,6 +14,7 @@ namespace UFH.Application
     {
         public void RegisterDependencies(ICompositionHelper resolver)
         {
+            resolver.RegisterSingleton<ICamLicenseProvider, CamLicenseProviderUFH>();
             resolver.RegisterSingleton<ITargetsDiscoveryService, TargetsDiscoveryService>();
             resolver.RegisterSingleton<IProxySettingsViewModel, ProxySettingsViewModel>();
             resolver.RegisterSingleton<IAptService, AptService>();

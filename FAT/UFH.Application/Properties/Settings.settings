@@ -11,5 +11,8 @@
     <Setting Name="applicationName" Type="System.String" Scope="Application">
       <Value Profile="(Default)">FAT</Value>
     </Setting>
+    <Setting Name="UseDevCam" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

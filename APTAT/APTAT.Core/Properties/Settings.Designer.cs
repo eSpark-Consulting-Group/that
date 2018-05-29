@@ -142,16 +142,7 @@ namespace APTAT.Core.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool UseDevCam {
-            get {
-                return ((bool)(this["UseDevCam"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://valkyrie.comodo.com/")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://staging.valkyrie.comodo.com/")]
         public string valkyrieBaseUrl {
             get {
                 return ((string)(this["valkyrieBaseUrl"]));

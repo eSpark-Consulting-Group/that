@@ -14,7 +14,6 @@ namespace APTAT.Core.DependencyLocator
     {
         public void RegisterDependencies(ICompositionHelper resolver)
         { 
-            resolver.RegisterSingleton<ICamLicenseProvider, CamLicenseProvider>();
             resolver.RegisterSingleton<IAptScannerFactory, AptScannerFactory>();
             resolver.RegisterSingleton<IDescentScannerFactory, AptDescentScannerFactory>();
             resolver.RegisterSingleton<IAptFactory, AptFactory>();

@@ -2,9 +2,11 @@
 using FAT.Application.Services;
 using APTAT.Common;
 using APTAT.Core;
+using APTAT.Core.CamLicense;
 using APTAT.Core.CMC;
 using FAT.Application.Models;
 using APTAT.Core.Reports;
+using FAT.Application.Providers;
 
 namespace FAT.Application
 {
@@ -12,6 +14,7 @@ namespace FAT.Application
     {
         public void RegisterDependencies(ICompositionHelper resolver)
         {
+            resolver.RegisterSingleton<ICamLicenseProvider, CamLicenseProviderFAT>();
             resolver.RegisterSingleton<ITargetsDiscoveryService, TargetsDiscoveryService>();
             resolver.RegisterSingleton<IProxySettingsViewModel, ProxySettingsViewModel>();
             resolver.RegisterSingleton<IAptService, AptService>();

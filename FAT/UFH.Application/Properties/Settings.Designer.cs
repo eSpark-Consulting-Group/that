@@ -49,5 +49,14 @@ namespace UFH.Application.Properties {
                 return ((string)(this["applicationName"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UseDevCam {
+            get {
+                return ((bool)(this["UseDevCam"]));
+            }
+        }
     }
 }

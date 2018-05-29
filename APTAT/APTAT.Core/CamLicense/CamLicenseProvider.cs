@@ -15,16 +15,17 @@ using Valkyrie.WebApiProvider;
 
 namespace APTAT.Core
 {
-    public class CamLicenseProvider : ICamLicenseProvider
+    public abstract class CamLicenseProvider : ICamLicenseProvider
     {
         private readonly IMachineKeyProvider _machineKeyProvider;
-        private readonly string _secretPhrase = "rogoyhpjtpqbwbqk"; //"dmiuchwodjvedpsh";              
-        private readonly string _camUrl = @"https://accounts.comodo.com/signup_service/get_free_license";
+        protected readonly string _secretPhrase = "rogoyhpjtpqbwbqk"; //"dmiuchwodjvedpsh";              
+        protected readonly string _camUrl = @"https://accounts.comodo.com/signup_service/get_free_license";
+        protected string _pricingTermIdentifier;// = "misc.forensic.analysis.tool.free";
 
-        public CamLicenseProvider(IMachineKeyProvider machineKeyProvider)
+        protected CamLicenseProvider(IMachineKeyProvider machineKeyProvider, bool useDevCam)
         {
             _machineKeyProvider = machineKeyProvider;
-            if (Settings.Default.UseDevCam)
+            if (useDevCam)
             {
                 _camUrl = @"https://accounts.comodo.od.ua/signup_service/get_free_license";
                 _secretPhrase = "rogoyhpjtpqbwbqk";
@@ -131,7 +132,7 @@ namespace APTAT.Core
             data.AffiliateID = 33220001;
             data.WebApiLogin = "cis_webapi_account";
             data.MachineCode = _machineKeyProvider.GlobalMachineKey;
-            data.PricingTermIdentifier = "misc.forensic.analysis.tool.free";
+            data.PricingTermIdentifier = _pricingTermIdentifier;
             data.LicenseKeyInfo = new GetFreeLicenseRequestDataLicenseKeyInfo();
             data.LicenseKeyInfo.Version = "1.0.0.0";
             data.LicenseKeyInfo.OsLang = 2052;
