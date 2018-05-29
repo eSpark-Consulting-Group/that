@@ -15,6 +15,7 @@ namespace APTAT.COT.Login
         ERR_MISSING_PARAM,
         ALREADY_LOGGED_IN,
         ERR_USER_NOT_FOUND,
+        LINCENSE_AVALIABLE,
     }
 
     public enum CheckAuthResults

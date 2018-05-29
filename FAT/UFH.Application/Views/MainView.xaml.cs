@@ -98,14 +98,20 @@ namespace UFH.Application
                         _camCredentialsdialog.ok.Visibility = Visibility.Collapsed;
                     });
 
-
                     var cred = SecurityCamCredentials.SetCredentials(camModel.UserName, camModel.Password, camModel.LicenseId);
-                    if (cred.CanApplay)
-                    {
-                        Task.Run(() => { LoginResult = LoginHelper.Login(cred); }).Wait();
+                    if (string.IsNullOrWhiteSpace(camModel.LicenseId))
+                    {                        
+                        if (cred.CanApplay)
+                        {
+                            Task.Run(() => { LoginResult = LoginHelper.Login(cred); }).Wait();
+                        }
+                        HandleLoginErrors();
                     }
-
-                    HandleLoginErrors();
+                    else
+                    {
+                        LoginResult = LoginResults.LINCENSE_AVALIABLE;
+                        cred.LicenseID = camModel.LicenseId;
+                    }                   
 
                     Dispatcher.Invoke(() =>
                     {
@@ -113,7 +119,7 @@ namespace UFH.Application
                         _camCredentialsdialog.loading.IsBusy = false;
                     });
 
-                    if (LoginResult == LoginResults.SUCCESS_AUTHENTICATION)
+                    if (LoginResult == LoginResults.SUCCESS_AUTHENTICATION || LoginResult == LoginResults.LINCENSE_AVALIABLE)
                     {
                         CloseCamLicenceWindow();
                     }
@@ -135,6 +141,13 @@ namespace UFH.Application
                             _viewModel.LogedIn = true;
                             _viewModel.AsGuest = false;
                         }
+                    }
+
+                    if (LoginResult == LoginResults.LINCENSE_AVALIABLE)
+                    {
+                        _viewModel.LogInTxt = SecurityCamCredentials.Instance.LicenseID.Split('-').FirstOrDefault();
+                        _viewModel.LogedIn = true;
+                        _viewModel.AsGuest = false;
                     }
 
 

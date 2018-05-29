@@ -55,7 +55,7 @@ namespace APTAT.COT.Login
             {
                 inst.Login = login;
                 inst.Password = password.ConvertToSecureString();
-                inst.CanApplay = true;
+                inst.CanApplay = true; 
             }
             else
             {
@@ -63,7 +63,11 @@ namespace APTAT.COT.Login
                 {
                     inst.CanApplay = false;
                 }
-                inst.LicenseID = licenseID;
+                else
+                {
+                    inst.LicenseID = licenseID;
+                    inst.CanApplay = true;
+                }
             }
         }
 
@@ -72,6 +76,6 @@ namespace APTAT.COT.Login
 
         public string Namespace { get; private set; }
 
-        public string LicenseID { get; private set; }
+        public string LicenseID { get; set; }
     }
 }
