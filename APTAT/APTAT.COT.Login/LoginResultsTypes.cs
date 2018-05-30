@@ -6,6 +6,14 @@ using System.Threading.Tasks;
 
 namespace APTAT.COT.Login
 {
+    public class ValkiryeLicenseIDCheckResult
+    {
+        public string api_key { get; set; }
+        public int return_code { get; set; }
+        public string result_description { get; set; }
+        public string result_message { get; set; }
+    }
+
     public class Params
     {
         public List<string> modules { get; set; }

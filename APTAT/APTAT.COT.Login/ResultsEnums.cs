@@ -16,6 +16,7 @@ namespace APTAT.COT.Login
         ALREADY_LOGGED_IN,
         ERR_USER_NOT_FOUND,
         LINCENSE_AVALIABLE,
+        LINCENSE_NOT_AVALIABLE,
     }
 
     public enum CheckAuthResults

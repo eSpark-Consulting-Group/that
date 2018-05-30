@@ -113,6 +113,14 @@ namespace UFH.Application
                         {
                             LoginResult = LoginResults.LINCENSE_AVALIABLE;
                             cred.LicenseID = camModel.LicenseId;
+
+                            var res = LoginHelper.CheckCamLicenseID(cred.LicenseID);
+                            if (!res.Item1)
+                            {
+                                LoginResult = LoginResults.LINCENSE_NOT_AVALIABLE;
+                                _camCredentialsdialog.SetErrorMessage(res.Item2);
+                                //HandleLoginErrors();
+                            }
                         }
                     }
 
@@ -220,6 +228,7 @@ namespace UFH.Application
                     _camCredentialsdialog.SetErrorMessage("User not found. Please make sure you are entering the correct credentials.");
                     break;
                 default:
+                    _camCredentialsdialog.SetErrorMessage("Something goes wrong");
                     break;
             }
         }

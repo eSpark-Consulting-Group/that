@@ -9,6 +9,7 @@ using System.Runtime.Serialization.Json;
 using System.IO;
 using System.Diagnostics;
 using APTAT.Common;
+using System.Collections.Specialized;
 
 namespace APTAT.COT.Login
 {
@@ -39,7 +40,7 @@ namespace APTAT.COT.Login
                     result = LoginResults.ERR_AUTHENTICATION;
                     LogHelper.Trace(TraceEventType.Information, "Result: {0}, Token: {1}", jsonData?.code, jsonData?.data?.token);
                 }
-            }          
+            }
 
             return result;
         }
@@ -62,7 +63,7 @@ namespace APTAT.COT.Login
                 {
                     result = CheckAuthResults.ERR_MISSING_PARAM;
                 }
-            }            
+            }
 
             return result;
         }
@@ -109,6 +110,78 @@ namespace APTAT.COT.Login
 
             }
             return responseText;
+        }
+
+        public static Tuple<bool, string> CheckCamLicenseID(string licenseId)
+        {
+            using (var res = CheckCamLicenseIDAsync(licenseId))
+            {
+                return res.Result;
+            }
+        }
+
+        public static async Task<Tuple<bool, string>> CheckCamLicenseIDAsync(string licenseId)
+        {
+            var baseUrl = "https://valkyrie.comodo.com";
+            var endPoint = "fvs_register_with_cam_license";
+            var url = baseUrl + "/" + endPoint;
+
+            var productName = "CDM";
+            var productVersion = "1.0.0.34";
+
+
+            string responseText = string.Empty;
+
+
+
+            using (var loginHttpClient = new HttpClient())
+            {
+                loginHttpClient.BaseAddress = new Uri("https://valkyrie.comodo.com");
+                loginHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                
+                var content = string.Format("{{\"product_name\": \"{0}\",\"product_version\": \"{1}\",\"license_id\": \"{2}\",\"api_key\": }}", productName,
+                                                                                                                                                productVersion,
+                                                                                                                                                licenseId);
+
+                var pHeaders = new Dictionary<string, string>
+                {
+                    { "license_id", licenseId },
+                    { "product_name", productName },
+                    { "product_version", productVersion },
+                    { "api_key", string.Empty },
+                };
+
+                using (var response = await Request(loginHttpClient, HttpMethod.Post, url, content, pHeaders))
+                {
+                    using (var httpContent = response.Content)
+                    {
+                        responseText = await httpContent.ReadAsStringAsync();
+                    }
+                }
+            }
+
+            var namedCollection = new NameValueCollection
+            {
+                { "license_id", licenseId },
+                { "product_name", productName },
+                { "product_version", productVersion },
+                { "api_key", string.Empty }
+            };
+
+            using (WebClient client = new WebClient())
+            {
+
+                byte[] response = client.UploadValues(url, namedCollection);
+
+                responseText = System.Text.Encoding.UTF8.GetString(response);
+                Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : Response for {url} {Environment.NewLine}{responseText}");
+            }
+
+
+            var root = ParseJson<ValkiryeLicenseIDCheckResult>(responseText);
+
+            return new Tuple<bool, string>(root.result_message == "SUCCESS", root.result_description);
         }
 
         private static async Task<string> LoginAsync(SecurityCamCredentials userCredentials)

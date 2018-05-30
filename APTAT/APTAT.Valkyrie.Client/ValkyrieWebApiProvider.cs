@@ -253,9 +253,6 @@ namespace Valkyrie.WebApiProvider
 
             using (WebClient client = new WebClient())
             {
-
-
-
                 if (ProxySettings.Proxy != null)
                 {
                     client.Proxy = ProxySettings.Proxy;
