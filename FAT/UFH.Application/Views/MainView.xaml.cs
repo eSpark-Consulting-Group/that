@@ -97,7 +97,7 @@ namespace UFH.Application
                         _camCredentialsdialog.loading.IsBusy = true;
                         _camCredentialsdialog.ok.Visibility = Visibility.Collapsed;
                     });
-
+                    LoginResult = LoginResults.ERR_MISSING_PARAM;
                     if (camModel.ValidateModel())
                     {
                         var cred = SecurityCamCredentials.SetCredentials(camModel.UserName, camModel.Password, camModel.LicenseId);
@@ -140,7 +140,7 @@ namespace UFH.Application
                     {
                         if (SecurityCamCredentials.Instance.CanApplay)
                         {
-                            _viewModel.LogInTxt = SecurityCamCredentials.Instance.Login.Split('@').FirstOrDefault();
+                            _viewModel.LogInTxt = SecurityCamCredentials.Instance.Login?.Split('@').FirstOrDefault();
                             _viewModel.LogedIn = true;
                             _viewModel.AsGuest = false;
                         }
@@ -148,7 +148,7 @@ namespace UFH.Application
 
                     if (LoginResult == LoginResults.LINCENSE_AVALIABLE)
                     {
-                        _viewModel.LogInTxt = SecurityCamCredentials.Instance.LicenseID.Split('-').FirstOrDefault();
+                        _viewModel.LogInTxt = SecurityCamCredentials.Instance.LicenseID?.Split('-').FirstOrDefault();
                         _viewModel.LogedIn = true;
                         _viewModel.AsGuest = false;
                     }
