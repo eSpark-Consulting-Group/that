@@ -98,20 +98,23 @@ namespace UFH.Application
                         _camCredentialsdialog.ok.Visibility = Visibility.Collapsed;
                     });
 
-                    var cred = SecurityCamCredentials.SetCredentials(camModel.UserName, camModel.Password, camModel.LicenseId);
-                    if (string.IsNullOrWhiteSpace(camModel.LicenseId))
-                    {                        
-                        if (cred.CanApplay)
-                        {
-                            Task.Run(() => { LoginResult = LoginHelper.Login(cred); }).Wait();
-                        }
-                        HandleLoginErrors();
-                    }
-                    else
+                    if (camModel.ValidateModel())
                     {
-                        LoginResult = LoginResults.LINCENSE_AVALIABLE;
-                        cred.LicenseID = camModel.LicenseId;
-                    }                   
+                        var cred = SecurityCamCredentials.SetCredentials(camModel.UserName, camModel.Password, camModel.LicenseId);
+                        if (string.IsNullOrWhiteSpace(camModel.LicenseId))
+                        {
+                            if (cred.CanApplay)
+                            {
+                                Task.Run(() => { LoginResult = LoginHelper.Login(cred); }).Wait();
+                            }
+                            HandleLoginErrors();
+                        }
+                        else
+                        {
+                            LoginResult = LoginResults.LINCENSE_AVALIABLE;
+                            cred.LicenseID = camModel.LicenseId;
+                        }
+                    }
 
                     Dispatcher.Invoke(() =>
                     {
@@ -152,7 +155,7 @@ namespace UFH.Application
 
 
                     //if (IsScanCompleted && _viewModel.BeginValkyrieAnalysis())
-                    
+
                     {
                         Dispatcher.Invoke(() =>
                         {
