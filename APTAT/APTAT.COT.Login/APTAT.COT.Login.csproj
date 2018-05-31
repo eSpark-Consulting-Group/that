@@ -58,6 +58,10 @@
       <Project>{49ba3c32-1495-4ea5-8d32-3997788ade2f}</Project>
       <Name>APTAT.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\APTAT.Core\APTAT.Core.csproj">
+      <Project>{9e80a126-241c-4079-8975-e16204d03e8d}</Project>
+      <Name>APTAT.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

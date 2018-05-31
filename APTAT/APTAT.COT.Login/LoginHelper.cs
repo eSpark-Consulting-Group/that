@@ -10,6 +10,7 @@ using System.IO;
 using System.Diagnostics;
 using APTAT.Common;
 using System.Collections.Specialized;
+using APTAT.Core;
 
 namespace APTAT.COT.Login
 {
@@ -112,28 +113,23 @@ namespace APTAT.COT.Login
             return responseText;
         }
 
-        public static Tuple<bool, string> CheckCamLicenseID(string licenseId)
+        public static Tuple<bool, string> CheckCamLicenseID(string licenseId, string productName, string productVersion)
         {
-            using (var res = CheckCamLicenseIDAsync(licenseId))
+            using (var res = CheckCamLicenseIDAsync(licenseId, productName, productVersion))
             {
                 return res.Result;
             }
         }
 
-        public static async Task<Tuple<bool, string>> CheckCamLicenseIDAsync(string licenseId)
+        public static async Task<Tuple<bool, string>> CheckCamLicenseIDAsync(string licenseId, string productName, string productVersion)
         {
-            var baseUrl = "https://valkyrie.comodo.com";
+            //"https://valkyrie.comodo.com";
+            var baseUrl = Core.Properties.Settings.Default.valkyrieBaseUrl;
+
             var endPoint = "fvs_register_with_cam_license";
             var url = baseUrl + "/" + endPoint;
-
-            var productName = "CDM";
-            var productVersion = "1.0.0.34";
-
-
+                       
             string responseText = string.Empty;
-
-
-
             using (var loginHttpClient = new HttpClient())
             {
                 loginHttpClient.BaseAddress = new Uri("https://valkyrie.comodo.com");
@@ -171,7 +167,6 @@ namespace APTAT.COT.Login
 
             using (WebClient client = new WebClient())
             {
-
                 byte[] response = client.UploadValues(url, namedCollection);
 
                 responseText = System.Text.Encoding.UTF8.GetString(response);
