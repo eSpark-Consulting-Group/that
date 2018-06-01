@@ -127,7 +127,7 @@ namespace APTAT.COT.Login
             var baseUrl = Core.Properties.Settings.Default.valkyrieBaseUrl;
 
             var endPoint = "fvs_register_with_cam_license";
-            var url = baseUrl + "/" + endPoint;
+            var url = baseUrl.TrimEnd('/') + "/" + endPoint;
                        
             string responseText = string.Empty;
             using (var loginHttpClient = new HttpClient())
