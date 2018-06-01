@@ -43,7 +43,7 @@ namespace UFH.Application.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("FAT")]
+        [global::System.Configuration.DefaultSettingValueAttribute("UFH")]
         public string applicationName {
             get {
                 return ((string)(this["applicationName"]));
