@@ -128,22 +128,6 @@ namespace UFH.Application
 
         private void InitTraceListener()
         {
-            //var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Comodo");
-            //if (!Directory.Exists(path))
-            //{
-            //    Directory.CreateDirectory(path);
-            //}
-
-            //path = Path.Combine(path, "FAT");
-
-            //if (!Directory.Exists(path))
-            //{
-            //    Directory.CreateDirectory(path);
-            //}
-
-            //path = Path.Combine(path, "trace.log");
-            //Trace.Listeners.Add(new TextWriterTraceListener(path, "FATListener"));
-
             var logFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Comodo", "UFH", "trace.log");
             var logFileDir = Path.GetDirectoryName(logFilePath);
 
@@ -155,8 +139,7 @@ namespace UFH.Application
         }
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            //LogHelper.Trace(TraceEventType.Error, e.ExceptionObject + (e.ExceptionObject is Exception && ((Exception)e.ExceptionObject).InnerException != null ? "\n InnerException : " + ((Exception)e.ExceptionObject).InnerException : null));
+        {            
             LogHelper.Trace(TraceEventType.Error, e.ExceptionObject.GetFullMessage());
         }
 
@@ -165,8 +148,7 @@ namespace UFH.Application
 #if DEBUG
             e.Handled = false;
 #else
-            e.Handled = true;
-            //LogHelper.Trace(TraceEventType.Error, e.Exception + (e.Exception.InnerException != null ? "\n InnerException :" + (e.Exception).InnerException : null));            
+            e.Handled = true;            
             MessageBox.Show(e.Exception.GetFullMessage());
             LogHelper.Trace(TraceEventType.Error, e.Exception.GetFullMessage());
 #endif

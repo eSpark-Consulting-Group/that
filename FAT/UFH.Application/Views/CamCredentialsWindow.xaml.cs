@@ -29,7 +29,35 @@ namespace UFH.Application
             DataContext = _model = CompositionHelper.Instance.Resolve<ValkyrieRegistrationModel>();
             _model.Password = null;
             _model.PasswordBuffer = null;
-            _model.ErrorMessage = null;            
+            _model.ErrorMessage = null;
+
+            LoginText.TextChanged += (sender, e) =>
+            {
+                if (string.IsNullOrWhiteSpace(LoginText.Text) && string.IsNullOrWhiteSpace(PasswordText.Text))
+                    LicenseIdText.IsEnabled = true;
+                else
+                    LicenseIdText.IsEnabled = false;
+            };
+            PasswordText.TextChanged += (sender, e) =>
+            {
+                if (string.IsNullOrWhiteSpace(LoginText.Text) && string.IsNullOrWhiteSpace(PasswordText.Text))
+                    LicenseIdText.IsEnabled = true;
+                else
+                    LicenseIdText.IsEnabled = false;
+            };
+            LicenseIdText.TextChanged += (sender, e) =>
+            {
+                if (string.IsNullOrWhiteSpace(LicenseIdText.Text))
+                {
+                    LoginText.IsEnabled = true;
+                    PasswordText.IsEnabled = true;
+                }
+                else
+                {
+                    LoginText.IsEnabled = false;
+                    PasswordText.IsEnabled = false;
+                }
+            };
         }
 
         protected override void OnClosed(EventArgs e)

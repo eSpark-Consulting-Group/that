@@ -22,6 +22,8 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using APTAT.COT.Login;
 using System.Net.Mail;
+using UFH.Application.Properties;
+using System.Reflection;
 
 namespace UFH.Application
 {
@@ -114,7 +116,8 @@ namespace UFH.Application
                             LoginResult = LoginResults.LINCENSE_AVALIABLE;
                             cred.LicenseID = camModel.LicenseId;
 
-                            var res = LoginHelper.CheckCamLicenseID(cred.LicenseID);
+                            var version = Assembly.GetEntryAssembly().GetName().Version.ToString();
+                            var res = LoginHelper.CheckCamLicenseID(cred.LicenseID, Settings.Default.applicationName, version);
                             if (!res.Item1)
                             {
                                 LoginResult = LoginResults.LINCENSE_NOT_AVALIABLE;
