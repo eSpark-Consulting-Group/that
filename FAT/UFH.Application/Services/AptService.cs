@@ -53,10 +53,10 @@ namespace UFH.Application.Services
            , string camLicenseId, string camUserName, string camPassword,
            NetworkCredential networkCredential)
         {
-            bool isLoggedIn = SecurityCamCredentials.Instance.CanApplay;
+            //bool isLoggedIn = SecurityCamCredentials.Instance.CanApplay;
 
             _manager.StartValkyrieAnalysis(systemLogin, systemPassword, camLicenseId, camUserName,
-                camPassword, networkCredential, isLoggedIn ? "CDM" : Settings.Default.applicationName);
+                camPassword, networkCredential, Settings.Default.applicationName);
         }
 
         #region reporting
@@ -178,7 +178,7 @@ namespace UFH.Application.Services
                 }
             }
             _manager.StartValkyrieAnalysis(_systemLogin, _systemPassword, camLicenseId, camLogin,
-                camPass.ConvertToString(), _proxyCredentials, loggedIn ? "CDM" : Settings.Default.applicationName);
+                camPass.ConvertToString(), _proxyCredentials, Settings.Default.applicationName);
         }
 
         public void OnErrorOccurred(Exception ex)

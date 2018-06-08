@@ -115,46 +115,17 @@ namespace APTAT.COT.Login
 
         public static Tuple<bool, string> CheckCamLicenseID(string licenseId, string productName, string productVersion)
         {
-            using (var res = CheckCamLicenseIDAsync(licenseId, productName, productVersion))
-            {
-                return res.Result;
-            }
+            return CheckCamLicenseIDAsync(licenseId, productName, productVersion);
         }
 
-        public static async Task<Tuple<bool, string>> CheckCamLicenseIDAsync(string licenseId, string productName, string productVersion)
+        private static Tuple<bool, string> CheckCamLicenseIDAsync(string licenseId, string productName, string productVersion)
         {
             var baseUrl = Core.Properties.Settings.Default.valkyrieBaseUrl;
 
             var endPoint = "fvs_register_with_cam_license";
             var url = baseUrl.TrimEnd('/') + "/" + endPoint;
                        
-            string responseText = string.Empty;
-            using (var loginHttpClient = new HttpClient())
-            {
-                loginHttpClient.BaseAddress = new Uri(baseUrl);
-                loginHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                
-                var content = string.Format("{{\"product_name\": \"{0}\",\"product_version\": \"{1}\",\"license_id\": \"{2}\",\"api_key\": }}", productName,
-                                                                                                                                                productVersion,
-                                                                                                                                                licenseId);
-
-                var pHeaders = new Dictionary<string, string>
-                {
-                    { "license_id", licenseId },
-                    { "product_name", productName },
-                    { "product_version", productVersion },
-                    { "api_key", string.Empty },
-                };
-
-                using (var response = await Request(loginHttpClient, HttpMethod.Post, url, content, pHeaders))
-                {
-                    using (var httpContent = response.Content)
-                    {
-                        responseText = await httpContent.ReadAsStringAsync();
-                    }
-                }
-            }
+            string responseText = string.Empty;           
 
             var namedCollection = new NameValueCollection
             {
