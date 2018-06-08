@@ -123,7 +123,6 @@ namespace APTAT.COT.Login
 
         public static async Task<Tuple<bool, string>> CheckCamLicenseIDAsync(string licenseId, string productName, string productVersion)
         {
-            //"https://valkyrie.comodo.com";
             var baseUrl = Core.Properties.Settings.Default.valkyrieBaseUrl;
 
             var endPoint = "fvs_register_with_cam_license";
@@ -132,7 +131,7 @@ namespace APTAT.COT.Login
             string responseText = string.Empty;
             using (var loginHttpClient = new HttpClient())
             {
-                loginHttpClient.BaseAddress = new Uri("https://valkyrie.comodo.com");
+                loginHttpClient.BaseAddress = new Uri(baseUrl);
                 loginHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 
