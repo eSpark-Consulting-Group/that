@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("APTAT.Extractor")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Comodo")]
 [assembly: AssemblyProduct("APTAT.Extractor")]
-[assembly: AssemblyCopyright("Copyright ©  2018")]
+[assembly: AssemblyCopyright("Copyright ©  2018 Comodo")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
