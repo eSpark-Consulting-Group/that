@@ -11,24 +11,22 @@ namespace APTAT.Extractor
 {
     public static class Extractor
     {
-        const string PROCESS_NAME = "UnknownFileHunter";
-        public static void ExtractId(string processName = PROCESS_NAME)
+        
+        public static string ExtractId(string processName)
         {
-            processName = string.IsNullOrWhiteSpace(processName) ? PROCESS_NAME : processName;
-            var process = Process.GetProcesses().FirstOrDefault(p => p.ProcessName.StartsWith(processName));
-            var processPath = process.MainModule.FileName;
-            var processFolder = Path.GetDirectoryName(processPath);
+            var process = Process.GetProcesses().FirstOrDefault(p => p.ProcessName.ToLower().StartsWith(processName.ToLower()));
+            if (process == null) return "";
 
-            var curPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            
-            var reg = new Regex(processName + "_[a-zA-Z0-9]+[=]{0,2}", RegexOptions.Compiled);
-            var match = reg.Match(processPath);  //math.Value == Path.GetFileNameWithoutExtension(processPath); //????????????
+            var processPath = process.MainModule.FileName;
+
+            var reg = new Regex(processName + "_[a-zA-Z0-9]+[=]{0,2}", RegexOptions.IgnoreCase);
+            var match = reg.Match(processPath); 
             if (match.Success)
             {
-                File.WriteAllBytes(Path.Combine(curPath, "originalfile"), Encoding.UTF8.GetBytes(match.Value));
+                return match.Value;
             }
 
-            Process.Start(Path.Combine(curPath, processName + ".exe"));
+            return "";
         }
     }
 }
