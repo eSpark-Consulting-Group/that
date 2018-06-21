@@ -125,10 +125,5 @@ namespace UFH.Application
         {
             DragMove();
         }
-
-        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
-        {
-
-        }
     }
 }

@@ -156,14 +156,18 @@ namespace UFH.Application
                             _viewModel.AsGuest = false;
                         }
                     }
-
-                    if (LoginResult == LoginResults.LINCENSE_AVALIABLE)
+                    else if (LoginResult == LoginResults.LINCENSE_AVALIABLE)
                     {
                         _viewModel.LogInTxt = SecurityCamCredentials.Instance.LicenseID?.Split('-').FirstOrDefault();
                         _viewModel.LogedIn = true;
                         _viewModel.AsGuest = false;
                     }
-
+                    else if (LoginResult != LoginResults.GUEST_AUTHENTICATION)
+                    {
+                        _viewModel.LogInTxt = "Login";
+                        _viewModel.LogedIn = false;
+                        _viewModel.AsGuest = false;
+                    }
 
                     //if (IsScanCompleted && _viewModel.BeginValkyrieAnalysis())
 
@@ -181,6 +185,7 @@ namespace UFH.Application
             {
                 SecurityCamCredentials.Reset();
 
+                LoginResult = LoginResults.GUEST_AUTHENTICATION;
                 _viewModel.LogInTxt = "Guest";
                 _viewModel.LogedIn = false;
                 _viewModel.AsGuest = true;

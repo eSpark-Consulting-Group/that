@@ -17,6 +17,7 @@ namespace APTAT.COT.Login
         ERR_USER_NOT_FOUND,
         LINCENSE_AVALIABLE,
         LINCENSE_NOT_AVALIABLE,
+        GUEST_AUTHENTICATION //Additional Login Result to identify CAM License usage
     }
 
     public enum CheckAuthResults
