@@ -107,23 +107,62 @@ namespace UFH.Application
                         {
                             if (cred.CanApplay)
                             {
-                                Task.Run(() => { LoginResult = LoginHelper.Login(cred); }).Wait();
+                                var task = LoginHelper.Login(cred);
+                                try
+                                {
+                                    task.Wait();
+                                    LoginResult = task.Result;
+                                    HandleLoginErrors();
+                                }
+                                catch (Exception e)
+                                {
+                                    LoginResult = LoginResults.LINCENSE_NOT_AVALIABLE;
+                                    if (task.IsFaulted && task.Exception != null)
+                                    {
+                                        Exception ex = task.Exception;
+                                        do
+                                        {
+                                            ex = ex.InnerException;
+                                        } while (ex.InnerException != null); 
+                                        
+                                        _camCredentialsdialog.SetErrorMessage(ex.Message);
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show(e.GetFullMessage());
+                                        HandleLoginErrors();
+                                    }
+                                }
                             }
-                            HandleLoginErrors();
                         }
                         else
                         {
-                            LoginResult = LoginResults.LINCENSE_AVALIABLE;
+                            
                             cred.LicenseID = camModel.LicenseId;
 
                             var version = Assembly.GetEntryAssembly().GetName().Version.ToString();
-                            var res = LoginHelper.CheckCamLicenseID(cred.LicenseID, Settings.Default.applicationName, version);
-                            if (!res.Item1)
+                            try
                             {
-                                LoginResult = LoginResults.LINCENSE_NOT_AVALIABLE;
-                                _camCredentialsdialog.SetErrorMessage(res.Item2);
-                                //HandleLoginErrors();
+                                var res = LoginHelper.CheckCamLicenseID(cred.LicenseID,
+                                    Settings.Default.applicationName, version);
+                                if (!res.Item1)
+                                {
+                                    LoginResult = LoginResults.LINCENSE_NOT_AVALIABLE;
+                                    _camCredentialsdialog.SetErrorMessage(res.Item2);
+                                    //HandleLoginErrors();
+                                }
+                                else
+                                {
+                                    LoginResult = LoginResults.LINCENSE_AVALIABLE;
+                                }
                             }
+                            catch (Exception e)
+                            {
+                                MessageBox.Show(e.GetFullMessage());
+                                LoginResult = LoginResults.ERR_AUTHENTICATION;
+                                HandleLoginErrors();
+                            }
+
                         }
                     }
 
@@ -174,7 +213,7 @@ namespace UFH.Application
                     {
                         Dispatcher.Invoke(() =>
                         {
-                            _camCredentialsdialog.loading.IsBusy = true;
+                            _camCredentialsdialog.loading.IsBusy = false;
                             _camCredentialsdialog.ok.Visibility = Visibility.Collapsed;
                         });
                     }

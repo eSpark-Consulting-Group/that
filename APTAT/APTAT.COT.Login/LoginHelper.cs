@@ -21,13 +21,13 @@ namespace APTAT.COT.Login
         private const string CHECK_ENDPOINT = "/check-auth";
 
 
-        public static LoginResults Login(SecurityCamCredentials userCredentials)
+        public static async Task<LoginResults> Login(SecurityCamCredentials userCredentials)
         {
-            var jsonString = string.Empty;
+            string jsonString;
 
             using (var resString = LoginAsync(userCredentials))
             {
-                resString.Wait();
+                await resString;
                 jsonString = resString.Result;
             }
 
@@ -101,7 +101,7 @@ namespace APTAT.COT.Login
                 var pHeaders = GetHeaders(userCredentials);
 
                 string url = MAIN_URL + CHECK_ENDPOINT;
-                using (var response = await Request(checkHttpClient, HttpMethod.Get, url, string.Empty, pHeaders))
+                using (var response = Request(checkHttpClient, HttpMethod.Get, url, string.Empty, pHeaders))
                 {
                     using (var httpContent = response.Content)
                     {
@@ -115,10 +115,10 @@ namespace APTAT.COT.Login
 
         public static Tuple<bool, string> CheckCamLicenseID(string licenseId, string productName, string productVersion)
         {
-            return CheckCamLicenseIDAsync(licenseId, productName, productVersion);
+            return CheckCamLicenseIDInternal(licenseId, productName, productVersion);
         }
 
-        private static Tuple<bool, string> CheckCamLicenseIDAsync(string licenseId, string productName, string productVersion)
+        private static Tuple<bool, string> CheckCamLicenseIDInternal(string licenseId, string productName, string productVersion)
         {
             var baseUrl = Core.Properties.Settings.Default.valkyrieBaseUrl;
 
@@ -137,10 +137,17 @@ namespace APTAT.COT.Login
 
             using (WebClient client = new WebClient())
             {
-                byte[] response = client.UploadValues(url, namedCollection);
+                try
+                {
+                    byte[] response = client.UploadValues(url, namedCollection);
 
-                responseText = System.Text.Encoding.UTF8.GetString(response);
-                Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : Response for {url} {Environment.NewLine}{responseText}");
+                    responseText = System.Text.Encoding.UTF8.GetString(response);
+                    Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : Response for {url} {Environment.NewLine}{responseText}");
+                }
+                catch (WebException ex)
+                {
+                    return new Tuple<bool, string>(false, ex.Message);
+                }
             }
 
 
@@ -165,8 +172,8 @@ namespace APTAT.COT.Login
 
                 string url = MAIN_URL + LOGIN_ENDPOINT;
 
-
-                using (var response = await Request(loginHttpClient, HttpMethod.Post, url, content, pHeaders))
+                
+                using (var response = Request(loginHttpClient, HttpMethod.Post, url, content, pHeaders))
                 {
                     using (var httpContent = response.Content)
                     {
@@ -196,7 +203,7 @@ namespace APTAT.COT.Login
         /// <param name="pJsonContent">String data to POST on the server</param>
         /// <param name="pHeaders">If you use some kind of Authorization you should use this</param>
         /// <returns></returns>
-        static Task<HttpResponseMessage> Request(HttpClient client, HttpMethod pMethod, string pUrl, string pJsonContent, Dictionary<string, string> pHeaders)
+        static HttpResponseMessage Request(HttpClient client, HttpMethod pMethod, string pUrl, string pJsonContent, Dictionary<string, string> pHeaders)
         {
             var httpRequestMessage = new HttpRequestMessage
             {
@@ -207,8 +214,8 @@ namespace APTAT.COT.Login
             {
                 httpRequestMessage.Headers.Add(head.Key, head.Value);
             }
-            HttpContent httpContent = null;
-            Task<HttpResponseMessage> message = null;
+            HttpContent httpContent;
+            Task<HttpResponseMessage> message;
             switch (pMethod.Method)
             {
                 case "POST":
@@ -221,16 +228,12 @@ namespace APTAT.COT.Login
                     httpRequestMessage.Content = httpContent;
                     message = client.GetAsync(pUrl);
                     break;
+                    default:
+                        return null;
             }
 
-            message.Wait();
-            if (message.Result.StatusCode == HttpStatusCode.OK)
-            {
-                var task = message.Result.Content.ReadAsStringAsync();
-                task.Wait();
-                string strRes = task.Result;
-            }
-            return message;
+            message.Wait(20000);
+            return message.Result;
         }
 
 
