@@ -137,17 +137,10 @@ namespace APTAT.COT.Login
 
             using (WebClient client = new WebClient())
             {
-                try
-                {
-                    byte[] response = client.UploadValues(url, namedCollection);
+                byte[] response = client.UploadValues(url, namedCollection);
 
-                    responseText = System.Text.Encoding.UTF8.GetString(response);
-                    Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : Response for {url} {Environment.NewLine}{responseText}");
-                }
-                catch (WebException ex)
-                {
-                    return new Tuple<bool, string>(false, ex.Message);
-                }
+                responseText = System.Text.Encoding.UTF8.GetString(response);
+                Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : Response for {url} {Environment.NewLine}{responseText}");
             }
 
 
@@ -242,7 +235,6 @@ namespace APTAT.COT.Login
             //TODO: Implement Logout
             return true;
         }
-
     }
 }
 

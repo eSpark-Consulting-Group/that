@@ -112,27 +112,12 @@ namespace UFH.Application
                                 {
                                     task.Wait();
                                     LoginResult = task.Result;
-                                    HandleLoginErrors();
                                 }
-                                catch (Exception e)
+                                catch (Exception)
                                 {
-                                    LoginResult = LoginResults.LINCENSE_NOT_AVALIABLE;
-                                    if (task.IsFaulted && task.Exception != null)
-                                    {
-                                        Exception ex = task.Exception;
-                                        do
-                                        {
-                                            ex = ex.InnerException;
-                                        } while (ex.InnerException != null); 
-                                        
-                                        _camCredentialsdialog.SetErrorMessage(ex.Message);
-                                    }
-                                    else
-                                    {
-                                        MessageBox.Show(e.GetFullMessage());
-                                        HandleLoginErrors();
-                                    }
+                                    LoginResult = LoginResults.CONNECTION_ERROR;
                                 }
+                                HandleLoginErrors();
                             }
                         }
                         else
@@ -149,17 +134,15 @@ namespace UFH.Application
                                 {
                                     LoginResult = LoginResults.LINCENSE_NOT_AVALIABLE;
                                     _camCredentialsdialog.SetErrorMessage(res.Item2);
-                                    //HandleLoginErrors();
                                 }
                                 else
                                 {
                                     LoginResult = LoginResults.LINCENSE_AVALIABLE;
                                 }
                             }
-                            catch (Exception e)
+                            catch (Exception)
                             {
-                                MessageBox.Show(e.GetFullMessage());
-                                LoginResult = LoginResults.ERR_AUTHENTICATION;
+                                LoginResult = LoginResults.CONNECTION_ERROR;
                                 HandleLoginErrors();
                             }
 
@@ -273,6 +256,9 @@ namespace UFH.Application
                     break;
                 case LoginResults.ERR_USER_NOT_FOUND:
                     _camCredentialsdialog.SetErrorMessage("User not found. Please make sure you are entering the correct credentials.");
+                    break;
+                case LoginResults.CONNECTION_ERROR:
+                    _camCredentialsdialog.SetErrorMessage("Failed to sign in. Please check your network connection and try again.");
                     break;
                 default:
                     _camCredentialsdialog.SetErrorMessage("Something goes wrong");
