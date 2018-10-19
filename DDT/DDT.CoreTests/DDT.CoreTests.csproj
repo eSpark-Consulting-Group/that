@@ -50,7 +50,7 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="Telerik.JustMock">
-      <HintPath>..\..\Common\ThirdParty\Telerik.JustMock.dll</HintPath>
+      <HintPath>..\..\ThirdParty\Telerik.JustMock.dll</HintPath>
     </Reference>
     <Reference Include="Telerik.Reporting">
       <HintPath>..\ThirdParty\Telerik.Reporting.dll</HintPath>
