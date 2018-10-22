@@ -161,10 +161,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\APTAT\APTAT.Core\APTAT.Core.csproj">
-      <Project>{9E80A126-241C-4079-8975-E16204D03E8D}</Project>
-      <Name>APTAT.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\APTAT.Common\APTAT.Common.csproj">
       <Project>{49ba3c32-1495-4ea5-8d32-3997788ade2f}</Project>
       <Name>APTAT.Common</Name>

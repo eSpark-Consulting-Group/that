@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using APTAT.Common;
-using APTAT.Core.Descent.Apt;
 using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Descent.Exceptions;
 using APTAT.DeploymentCore.Directory;
@@ -21,7 +20,6 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
         private Dictionary<Guid, IDescentQueryResult> _descentResults = new Dictionary<Guid, IDescentQueryResult>();
         private IEnumerable<IComputer> targets;
         private IDevicesSourceDescription devices;
-        private IScanOptions scanOptions;
         private IComputerDescentResultFactory computerDescentResultFactory;
         private IDescentWatcherFactory descentWatcherFactory;
 
@@ -42,7 +40,6 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
             targets = computers.ToArray();
 
             devices = Mock.Create<IDevicesSourceDescription>(Behavior.Strict);
-            scanOptions = Mock.Create<IScanOptions>(Behavior.Strict);
             computerDescentResultFactory = Mock.Create<IComputerDescentResultFactory>();
             descentWatcherFactory = Mock.Create<IDescentWatcherFactory>(Behavior.Strict);
  
