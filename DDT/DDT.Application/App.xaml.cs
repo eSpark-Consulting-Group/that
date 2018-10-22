@@ -93,7 +93,7 @@ namespace DDT.Application
 
         private void InitTraceListener()
         {
-            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Comodo");
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "ITarian");
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);

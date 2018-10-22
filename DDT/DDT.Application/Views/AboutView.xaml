@@ -35,7 +35,7 @@
                             <Run Text="This tool is designed to deploy installation packages to the devices discovered on the network."/>
                         </TextBlock>
 
-                        <TextBlock Style="{StaticResource SubTitleTextStyle}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Text="© 2016 Comodo Security Solutions, Inc. All Rights Reserved." Margin="0,0,0,-3"  FontSize="13" />
+                        <TextBlock Style="{StaticResource SubTitleTextStyle}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Text="© 2018 ITarian LLC, Inc. All Rights Reserved." Margin="0,0,0,-3"  FontSize="13" />
                     </Grid>
                 </Border>
 

@@ -145,6 +145,7 @@
     <ClInclude Include="ImpersonationHelper.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource1.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ResourceMappings.ini">

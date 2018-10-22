@@ -155,6 +155,7 @@
     <ClInclude Include="LoggingBase.h" />
     <ClInclude Include="LoggingImpl.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="resource1.h" />
     <ClInclude Include="ResourceText.h" />
     <ClInclude Include="SAgentVersion.h" />
     <ClInclude Include="sslsocket.h" />

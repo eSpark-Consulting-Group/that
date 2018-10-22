@@ -23,7 +23,7 @@ namespace APTAT.DeploymentCore.Descent.Helpers
 			protected string RemoteAdminPath;
             public string RemoteWorkingDirectory;
             protected string RemoteHost;
-			public string TempFolderName = "ComodoRemoteDeployment";
+			public string TempFolderName = "ITarianRemoteDeployment";
             private readonly IDescentImpersonationHelper _networkHelper;
 		    protected string PackageFileName;
 		    protected readonly INetworkObserver NetworkObserver;
@@ -55,7 +55,7 @@ namespace APTAT.DeploymentCore.Descent.Helpers
 
 		    protected virtual string ServiceDisplayName
 		    {
-		        get { return "Comodo Deployment Helper"; }
+		        get { return "ITarian Deployment Helper"; }
             }
             protected virtual string ServiceName { get { return "Helper.exe"; } }
 
