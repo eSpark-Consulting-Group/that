@@ -1,4 +1,5 @@
 rmdir sfx /s/q
+del ADDT.exe
 set ZDIR="..\..\SfxPackage\"
 mkdir "%CD%\sfx"
 
@@ -18,11 +19,14 @@ ResourceHacker.exe -compile version.rc, version.res
 ren ADDT.exe ADDT_old.exe
 ResourceHacker.exe -modify ADDT_old.exe, ADDT.exe, version.res,,,
 
-del version.rc
-del version.res
-del ADDT_old.exe
-del ResourceCopy.exe
-del ResourceHacker.*
-del DDT.Application.exe
+rem del version.rc
+rem del version.res
+rem del ADDT_old.exe
+rem del ResourceCopy.exe
+rem del ResourceHacker.*
+rem del DDT.Application.exe
 
 cd ..
+del ADDT.exe
+copy  sfx\ADDT.exe ADDT.exe
+rmdir sfx /s/q
