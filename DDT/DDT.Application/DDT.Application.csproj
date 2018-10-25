@@ -381,6 +381,14 @@
   <ItemGroup>
     <Resource Include="ddt_logo.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ResourceCopy.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ResourceHacker.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if not exist "$(TargetDir)DescentHelper.exe" xcopy "$(SolutionDir)out\bin.$(Configuration).Win32\DescentHelper.exe"  "$(TargetDir)" /Y /F

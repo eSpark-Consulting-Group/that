@@ -1,8 +1,8 @@
 ﻿;!@Install@!UTF-8!
 
-Title="Comodo Discovery and Deployment Tool"
-ErrorTitle="Comodo Discovery and Deployment Tool"
-WarningTitle="Comodo Discovery and Deployment Tool"
+Title="ITarian Discovery and Deployment Tool"
+ErrorTitle="ITarian Discovery and Deployment Tool"
+WarningTitle="ITarian Discovery and Deployment Tool"
 RunProgram="DDT.Bootstrapper.exe"
 
 ;!@InstallEnd@!
