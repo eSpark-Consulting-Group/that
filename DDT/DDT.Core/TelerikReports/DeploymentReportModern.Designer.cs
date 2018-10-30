@@ -1,3 +1,5 @@
+using Telerik.Reporting.Drawing;
+
 namespace DDT.Core.TelerikReports
 {
     partial class DeploymentReportModern
@@ -93,6 +95,7 @@ namespace DDT.Core.TelerikReports
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(6.1999998092651367D), Telerik.Reporting.Drawing.Unit.Cm(0.99990016222000122D));
             this.pictureBox1.Value = ((object)(resources.GetObject("pictureBox1.Value")));
+            //this.pictureBox1.Sizing = ImageSizeMode.AutoSize;
             // 
             // shape2
             // 
