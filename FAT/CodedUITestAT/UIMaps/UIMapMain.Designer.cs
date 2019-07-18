@@ -38,7 +38,7 @@ namespace CodedUITestFAT.UIMaps.UIMapMainClasses
             WpfText uIComodoForensicAnalysText1 = this.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIPleaseWaitProgressBar.UIComodoForensicAnalysText1;
             #endregion
 
-            // Verify that the 'DisplayText' property of 'Comodo Forensic Analysis Tool is part of the Comod...' label equals 'Comodo Forensic Analysis Tool is part of the Comodo ONE portfolio of security solutions. Visit '
+            // Verify that the 'DisplayText' property of 'Comodo Forensic Analysis Tool is part of the Comod...' label equals 'Comodo Forensic Analysis Tool is part of the Comodo Dragon portfolio of security solutions. Visit '
             Assert.AreEqual(this.AssertComodoOneReferalTextPart1ExpectedValues.UIComodoForensicAnalysText1DisplayText, uIComodoForensicAnalysText1.DisplayText);
         }
         
@@ -77,7 +77,7 @@ namespace CodedUITestFAT.UIMaps.UIMapMainClasses
             WpfText uIThisproductisjustoneText = this.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UISendingFilesforAnalyProgressBar.UIThisproductisjustoneText;
             #endregion
 
-            // Verify that the 'DisplayText' property of 'This product is just one part of Comodo ONE produc...' label equals 'This product is just one part of Comodo ONE productivity and revenue generation engine. To get more AWESOME products for FREE, please visit one.comodo.com'
+            // Verify that the 'DisplayText' property of 'This product is just one part of Comodo Dragon produc...' label equals 'This product is just one part of Comodo Dragon productivity and revenue generation engine. To get more AWESOME products for FREE, please visit one.comodo.com'
             Assert.AreEqual(this.AssertComodoOneReferralTextBlockTextExpectedValues.UIThisproductisjustoneTextDisplayText, uIThisproductisjustoneText.DisplayText);
         }
         
@@ -168,7 +168,7 @@ namespace CodedUITestFAT.UIMaps.UIMapMainClasses
             WpfText uIComodoForensicAnalysText = this.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIPleaseWaitProgressBar.UIComodoForensicAnalysText;
             #endregion
 
-            // Verify that the 'DisplayText' property of 'Comodo Forensic Analysis Tool is part of the Comod...' label equals 'Comodo Forensic Analysis Tool is part of the Comodo ONE portfolio of security solutions. Visit '
+            // Verify that the 'DisplayText' property of 'Comodo Forensic Analysis Tool is part of the Comod...' label equals 'Comodo Forensic Analysis Tool is part of the Comodo Dragon portfolio of security solutions. Visit '
             Assert.AreEqual(this.AssertReferalTextPart1ExpectedValues.UIComodoForensicAnalysTextDisplayText, uIComodoForensicAnalysText.DisplayText);
         }
         
@@ -619,9 +619,9 @@ namespace CodedUITestFAT.UIMaps.UIMapMainClasses
         
         #region Fields
         /// <summary>
-        /// Verify that the 'DisplayText' property of 'Comodo Forensic Analysis Tool is part of the Comod...' label equals 'Comodo Forensic Analysis Tool is part of the Comodo ONE portfolio of security solutions. Visit '
+        /// Verify that the 'DisplayText' property of 'Comodo Forensic Analysis Tool is part of the Comod...' label equals 'Comodo Forensic Analysis Tool is part of the Comodo Dragon portfolio of security solutions. Visit '
         /// </summary>
-        public string UIComodoForensicAnalysText1DisplayText = "Comodo Forensic Analysis Tool is part of the Comodo ONE portfolio of security sol" +
+        public string UIComodoForensicAnalysText1DisplayText = "Comodo Forensic Analysis Tool is part of the Comodo Dragon portfolio of security sol" +
             "utions. Visit ";
         #endregion
     }
@@ -665,9 +665,9 @@ namespace CodedUITestFAT.UIMaps.UIMapMainClasses
         
         #region Fields
         /// <summary>
-        /// Verify that the 'DisplayText' property of 'This product is just one part of Comodo ONE produc...' label equals 'This product is just one part of Comodo ONE productivity and revenue generation engine. To get more AWESOME products for FREE, please visit one.comodo.com'
+        /// Verify that the 'DisplayText' property of 'This product is just one part of Comodo Dragon produc...' label equals 'This product is just one part of Comodo Dragon productivity and revenue generation engine. To get more AWESOME products for FREE, please visit one.comodo.com'
         /// </summary>
-        public string UIThisproductisjustoneTextDisplayText = "This product is just one part of Comodo ONE productivity and revenue generation e" +
+        public string UIThisproductisjustoneTextDisplayText = "This product is just one part of Comodo Dragon productivity and revenue generation e" +
             "ngine. To get more AWESOME products for FREE, please visit one.comodo.com";
         #endregion
     }
@@ -771,9 +771,9 @@ namespace CodedUITestFAT.UIMaps.UIMapMainClasses
         
         #region Fields
         /// <summary>
-        /// Verify that the 'DisplayText' property of 'Comodo Forensic Analysis Tool is part of the Comod...' label equals 'Comodo Forensic Analysis Tool is part of the Comodo ONE portfolio of security solutions. Visit '
+        /// Verify that the 'DisplayText' property of 'Comodo Forensic Analysis Tool is part of the Comod...' label equals 'Comodo Forensic Analysis Tool is part of the Comodo Dragon portfolio of security solutions. Visit '
         /// </summary>
-        public string UIComodoForensicAnalysTextDisplayText = "Comodo Forensic Analysis Tool is part of the Comodo ONE portfolio of security sol" +
+        public string UIComodoForensicAnalysTextDisplayText = "Comodo Forensic Analysis Tool is part of the Comodo Dragon portfolio of security sol" +
             "utions. Visit ";
         #endregion
     }

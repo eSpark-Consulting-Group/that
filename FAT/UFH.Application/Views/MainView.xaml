@@ -878,7 +878,7 @@
 
                 <Border Grid.Row="4" Height="46"  Background="White" >
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <TextBlock AutomationProperties.AutomationId="ComodoOneReferalTextPart1" Text="Comodo Unknown File Hunter is part of the Comodo ONE portfolio of security solutions. Visit " Foreground="#FF547D98" FontSize="13"/>
+                        <TextBlock AutomationProperties.AutomationId="ComodoOneReferalTextPart1" Text="Comodo Unknown File Hunter is part of the Comodo Dragon portfolio of security solutions. Visit " Foreground="#FF547D98" FontSize="13"/>
 
                         <TextBlock AutomationProperties.AutomationId="ComodoOneReferalTextPart2" Cursor="Hand">
                     <Hyperlink AutomationProperties.AutomationId="ComodoOneReferralLink" NavigateUri="https://one.comodo.com" RequestNavigate="Hyperlink_RequestNavigate"  Foreground="#FF547D98" FontSize="13">one.comodo.com </Hyperlink>

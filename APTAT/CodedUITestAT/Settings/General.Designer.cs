@@ -160,7 +160,7 @@ namespace CodedUITestAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("This product is just one part of Comodo ONE productivity and revenue generation e" +
+        [global::System.Configuration.DefaultSettingValueAttribute("This product is just one part of Comodo Dragon productivity and revenue generation e" +
             "ngine. To get more AWESOME products for FREE, please visit one.comodo.com")]
         public string ComodoOneReferralText {
             get {

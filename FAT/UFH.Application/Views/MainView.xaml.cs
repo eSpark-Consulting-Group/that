@@ -246,7 +246,7 @@ namespace UFH.Application
                     _camCredentialsdialog.SetErrorMessage("You need to enter Verification Code.");
                     break;
                 case LoginResults.OTP_CONF_REQUIRED:
-                    _camCredentialsdialog.SetErrorMessage("One-Time Password verification is not configured for your account. Please visit Comodo ONE to configure it.");
+                    _camCredentialsdialog.SetErrorMessage("One-Time Password verification is not configured for your account. Please visit Comodo Dragon to configure it.");
                     break;
                 case LoginResults.ERR_MISSING_PARAM:
                     _camCredentialsdialog.SetErrorMessage("Please make sure you fill out all the mandatory fields.");

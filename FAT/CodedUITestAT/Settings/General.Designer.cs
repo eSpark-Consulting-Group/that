@@ -124,7 +124,7 @@ namespace CodedUITestFAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Comodo Forensic Analysis Tool is part of the Comodo ONE portfolio of security sol" +
+        [global::System.Configuration.DefaultSettingValueAttribute("Comodo Forensic Analysis Tool is part of the Comodo Dragon portfolio of security sol" +
             "utions. Visit one.comodo.com to learn how Comodo can help protect your environme" +
             "nt.")]
         public string ComodoOneReferralText {
