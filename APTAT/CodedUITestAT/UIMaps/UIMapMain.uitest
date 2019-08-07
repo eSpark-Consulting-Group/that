@@ -303,7 +303,7 @@
     <AssertAction UIObjectName="UIMapMain.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UISendingFilesforAnalyProgressBar.UIThisproductisjustoneText">
       <ParameterName />
       <PropertyName>DisplayText</PropertyName>
-      <ExpectedValue>This product is just one part of Comodo Dragon productivity and revenue generation engine. To get more AWESOME products for FREE, please visit one.comodo.com</ExpectedValue>
+      <ExpectedValue>This product is just one part of Comodo Dragon productivity and revenue generation engine. To get more AWESOME products for FREE, please visit platform.comodo.com</ExpectedValue>
       <MessageOnValidationFailure />
       <Type>String</Type>
       <PropertyCondition>AreEqual</PropertyCondition>
@@ -808,7 +808,7 @@
                   </AndCondition>
                   <SupportLevel>0</SupportLevel>
                   <Descendants>
-                    <UIObject ControlType="Hyperlink" Id="UIOnecomodocomHyperlink" FriendlyName="one.comodo.com" SpecialControlType="None">
+                    <UIObject ControlType="Hyperlink" Id="UIOnecomodocomHyperlink" FriendlyName="Comodo Dragon" SpecialControlType="None">
                       <TechnologyName>UIA</TechnologyName>
                       <WindowTitles>
                         <WindowTitle>Unknown File Hunter</WindowTitle>

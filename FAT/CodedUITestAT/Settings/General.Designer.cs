@@ -125,7 +125,7 @@ namespace CodedUITestFAT.Settings {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Comodo Forensic Analysis Tool is part of the Comodo Dragon portfolio of security sol" +
-            "utions. Visit one.comodo.com to learn how Comodo can help protect your environme" +
+            "utions. Visit platform.comodo.com to learn how Comodo can help protect your environme" +
             "nt.")]
         public string ComodoOneReferralText {
             get {
@@ -135,7 +135,7 @@ namespace CodedUITestFAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://one.comodo.com")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://platform.comodo.com/signup")]
         public string ComodoOneReferralUri {
             get {
                 return ((string)(this["ComodoOneReferralUri"]));

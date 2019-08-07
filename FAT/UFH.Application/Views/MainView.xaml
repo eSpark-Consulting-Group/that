@@ -881,7 +881,7 @@
                         <TextBlock AutomationProperties.AutomationId="ComodoOneReferalTextPart1" Text="Comodo Unknown File Hunter is part of the Comodo Dragon portfolio of security solutions. Visit " Foreground="#FF547D98" FontSize="13"/>
 
                         <TextBlock AutomationProperties.AutomationId="ComodoOneReferalTextPart2" Cursor="Hand">
-                    <Hyperlink AutomationProperties.AutomationId="ComodoOneReferralLink" NavigateUri="https://one.comodo.com" RequestNavigate="Hyperlink_RequestNavigate"  Foreground="#FF547D98" FontSize="13">one.comodo.com </Hyperlink>
+                    <Hyperlink AutomationProperties.AutomationId="ComodoOneReferralLink" NavigateUri="https://platform.comodo.com/signup" RequestNavigate="Hyperlink_RequestNavigate"  Foreground="#FF547D98" FontSize="13">Comodo Dragon </Hyperlink>
                         </TextBlock>
 
                         <TextBlock AutomationProperties.AutomationId="ComodoOneReferalTextPart3" Text=" to learn how Comodo can help protect your environment." Foreground="#FF547D98" FontSize="13"/>

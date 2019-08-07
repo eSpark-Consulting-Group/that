@@ -161,7 +161,7 @@ namespace CodedUITestAT.Settings {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("This product is just one part of Comodo Dragon productivity and revenue generation e" +
-            "ngine. To get more AWESOME products for FREE, please visit one.comodo.com")]
+            "ngine. To get more AWESOME products for FREE, please visit platform.comodo.com")]
         public string ComodoOneReferralText {
             get {
                 return ((string)(this["ComodoOneReferralText"]));
@@ -170,7 +170,7 @@ namespace CodedUITestAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://one.comodo.com")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://platform.comodo.com/signup")]
         public string ComodoOneReferralUri {
             get {
                 return ((string)(this["ComodoOneReferralUri"]));

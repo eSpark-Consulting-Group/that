@@ -233,7 +233,7 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
             WpfText uIThisproductisjustoneText = this.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UISendingFilesforAnalyProgressBar.UIThisproductisjustoneText;
             #endregion
 
-            // Verify that the 'DisplayText' property of 'This product is just one part of Comodo Dragon produc...' label equals 'This product is just one part of Comodo Dragon productivity and revenue generation engine. To get more AWESOME products for FREE, please visit one.comodo.com'
+            // Verify that the 'DisplayText' property of 'This product is just one part of Comodo Dragon produc...' label equals 'This product is just one part of Comodo Dragon productivity and revenue generation engine. To get more AWESOME products for FREE, please visit platform.comodo.com'
             Assert.AreEqual(this.AssertComodoOneReferralTextBlockTextExpectedValues.UIThisproductisjustoneTextDisplayText, uIThisproductisjustoneText.DisplayText);
         }
         
@@ -246,7 +246,7 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
             WpfHyperlink uIOnecomodocomHyperlink = this.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UIThisproductisjustoneText.UIOnecomodocomHyperlink;
             #endregion
 
-            // Click 'one.comodo.com' link
+            // Click 'platform.comodo.com' link
             Mouse.Click(uIOnecomodocomHyperlink, new Point(31, 1));
         }
         
@@ -546,10 +546,10 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         
         #region Fields
         /// <summary>
-        /// Verify that the 'DisplayText' property of 'This product is just one part of Comodo Dragon produc...' label equals 'This product is just one part of Comodo Dragon productivity and revenue generation engine. To get more AWESOME products for FREE, please visit one.comodo.com'
+        /// Verify that the 'DisplayText' property of 'This product is just one part of Comodo Dragon produc...' label equals 'This product is just one part of Comodo Dragon productivity and revenue generation engine. To get more AWESOME products for FREE, please visit platform.comodo.com'
         /// </summary>
         public string UIThisproductisjustoneTextDisplayText = "This product is just one part of Comodo Dragon productivity and revenue generation e" +
-            "ngine. To get more AWESOME products for FREE, please visit one.comodo.com";
+            "ngine. To get more AWESOME products for FREE, please visit platform.comodo.com";
         #endregion
     }
     

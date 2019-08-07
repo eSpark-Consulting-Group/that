@@ -139,7 +139,7 @@
                                    TextWrapping="Wrap" FontSize="13" TextAlignment="Center" VerticalAlignment="Bottom" Margin="0 0 0 30"  Width="500">
                     This product is just one part of Comodo Dragon productivity and revenue generation engine. To get more AWESOME products for FREE, please visit
                 <Hyperlink AutomationProperties.AutomationId="ComodoOneReferralLink"
-                           NavigateUri="https://one.comodo.com" RequestNavigate="Hyperlink_RequestNavigate"> one.comodo.com</Hyperlink></TextBlock>
+                           NavigateUri="https://platform.comodo.com/signup" RequestNavigate="Hyperlink_RequestNavigate"> Comodo Dragon</Hyperlink></TextBlock>
                     </Grid>
                 </Grid>
             </telerik:RadBusyIndicator>

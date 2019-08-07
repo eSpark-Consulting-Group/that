@@ -36,10 +36,10 @@
       <Value Profile="(Default)">pskill.exe</Value>
     </Setting>
     <Setting Name="ComodoOneReferralText" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">Comodo Forensic Analysis Tool is part of the Comodo Dragon portfolio of security solutions. Visit one.comodo.com to learn how Comodo can help protect your environment.</Value>
+      <Value Profile="(Default)">Comodo Forensic Analysis Tool is part of the Comodo Dragon portfolio of security solutions. Visit platform.comodo.com to learn how Comodo can help protect your environment.</Value>
     </Setting>
     <Setting Name="ComodoOneReferralUri" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">https://one.comodo.com</Value>
+      <Value Profile="(Default)">https://platform.comodo.com/signup</Value>
     </Setting>
     <Setting Name="EmptyWatermarkTextBoxText" Type="System.String" Scope="Application">
       <Value Profile="(Default)">System.Windows.Controls.TextBlock</Value>

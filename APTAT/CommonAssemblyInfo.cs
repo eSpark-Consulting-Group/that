@@ -4,5 +4,5 @@ using System.Resources;
 //[assembly: AssemblyVersion("1.0.0.34")]
 //[assembly: AssemblyFileVersion("1.0.0.34")]
 [assembly: NeutralResourcesLanguage("en-US")]
-[assembly: AssemblyCopyright("Copyright � 2018")]
+[assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyCompany("Comodo")]

@@ -48,10 +48,10 @@
       <Value Profile="(Default)">pskill.exe</Value>
     </Setting>
     <Setting Name="ComodoOneReferralText" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">This product is just one part of Comodo Dragon productivity and revenue generation engine. To get more AWESOME products for FREE, please visit one.comodo.com</Value>
+      <Value Profile="(Default)">This product is just one part of Comodo Dragon productivity and revenue generation engine. To get more AWESOME products for FREE, please visit platform.comodo.com</Value>
     </Setting>
     <Setting Name="ComodoOneReferralUri" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">https://one.comodo.com</Value>
+      <Value Profile="(Default)">https://platform.comodo.com/signup</Value>
     </Setting>
     <Setting Name="EmptyWatermarkTextBoxText" Type="System.String" Scope="Application">
       <Value Profile="(Default)">System.Windows.Controls.TextBlock</Value>

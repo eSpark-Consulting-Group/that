@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Comodo")]
 [assembly: AssemblyProduct("APTAT.DAL")]
-[assembly: AssemblyCopyright("Copyright ©  2018 Comodo")]
+[assembly: AssemblyCopyright("Copyright ©  2019 Comodo")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
