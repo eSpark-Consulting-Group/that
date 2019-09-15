@@ -17,20 +17,12 @@ namespace APTAT.COT.Login
     public sealed class LoginHelper
     {
         private const string MAIN_URL = "https://one.comodo.com/app/sso";
+        private const string MAIN_URL_US = "https://one-us.comodo.com/app/sso";
         private const string LOGIN_ENDPOINT = "/api/auth";
         private const string CHECK_ENDPOINT = "/check-auth";
 
-
-        public static async Task<LoginResults> Login(SecurityCamCredentials userCredentials)
+        private static LoginResults ParseLoginResult(string jsonString)
         {
-            string jsonString;
-
-            using (var resString = LoginAsync(userCredentials))
-            {
-                await resString;
-                jsonString = resString.Result;
-            }
-
             var jsonData = ParseJson<LoginRootObject>(jsonString);
 
             var result = LoginResults.ERR_AUTHENTICATION;
@@ -42,13 +34,44 @@ namespace APTAT.COT.Login
                     LogHelper.Trace(TraceEventType.Information, "Result: {0}, Token: {1}", jsonData?.code, jsonData?.data?.token);
                 }
             }
-
+            
             return result;
+        }
+
+        public static async Task<LoginResults> Login(SecurityCamCredentials userCredentials)
+        {
+            string jsonString;
+
+            using (var resString = LoginAsync(userCredentials, MAIN_URL))
+            {
+                await resString;
+                jsonString = resString.Result;
+            }
+
+            var result = ParseLoginResult(jsonString);
+            if (result == LoginResults.ERR_AUTHENTICATION)
+                return result;
+            if (result != LoginResults.ERR_USER_NOT_FOUND)
+                return result;
+
+            /* Let's try US server */
+            jsonString = "";
+            using (var resString = LoginAsync(userCredentials, MAIN_URL_US))
+            {
+                await resString;
+                jsonString = resString.Result;
+            }
+
+            return ParseLoginResult(jsonString);
         }
 
         public static CheckAuthResults CheckAuth(SecurityCamCredentials userCredentials)
         {
             var jsonString = string.Empty;
+            /* TODO: CheckAuth only supports EU server, since it is not used anywhere
+             * we don't modify it. If we use CheckAuth someday, we need to add support
+             * for US server
+             */
             using (var resString = CheckAuthAsync(userCredentials))
             {
                 resString.Wait();
@@ -149,12 +172,12 @@ namespace APTAT.COT.Login
             return new Tuple<bool, string>(root.result_message == "SUCCESS", root.result_description);
         }
 
-        private static async Task<string> LoginAsync(SecurityCamCredentials userCredentials)
+        private static async Task<string> LoginAsync(SecurityCamCredentials userCredentials, String loginUrl)
         {
             string responseText = string.Empty;
             using (var loginHttpClient = new HttpClient())
             {
-                loginHttpClient.BaseAddress = new Uri(MAIN_URL);
+                loginHttpClient.BaseAddress = new Uri(loginUrl);
                 loginHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 var pHeaders = GetHeaders(userCredentials);
@@ -163,7 +186,7 @@ namespace APTAT.COT.Login
                                                                                                                  , userCredentials.Password.ConvertToString()
                                                                                                                  , userCredentials.Namespace);
 
-                string url = MAIN_URL + LOGIN_ENDPOINT;
+                string url = loginUrl + LOGIN_ENDPOINT;
 
                 
                 using (var response = Request(loginHttpClient, HttpMethod.Post, url, content, pHeaders))
