@@ -16,7 +16,7 @@ namespace APTAT.COT.Login
 
     public class Params
     {
-        public List<string> modules { get; set; }
+        public List<object> modules { get; set; }
     }
 
     public class StartingProcessList
@@ -31,6 +31,8 @@ namespace APTAT.COT.Login
     public class LicenseKey
     {
         public string @namespace { get; set; }
+        public bool isAddedToSession { get; set; }
+        public bool isDomeSWG { get; set; }
         public List<object> licenseKeys { get; set; }
     }
 
