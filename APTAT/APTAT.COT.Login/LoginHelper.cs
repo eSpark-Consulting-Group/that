@@ -11,6 +11,7 @@ using System.Diagnostics;
 using APTAT.Common;
 using System.Collections.Specialized;
 using APTAT.Core;
+using Microsoft.VisualBasic;
 
 namespace APTAT.COT.Login
 {
@@ -20,6 +21,10 @@ namespace APTAT.COT.Login
         private const string MAIN_URL_US = "https://one-us.comodo.com/app/sso";
         private const string LOGIN_ENDPOINT = "/api/auth";
         private const string CHECK_ENDPOINT = "/check-auth";
+        private const string OTP_ENDPOINT = "/api/verify-otp";
+
+        private static string REGION = "";
+        public static string otpKey = "";
 
         private static LoginResults ParseLoginResult(string jsonString)
         {
@@ -42,27 +47,55 @@ namespace APTAT.COT.Login
         {
             string jsonString;
 
-            using (var resString = LoginAsync(userCredentials, MAIN_URL))
+            REGION = MAIN_URL;
+            using (var resString = LoginAsync(userCredentials, REGION))
             {
                 await resString;
                 jsonString = resString.Result;
             }
 
             var result = ParseLoginResult(jsonString);
+            
             if (result == LoginResults.ERR_AUTHENTICATION)
                 return result;
-            if (result != LoginResults.ERR_USER_NOT_FOUND)
-                return result;
 
-            /* Let's try US server */
-            jsonString = "";
-            using (var resString = LoginAsync(userCredentials, MAIN_URL_US))
+            if (result == LoginResults.ERR_USER_NOT_FOUND)
+            {
+                /* Let's try US server */
+                jsonString = "";
+                REGION = MAIN_URL_US;
+                using (var resString = LoginAsync(userCredentials, REGION))
+                {
+                    await resString;
+                    jsonString = resString.Result;
+                }
+
+                result = ParseLoginResult(jsonString);
+                if (result != LoginResults.OTP_REQUIRED)
+                    return result;
+            }
+            if (result == LoginResults.OTP_REQUIRED)
+            {
+                /* get otpKey from json request */
+                var jsonData = ParseJson<LoginOtpObject>(jsonString);
+                otpKey = jsonData.data.otpKey;
+                REGION += OTP_ENDPOINT;
+                return result;
+            }
+                return result;
+        }
+
+        public static async Task<LoginResults> CheckTwoFactorAuth(string TwoFacInput) // input 
+        {
+            /* verify with the server */
+            string jsonResp;
+            using (var resString = Verify2fa(TwoFacInput, otpKey, REGION))
             {
                 await resString;
-                jsonString = resString.Result;
+                jsonResp = resString.Result;
             }
 
-            return ParseLoginResult(jsonString);
+            return ParseLoginResult(jsonResp);
         }
 
         public static CheckAuthResults CheckAuth(SecurityCamCredentials userCredentials)
@@ -111,6 +144,27 @@ namespace APTAT.COT.Login
             }
 
             return root;
+        }
+
+        private static async Task<string> Verify2fa(string code, string otpKey, string endpoint)
+        {
+            string responseText = string.Empty;
+            using (var checkHttpClient = new HttpClient())
+            {
+                checkHttpClient.BaseAddress = new Uri(endpoint);
+                checkHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var jsonContent = string.Format("{{\"otpKey\": \"{0}\",\"otp\": \"{1}\"}}", otpKey, code);
+                using (var response = Request(checkHttpClient, HttpMethod.Post, endpoint, jsonContent, new Dictionary<string, string>()))
+                {
+                    using (var httpContent = response.Content)
+                    {
+                        responseText = await httpContent.ReadAsStringAsync();
+                    }
+                }
+
+            }
+            return responseText;
         }
 
         private static async Task<string> CheckAuthAsync(SecurityCamCredentials userCredentials)
@@ -186,9 +240,7 @@ namespace APTAT.COT.Login
                                                                                                                  , userCredentials.Password.ConvertToString()
                                                                                                                  , userCredentials.Namespace);
 
-                string url = loginUrl + LOGIN_ENDPOINT;
-
-                
+                string url = loginUrl + LOGIN_ENDPOINT;         
                 using (var response = Request(loginHttpClient, HttpMethod.Post, url, content, pHeaders))
                 {
                     using (var httpContent = response.Content)
@@ -251,7 +303,6 @@ namespace APTAT.COT.Login
             message.Wait(20000);
             return message.Result;
         }
-
 
         public static bool Logout()
         {

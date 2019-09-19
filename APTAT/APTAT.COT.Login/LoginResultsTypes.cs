@@ -80,6 +80,17 @@ namespace APTAT.COT.Login
         public string code { get; set; }
         public Data data { get; set; }
     }
+
+    public class OtpData
+    {
+        public string otpKey { get; set; }
+    }
+
+    public class LoginOtpObject
+    {
+        public string code { get; set; }
+        public OtpData data { get; set; }
+    }
 }
 public class CheckRootObject
 {

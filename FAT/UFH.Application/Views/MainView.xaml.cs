@@ -24,6 +24,9 @@ using APTAT.COT.Login;
 using System.Net.Mail;
 using UFH.Application.Properties;
 using System.Reflection;
+using Microsoft.VisualBasic;
+using System.Net.Http;
+using System.Text;
 
 namespace UFH.Application
 {
@@ -86,6 +89,8 @@ namespace UFH.Application
         }
 
         CamCredentialsWindow _camCredentialsdialog = new CamCredentialsWindow();
+        Views.PopupWindow twoFactWind = new Views.PopupWindow();
+
 
         private void ShowRegisterToValkyrieWindow(bool isScanCompleted = false)
         {
@@ -112,6 +117,25 @@ namespace UFH.Application
                                 {
                                     task.Wait();
                                     LoginResult = task.Result;
+                                    if (LoginResult == LoginResults.OTP_REQUIRED)
+                                    {
+                                        twoFactWind.TopMost = true;
+                                        twoFactWind.ShowDialog();
+                                        string code = twoFactWind.GetCode();
+                                        var task2 = LoginHelper.CheckTwoFactorAuth(code);
+                                        twoFactWind.Close();
+                                        twoFactWind = null;
+                                        twoFactWind = new Views.PopupWindow();
+                                        try
+                                        {
+                                            task2.Wait();
+                                            LoginResult = task2.Result;
+                                        }
+                                        catch (Exception)
+                                        {
+                                            LoginResult = LoginResults.CONNECTION_ERROR;
+                                        }
+                                    }
                                 }
                                 catch (Exception)
                                 {
@@ -122,7 +146,6 @@ namespace UFH.Application
                         }
                         else
                         {
-                            
                             cred.LicenseID = camModel.LicenseId;
 
                             var version = Assembly.GetEntryAssembly().GetName().Version.ToString();
@@ -242,8 +265,8 @@ namespace UFH.Application
                 case LoginResults.ERR_AUTHENTICATION:
                     _camCredentialsdialog.SetErrorMessage("Provided username or password is incorrect.");
                     break;
-                case LoginResults.OTP_REQUIRED:
-                    _camCredentialsdialog.SetErrorMessage("You need to enter Verification Code.");
+                case LoginResults.ERR_OTP_INVALID:
+                    _camCredentialsdialog.SetErrorMessage("Provided 2FA authentication code is not valid.");
                     break;
                 case LoginResults.OTP_CONF_REQUIRED:
                     _camCredentialsdialog.SetErrorMessage("One-Time Password verification is not configured for your account. Please visit Comodo Dragon to configure it.");

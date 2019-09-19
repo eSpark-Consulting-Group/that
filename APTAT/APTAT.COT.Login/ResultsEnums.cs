@@ -12,6 +12,7 @@ namespace APTAT.COT.Login
         ERR_AUTHENTICATION,
         OTP_REQUIRED, //(2 Factor Authentication is enabled and configured for user, so he/she first needs to pass otp verification.)
         OTP_CONF_REQUIRED, //(2 Factor Authentication is enabled but not configured yet for user, so he/she first needs to configure authentication on Portal.)
+        ERR_OTP_INVALID,
         ERR_MISSING_PARAM,
         ALREADY_LOGGED_IN,
         ERR_USER_NOT_FOUND,
