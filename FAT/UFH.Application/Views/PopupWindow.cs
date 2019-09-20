@@ -46,6 +46,12 @@ namespace UFH.Application.Views
             {
                 e.Handled = true;
             }
+
+            if (e.KeyChar == 8)
+            {
+                ((TextBox)sender).Clear();
+                textBox1.Focus();
+            }
         }
 
         private void textBox2_KeyPress(object sender, KeyPressEventArgs e)
@@ -60,6 +66,11 @@ namespace UFH.Application.Views
             if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
             {
                 e.Handled = true;
+            }
+            if (e.KeyChar == 8)
+            {
+                ((TextBox)sender).Clear();
+                textBox1.Focus();
             }
         }
 
@@ -76,6 +87,11 @@ namespace UFH.Application.Views
             {
                 e.Handled = true;
             }
+            if (e.KeyChar == 8)
+            {
+                ((TextBox)sender).Clear();
+                textBox2.Focus();
+            }
         }
 
         private void textBox4_KeyPress(object sender, KeyPressEventArgs e)
@@ -90,6 +106,11 @@ namespace UFH.Application.Views
             if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
             {
                 e.Handled = true;
+            }
+            if (e.KeyChar == 8)
+            {
+                ((TextBox)sender).Clear();
+                textBox3.Focus();
             }
         }
 
@@ -106,6 +127,11 @@ namespace UFH.Application.Views
             {
                 e.Handled = true;
             }
+            if (e.KeyChar == 8)
+            {
+                ((TextBox)sender).Clear();
+                textBox4.Focus();
+            }
         }
 
         private void textBox6_KeyPress(object sender, KeyPressEventArgs e)
@@ -120,6 +146,11 @@ namespace UFH.Application.Views
             if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
             {
                 e.Handled = true;
+            }
+            if (e.KeyChar == 8)
+            {
+                ((TextBox)sender).Clear();
+                textBox5.Focus();
             }
         }
 
@@ -138,6 +169,46 @@ namespace UFH.Application.Views
             }
         }
 
-  
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            Control nextInTabOrder = GetNextControl(this, true);
+            nextInTabOrder.Focus();
+            textBox2.Focus();
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+            Control nextInTabOrder = GetNextControl(this, true);
+            nextInTabOrder.Focus();
+            textBox3.Focus();
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+            Control nextInTabOrder = GetNextControl(this, true);
+            nextInTabOrder.Focus();
+            textBox4.Focus();
+        }
+
+        private void textBox4_TextChanged(object sender, EventArgs e)
+        {
+            Control nextInTabOrder = GetNextControl(this, true);
+            nextInTabOrder.Focus();
+            textBox5.Focus();
+        }
+
+        private void textBox5_TextChanged(object sender, EventArgs e)
+        {
+            Control nextInTabOrder = GetNextControl(this, true);
+            nextInTabOrder.Focus();
+            textBox6.Focus();
+        }
+
+        private void textBox6_TextChanged(object sender, EventArgs e)
+        {
+            Control nextInTabOrder = GetNextControl(this, true);
+            nextInTabOrder.Focus();
+            buttonSubmit.Focus();
+        }
     }
 }
