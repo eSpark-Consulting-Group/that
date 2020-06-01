@@ -9,7 +9,7 @@
       Title="StartingPage">
 
     <Grid Background="White">
-        <TextBlock TextAlignment="Center" Text="Comodo Unknown File Hunter discovers known good, known bad or unknown files and identifies zero-day threats in your environment. Newly discovered unknown files are sent to Valkyrie, Comodo's cloud-based file analysis platform. Valkyrie assesses them and returns a verdict of good or bad on all unknown files and sends a detailed report." TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="100 0"
+        <TextBlock TextAlignment="Center" Text="Comodo ZeroDayMalwareHunter discovers known good, known bad or unknown files and identifies zero-day threats in your environment. Newly discovered unknown files are sent to Valkyrie, Comodo's cloud-based file analysis platform. Valkyrie assesses them and returns a verdict of good or bad on all unknown files and sends a detailed report." TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="100 0"
     FontSize="13"/>
     </Grid>
 </Page>

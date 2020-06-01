@@ -25,7 +25,7 @@
 
                             <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource StrongBrush}" Grid.ColumnSpan="2">
                                 <Grid>
-                                    <TextBlock Text="Unknown File Hunter" Foreground="White" FontFamily="{StaticResource myriadpro}"  FontSize="19" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20 0 0 0"  SnapsToDevicePixels="True"/>
+                                    <TextBlock Text="ZeroDayMalwareHunter" Foreground="White" FontFamily="{StaticResource myriadpro}"  FontSize="19" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20 0 0 0"  SnapsToDevicePixels="True"/>
                                 </Grid>
                             </Border>
 
@@ -61,7 +61,7 @@
                                     Margin="170,10,0,0" Grid.Row="4" Text="By clicking 'I ACCEPT', you agree you have read and accepted"/>
 
                                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="14" VerticalAlignment="Top"
-                                    Margin="170,0,0,0" Grid.Row="5" Text="COMODO Unknown File Hunter License Agreement" Opacity="{Binding ElementName=eula, Path=Opacity}"/>
+                                    Margin="170,0,0,0" Grid.Row="5" Text="COMODO ZeroDayMalwareHunter License Agreement" Opacity="{Binding ElementName=eula, Path=Opacity}"/>
 
                                 <Border  Grid.Row="7" VerticalAlignment="Bottom"  Background="White">
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">

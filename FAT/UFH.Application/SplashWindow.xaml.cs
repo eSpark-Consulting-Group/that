@@ -10,7 +10,7 @@ namespace UFH.Application
         {
             InitializeComponent();
 
-            txtProductName.Text = "Unknown File Hunter";
+            txtProductName.Text = "ZeroDayMalwareHunter";
             txtProductVersion.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
     }

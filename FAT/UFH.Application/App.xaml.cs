@@ -30,7 +30,7 @@ namespace UFH.Application
 
             if (!createdNew)
             {
-                MessageBox.Show("Unknown File Hunter is already running.", "Unknown File Hunter");
+                MessageBox.Show("ZeroDayMalwareHunter is already running.", "ZeroDayMalwareHunter");
                 Current.Shutdown();
             }
             else
